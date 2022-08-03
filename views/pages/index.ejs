@@ -8,14 +8,14 @@
 <body>
   <p><%= response %></p>
  
-   <div id="app">
-     <p>{{msg}}</p>
-     <button @click="sayHello">Hi!</button>
-   </div>
+  <div id="app">
+    <p>{{msg}}</p>
+    <button @click="sayHello">Hi!</button>
+  </div>
 
-  <script type="">
-  let response= <%- response %>;
-  console.log(response);
+  <script type="text/javascript">
+  let response= `<%- response %>`;
+  console.log(JSON.parse(response));
 
   new Vue({
     el: "#app",
