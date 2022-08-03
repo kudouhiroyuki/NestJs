@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>App</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+</head>
+<body>
+  <p><%= response %></p>
+ 
+   <div id="app">
+     <p>{{msg}}</p>
+     <button @click="sayHello">Hi!</button>
+   </div>
+
+  <script type="">
+  let response= <%- response %>;
+  console.log(response);
+
+  new Vue({
+    el: "#app",
+    data: {
+      msg: "Welcome"
+    },
+    methods: {
+      sayHello() {
+        this.msg = "Hello!"
+      }
+    },
+    mounted() {
+    }
+  })
+  </script>
+</body>
+</html>

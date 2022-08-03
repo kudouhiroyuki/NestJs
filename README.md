@@ -5,6 +5,7 @@ http://localhost:3000/
 ## 起動<br>
 npm install<br>
 yarn start
+yarn start --watch
 
 ## 環境構築Log<br>
 - npm i -g @nestjs/cli

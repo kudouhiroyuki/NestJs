@@ -1,5 +1,6 @@
+import { Response } from 'express';
 export declare class AppController {
-    root(): {
-        message: string;
+    root(res: Response): {
+        response: string;
     };
 }
