@@ -14,8 +14,7 @@ npm install<br>
 yarn start
 yarn start --watch
 
-## 環境構築Log<br>
-- npm i -g @nestjs/cli
-- nest new project-name（yarn）
-- npm install --save hbs
-- npm i --save @fastify/static @fastify/view handlebars
+## コマンド<br>
+nest g module users<br>
+nest g controller users<br>
+nest g service users
