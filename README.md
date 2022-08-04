@@ -9,6 +9,9 @@ http://localhost:3000/institution/notice_regist
 - お知らせ照会 /institution/notice_inquiry<br>
 http://localhost:3000/institution/notice_inquiry
 
+- 動作確認用（users）
+http://localhost:3000/users
+
 ## 環境構築<br>
 - npm install
 
