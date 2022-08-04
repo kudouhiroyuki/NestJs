@@ -13,6 +13,7 @@ const app_service_1 = require("./app.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_module_1 = require("./users/users.module");
 const users_entity_1 = require("./entities/users.entity");
+const notice_regist_module_1 = require("./institution/notice_regist/notice_regist.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -29,6 +30,7 @@ AppModule = __decorate([
                 synchronize: true,
             }),
             users_module_1.UsersModule,
+            notice_regist_module_1.NoticeRegistModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { Users } from './entities/users.entity';
+import { NoticeRegistModule } from './institution/notice_regist/notice_regist.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { Users } from './entities/users.entity';
       synchronize: true,
     }),
     UsersModule,
+    NoticeRegistModule,
   ],
   controllers: [AppController],
   providers: [AppService],

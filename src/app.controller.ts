@@ -6,9 +6,6 @@ export class AppController {
   @Get()
   @Render('index')
   root(@Res() res: Response) {
-    // return res.send({
-    //   result: JSON.stringify([{"id": 1, "name": "kudou" }])
-    // });
     return {
       response: JSON.stringify([{ name: "kudou" }])
     };

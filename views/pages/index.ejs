@@ -6,15 +6,15 @@
     <main>
       <%- include('../partials/sidebar'); %>
       <section>
-        <p><%= response %></p>
+        <!-- <p><%= response %></p>
         <div id="index">
           <p>{{msg}}</p>
           <button @click="sayHello">Hi!</button>
-        </div>
+        </div> -->
       </section>
     </main>
   </div>
-  
+
   <script type="text/javascript">
   let response= `<%- response %>`;
   console.log(JSON.parse(response));
