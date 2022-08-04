@@ -15,20 +15,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NoticeRegistController = void 0;
 const common_1 = require("@nestjs/common");
 let NoticeRegistController = class NoticeRegistController {
-    root(res) {
+    root() {
         return {
-            response: 111
+            tagLists: JSON.stringify([
+                { name: "アトラクション" },
+                { name: "フード&レストラン" }
+            ])
+        };
+    }
+    send(form) {
+        return {
+            tagLists: JSON.stringify([
+                { name: "アトラクション" },
+                { name: "フード&レストラン" }
+            ])
         };
     }
 };
 __decorate([
     (0, common_1.Get)(),
     (0, common_1.Render)('institution/notice_regist'),
-    __param(0, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], NoticeRegistController.prototype, "root", null);
+__decorate([
+    (0, common_1.Post)('/'),
+    (0, common_1.Render)('institution/notice_regist'),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], NoticeRegistController.prototype, "root", null);
+], NoticeRegistController.prototype, "send", null);
 NoticeRegistController = __decorate([
     (0, common_1.Controller)('institution/notice_regist')
 ], NoticeRegistController);

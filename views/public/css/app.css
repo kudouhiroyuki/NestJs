@@ -41,6 +41,10 @@ a {
   box-sizing: border-box;
 }
 
+textarea {
+  resize: none;
+}
+
 .layout {
   width: 100vw;
   height: 100vh;

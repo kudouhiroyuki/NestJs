@@ -1,6 +1,8 @@
-import { Response } from 'express';
 export declare class NoticeRegistController {
-    root(res: Response): {
-        response: number;
+    root(): {
+        tagLists: string;
+    };
+    send(form: any): {
+        tagLists: string;
     };
 }

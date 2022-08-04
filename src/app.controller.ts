@@ -1,11 +1,10 @@
-import {Response} from 'express';
-import { Get, Controller, Render, Res } from '@nestjs/common';
+import { Get, Controller, Render } from '@nestjs/common';
 
 @Controller()
 export class AppController {
   @Get()
   @Render('index')
-  root(@Res() res: Response) {
+  root() {
     return {
       response: JSON.stringify([{ name: "kudou" }])
     };

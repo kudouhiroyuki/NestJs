@@ -1,13 +1,28 @@
-import { Response } from 'express';
-import { Get, Controller, Render, Res } from '@nestjs/common';
+import { Get, Post, Body, Controller, Render } from '@nestjs/common';
 
 @Controller('institution/notice_regist')
 export class NoticeRegistController {
+  
   @Get()
   @Render('institution/notice_regist')
-  root(@Res() res: Response) {
+  root() {
     return {
-      response: 111
+      tagLists: JSON.stringify([
+        { name: "アトラクション" },
+        { name: "フード&レストラン" }
+      ])
     };
   }
+
+  @Post('/')
+  @Render('institution/notice_regist')
+  send(@Body() form:any) {
+  	return {
+      tagLists: JSON.stringify([
+        { name: "アトラクション" },
+        { name: "フード&レストラン" }
+      ])
+    };
+  }
+  
 }
