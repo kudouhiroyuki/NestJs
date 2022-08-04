@@ -6,11 +6,6 @@
     <main>
       <%- include('../partials/sidebar'); %>
       <section>
-        <p><%= response %></p>
-        <div id="index">
-          <p>{{msg}}</p>
-          <button @click="sayHello">Hi!</button>
-        </div>
       </section>
     </main>
   </div>
@@ -18,20 +13,6 @@
   <script type="text/javascript">
   let response= `<%- response %>`;
   console.log(JSON.parse(response));
-
-  new Vue({
-    el: "#index",
-    data: {
-      msg: "Welcome"
-    },
-    methods: {
-      sayHello() {
-        this.msg = "Hello!"
-      }
-    },
-    mounted() {
-    }
-  })
   </script>
 </body>
 </html>

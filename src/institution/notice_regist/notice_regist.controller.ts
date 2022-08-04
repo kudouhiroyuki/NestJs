@@ -16,7 +16,8 @@ export class NoticeRegistController {
 
   @Post('/')
   @Render('institution/notice_regist')
-  send(@Body() form:any) {
+  send(@Body() body:any) {
+    console.log(body);
   	return {
       tagLists: JSON.stringify([
         { name: "アトラクション" },

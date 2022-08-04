@@ -23,3 +23,6 @@ yarn start --watch
 nest g module users<br>
 nest g controller users<br>
 nest g service users
+
+## SQL<br>
+TRUNCATE laravel.contactChats;（全レコード削除）

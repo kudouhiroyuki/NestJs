@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
+
 import { Users } from './entities/users.entity';
+import { UsersModule } from './users/users.module';
+
 import { NoticeRegistModule } from './institution/notice_regist/notice_regist.module';
 
 @Module({
@@ -21,7 +23,11 @@ import { NoticeRegistModule } from './institution/notice_regist/notice_regist.mo
     UsersModule,
     NoticeRegistModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [
+    AppController,
+  ],
+  providers: [
+    AppService,
+  ],
 })
 export class AppModule {}

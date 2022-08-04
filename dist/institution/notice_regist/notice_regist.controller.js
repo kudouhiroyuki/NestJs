@@ -23,7 +23,8 @@ let NoticeRegistController = class NoticeRegistController {
             ])
         };
     }
-    send(form) {
+    send(body) {
+        console.log(body);
         return {
             tagLists: JSON.stringify([
                 { name: "アトラクション" },

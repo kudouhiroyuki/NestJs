@@ -1,6 +1,13 @@
-import {Response} from 'express';
-import { Get, Controller, Render, Res } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { Users } from '../entities/users.entity';
+import { UsersService } from './users.service';
 
-@Controller()
+@Controller('users')
 export class UsersController {
+  constructor(private readonly service: UsersService) {}
+
+  @Get()
+  async getUsers(): Promise<Users[]> {
+    return await this.service.findAll();
+  }
 }

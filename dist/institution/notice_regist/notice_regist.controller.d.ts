@@ -2,7 +2,7 @@ export declare class NoticeRegistController {
     root(): {
         tagLists: string;
     };
-    send(form: any): {
+    send(body: any): {
         tagLists: string;
     };
 }
