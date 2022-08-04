@@ -1,22 +1,26 @@
 <%- include('../partials/head'); %>
 
 <body>
-  <%- include('../partials/header'); %>
-  <%- include('../partials/sidebar'); %>
-
-  <p><%= response %></p>
- 
-  <div id="app">
-    <p>{{msg}}</p>
-    <button @click="sayHello">Hi!</button>
+  <div class="layout">
+    <%- include('../partials/header'); %>
+    <main>
+      <%- include('../partials/sidebar'); %>
+      <section>
+        <p><%= response %></p>
+        <div id="index">
+          <p>{{msg}}</p>
+          <button @click="sayHello">Hi!</button>
+        </div>
+      </section>
+    </main>
   </div>
-
+  
   <script type="text/javascript">
   let response= `<%- response %>`;
   console.log(JSON.parse(response));
 
   new Vue({
-    el: "#app",
+    el: "#index",
     data: {
       msg: "Welcome"
     },
