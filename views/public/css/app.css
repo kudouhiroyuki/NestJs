@@ -1,0 +1,28 @@
+.sidebar {
+  box-sizing: border-box;
+  width: 260px;
+  height: calc(100vh - 24px);
+  padding: 20px 20px;
+  list-style-type: none;
+  background-color: #222d32;
+  overflow-y: scroll;
+}
+.sidebar li {
+  margin-bottom: 15px;
+}
+.sidebar li > span {
+  display: block;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 5px;
+}
+.sidebar li > a {
+  display: block;
+  font-size: 14px;
+  color: #fff;
+  padding: 0 15px;
+  margin-bottom: 5px;
+}
+.sidebar li > a:last-child {
+  margin-bottom: 0;
+}/*# sourceMappingURL=app.css.map */

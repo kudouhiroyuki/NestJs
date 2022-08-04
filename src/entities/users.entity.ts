@@ -1,5 +1,6 @@
 import {
   Entity,
+  Column,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -7,4 +8,7 @@ import {
 export class Users {
   @PrimaryGeneratedColumn()
   readonly id: number;
+
+  @Column({ length: 60 })
+  password: string;
 }

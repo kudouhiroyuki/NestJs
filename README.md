@@ -9,9 +9,13 @@ http://localhost:3000/institution/notice_regist
 - お知らせ照会 /institution/notice_inquiry<br>
 http://localhost:3000/institution/notice_inquiry
 
+## 環境構築<br>
+- npm install
+
+- Live Sass Compiler（VSCode）
+
 ## 起動<br>
-npm install<br>
-yarn start
+yarn start<br>
 yarn start --watch
 
 ## コマンド<br>
