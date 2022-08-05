@@ -6,7 +6,7 @@
 
   <%- include('../../partials/sidebar'); %>
   <main id="notice_regist">
-    <form action="notice_regist" method="post">
+    <form @submit.prevent="onSubmit" name="noticeRegist">
       <button type="submit" class="btn btn-primary">プレビュー</button>
       <button type="submit" class="btn btn-primary">登録</button>
 
@@ -33,7 +33,10 @@
           <span class="badge bg-danger">必須</span>
         </label>
         <div class="col-md-8">
-          <input name="notice_title" maxlength="50" type="text" class="form-control">
+          <input v-model="$v.notice_title.$model" name="notice_title" maxlength="50" type="text" class="form-control">
+          <div v-if="$v.notice_title.$dirty">
+            <span v-if="!$v.notice_title.required">名前が入力されていません。</span>
+          </div>
         </div>
       </div>
 
@@ -112,11 +115,18 @@
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
+Vue.use(window.vuelidate.default);
+const { required } = window.validators;
+
 let tagLists = `<%- tagLists %>`;
 
 new Vue({
   el: "#notice_regist",
   data: {
+    // 送信データ
+    notice_title: "",
+    notice_title: "",
+
     tag: {
       value: JSON.parse(tagLists)[0].name,
       items: JSON.parse(tagLists),
@@ -127,10 +137,23 @@ new Vue({
       minDate: moment().format('YYYY-MM-DD'),
     }
   },
+  validations: {
+    notice_title: {
+      required,
+    },
+  },
   methods: {
     onFormChange(target, updateValue) {
       data[name].value = updateValue;
     },
+    onSubmit() {
+      this.$v.$touch();
+      if(!this.$v.$invalid) {
+        document.noticeRegist.method="post";
+        document.noticeRegist.action = "notice_regist";
+        document.noticeRegist.submit();
+      }
+    }
   }
 })
 </script>
