@@ -84,9 +84,10 @@
           <span class="badge bg-danger">必須</span>
         </label>
         <div class="col-md-8">
-          <select :value="tag.value" @change="onFormChange('tag',$event.target.value)" name="tag" class="form-select">
+          <select v-model="tag" name="tag" class="form-select">
+            <option disabled>検索項目・詳細入力</option>
             <option
-              v-for="item in tag.items"
+              v-for="item in tagItems"
               :key="item.name"
               :value="item.name"
             >{{ item.name }}</option>
@@ -151,15 +152,13 @@ let tagLists = `<%- tagLists %>`;
 new Vue({
   el: "#noticeRegistPage",
   data: {
+    tagItems: JSON.parse(tagLists),
     // 送信データ
     open_range: "",
     notice_title: "",
     notice_body: "",
-
-    tag: {
-      value: JSON.parse(tagLists)[0].name,
-      items: JSON.parse(tagLists),
-    },
+    tag: "",
+    
     dateTime: {
       picked: "type1",
       value: null,
