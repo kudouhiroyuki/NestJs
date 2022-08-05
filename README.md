@@ -29,3 +29,9 @@ nest g service users
 
 ## SQL<br>
 TRUNCATE laravel.contactChats;（全レコード削除）
+
+■INSERT 文
+INSERT INTO nest.users VALUES(2, 'password');
+
+■UPDATE 文
+UPDATE nest.users SET password='admin' WHERE id='1';
