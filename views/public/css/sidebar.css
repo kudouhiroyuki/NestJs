@@ -1,11 +1,14 @@
 .sidebar {
+  z-index: 998;
   box-sizing: border-box;
+  overflow-y: scroll;
+  position: fixed;
+  top: 24px;
   width: 260px;
-  height: calc(100vh - 24px);
+  height: 100%;
   padding: 20px 20px;
   list-style-type: none;
   background-color: #222d32;
-  overflow-y: scroll;
 }
 .sidebar li {
   margin-bottom: 15px;

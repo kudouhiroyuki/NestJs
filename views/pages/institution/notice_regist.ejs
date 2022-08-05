@@ -3,80 +3,92 @@
 <body>
 <div class="layout">
   <%- include('../../partials/header'); %>
-  <main>
-    <%- include('../../partials/sidebar'); %>
-    <section id="notice_regist">
-      <form action="notice_regist" method="post">
-        <button type="submit" class="btn btn-primary">プレビュー</button>
-        <button type="submit" class="btn btn-primary">登録</button>
 
-        <div class="form-group row mb-4">
-          <label class="col-sm-4 col-form-label">
-            公開範囲
-            <span class="badge bg-danger">必須</span>
-          </label>
-          <div class="col-md-8">
+  <%- include('../../partials/sidebar'); %>
+  <main id="notice_regist">
+    <form action="notice_regist" method="post">
+      <button type="submit" class="btn btn-primary">プレビュー</button>
+      <button type="submit" class="btn btn-primary">登録</button>
+
+      <div class="form-group row mb-4">
+        <label class="col-sm-4 col-form-label">
+          公開範囲
+          <span class="badge bg-danger">必須</span>
+        </label>
+        <div class="col-md-8">
+          <input name="open_range" value="consumer" class="form-check-input" type="radio" id="consumer" checked>
+          <label class="form-check-label" for="consumer">
             コンシューマ
-          </div>
-        </div>
-
-        <div class="form-group row mb-4">
-          <label class="col-sm-4 col-form- label">
-            お知らせタイトル
-            <span class="badge bg-danger">必須</span>
           </label>
-          <div class="col-md-8">
-            <input name="notice_title" maxlength="50" type="text" class="form-control">
-          </div>
-        </div>
-
-        <div class="form-group row mb-4">
-          <label class="col-sm-4 col-form-label">
-            お知らせ本文
-            <span class="badge bg-danger">必須</span>
+          <input name="open_range" value="back_office" class="form-check-input" type="radio" id="back_office">
+          <label class="form-check-label" for="back_office">
+            バックオフィス
           </label>
-          <div class="col-md-8">
-            <textarea name="notice_body" maxlength="2000" rows="3" class="form-control"></textarea>
-          </div>
         </div>
+      </div>
 
-        <div class="form-group row mb-4">
-          <label class="col-sm-4 col-form-label">
-            タグ
-            <span class="badge bg-danger">必須</span>
-          </label>
-          <div class="col-md-8">
-            <select class="form-select">
-              <option v-for="item in tagLists" :key="item.name" :value="item.name">{{ item.name }}</option>
-            </select>
-          </div>
+      <div class="form-group row mb-4">
+        <label class="col-sm-4 col-form- label">
+          お知らせタイトル
+          <span class="badge bg-danger">必須</span>
+        </label>
+        <div class="col-md-8">
+          <input name="notice_title" maxlength="50" type="text" class="form-control">
         </div>
+      </div>
 
-        <div class="form-group row mb-4">
-          <label class="col-sm-4 col-form-label">
-            投稿日時
-            <span class="badge bg-danger">必須</span>
-          </label>
-          <div class="col-md-8">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-            <label class="form-check-label" for="flexRadioDefault2">
-              日時を指定
-            </label>
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-            <label class="form-check-label" for="flexRadioDefault2">
-              即時を指定
-            </label>
-            <vue-ctk-date-time-picker
-              name="dateTime"
-              v-model="dateTime.date"
-              formatted="YYYY/MM/DD hh:mm"
-              :min-date="dateTime.minDate"
-              label=""
-            />
-          </div>
+      <div class="form-group row mb-4">
+        <label class="col-sm-4 col-form-label">
+          お知らせ本文
+          <span class="badge bg-danger">必須</span>
+        </label>
+        <div class="col-md-8">
+          <textarea name="notice_body" maxlength="2000" rows="3" class="form-control"></textarea>
         </div>
-      </form>
-    </section>
+      </div>
+
+      <div class="form-group row mb-4">
+        <label class="col-sm-4 col-form-label">
+          タグ
+          <span class="badge bg-danger">必須</span>
+        </label>
+        <div class="col-md-8">
+          <select :value="tag.value" @change="onFormChange('tag',$event.target.value)" name="tag" class="form-select">
+            <option
+              v-for="item in tag.items"
+              :key="item.name"
+              :value="item.name"
+            >{{ item.name }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group row mb-4">
+        <label class="col-sm-4 col-form-label">
+          投稿日時
+          <span class="badge bg-danger">必須</span>
+        </label>
+        <div class="col-md-8">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+          <label class="form-check-label" for="flexRadioDefault2">
+            日時を指定
+          </label>
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+          <label class="form-check-label" for="flexRadioDefault2">
+            即時を指定
+          </label>
+          <vue-ctk-date-time-picker
+            name="date_time"
+            v-model="dateTime.value"
+            formatted="YYYY/MM/DD hh:mm"
+            :min-date="dateTime.minDate"
+            position="top"
+            label=""
+          />
+        </div>
+      </div>
+    </form>
+    <p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p><p>zzz</p>
   </main>
 </div>
 
@@ -85,17 +97,22 @@ const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 let tagLists = `<%- tagLists %>`;
+
 new Vue({
   el: "#notice_regist",
   data: {
-    tagLists: JSON.parse(tagLists),
+    tag: {
+      value: JSON.parse(tagLists)[0].name,
+      items: JSON.parse(tagLists),
+    },
     dateTime: {
-      date: null,
+      value: null,
       minDate: moment().format('YYYY-MM-DD'),
     }
   },
   methods: {
-    test() {   
+    onFormChange(target, updateValue) {
+      data[name].value = updateValue;
     },
   }
 })
