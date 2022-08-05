@@ -5,8 +5,8 @@
   <%- include('../../partials/header'); %>
 
   <%- include('../../partials/sidebar'); %>
-  <main id="notice_regist">
-    <form @submit.prevent="onSubmit" name="noticeRegist">
+  <main id="noticeRegistPage">
+    <form @submit.prevent="onSubmit" name="notice_regist">
       <button type="submit" class="btn btn-primary">プレビュー</button>
       <button type="submit" class="btn btn-primary">登録</button>
 
@@ -16,14 +16,27 @@
           <span class="badge bg-danger">必須</span>
         </label>
         <div class="col-md-8">
-          <input name="open_range" value="consumer" class="form-check-input" type="radio" id="consumer" checked>
-          <label class="form-check-label" for="consumer">
-            コンシューマ
-          </label>
-          <input name="open_range" value="back_office" class="form-check-input" type="radio" id="back_office">
-          <label class="form-check-label" for="back_office">
-            バックオフィス
-          </label>
+          <input
+            v-model="$v.open_range.$model"
+            name="open_range"
+            value="consumer"
+            class="form-check-input"
+            type="radio"
+            id="consumer"
+          />
+          <label class="form-check-label" for="consumer">コンシューマ</label>
+          <input
+            v-model="$v.open_range.$model"
+            name="open_range"
+            value="back_office" 
+            class="form-check-input"
+            type="radio"
+            id="back_office"
+          />
+          <label class="form-check-label" for="back_office">バックオフィス</label>
+          <div v-if="$v.open_range.$dirty" class="text-danger fw-bold">
+            <span v-if="!$v.open_range.required">必須項目が選択されていません。</span>
+          </div>
         </div>
       </div>
 
@@ -33,9 +46,15 @@
           <span class="badge bg-danger">必須</span>
         </label>
         <div class="col-md-8">
-          <input v-model="$v.notice_title.$model" name="notice_title" maxlength="50" type="text" class="form-control">
-          <div v-if="$v.notice_title.$dirty">
-            <span v-if="!$v.notice_title.required">名前が入力されていません。</span>
+          <input
+            v-model="$v.notice_title.$model"
+            name="notice_title"
+            maxlength="50"
+            type="text"
+            class="form-control mb-1"
+          />
+          <div v-if="$v.notice_title.$dirty" class="text-danger fw-bold">
+            <span v-if="!$v.notice_title.required">必須項目が入力されていません。</span>
           </div>
         </div>
       </div>
@@ -46,7 +65,16 @@
           <span class="badge bg-danger">必須</span>
         </label>
         <div class="col-md-8">
-          <textarea name="notice_body" maxlength="2000" rows="3" class="form-control"></textarea>
+          <textarea
+            v-model="$v.notice_body.$model"
+            name="notice_body"
+            maxlength="2000"
+            rows="3"
+            class="form-control mb-1"
+          ></textarea>
+          <div v-if="$v.notice_body.$dirty" class="text-danger fw-bold">
+            <span v-if="!$v.notice_body.required">必須項目が入力されていません。</span>
+          </div>
         </div>
       </div>
 
@@ -121,11 +149,12 @@ const { required } = window.validators;
 let tagLists = `<%- tagLists %>`;
 
 new Vue({
-  el: "#notice_regist",
+  el: "#noticeRegistPage",
   data: {
     // 送信データ
+    open_range: "",
     notice_title: "",
-    notice_title: "",
+    notice_body: "",
 
     tag: {
       value: JSON.parse(tagLists)[0].name,
@@ -138,7 +167,13 @@ new Vue({
     }
   },
   validations: {
+    open_range: {
+      required,
+    },
     notice_title: {
+      required,
+    },
+    notice_body: {
       required,
     },
   },
@@ -149,9 +184,9 @@ new Vue({
     onSubmit() {
       this.$v.$touch();
       if(!this.$v.$invalid) {
-        document.noticeRegist.method="post";
-        document.noticeRegist.action = "notice_regist";
-        document.noticeRegist.submit();
+        document.notice_regist.method="post";
+        document.notice_regist.action = "notice_regist";
+        document.notice_regist.submit();
       }
     }
   }
