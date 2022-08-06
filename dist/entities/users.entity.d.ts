@@ -1,4 +1,4 @@
 export declare class Users {
-    readonly id: number;
+    id: number;
     password: string;
 }

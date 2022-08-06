@@ -3,5 +3,6 @@ import { Users } from '../entities/users.entity';
 export declare class UsersService {
     private readonly usersRepository;
     constructor(usersRepository: Repository<Users>);
-    findAll(): Promise<Users[]>;
+    getUsers(): Promise<Users[]>;
+    getUser(userId: number): Promise<Users>;
 }

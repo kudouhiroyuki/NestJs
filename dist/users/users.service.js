@@ -21,8 +21,11 @@ let UsersService = class UsersService {
     constructor(usersRepository) {
         this.usersRepository = usersRepository;
     }
-    async findAll() {
+    async getUsers() {
         return await this.usersRepository.find();
+    }
+    async getUser(userId) {
+        return await this.usersRepository.findOne(userId);
     }
 };
 UsersService = __decorate([

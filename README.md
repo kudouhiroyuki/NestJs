@@ -10,7 +10,10 @@ http://localhost:3000/institution/notice_regist
 http://localhost:3000/institution/notice_inquiry
 
 - 動作確認用（users）<br>
-http://localhost:3000/users
+curl -X GET "http://localhost:3000/users"<br>
+curl -X GET "http://localhost:3000/users" -v
+curl -X GET "http://localhost:3000/users/1"
+curl -X GET "http://localhost:3000/users/1" -v
 
 ## 環境構築<br>
 - npm install
@@ -26,10 +29,6 @@ yarn start --watch
 nest g module users<br>
 nest g controller users<br>
 nest g service users
-
-## curl<br>
-curl -X GET "http://localhost:3000/users"<br>
-curl -X GET "http://localhost:3000/users" -v
 
 ## SQL<br>
 TRUNCATE laravel.contactChats;（全レコード削除）

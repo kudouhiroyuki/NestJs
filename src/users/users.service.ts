@@ -10,7 +10,11 @@ export class UsersService {
     private readonly usersRepository: Repository<Users>,
   ) {}
 
-  async findAll(): Promise<Users[]> {
+  async getUsers(): Promise<Users[]> {
     return await this.usersRepository.find();
+  }
+
+  async getUser(userId: number): Promise<Users> {
+    return await this.usersRepository.findOne(userId);
   }
 }
