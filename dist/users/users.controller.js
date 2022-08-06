@@ -16,16 +16,16 @@ let UsersController = class UsersController {
     constructor(service) {
         this.service = service;
     }
-    async getUsers() {
-        return await this.service.findAll();
+    getString() {
+        return 'String Data';
     }
 };
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getUsers", null);
+    __metadata("design:returntype", String)
+], UsersController.prototype, "getString", null);
 UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

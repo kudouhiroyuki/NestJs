@@ -27,11 +27,15 @@ nest g module users<br>
 nest g controller users<br>
 nest g service users
 
+## curl<br>
+curl -X GET "http://localhost:3000/users"<br>
+curl -X GET "http://localhost:3000/users" -v
+
 ## SQL<br>
 TRUNCATE laravel.contactChats;（全レコード削除）
 
-■INSERT 文
+- INSERT 文<br>
 INSERT INTO nest.users VALUES(2, 'password');
 
-■UPDATE 文
+- UPDATE 文<br>
 UPDATE nest.users SET password='admin' WHERE id='1';
