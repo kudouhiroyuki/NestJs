@@ -27,6 +27,9 @@ let UsersService = class UsersService {
     async getUser(userId) {
         return await this.usersRepository.findOne(userId);
     }
+    async createUser(user) {
+        return await this.usersRepository.insert(user);
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),

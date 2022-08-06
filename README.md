@@ -14,6 +14,8 @@ curl -X GET "http://localhost:3000/users"<br>
 curl -X GET "http://localhost:3000/users" -v<br>
 curl -X GET "http://localhost:3000/users/1"<br>
 curl -X GET "http://localhost:3000/users/1" -v<br>
+curl -X POST http://localhost:3000/users -d "id=3&password=password"<br>
+curl -X POST http://localhost:3000/users -d "id=3&password=password" -v<br>
 
 ## 環境構築<br>
 - npm install
