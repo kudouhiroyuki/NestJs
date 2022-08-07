@@ -11,11 +11,11 @@ http://localhost:3000/institution/notice_inquiry
 
 - 動作確認用（users）<br>
 curl -X GET "http://localhost:3000/users"<br>
-curl -X GET "http://localhost:3000/users" -v<br>
 curl -X GET "http://localhost:3000/users/1"<br>
-curl -X GET "http://localhost:3000/users/1" -v<br>
 curl -X POST http://localhost:3000/users -d "id=3&password=password"<br>
-curl -X POST http://localhost:3000/users -d "id=3&password=password" -v<br>
+curl -X PUT http://localhost:3000/users/1 -d "password=Test"<br>
+curl -X DELETE http://localhost:3000/users/1<br>
+-v<br>
 
 ## 環境構築<br>
 - npm install

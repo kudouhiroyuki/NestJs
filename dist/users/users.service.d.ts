@@ -1,4 +1,4 @@
-import { Repository, InsertResult } from 'typeorm';
+import { Repository, InsertResult, UpdateResult, DeleteResult } from 'typeorm';
 import { Users } from '../entities/users.entity';
 export declare class UsersService {
     private readonly usersRepository;
@@ -6,4 +6,6 @@ export declare class UsersService {
     getUsers(): Promise<Users[]>;
     getUser(userId: number): Promise<Users>;
     createUser(user: Users): Promise<InsertResult>;
+    updateUser(id: number, user: Users): Promise<UpdateResult>;
+    deleteUser(id: number): Promise<DeleteResult>;
 }

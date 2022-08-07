@@ -30,6 +30,12 @@ let UsersService = class UsersService {
     async createUser(user) {
         return await this.usersRepository.insert(user);
     }
+    async updateUser(id, user) {
+        return await this.usersRepository.update(id, user);
+    }
+    async deleteUser(id) {
+        return await this.usersRepository.delete(id);
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),

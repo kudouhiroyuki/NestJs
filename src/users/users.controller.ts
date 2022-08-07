@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Query, Body, Param } from '@nestjs/common';
-import { InsertResult } from 'typeorm';
+import { Controller, Get, Post, Put, Delete, Query, Body, Param } from '@nestjs/common';
+import { InsertResult, UpdateResult, DeleteResult } from 'typeorm';
 import { Users } from '../entities/users.entity';
 import { UsersService } from './users.service';
 
@@ -20,5 +20,15 @@ export class UsersController {
   @Post()
   async createUser(@Body() user: Users): Promise<InsertResult> {
     return this.service.createUser(user);
+  }
+
+  @Put(':id')
+  async updateUser(@Param('id') id: string, @Body() user: Users): Promise<UpdateResult> {
+    return this.service.updateUser(Number(id), user);
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param('id') id: string): Promise<DeleteResult> {
+    return await this.service.deleteUser(Number(id));
   }
 }
