@@ -5,42 +5,145 @@
   <%- include('../../partials/header'); %>
 
   <%- include('../../partials/sidebar'); %>
+
   <main id="noticeInquiryPage">
+    <form @submit.prevent="onSerch" name="noticeInquirySerch" class="mb-5">
+      <div class="d-flex justify-content-between mb-5">
+        <p class="fs-4">お知らせ照会</p>
+        <div>
+          <button type="submit" class="btn btn-primary">検索</button>
+          <button type="submit" class="btn btn-primary">CSVダウンロード</button>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-4">
+            <label>ステータス</label>
+          </div>
+          <div class="col-8">
+            <select v-model="status" name="status" class="form-select">
+              <option
+                v-for="item in statusItems"
+                :key="item.name"
+                :value="item.name"
+              >{{ item.name }}</option>
+            </select>
+          </div>
+        </div>
 
-    <form @submit.prevent="onSubmit" name="notice_regist">
-      <button type="submit" class="btn btn-primary">検索</button>
-      <button type="submit" class="btn btn-primary">CSVダウンロード</button>
+        <div class="row">
+          <div class="col-4">
+            <label>お知らせタイトル</label>
+          </div>
+          <div class="col-8">
+            <input
+              v-model="notice_title"
+              name="notice_title"
+              type="text"
+              class="form-control"
+            />
+          </div>
+        </div>
 
-      <div class="form-group row mb-4">
-        <label class="col-sm-4 col-form-label">
-          お知らせタイトル
-          <span class="badge bg-danger">必須</span>
-        </label>
-        <div class="col-md-8">
-          <input
-            name="notice_title"
-            maxlength="50"
-            type="text"
-            class="form-control mb-2"
-          />
+        <div class="row">
+          <div class="col-4">
+            <label>タグ</label>
+          </div>
+          <div class="col-8">
+            <select v-model="tag" name="tag" class="form-select">
+              <option
+                v-for="item in tagItems"
+                :key="item.name"
+                :value="item.name"
+              >{{ item.name }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-4">
+            <label>投稿日時</label>
+          </div>
+          <div class="col-8">
+            <vue-ctk-date-time-picker
+              name="date_time"
+              v-model="date_time"
+              formatted="YYYY/MM/DD hh:mm"
+              :min-date="minDate"
+              position="bottom"
+              label=""
+            /></vue-ctk-date-time-picker>
+          </div>
         </div>
       </div>
     </form>
 
-    
-
-
-
-    <vue-good-table :columns="columns" :rows="rows"/>
+    <form @submit.prevent="onUpdate" name="notice_inquiry">
+      <table class="table table-bordered small">
+        <thead>
+          <tr class="align-middle">
+            <th scope="col">お知らせID</th>
+            <th scope="col">公開範囲</th>
+            <th scope="col">お知らせタイトル</th>
+            <th scope="col">タグ</th>
+            <th scope="col">投稿日時</th>
+            <th scope="col">詳細</th>
+            <th scope="col">コピーして新規</th>
+            <th scope="col">並び替え</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr template v-for="item in tableItems" :key="item.index">
+            <td>{{ item.notice_id }}</td>
+            <td>{{ item.open_range }}</td>
+            <td>{{ item.notice_title }}</td>
+            <td>{{ item.tag }}</td>
+            <td>{{ item.date_time }}</td>
+            <td><button type="button" class="btn btn-secondary btn-sm">詳細</button></td>
+            <td><button type="button" class="btn btn-secondary btn-sm">コピーして新規</button></td>
+            <td>
+              <button type="button" class="btn btn-secondary btn-sm">上へ</button>
+              <button type="button" class="btn btn-secondary btn-sm">下へ</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
   </main>
 </div>
 
 <script type="text/javascript">
-Vue.use(window.vueGoodTable.default);
+const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
+Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 new Vue({
   el: "#noticeInquiryPage",
   data: {
+    statusItems: [
+      { name: "公開" },
+      { name: "非公開" }
+    ],
+    tagItems: [
+      { name: "アトラクション" },
+      { name: "フード&レストラン" },
+      { name: "グッツ&ショップ" },
+      { name: "チケット" },
+      { name: "ホテル&関連施設" },
+      { name: "お知らせ" }
+    ],
+    tableItems: [
+      { notice_id: "1001", open_range: "コンシューマ", notice_title: "タイトル", tag: "チケット", date_time: "2022/08/22 10:00" },
+      { notice_id: "1002", open_range: "コンシューマ", notice_title: "タイトル", tag: "お知らせ", date_time: "2022/08/22 10:00" },
+      { notice_id: "1003", open_range: "コンシューマ", notice_title: "タイトル", tag: "アトラクション", date_time: "2022/08/22 10:00" },
+    ],
+
+    minDate: moment().format('YYYY-MM-DD'),
+    // 検索データ
+    status: "",
+    notice_title: "",
+    tag: "",
+    date_time: null,
+
     columns: [
       {
         label: 'お知らせID',
@@ -79,6 +182,14 @@ new Vue({
     ]
   },
   methods: {
+    onSerch() {
+      document.noticeInquirySerch.method="get";
+      document.noticeInquirySerch.action = "notice_inquiry";
+      document.noticeInquirySerch.submit();
+    },
+    onUpdate() {
+      alert("更新")
+    }
   }
 })
 </script>

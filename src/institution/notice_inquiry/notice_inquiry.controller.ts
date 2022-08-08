@@ -7,10 +7,14 @@ export class NoticeInquiryController {
   @Render('institution/notice_inquiry')
   root() {
     return {
-      tagLists: JSON.stringify([
-        { name: "アトラクション" },
-        { name: "フード&レストラン" }
-      ])
     };
-  }  
+  }
+
+  @Post('/')
+  @Render('institution/notice_inquiry')
+  send(@Body() body:any) {
+    console.log(body);
+  	return {
+    };
+  }
 }

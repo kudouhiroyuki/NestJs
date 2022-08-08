@@ -5,6 +5,7 @@
   <%- include('../../partials/header'); %>
 
   <%- include('../../partials/sidebar'); %>
+
   <main id="noticeRegistPage">
     <form @submit.prevent="onSubmit" name="notice_regist">
       <div class="d-flex justify-content-between mb-5">
@@ -90,7 +91,6 @@
         </label>
         <div class="col-md-8">
           <select v-model="$v.tag.$model" name="tag" class="form-select mb-2">
-            <option disabled>検索項目・詳細入力</option>
             <option
               v-for="item in tagItems"
               :key="item.name"
@@ -174,7 +174,7 @@ new Vue({
     ],
     pickeDate: "type1",
     minDate: moment().format('YYYY-MM-DD'),
-    // 送信データ
+    // 登録データ
     open_range: "",
     notice_title: "",
     notice_body: "",

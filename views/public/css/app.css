@@ -64,7 +64,6 @@ textarea {
 }
 .layout main {
   box-sizing: border-box;
-  overflow-y: scroll;
   position: absolute;
   top: 24px;
   left: 260px;
