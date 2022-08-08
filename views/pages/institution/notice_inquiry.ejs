@@ -16,12 +16,12 @@
         </div>
       </div>
       <div class="container">
-        <div class="row">
+        <div class="row mb-3">
           <div class="col-4">
             <label>ステータス</label>
           </div>
           <div class="col-8">
-            <select v-model="status" name="status" class="form-select">
+            <select v-model="status" name="status" class="form-select form-select-sm">
               <option
                 v-for="item in statusItems"
                 :key="item.name"
@@ -31,7 +31,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row mb-3">
           <div class="col-4">
             <label>お知らせタイトル</label>
           </div>
@@ -40,17 +40,17 @@
               v-model="notice_title"
               name="notice_title"
               type="text"
-              class="form-control"
+              class="form-control form-control-sm"
             />
           </div>
         </div>
 
-        <div class="row">
+        <div class="row mb-3">
           <div class="col-4">
             <label>タグ</label>
           </div>
           <div class="col-8">
-            <select v-model="tag" name="tag" class="form-select">
+            <select v-model="tag" name="tag" class="form-select form-select-sm">
               <option
                 v-for="item in tagItems"
                 :key="item.name"

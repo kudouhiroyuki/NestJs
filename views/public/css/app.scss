@@ -23,3 +23,11 @@ textarea { resize: none; }
     background-color: #fff;
   }
 }
+
+#noticeInquiryPage {
+  .field-input {
+    height: 31px;
+    min-height: 31px;
+    padding-top: initial;
+  }
+}
