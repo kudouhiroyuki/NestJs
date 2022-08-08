@@ -7,8 +7,13 @@
   <%- include('../../partials/sidebar'); %>
   <main id="noticeRegistPage">
     <form @submit.prevent="onSubmit" name="notice_regist">
-      <button type="submit" class="btn btn-primary">プレビュー</button>
-      <button type="submit" class="btn btn-primary">登録</button>
+      <div class="d-flex justify-content-between mb-5">
+        <p class="fs-4">お知らせ登録</p>
+        <div>
+          <button type="submit" class="btn btn-primary">プレビュー</button>
+          <button type="submit" class="btn btn-primary">登録</button>
+        </div>
+      </div>
 
       <div class="form-group row mb-4">
         <label class="col-sm-4 col-form-label">
