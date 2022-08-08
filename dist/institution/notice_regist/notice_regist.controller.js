@@ -16,21 +16,11 @@ exports.NoticeRegistController = void 0;
 const common_1 = require("@nestjs/common");
 let NoticeRegistController = class NoticeRegistController {
     root() {
-        return {
-            tagLists: JSON.stringify([
-                { name: "アトラクション" },
-                { name: "フード&レストラン" }
-            ])
-        };
+        return {};
     }
     send(body) {
         console.log(body);
-        return {
-            tagLists: JSON.stringify([
-                { name: "アトラクション" },
-                { name: "フード&レストラン" }
-            ])
-        };
+        return {};
     }
 };
 __decorate([

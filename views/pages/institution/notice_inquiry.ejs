@@ -7,6 +7,30 @@
   <%- include('../../partials/sidebar'); %>
   <main id="noticeInquiryPage">
 
+    <form @submit.prevent="onSubmit" name="notice_regist">
+      <button type="submit" class="btn btn-primary">検索</button>
+      <button type="submit" class="btn btn-primary">CSVダウンロード</button>
+
+      <div class="form-group row mb-4">
+        <label class="col-sm-4 col-form-label">
+          お知らせタイトル
+          <span class="badge bg-danger">必須</span>
+        </label>
+        <div class="col-md-8">
+          <input
+            name="notice_title"
+            maxlength="50"
+            type="text"
+            class="form-control mb-2"
+          />
+        </div>
+      </div>
+    </form>
+
+    
+
+
+
     <vue-good-table :columns="columns" :rows="rows"/>
   </main>
 </div>
@@ -19,12 +43,12 @@ new Vue({
   data: {
     columns: [
       {
-        label: 'id',
+        label: 'お知らせID',
         field: 'id',
         type: 'number',
       },
       {
-        label: 'Name',
+        label: '公開範囲',
         field: 'name',
       },
       {

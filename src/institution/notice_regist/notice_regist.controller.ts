@@ -7,10 +7,6 @@ export class NoticeRegistController {
   @Render('institution/notice_regist')
   root() {
     return {
-      tagLists: JSON.stringify([
-        { name: "アトラクション" },
-        { name: "フード&レストラン" }
-      ])
     };
   }
 
@@ -19,10 +15,6 @@ export class NoticeRegistController {
   send(@Body() body:any) {
     console.log(body);
   	return {
-      tagLists: JSON.stringify([
-        { name: "アトラクション" },
-        { name: "フード&レストラン" }
-      ])
     };
   }
   

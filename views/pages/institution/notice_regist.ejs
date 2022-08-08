@@ -105,7 +105,8 @@
         </label>
         <div class="col-md-8">
           <input
-            v-model="dateTime.picked"
+            v-model="pickeDate"
+            @change="onPickeDateChange"
             value="type1"
             id="type1"
             class="form-check-input"
@@ -115,7 +116,8 @@
             日時を指定
           </label>
           <input
-            v-model="dateTime.picked"
+            v-model="pickeDate"
+            @change="onPickeDateChange"
             value="type2"
             id="type2"
             class="form-check-input"
@@ -124,18 +126,19 @@
           <label class="form-check-label" for="type2">
             即時を指定
           </label>
-          <template v-if="dateTime.picked==='type1'">
+          <template v-if="pickeDate==='type1'">
             <vue-ctk-date-time-picker
-            name="date_time"
-            v-model="$v.date_time.$model"
-            formatted="YYYY/MM/DD hh:mm"
-            :min-date="dateTime.minDate"
-            position="top"
-            label=""
-            />
+              name="date_time"
+              v-model="$v.date_time.$model"
+              formatted="YYYY/MM/DD hh:mm"
+              :min-date="minDate"
+              position="top"
+              label=""
+              class="mt-2"
+            /></vue-ctk-date-time-picker>
           </template>
           <template v-else>
-            <input name="date_time" type="hidden" value="現在日付">
+            <input v-model="$v.date_time.$model" name="date_time" type="hidden">
           </template>
           <div v-if="$v.date_time.$dirty" class="text-danger fw-bold mt-2">
             <span v-if="!$v.date_time.required">必須項目が入力されていません。</span>
@@ -153,22 +156,21 @@ Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 Vue.use(window.vuelidate.default);
 const { required } = window.validators;
 
-let tagLists = `<%- tagLists %>`;
-
 new Vue({
   el: "#noticeRegistPage",
   data: {
-    tagItems: JSON.parse(tagLists),
+    tagItems: [
+      { name: "アトラクション" },
+      { name: "フード&レストラン" }
+    ],
+    pickeDate: "type1",
+    minDate: moment().format('YYYY-MM-DD'),
     // 送信データ
     open_range: "",
     notice_title: "",
     notice_body: "",
     tag: "",
     date_time: null,
-    dateTime: {
-      picked: "type1",
-      minDate: moment().format('YYYY-MM-DD'),
-    }
   },
   validations: {
     open_range: {
@@ -188,8 +190,12 @@ new Vue({
     },
   },
   methods: {
-    onFormChange(target, updateValue) {
-      data[name].value = updateValue;
+    onPickeDateChange() {
+      if(this.pickeDate === 'type2') {
+        this.date_time = moment(new Date()).format('YYYY/MM/DD hh:mm');
+      } else {
+        this.date_time = "";
+      }
     },
     onSubmit() {
       this.$v.$touch();
