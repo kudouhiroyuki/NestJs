@@ -12,7 +12,7 @@
         <p class="fs-4">お知らせ照会</p>
         <div>
           <button type="submit" class="btn btn-primary">検索</button>
-          <button type="submit" class="btn btn-primary">CSVダウンロード</button>
+          <input @click="onCsvDownload" type="button" class="btn btn-primary" value="CSVダウンロード" />
         </div>
       </div>
       <div class="container">
@@ -80,7 +80,7 @@
 
     <form @submit.prevent="onUpdate" name="notice_inquiry">
       <table class="table table-bordered small">
-        <thead>
+        <thead class="table-secondary">
           <tr class="align-middle">
             <th scope="col">お知らせID</th>
             <th scope="col">公開範囲</th>
@@ -183,12 +183,16 @@ new Vue({
   },
   methods: {
     onSerch() {
+      alert("onSerch")
       document.noticeInquirySerch.method="get";
       document.noticeInquirySerch.action = "notice_inquiry";
       document.noticeInquirySerch.submit();
     },
+    onCsvDownload() {
+      alert("CSVダウンロード");
+    },
     onUpdate() {
-      alert("更新")
+      alert("onUpdate")
     }
   }
 })

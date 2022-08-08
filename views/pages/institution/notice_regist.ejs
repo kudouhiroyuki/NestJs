@@ -11,7 +11,7 @@
       <div class="d-flex justify-content-between mb-5">
         <p class="fs-4">お知らせ登録</p>
         <div>
-          <button type="submit" class="btn btn-primary">プレビュー</button>
+          <input @click="onPreview" type="button" class="btn btn-primary" value="プレビュー" />
           <button type="submit" class="btn btn-primary">登録</button>
         </div>
       </div>
@@ -208,6 +208,9 @@ new Vue({
     },
     setDateNow() {
       this.date_time = moment(new Date()).format('YYYY/MM/DD hh:mm');
+    },
+    onPreview() {
+      alert("プレビュー");
     },
     onSubmit() {
       if(this.pickeDate === 'type2') this.setDateNow();
