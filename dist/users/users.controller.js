@@ -20,7 +20,7 @@ let UsersController = class UsersController {
     constructor(service) {
         this.service = service;
     }
-    async getUsers() {
+    async getUsers(query) {
         return await this.service.getUsers();
     }
     async getUser(id) {
@@ -38,8 +38,9 @@ let UsersController = class UsersController {
 };
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUsers", null);
 __decorate([

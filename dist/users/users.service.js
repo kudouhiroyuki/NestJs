@@ -22,7 +22,10 @@ let UsersService = class UsersService {
         this.usersRepository = usersRepository;
     }
     async getUsers() {
-        return await this.usersRepository.find();
+        return await this.usersRepository.find({
+            take: 1,
+            skip: 0
+        });
     }
     async getUser(userId) {
         return await this.usersRepository.findOne(userId);
