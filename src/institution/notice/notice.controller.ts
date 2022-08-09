@@ -21,7 +21,7 @@ export class NoticeController {
   }
 
   /**
-  * GET	お知らせ登録処理
+  * POST お知らせ登録処理
   */
   @Post('/create')
   @Redirect('http://localhost:3000/institution/notice')
