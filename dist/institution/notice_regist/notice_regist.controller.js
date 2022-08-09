@@ -24,7 +24,7 @@ let NoticeRegistController = class NoticeRegistController {
     }
 };
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('/'),
     (0, common_1.Render)('institution/notice_regist'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

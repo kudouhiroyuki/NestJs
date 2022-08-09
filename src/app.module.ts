@@ -7,8 +7,7 @@ import { Users } from './entities/users.entity';
 import { UsersModule } from './users/users.module';
 
 // 施設管理（お知らせ登録・お知らせ照会）
-import { NoticeRegistModule } from './institution/notice_regist/notice_regist.module';
-import { NoticeInquiryModule } from './institution/notice_inquiry/notice_inquiry.module';
+import { NoticeModule } from './institution/notice/notice.module';
 
 @Module({
   imports: [
@@ -23,8 +22,7 @@ import { NoticeInquiryModule } from './institution/notice_inquiry/notice_inquiry
       synchronize: true,
     }),
     UsersModule,
-    NoticeRegistModule,
-    NoticeInquiryModule,
+    NoticeModule,
   ],
   controllers: [ AppController ],
   providers: [ AppService ],
