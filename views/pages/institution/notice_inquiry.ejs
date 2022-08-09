@@ -119,6 +119,14 @@ Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 new Vue({
   el: "#noticeInquiryPage",
   data: {
+    title: 'download csv',
+    d: [{
+      'a': 1,
+      'b': 2
+    }, {
+      'a': 3,
+      'b': 4
+    }],
     statusItems: [
       { name: "公開" },
       { name: "非公開" }
@@ -189,7 +197,15 @@ new Vue({
       document.noticeInquirySerch.submit();
     },
     onCsvDownload() {
-      alert("CSVダウンロード");
+      let csv = '\ufeff' + 'お知らせID,公開範囲,お知らせタイトル,タグ,投稿日時\n';
+      this.tableItems.forEach(el => {
+        let line = `${el['notice_id']},${el['open_range']},${el['notice_title']},${el['tag']},${el['date_time']}`;
+        csv += (line + '\n');
+      })
+      let link = document.createElement('a');
+      link.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      link.download = 'お知らせ一覧.csv';
+      link.click();
     },
     onUpdate() {
       alert("onUpdate")
