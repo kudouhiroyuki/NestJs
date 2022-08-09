@@ -22,6 +22,7 @@
           </div>
           <div class="col-8">
             <select v-model="status" name="status" class="form-select form-select-sm">
+              <option value=""></option>
               <option
                 v-for="item in statusItems"
                 :key="item.name"
@@ -51,6 +52,7 @@
           </div>
           <div class="col-8">
             <select v-model="tag" name="tag" class="form-select form-select-sm">
+              <option value=""></option>
               <option
                 v-for="item in tagItems"
                 :key="item.name"
