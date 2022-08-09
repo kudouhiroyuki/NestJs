@@ -3,15 +3,20 @@
 - XXXXXX
 http://localhost:3000/
 
-- お知らせ登録<br>
+- お知らせ登録（画面）<br>
 http://localhost:3000/institution/notice/create<br>
 src/institution/notice/notice.controller.ts（create）<br>
 views/pages/institution/notice/create.ejs
 
-- お知らせ照会<br>
+- お知らせ照会（画面）<br>
 http://localhost:3000/institution/notice<br>
 src/institution/notice/notice.controller.ts（index）<br>
 views/pages/institution/notice/index.ejs
+
+- お知らせ詳細（画面）<br>
+http://localhost:3000/institution/notice/{id}<br>
+src/institution/notice/notice.controller.ts（show）<br>
+views/pages/institution/notice/show.ejs
 
 - 動作確認用（users）<br>
 curl -X GET "http://localhost:3000/users"<br>

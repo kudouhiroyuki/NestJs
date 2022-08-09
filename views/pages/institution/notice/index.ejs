@@ -99,7 +99,11 @@
             <td>{{ item.notice_title }}</td>
             <td>{{ item.tag }}</td>
             <td>{{ item.date_time }}</td>
-            <td><button type="button" class="btn btn-secondary btn-sm">詳細</button></td>
+            <td>
+              <a :href=`/institution/notice/${item.notice_id}`>
+                <button type="button" class="btn btn-secondary btn-sm">詳細</button>
+              </a>
+            </td>
             <td><button type="button" class="btn btn-secondary btn-sm">コピーして新規</button></td>
             <td>
               <button type="button" class="btn btn-secondary btn-sm">上へ</button>

@@ -28,4 +28,13 @@ export class NoticeController {
   store(@Body() body: any) {
     console.log(body)
   }
+
+  /**
+  * GET	お知らせ詳細画面
+  */
+  @Get(':id')
+  @Render('institution/notice/show')
+  async show() {
+    return {};
+  }
 }
