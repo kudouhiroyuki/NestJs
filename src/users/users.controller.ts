@@ -3,15 +3,13 @@ import { InsertResult, UpdateResult, DeleteResult } from 'typeorm';
 import { Users } from '../entities/users.entity';
 import { UsersService } from './users.service';
 
-
-// curl -X GET "http://localhost:3000/users?limit=1"
 @Controller('users')
 export class UsersController {
   constructor(private readonly service: UsersService) {}
 
   @Get()
-  async getUsers(@Query() query): Promise<Users[]> {
-    return await this.service.getUsers();
+  async getUsers(@Query() query: {limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number}> {
+    return await this.service.getUsers(query.limit, query.page_number);
   }
 
   @Get(':id')

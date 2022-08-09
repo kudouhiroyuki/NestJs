@@ -21,11 +21,16 @@ let UsersService = class UsersService {
     constructor(usersRepository) {
         this.usersRepository = usersRepository;
     }
-    async getUsers() {
-        return await this.usersRepository.find({
-            take: 1,
-            skip: 0
+    async getUsers(limit, page_number) {
+        const offset = (page_number - 1) * limit;
+        const [users, total_record_count] = await this.usersRepository.findAndCount({
+            take: limit,
+            skip: offset
         });
+        return {
+            users,
+            total_record_count,
+        };
     }
     async getUser(userId) {
         return await this.usersRepository.findOne(userId);
