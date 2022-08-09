@@ -8,8 +8,21 @@ export class NoticeController {
   @Get('/')
   @Render('institution/notice/index')
   async index(@Query() query: any) {
-    console.log(query)
-    return {};
+    let notices = [];
+    if(Object.keys(query).length) {
+      notices = [
+        { notice_id: "1001", open_range: "コンシューマ", notice_title: "タイトル", tag: "チケット", date_time: "2022/08/22 10:00" },
+      ]
+    } else {
+      notices = [
+        { notice_id: "1001", open_range: "コンシューマ", notice_title: "タイトル", tag: "チケット", date_time: "2022/08/22 10:00" },
+        { notice_id: "1002", open_range: "コンシューマ", notice_title: "タイトル", tag: "お知らせ", date_time: "2022/08/22 10:00" },
+        { notice_id: "1003", open_range: "コンシューマ", notice_title: "タイトル", tag: "アトラクション", date_time: "2022/08/22 10:00" },
+      ]
+    }
+    return {
+      notices: JSON.stringify(notices)
+    };
   }
 
   /**

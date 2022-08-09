@@ -118,6 +118,8 @@
 </div>
 
 <script type="text/javascript">
+const notices = JSON.parse(`<%- notices %>`);
+
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
@@ -136,11 +138,7 @@ new Vue({
       { name: "ホテル&関連施設" },
       { name: "お知らせ" }
     ],
-    tableItems: [
-      { notice_id: "1001", open_range: "コンシューマ", notice_title: "タイトル", tag: "チケット", date_time: "2022/08/22 10:00" },
-      { notice_id: "1002", open_range: "コンシューマ", notice_title: "タイトル", tag: "お知らせ", date_time: "2022/08/22 10:00" },
-      { notice_id: "1003", open_range: "コンシューマ", notice_title: "タイトル", tag: "アトラクション", date_time: "2022/08/22 10:00" },
-    ],
+    tableItems: notices,
     minDate: moment().format('YYYY-MM-DD'),
     // 検索データ
     status: "",
