@@ -1,4 +1,4 @@
-import { Get, Post, Body, Controller, Render, Query, Redirect } from '@nestjs/common';
+import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect } from '@nestjs/common';
 
 @Controller('institution/notice')
 export class NoticeController {
@@ -58,5 +58,14 @@ export class NoticeController {
         date_time: "2022/08/09 03:36"
       })
     };
+  }
+
+  /**
+  * PUT	お知らせ更新処理
+  */
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body: any) {
+    console.log(id)
+    console.log(body)
   }
 }

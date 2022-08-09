@@ -164,7 +164,9 @@ new Vue({
       link.click();
     },
     onUpdate() {
-      alert("onUpdate")
+      document.noticeSerch.method="put";
+      document.noticeSerch.action = "/institution/notice/1001";
+      document.noticeSerch.submit();
     }
   }
 })
