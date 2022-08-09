@@ -3,11 +3,15 @@
 - XXXXXX
 http://localhost:3000/
 
-- お知らせ登録 /institution/notice_regist<br>
-http://localhost:3000/institution/notice_regist
+- お知らせ登録<br>
+http://localhost:3000/institution/notice_regist<br>
+src/institution/notice_regist/notice_regist.controller.ts<br>
+views/pages/institution/notice_regist.ejs
 
-- お知らせ照会 /institution/notice_inquiry<br>
-http://localhost:3000/institution/notice_inquiry
+- お知らせ照会<br>
+http://localhost:3000/institution/notice_inquiry<br>
+src/institution/notice_inquiry/notice_inquiry.controller.ts<br>
+views/pages/institution/notice_inquiry.ejs
 
 - 動作確認用（users）<br>
 curl -X GET "http://localhost:3000/users"<br>
