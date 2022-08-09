@@ -81,7 +81,7 @@
       </div>
     </form>
 
-    <form @submit.prevent="onUpdate" name="notice_inquiry">
+    <form @submit.prevent="onEdit" name="noticeEdit">
       <table class="table table-bordered small">
         <thead class="table-secondary">
           <tr class="align-middle">
@@ -165,10 +165,10 @@ new Vue({
       link.download = 'お知らせ一覧.csv';
       link.click();
     },
-    onUpdate() {
-      document.noticeSerch.method="put";
-      document.noticeSerch.action = "/institution/notice/1001";
-      document.noticeSerch.submit();
+    onEdit() {
+      document.noticeEdit.method="post";
+      document.noticeEdit.action = "/institution/notice/1001/edit";
+      document.noticeEdit.submit();
     }
   }
 })

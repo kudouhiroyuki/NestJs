@@ -61,10 +61,11 @@ export class NoticeController {
   }
 
   /**
-  * PUT	お知らせ更新処理
+  * Post お知らせ更新処理
   */
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() body: any) {
+  @Post(':id/edit')
+  @Redirect('http://localhost:3000/institution/notice')
+  async edit(@Param('id') id: string, @Body() body: any) {
     console.log(id)
     console.log(body)
   }
