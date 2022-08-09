@@ -39,7 +39,7 @@ export class NoticeController {
   */
   @Post('/create')
   @Redirect('http://localhost:3000/institution/notice')
-  store(@Body() body: any) {
+  async store(@Body() body: any) {
     console.log(body)
   }
 
