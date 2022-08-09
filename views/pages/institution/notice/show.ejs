@@ -6,13 +6,13 @@
 
   <%- include('../../../partials/sidebar'); %>
 
-  <main id="noticeRegistPage">
+  <main id="noticeShow">
     <form @submit.prevent="onSubmit" name="notice">
       <div class="d-flex justify-content-between mb-5">
         <p class="fs-4">お知らせ詳細</p>
         <div>
-          <input @click="onPreview" type="button" class="btn btn-primary" value="プレビュー" />
-          <button type="submit" class="btn btn-primary">登録</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+          <button type="submit" class="btn btn-primary">削除</button>
         </div>
       </div>
 
@@ -72,7 +72,7 @@
         </label>
         <div class="col-md-8">
           <textarea
-            v-model="$v.notice_body.$model"
+            v-model="notice_body"
             name="notice_body"
             maxlength="2000"
             rows="3"
@@ -132,15 +132,15 @@
             即時を指定
           </label>
           <template v-if="pickeDate==='type1'">
-            <vue-ctk-date-time-picker
+            <p>datePicker作り直し</p>
+            <!-- <vue-ctk-date-time-picker
               name="date_time"
-              v-model="$v.date_time.$model"
-              formatted="YYYY/MM/DD hh:mm"
+              v-model="date_time"
               :min-date="minDate"
               position="top"
               label=""
               class="mt-2"
-            /></vue-ctk-date-time-picker>
+            /></vue-ctk-date-time-picker> -->
           </template>
           <template v-else>
             <input v-model="$v.date_time.$model" name="date_time" type="hidden">
@@ -155,6 +155,8 @@
 </div>
 
 <script type="text/javascript">
+const response = JSON.parse(`<%- response %>`);
+
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
@@ -162,7 +164,7 @@ Vue.use(window.vuelidate.default);
 const { required } = window.validators;
 
 new Vue({
-  el: "#noticeRegistPage",
+  el: "#noticeShow",
   data: {
     tagItems: [
       { name: "アトラクション" },
@@ -173,13 +175,13 @@ new Vue({
       { name: "お知らせ" }
     ],
     pickeDate: "type1",
-    minDate: moment().format('YYYY-MM-DD'),
+    minDate: moment(new Date()).format('YYYY/MM/DD hh:mm'),
     // 登録データ
-    open_range: "",
-    notice_title: "",
-    notice_body: "",
-    tag: "",
-    date_time: null,
+    open_range: response.open_range,
+    notice_title: response.notice_title,
+    notice_body: response.notice_body,
+    tag: response.tag,
+    date_time: response.date_time,
   },
   validations: {
     open_range: {

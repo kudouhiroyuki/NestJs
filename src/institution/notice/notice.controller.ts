@@ -1,13 +1,14 @@
-import { Get, Post, Body, Controller, Render, Res, Redirect } from '@nestjs/common';
+import { Get, Post, Body, Controller, Render, Query, Redirect } from '@nestjs/common';
 
 @Controller('institution/notice')
 export class NoticeController {
   /**
-  * GET	お知らせ一覧画面
+  * GET	お知らせ一覧画面（検索処理）
   */
   @Get('/')
   @Render('institution/notice/index')
-  async index() {
+  async index(@Query() query: any) {
+    console.log(query)
     return {};
   }
 
@@ -35,6 +36,14 @@ export class NoticeController {
   @Get(':id')
   @Render('institution/notice/show')
   async show() {
-    return {};
+    return {
+      response: JSON.stringify({
+        open_range: "consumer",
+        notice_title: "お知らせタイトル",
+        notice_body: "お知らせ本文",
+        tag: "アトラクション",
+        date_time: "2022/08/09 03:36"
+      })
+    };
   }
 }

@@ -6,8 +6,8 @@
 
   <%- include('../../../partials/sidebar'); %>
 
-  <main id="noticeInquiryPage">
-    <form @submit.prevent="onSerch" name="noticeInquirySerch" class="mb-5">
+  <main id="noticeIndex">
+    <form @submit.prevent="onSerch" name="noticeSerch" class="mb-5">
       <div class="d-flex justify-content-between mb-5">
         <p class="fs-4">お知らせ照会</p>
         <div>
@@ -65,14 +65,15 @@
             <label>投稿日時</label>
           </div>
           <div class="col-8">
-            <vue-ctk-date-time-picker
+            <p>datePicker作り直し</p>
+            <!-- <vue-ctk-date-time-picker
               name="date_time"
               v-model="date_time"
               formatted="YYYY/MM/DD hh:mm"
               :min-date="minDate"
               position="bottom"
               label=""
-            /></vue-ctk-date-time-picker>
+            /></vue-ctk-date-time-picker> -->
           </div>
         </div>
       </div>
@@ -106,8 +107,8 @@
             </td>
             <td><button type="button" class="btn btn-secondary btn-sm">コピーして新規</button></td>
             <td>
-              <button type="button" class="btn btn-secondary btn-sm">上へ</button>
-              <button type="button" class="btn btn-secondary btn-sm">下へ</button>
+              <button type="submit" type="button" class="btn btn-secondary btn-sm">上へ</button>
+              <button type="submit" type="button" class="btn btn-secondary btn-sm">下へ</button>
             </td>
           </tr>
         </tbody>
@@ -121,16 +122,8 @@ const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 new Vue({
-  el: "#noticeInquiryPage",
+  el: "#noticeIndex",
   data: {
-    title: 'download csv',
-    d: [{
-      'a': 1,
-      'b': 2
-    }, {
-      'a': 3,
-      'b': 4
-    }],
     statusItems: [
       { name: "公開" },
       { name: "非公開" }
@@ -148,57 +141,18 @@ new Vue({
       { notice_id: "1002", open_range: "コンシューマ", notice_title: "タイトル", tag: "お知らせ", date_time: "2022/08/22 10:00" },
       { notice_id: "1003", open_range: "コンシューマ", notice_title: "タイトル", tag: "アトラクション", date_time: "2022/08/22 10:00" },
     ],
-
     minDate: moment().format('YYYY-MM-DD'),
     // 検索データ
     status: "",
     notice_title: "",
     tag: "",
     date_time: null,
-
-    columns: [
-      {
-        label: 'お知らせID',
-        field: 'id',
-        type: 'number',
-      },
-      {
-        label: '公開範囲',
-        field: 'name',
-      },
-      {
-        label: 'Age',
-        field: 'age',
-        type: 'number',
-      },
-      {
-        label: 'Created On',
-        field: 'createdAt',
-        type: 'date',
-        dateInputFormat: 'YYYY-MM-DD',
-        dateOutputFormat: 'MMM Do YY',
-      },
-      {
-        label: 'Percent',
-        field: 'score',
-        type: 'percentage',
-      },
-    ],
-    rows: [
-      { id:1, name:"John", age: 20, createdAt: '201-10-31:9: 35 am',score: 0.03343 },
-      { id:2, name:"Jane", age: 24, createdAt: '2011-10-31', score: 0.03343 },
-      { id:3, name:"Susan", age: 16, createdAt: '2011-10-30', score: 0.03343 },
-      { id:4, name:"Chris", age: 55, createdAt: '2011-10-11', score: 0.03343 },
-      { id:5, name:"Dan", age: 40, createdAt: '2011-10-21', score: 0.03343 },
-      { id:6, name:"John", age: 20, createdAt: '2011-10-31', score: 0.03343 },
-    ]
   },
   methods: {
     onSerch() {
-      alert("onSerch")
-      document.noticeInquirySerch.method="get";
-      document.noticeInquirySerch.action = "notice_inquiry";
-      document.noticeInquirySerch.submit();
+      document.noticeSerch.method="get";
+      document.noticeSerch.action = "/institution/notice";
+      document.noticeSerch.submit();
     },
     onCsvDownload() {
       let csv = '\ufeff' + 'お知らせID,公開範囲,お知らせタイトル,タグ,投稿日時\n';
