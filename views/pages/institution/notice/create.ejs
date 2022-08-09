@@ -7,7 +7,7 @@
   <%- include('../../../partials/sidebar'); %>
 
   <main id="noticeRegistPage">
-    <form @submit.prevent="onSubmit" name="notice_regist">
+    <form @submit.prevent="onSubmit" name="notice">
       <div class="d-flex justify-content-between mb-5">
         <p class="fs-4">お知らせ登録</p>
         <div>
@@ -175,10 +175,10 @@ new Vue({
     pickeDate: "type1",
     minDate: moment().format('YYYY-MM-DD'),
     // 登録データ
-    open_range: "",
-    notice_title: "",
-    notice_body: "",
-    tag: "",
+    open_range: "a",
+    notice_title: "b",
+    notice_body: "c",
+    tag: "アトラクション",
     date_time: null,
   },
   validations: {
@@ -216,9 +216,9 @@ new Vue({
       if(this.pickeDate === 'type2') this.setDateNow();
       this.$v.$touch();
       if(!this.$v.$invalid) {
-        document.notice_regist.method="post";
-        document.notice_regist.action = "notice_regist";
-        document.notice_regist.submit();
+        document.notice.method="post";
+        document.notice.action = "/institution/notice/create";
+        document.notice.submit();
       }
     }
   }
