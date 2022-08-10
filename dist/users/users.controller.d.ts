@@ -5,6 +5,7 @@ export declare class UsersController {
     private readonly service;
     constructor(service: UsersService);
     getUsers(query: {
+        sort: "ASC" | 1 | "DESC" | -1;
         limit: number;
         page_number: number;
     }): Promise<{

@@ -3,9 +3,14 @@ import { Users } from '../entities/users.entity';
 export declare class UsersService {
     private readonly usersRepository;
     constructor(usersRepository: Repository<Users>);
-    getUsers(limit: number, page_number: number): Promise<{
+    getUsers(query: {
+        sort: "ASC" | 1 | "DESC" | -1;
+        limit: number;
+        page_number: number;
+    }): Promise<{
         users: Users[];
         total_record_count: number;
+        total_page_count: number;
     }>;
     getUser(userId: number): Promise<Users>;
     createUser(user: Users): Promise<InsertResult>;

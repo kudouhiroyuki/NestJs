@@ -21,15 +21,20 @@ let UsersService = class UsersService {
     constructor(usersRepository) {
         this.usersRepository = usersRepository;
     }
-    async getUsers(limit, page_number) {
-        const offset = (page_number - 1) * limit;
+    async getUsers(query) {
+        const offset = (query.page_number - 1) * query.limit;
         const [users, total_record_count] = await this.usersRepository.findAndCount({
-            take: limit,
+            select: ['id', 'password'],
+            order: {
+                id: query.sort
+            },
+            take: query.limit,
             skip: offset
         });
         return {
             users,
             total_record_count,
+            total_page_count: 1111,
         };
     }
     async getUser(userId) {

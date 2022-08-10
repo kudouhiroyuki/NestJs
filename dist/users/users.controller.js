@@ -21,7 +21,7 @@ let UsersController = class UsersController {
         this.service = service;
     }
     async getUsers(query) {
-        return await this.service.getUsers(query.limit, query.page_number);
+        return await this.service.getUsers(query);
     }
     async getUser(id) {
         return await this.service.getUser(Number(id));
