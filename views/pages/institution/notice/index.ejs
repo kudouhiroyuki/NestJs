@@ -81,7 +81,7 @@
       </div>
     </form>
 
-    <form @submit.prevent="onEdit" name="noticeEdit">
+    <form>
       <table class="table table-bordered small">
         <thead class="table-secondary">
           <tr class="align-middle">
@@ -109,8 +109,20 @@
             </td>
             <td><button type="button" class="btn btn-secondary btn-sm">コピーして新規</button></td>
             <td>
-              <button type="submit" type="button" class="btn btn-secondary btn-sm">上へ</button>
-              <button type="submit" type="button" class="btn btn-secondary btn-sm">下へ</button>
+              <input
+                formmethod="post"
+                :formaction=`/institution/notice/${item.notice_id}/edit`
+                type="submit"
+                value="上へ"
+                class="btn btn-secondary btn-sm"
+              />
+              <input
+                formmethod="post"
+                :formaction=`/institution/notice/${item.notice_id}/edit`
+                type="submit"
+                value="下へ"
+                class="btn btn-secondary btn-sm"
+              />
             </td>
           </tr>
         </tbody>
@@ -165,11 +177,6 @@ new Vue({
       link.download = 'お知らせ一覧.csv';
       link.click();
     },
-    onEdit() {
-      document.noticeEdit.method="post";
-      document.noticeEdit.action = "/institution/notice/1001/edit";
-      document.noticeEdit.submit();
-    }
   }
 })
 </script>

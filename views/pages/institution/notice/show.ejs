@@ -7,12 +7,24 @@
   <%- include('../../../partials/sidebar'); %>
 
   <main id="noticeShow">
-    <form @submit.prevent="onSubmit" name="notice">
+    <form>
       <div class="d-flex justify-content-between mb-5">
         <p class="fs-4">お知らせ詳細</p>
         <div>
-          <button type="submit" class="btn btn-primary">保存</button>
-          <button type="submit" class="btn btn-primary">削除</button>
+          <input
+            formmethod="post"
+            :formaction=`/institution/notice/${notice_id}/edit`
+            type="submit"
+            value="保存"
+            class="btn btn-primary"
+          />
+          <input
+            formmethod="post"
+            :formaction=`/institution/notice/${notice_id}/delete`
+            type="submit"
+            value="削除"
+            class="btn btn-primary"
+          />
         </div>
       </div>
 
@@ -177,6 +189,7 @@ new Vue({
     pickeDate: "type1",
     minDate: moment(new Date()).format('YYYY/MM/DD hh:mm'),
     // 登録データ
+    notice_id: response.notice_id,
     open_range: response.open_range,
     notice_title: response.notice_title,
     notice_body: response.notice_body,

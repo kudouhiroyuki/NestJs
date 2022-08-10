@@ -40,6 +40,7 @@ export class NoticeController {
   @Post('/create')
   @Redirect('http://localhost:3000/institution/notice')
   async store(@Body() body: any) {
+    console.log("お知らせ登録処理")
     console.log(body)
   }
 
@@ -51,6 +52,7 @@ export class NoticeController {
   async show() {
     return {
       response: JSON.stringify({
+        notice_id: "1001",
         open_range: "consumer",
         notice_title: "お知らせタイトル",
         notice_body: "お知らせ本文",
@@ -66,7 +68,18 @@ export class NoticeController {
   @Post(':id/edit')
   @Redirect('http://localhost:3000/institution/notice')
   async edit(@Param('id') id: string, @Body() body: any) {
+    console.log("お知らせ更新処理")
     console.log(id)
     console.log(body)
+  }
+
+  /**
+  * Post お知らせ削除処理
+  */
+  @Post(':id/delete')
+  @Redirect('http://localhost:3000/institution/notice')
+  async delete(@Param('id') id: string) {
+    console.log("お知らせ削除処理")
+    console.log(id)
   }
 }
