@@ -6,11 +6,194 @@
 
   <%- include('../../../partials/sidebar'); %>
 
-  <main id="noticeIndex">
+  <main id="facilityIndex">
     <div class="d-flex justify-content-between mb-5">
       <p class="fs-4">施設情報管理</p>
       <div>
         <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+    
+    <nav>
+      <div class="nav nav-tabs">
+        <button
+          @click="onTabChange('1')"
+          :class="{'active': tabActive === '1'}"
+          class="nav-link"
+          type="button"
+        >施設情報編集</button>
+        <button
+          @click="onTabChange('2')"
+          :class="{'active': tabActive === '2'}"
+          class="nav-link"
+          type="button"
+        >商品規約</button>
+        <button
+          @click="onTabChange('3')"
+          :class="{'active': tabActive === '3'}"
+          class="nav-link"
+          type="button"
+        >画像</button>
+      </div>
+    </nav>
+
+    <div class="tab-content">
+      <div v-if="tabActive === '1'" class="tab-pane fade show active">
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            施設名
+            <span class="badge bg-danger">必須</span>
+          </label>
+          <div class="col-md-8">
+            <input
+              name="facility_name"
+              maxlength="50"
+              type="text"
+              class="form-control mb-2"
+            />
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            施設住所
+            <span class="badge bg-danger">必須</span>
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="facility_address"
+              maxlength="161"
+              minlength="9"
+              rows="3"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            電話番号
+            <span class="badge bg-danger">必須</span>
+          </label>
+          <div class="col-md-8">
+            <input
+              name="phone_number"
+              maxlength="21"
+              type="number"
+              class="form-control mb-2"
+            />
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            営業時間
+            <span class="badge bg-danger">必須</span>
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="business_hours"
+              maxlength="50"
+              rows="3"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            定休日
+            <span class="badge bg-danger">必須</span>
+          </label>
+          <div class="col-md-8">
+            <input
+              name="holiday"
+              maxlength="50"
+              type="text"
+              class="form-control mb-2"
+            />
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            交通アクセス
+            <span class="badge bg-danger">必須</span>
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="access"
+              maxlength="400"
+              rows="3"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            マップ
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="map"
+              rows="3"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            注意事項
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="notes"
+              maxlength="400"
+              rows="3"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            ホームページURL
+          </label>
+          <div class="col-md-8">
+            <input
+              name="url"
+              maxlength="2000"
+              type="text"
+              class="form-control mb-2"
+            />
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            紹介文
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="Introduction"
+              rows="3"
+              maxlength="1200"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            フリーエリア
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="area"
+              rows="3"
+              maxlength="1200"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div v-else-if="tabActive === '2'" class="tab-pane fade show active">
+        商品規約
+      </div>
+      <div v-else-if="tabActive === '3'" class="tab-pane fade show active">
+        画像
       </div>
     </div>
    
@@ -18,7 +201,17 @@
 </div>
 
 <script type="text/javascript">
-
+new Vue({
+  el: "#facilityIndex",
+  data: {
+    tabActive: '1'
+  },
+  methods: {
+    onTabChange(num) {
+      this.tabActive = num;
+    },
+  }
+})
 </script>
 </body>
 </html>
