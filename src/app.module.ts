@@ -6,8 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from './entities/users.entity';
 import { UsersModule } from './users/users.module';
 
-// 施設管理（お知らせ登録・お知らせ照会）
+// 施設管理
 import { NoticeModule } from './facility_management/notice/notice.module';
+import { FacilityModule } from './facility_management/facility/facility.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { NoticeModule } from './facility_management/notice/notice.module';
     }),
     UsersModule,
     NoticeModule,
+    FacilityModule,
   ],
   controllers: [ AppController ],
   providers: [ AppService ],
