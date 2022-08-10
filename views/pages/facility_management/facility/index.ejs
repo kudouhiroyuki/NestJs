@@ -286,14 +286,14 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div
-            @dragover.prevent="onDrag(true)"
-            @dragleave="onDrag(false)"
-            @drop.prevent="onDrop" 
+            @dragover.prevent="onFileDrag(true)"
+            @dragleave="onFileDrag(false)"
+            @drop.prevent="onFileDrop" 
             :class="{fileAreaFocus: isFileAreaFocus}"
             class="modal-body m-3"
           >
             <p>ここにファイルをドラッグ＆ドロップ<br>または</p>
-            <input type="file" />
+            <input type="file" @change="onFileChange"/>
           </div>
         </div>
       </div>
@@ -318,22 +318,32 @@ new Vue({
     onTabChange(num) {
       this.tabActive = num;
     },
-    onDrop(event) {
+    onFileDrag(flag) {
+      this.isFileAreaFocus = flag;
+    },
+    onFileDrop(event) {
       this.isFileAreaFocus = false;
       const files = event.dataTransfer.files;
       if (files.length !== 1 || files[0].type.indexOf("image") !== 0) {
         return;
       }
+      this.createFileData(files);
+    },
+    onFileChange(event) {
+      const files = event.target.files;
+      if (files.length !== 1 || files[0].type.indexOf("image") !== 0) {
+        return;
+      }
+      this.createFileData(files);
+    },
+    createFileData(files) {
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
         this.logo = reader.result;
       };
       this.logoView = URL.createObjectURL(files[0]);
-    },
-    onDrag(flag) {
-      this.isFileAreaFocus = flag;
-    },
+    }
   }
 })
 </script>
