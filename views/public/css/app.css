@@ -57,6 +57,10 @@ textarea {
   resize: none;
 }
 
+input[type=file] {
+  color: transparent;
+}
+
 .layout {
   width: 100vw;
   height: 100vh;
@@ -79,4 +83,8 @@ textarea {
   height: 31px;
   min-height: 31px;
   padding-top: initial;
+}
+
+.modal .fileAreaFocus {
+  border: 10px dotted powderblue;
 }/*# sourceMappingURL=app.css.map */

@@ -37,7 +37,8 @@
       </div>
     </nav>
 
-    <div class="tab-content">
+    <div class="tab-content pt-5">
+      <!-- 施設情報編集 -->
       <div v-if="tabActive === '1'" class="tab-pane fade show active">
         <div class="form-group row mb-4">
           <label class="col-sm-4 col-form-label">
@@ -189,11 +190,112 @@
           </div>
         </div>
       </div>
+      <!-- 商品規約 -->
       <div v-else-if="tabActive === '2'" class="tab-pane fade show active">
-        商品規約
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            利用規約
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="terms"
+              maxlength="1200"
+              rows="3"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            旅行業法
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="travel_agency"
+              maxlength="1200"
+              rows="3"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            特定商取引法
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="specified_commercial"
+              maxlength="1200"
+              rows="3"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            プライバシーポリシー
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="privacy_policy"
+              maxlength="1200"
+              rows="3"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            キャンセルポリシー
+          </label>
+          <div class="col-md-8">
+            <textarea
+              name="cancellation_policy"
+              maxlength="1200"
+              rows="3"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
       </div>
+      <!-- 画像 -->
       <div v-else-if="tabActive === '3'" class="tab-pane fade show active">
-        画像
+
+        <div class="form-group row mb-4">
+          <label class="col-sm-4 col-form-label">
+            ロゴ
+          </label>
+          <div class="col-md-8">
+            <img :src="logoView">
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- モーダル -->
+    <div
+      class="modal"
+      tabindex="-1"
+      style="display: block;"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">ファイルアップロード</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div
+            @dragover.prevent="onDrag(true)"
+            @dragleave="onDrag(false)"
+            @drop.prevent="onDrop" 
+            :class="{fileAreaFocus: isFileAreaFocus}"
+            class="modal-body m-3"
+          >
+            <p>ここにファイルをドラッグ＆ドロップ<br>または</p>
+            <input type="file" />
+          </div>
+        </div>
       </div>
     </div>
    
@@ -204,11 +306,33 @@
 new Vue({
   el: "#facilityIndex",
   data: {
-    tabActive: '1'
+    tabActive: '3',
+    isFileAreaFocus: false,
+    // 表示データ
+    logoView: "",
+
+    // 登録データ
+    logo: "",
   },
   methods: {
     onTabChange(num) {
       this.tabActive = num;
+    },
+    onDrop(event) {
+      this.isFileAreaFocus = false;
+      const files = event.dataTransfer.files;
+      if (files.length !== 1 || files[0].type.indexOf("image") !== 0) {
+        return;
+      }
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onloadend = () => {
+        this.logo = reader.result;
+      };
+      this.logoView = URL.createObjectURL(files[0]);
+    },
+    onDrag(flag) {
+      this.isFileAreaFocus = flag;
     },
   }
 })

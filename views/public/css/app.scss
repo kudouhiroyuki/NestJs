@@ -5,6 +5,7 @@ html, body { padding: 0; margin: 0; position: relative ; }
 a { color: inherit; text-decoration: none; }
 * { box-sizing: border-box; }
 textarea { resize: none; }
+input[type='file'] { color: transparent; }
 
 .layout {
   width: 100vw;
@@ -29,5 +30,11 @@ textarea { resize: none; }
     height: 31px;
     min-height: 31px;
     padding-top: initial;
+  }
+}
+
+.modal {
+  .fileAreaFocus {
+    border: 10px dotted powderblue;
   }
 }
