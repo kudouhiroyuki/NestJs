@@ -1,12 +1,12 @@
 import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect } from '@nestjs/common';
 
-@Controller('institution/notice')
+@Controller('facility_management/notice')
 export class NoticeController {
   /**
   * GET	お知らせ一覧画面（検索処理）
   */
   @Get('/')
-  @Render('institution/notice/index')
+  @Render('facility_management/notice/index')
   async index(@Query() query: any) {
     let notices = [];
     if(Object.keys(query).length) {
@@ -29,7 +29,7 @@ export class NoticeController {
   * GET	お知らせ登録画面
   */
   @Get('/create')
-  @Render('institution/notice/create')
+  @Render('facility_management/notice/create')
   async create() {
     return {};
   }
@@ -38,7 +38,7 @@ export class NoticeController {
   * POST お知らせ登録処理
   */
   @Post('/create')
-  @Redirect('http://localhost:3000/institution/notice')
+  @Redirect('http://localhost:3000/facility_management/notice')
   async store(@Body() body: any) {
     console.log("お知らせ登録処理")
     console.log(body)
@@ -48,7 +48,7 @@ export class NoticeController {
   * GET	お知らせ詳細画面
   */
   @Get(':id')
-  @Render('institution/notice/show')
+  @Render('facility_management/notice/show')
   async show() {
     return {
       response: JSON.stringify({
@@ -66,7 +66,7 @@ export class NoticeController {
   * Post お知らせ更新処理
   */
   @Post(':id/edit')
-  @Redirect('http://localhost:3000/institution/notice')
+  @Redirect('http://localhost:3000/facility_management/notice')
   async edit(@Param('id') id: string, @Body() body: any) {
     console.log("お知らせ更新処理")
     console.log(id)
@@ -77,7 +77,7 @@ export class NoticeController {
   * Post お知らせ削除処理
   */
   @Post(':id/delete')
-  @Redirect('http://localhost:3000/institution/notice')
+  @Redirect('http://localhost:3000/facility_management/notice')
   async delete(@Param('id') id: string) {
     console.log("お知らせ削除処理")
     console.log(id)

@@ -6,25 +6,13 @@
 
   <%- include('../../../partials/sidebar'); %>
 
-  <main id="noticeShow">
-    <form>
+  <main id="noticeRegistPage">
+    <form @submit.prevent="onSubmit" name="notice">
       <div class="d-flex justify-content-between mb-5">
-        <p class="fs-4">お知らせ詳細</p>
+        <p class="fs-4">お知らせ登録</p>
         <div>
-          <input
-            formmethod="post"
-            :formaction=`/institution/notice/${notice_id}/edit`
-            type="submit"
-            value="保存"
-            class="btn btn-primary"
-          />
-          <input
-            formmethod="post"
-            :formaction=`/institution/notice/${notice_id}/delete`
-            type="submit"
-            value="削除"
-            class="btn btn-primary"
-          />
+          <input @click="onPreview" type="button" class="btn btn-primary" value="プレビュー" />
+          <button type="submit" class="btn btn-primary">登録</button>
         </div>
       </div>
 
@@ -84,7 +72,7 @@
         </label>
         <div class="col-md-8">
           <textarea
-            v-model="notice_body"
+            v-model="$v.notice_body.$model"
             name="notice_body"
             maxlength="2000"
             rows="3"
@@ -147,7 +135,7 @@
             <p>datePicker作り直し</p>
             <!-- <vue-ctk-date-time-picker
               name="date_time"
-              v-model="date_time"
+              v-model="$v.date_time.$model"
               :min-date="minDate"
               position="top"
               label=""
@@ -167,8 +155,6 @@
 </div>
 
 <script type="text/javascript">
-const response = JSON.parse(`<%- response %>`);
-
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
@@ -176,7 +162,7 @@ Vue.use(window.vuelidate.default);
 const { required } = window.validators;
 
 new Vue({
-  el: "#noticeShow",
+  el: "#noticeRegistPage",
   data: {
     tagItems: [
       { name: "アトラクション" },
@@ -187,14 +173,13 @@ new Vue({
       { name: "お知らせ" }
     ],
     pickeDate: "type1",
-    minDate: moment(new Date()).format('YYYY/MM/DD hh:mm'),
+    minDate: moment().format('YYYY-MM-DD'),
     // 登録データ
-    notice_id: response.notice_id,
-    open_range: response.open_range,
-    notice_title: response.notice_title,
-    notice_body: response.notice_body,
-    tag: response.tag,
-    date_time: response.date_time,
+    open_range: "",
+    notice_title: "",
+    notice_body: "",
+    tag: "",
+    date_time: null,
   },
   validations: {
     open_range: {
@@ -232,7 +217,7 @@ new Vue({
       this.$v.$touch();
       if(!this.$v.$invalid) {
         document.notice.method="post";
-        document.notice.action = "/institution/notice/create";
+        document.notice.action = "/facility_management/notice/create";
         document.notice.submit();
       }
     }

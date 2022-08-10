@@ -103,7 +103,7 @@
             <td>{{ item.tag }}</td>
             <td>{{ item.date_time }}</td>
             <td>
-              <a :href=`/institution/notice/${item.notice_id}`>
+              <a :href=`/facility_management/notice/${item.notice_id}`>
                 <button type="button" class="btn btn-secondary btn-sm">詳細</button>
               </a>
             </td>
@@ -111,14 +111,14 @@
             <td>
               <input
                 formmethod="post"
-                :formaction=`/institution/notice/${item.notice_id}/edit`
+                :formaction=`/facility_management/notice/${item.notice_id}/edit`
                 type="submit"
                 value="上へ"
                 class="btn btn-secondary btn-sm"
               />
               <input
                 formmethod="post"
-                :formaction=`/institution/notice/${item.notice_id}/edit`
+                :formaction=`/facility_management/notice/${item.notice_id}/edit`
                 type="submit"
                 value="下へ"
                 class="btn btn-secondary btn-sm"
@@ -163,7 +163,7 @@ new Vue({
   methods: {
     onSerch() {
       document.noticeSerch.method="get";
-      document.noticeSerch.action = "/institution/notice";
+      document.noticeSerch.action = "/facility_management/notice";
       document.noticeSerch.submit();
     },
     onCsvDownload() {

@@ -7,7 +7,7 @@ import { Users } from './entities/users.entity';
 import { UsersModule } from './users/users.module';
 
 // 施設管理（お知らせ登録・お知らせ照会）
-import { NoticeModule } from './institution/notice/notice.module';
+import { NoticeModule } from './facility_management/notice/notice.module';
 
 @Module({
   imports: [
