@@ -26,8 +26,10 @@ let UsersService = class UsersService {
         const conditions = {};
         if (query.id)
             conditions["id"] = query.id;
+        if (query.user_name)
+            conditions["user_name"] = (0, typeorm_2.Like)(`%${query.user_name}`);
         const [users, total_record_count] = await this.usersRepository.findAndCount({
-            select: ['id', 'password'],
+            select: ['id', 'user_name', 'password'],
             where: conditions,
             order: {
                 id: query.sort

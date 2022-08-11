@@ -10,16 +10,15 @@ export class UsersService {
     private readonly usersRepository: Repository<Users>,
   ) {}
 
-  async getUsers(query: {id: number, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number, total_page_count: number}> {
+  async getUsers(query: {id: number, user_name: string, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number, total_page_count: number}> {
     const offset = (query.page_number - 1) * query.limit;
-    const conditions = {
-      // password: Like(`%${"Test"}`)
-    };
+    const conditions = {};
 
     if(query.id) conditions["id"] = query.id;
+    if(query.user_name) conditions["user_name"] = Like(`%${query.user_name}`);
 
     const [users, total_record_count] = await this.usersRepository.findAndCount({
-      select: ['id', 'password'],
+      select: ['id', 'user_name', 'password'],
       where: conditions,
       order: {
         id: query.sort
