@@ -23,8 +23,12 @@ let UsersService = class UsersService {
     }
     async getUsers(query) {
         const offset = (query.page_number - 1) * query.limit;
+        const conditions = {};
+        if (query.id)
+            conditions["id"] = query.id;
         const [users, total_record_count] = await this.usersRepository.findAndCount({
             select: ['id', 'password'],
+            where: conditions,
             order: {
                 id: query.sort
             },
@@ -34,7 +38,7 @@ let UsersService = class UsersService {
         return {
             users,
             total_record_count,
-            total_page_count: 1111,
+            total_page_count: Math.ceil(total_record_count / query.limit),
         };
     }
     async getUser(userId) {

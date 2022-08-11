@@ -8,7 +8,7 @@ export class UsersController {
   constructor(private readonly service: UsersService) {}
 
   @Get()
-  async getUsers(@Query() query: {sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number}> {
+  async getUsers(@Query() query: {id: number, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number}> {
     return await this.service.getUsers(query);
   }
 

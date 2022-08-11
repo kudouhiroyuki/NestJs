@@ -10,10 +10,13 @@ export class UsersService {
     private readonly usersRepository: Repository<Users>,
   ) {}
 
-  async getUsers(query: {sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number, total_page_count: number}> {
+  async getUsers(query: {id: number, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number, total_page_count: number}> {
     const offset = (query.page_number - 1) * query.limit;
+    const conditions = {};
+    if(query.id) conditions["id"] = query.id;
     const [users, total_record_count] = await this.usersRepository.findAndCount({
       select: ['id', 'password'],
+      where: conditions,
       order: {
         id: query.sort
       },
@@ -23,7 +26,7 @@ export class UsersService {
     return {
       users,
       total_record_count,
-      total_page_count: 1111,
+      total_page_count: Math.ceil(total_record_count / query.limit),
     }
   }
 

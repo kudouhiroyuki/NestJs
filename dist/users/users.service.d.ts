@@ -4,6 +4,7 @@ export declare class UsersService {
     private readonly usersRepository;
     constructor(usersRepository: Repository<Users>);
     getUsers(query: {
+        id: number;
         sort: "ASC" | 1 | "DESC" | -1;
         limit: number;
         page_number: number;
