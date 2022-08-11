@@ -22,13 +22,10 @@ views/pages/facility_management/notice/show.ejs
 
 - 動作確認用（users）<br>
 curl -X GET "http://localhost:3000/users"<br>
-
 curl -X GET "http://localhost:3000/users?sort=ASC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users?sort=DESC&limit=5&page_number=1"<br>
-
-curl -X GET "http://localhost:3000/users?id=&sort=ASC&limit=5&page_number=1
+curl -X GET "http://localhost:3000/users?id=&sort=ASC&limit=5&page_number=1<br>
 curl -X GET "http://localhost:3000/users?id=1&sort=ASC&limit=5&page_number=1<br>
-
 curl -X GET "http://localhost:3000/users/1"<br>
 curl -X POST http://localhost:3000/users -d "id=3&password=password"<br>
 curl -X PUT http://localhost:3000/users/1 -d "password=Test"<br>
