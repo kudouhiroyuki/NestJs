@@ -48,7 +48,10 @@ nest g controller users<br>
 nest g service users
 
 ## SQL<br>
-TRUNCATE laravel.contactChats;（全レコード削除）
+#### データの追加と削除<br>
+- TRUNCATE TABLE文<br>
+※全てのデータを削除する
+TRUNCATE TABLE nest.users;
 
 - INSERT 文<br>
 INSERT INTO nest.users VALUES(2, 'password');

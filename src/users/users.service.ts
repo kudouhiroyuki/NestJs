@@ -1,6 +1,6 @@
 import { Injectable, Query, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, InsertResult, UpdateResult, DeleteResult } from 'typeorm';
+import { Repository, InsertResult, UpdateResult, DeleteResult, Like } from 'typeorm';
 import { Users } from '../entities/users.entity';
 
 @Injectable()
@@ -12,8 +12,12 @@ export class UsersService {
 
   async getUsers(query: {id: number, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number, total_page_count: number}> {
     const offset = (query.page_number - 1) * query.limit;
-    const conditions = {};
+    const conditions = {
+      // password: Like(`%${"Test"}`)
+    };
+
     if(query.id) conditions["id"] = query.id;
+
     const [users, total_record_count] = await this.usersRepository.findAndCount({
       select: ['id', 'password'],
       where: conditions,

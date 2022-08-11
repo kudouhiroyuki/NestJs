@@ -20,6 +20,10 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ length: 60 }),
     __metadata("design:type", String)
+], Users.prototype, "user_name", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ length: 60 }),
+    __metadata("design:type", String)
 ], Users.prototype, "password", void 0);
 Users = __decorate([
     (0, typeorm_1.Entity)()
