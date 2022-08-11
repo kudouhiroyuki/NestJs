@@ -49,12 +49,14 @@ nest g service users
 
 ## SQL<br>
 #### データの追加と削除<br>
-- TRUNCATE TABLE文<br>
-※全てのデータを削除する
-TRUNCATE TABLE nest.users;
-
 - INSERT 文<br>
-INSERT INTO nest.users VALUES(2, 'password');
+※データを追加する<br>
+INSERT INTO nest.users (id, user_name, password) VALUES(1, 'name', 'password');
 
 - UPDATE 文<br>
-UPDATE nest.users SET password='admin' WHERE id='1';
+※データを更新する<br>
+UPDATE nest.users SET user_name='kudou' WHERE id='1';
+
+- TRUNCATE TABLE文<br>
+※全てのデータを削除する<br>
+TRUNCATE TABLE nest.users;
