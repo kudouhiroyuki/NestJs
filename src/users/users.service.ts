@@ -11,9 +11,12 @@ export class UsersService {
   ) {}
 
   async getUsers(query: {id: number, user_name: string, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number, total_page_count: number}> {
-    const offset = (query.page_number - 1) * query.limit;
+    let limit = 5;
+    let offset = 1;
     const conditions = {};
 
+    if(query.limit) limit = query.limit;
+    if(query.page_number) offset = query.page_number;
     if(query.id) conditions["id"] = query.id;
     if(query.user_name) conditions["user_name"] = Like(`%${query.user_name}`);
 
@@ -23,13 +26,13 @@ export class UsersService {
       order: {
         id: query.sort
       },
-      take: query.limit,
-      skip: offset
+      take: limit,
+      skip: (offset - 1) * limit
     })
     return {
       users,
       total_record_count,
-      total_page_count: Math.ceil(total_record_count / query.limit),
+      total_page_count: Math.ceil(total_record_count / limit),
     }
   }
 

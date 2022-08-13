@@ -22,8 +22,13 @@ let UsersService = class UsersService {
         this.usersRepository = usersRepository;
     }
     async getUsers(query) {
-        const offset = (query.page_number - 1) * query.limit;
+        let limit = 5;
+        let offset = 1;
         const conditions = {};
+        if (query.limit)
+            limit = query.limit;
+        if (query.page_number)
+            offset = query.page_number;
         if (query.id)
             conditions["id"] = query.id;
         if (query.user_name)
@@ -34,13 +39,13 @@ let UsersService = class UsersService {
             order: {
                 id: query.sort
             },
-            take: query.limit,
-            skip: offset
+            take: limit,
+            skip: (offset - 1) * limit
         });
         return {
             users,
             total_record_count,
-            total_page_count: Math.ceil(total_record_count / query.limit),
+            total_page_count: Math.ceil(total_record_count / limit),
         };
     }
     async getUser(userId) {
