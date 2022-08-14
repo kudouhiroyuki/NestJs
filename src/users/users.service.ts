@@ -1,7 +1,16 @@
+import { Users } from '../entities/users.entity';
 import { Injectable, Query, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, InsertResult, UpdateResult, DeleteResult, Like } from 'typeorm';
-import { Users } from '../entities/users.entity';
+import {
+    Repository,
+    InsertResult,
+    UpdateResult,
+    DeleteResult,
+    Like,
+    getConnection,
+    getManager,
+    getRepository
+} from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -37,14 +46,28 @@ export class UsersService {
   }
 
   async getUser(userId: number): Promise<Users> {
-    // Repository標準メソッド
-    // return await this.usersRepository.findOne(userId);
+    // Repositoryメソッド：TypeORM
+    return await this.usersRepository.findOne(userId);
 
-    // QueryBuilder
-    return this.usersRepository
-    .createQueryBuilder("user")
-    .where("user.id = :id", { id: 1 })
-    .getRawOne();
+    // QueryBuilder(Connection)：TypeORM
+    // return await getConnection()
+    //   .createQueryBuilder()
+    //   .select("users")
+    //   .from(Users, "users")
+    //   .where("users.id = :id", { id: userId })
+    //   .getOne();
+
+    // QueryBuilder(Entity Manager)：TypeORM
+    // return await getManager()
+    //   .createQueryBuilder(Users, "users")
+    //   .where("users.id = :id", { id: userId })
+    //   .getOne();
+
+    // QueryBuilder(Repository)：TypeORM
+    // return await getRepository(Users)
+    //   .createQueryBuilder("users")
+    //   .where("users.id = :id", { id: userId })
+    //   .getRawOne();
   }
 
   async createUser(user: Users): Promise<InsertResult> {

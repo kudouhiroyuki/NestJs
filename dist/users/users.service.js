@@ -13,10 +13,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
+const users_entity_1 = require("../entities/users.entity");
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const users_entity_1 = require("../entities/users.entity");
 let UsersService = class UsersService {
     constructor(usersRepository) {
         this.usersRepository = usersRepository;
@@ -49,10 +49,7 @@ let UsersService = class UsersService {
         };
     }
     async getUser(userId) {
-        return this.usersRepository
-            .createQueryBuilder("user")
-            .where("user.id = :id", { id: 1 })
-            .getRawOne();
+        return await this.usersRepository.findOne(userId);
     }
     async createUser(user) {
         return await this.usersRepository.insert(user);
