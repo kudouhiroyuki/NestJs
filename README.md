@@ -61,12 +61,13 @@ UPDATE nest.users SET user_name='kudou' WHERE id='1';
 ※全てのデータを削除する<br>
 TRUNCATE TABLE nest.users;
 
-|  アクション  |  画面の有無  |  内容  |
-| ---- | ---- | ---- |
-|  index  |  -  |  一覧表示画面  |
-|  create  |  -  |  新規入力フォーム  |
-|  store  |  -  |  追加処理(createの登録ボタン)  |
-|  show  |  -  |  詳細表示  |
-|  edit  |  -  |  変更フォーム(既存の値が入っている状態)  |
-|  update  |  -  |  変更処理(editの更新ボタン)  |
-|  destroy  |  -  |  削除処理(showの削除ボタン)  |
+## CRUD<br>
+|  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
+|  ----  | ----  |  ----  |  ----  |  ----  |
+|  GET  |  users  |  @index  |  有  |  一覧画面  |
+|  GET  |  users/create  |  @create  |  有  |  新規作成画面  |
+|  GET  |  users  |  @store  |  無  |  追加処理(新規作成画面：登録ボタン)  |
+|  GET  |  users/{id}  |  @show  |  有  |  詳細画面  |
+|  GET  |  users/{id}/edit  |  @edit  |  有  |  編集画面  |
+|  PUT  |  users/{id}  |  @update  |  無  |  変更処理(編集画面：更新ボタン)  |
+|  DELETE  |  users/{id}  |  @destroy  |  無  |  変更処理(編集画面：削除ボタン)  |
