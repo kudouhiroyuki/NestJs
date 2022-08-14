@@ -49,7 +49,10 @@ let UsersService = class UsersService {
         };
     }
     async getUser(userId) {
-        return await this.usersRepository.findOne(userId);
+        return this.usersRepository
+            .createQueryBuilder("user")
+            .where("user.id = :id", { id: 1 })
+            .getRawOne();
     }
     async createUser(user) {
         return await this.usersRepository.insert(user);

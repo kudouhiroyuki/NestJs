@@ -37,7 +37,14 @@ export class UsersService {
   }
 
   async getUser(userId: number): Promise<Users> {
-    return await this.usersRepository.findOne(userId);
+    // Repository標準メソッド
+    // return await this.usersRepository.findOne(userId);
+
+    // QueryBuilder
+    return this.usersRepository
+    .createQueryBuilder("user")
+    .where("user.id = :id", { id: 1 })
+    .getRawOne();
   }
 
   async createUser(user: Users): Promise<InsertResult> {
