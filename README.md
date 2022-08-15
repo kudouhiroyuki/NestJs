@@ -28,7 +28,7 @@ curl -X GET "http://localhost:3000/users?id=&user_name=&sort=ASC&limit=5&page_nu
 curl -X GET "http://localhost:3000/users?id=1&user_name=kudou&sort=ASC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users/1"<br>
 curl -X POST http://localhost:3000/users -d "id=10&user_name=name&password=password"<br>
-curl -X PUT http://localhost:3000/users/10 -d "user_name=name"<br>
+curl -X PUT http://localhost:3000/users/1 -d "user_name=name"<br>
 curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
 
@@ -66,8 +66,12 @@ TRUNCATE TABLE nest.users;
 |  ----  | ----  |  ----  |  ----  |  ----  |
 |  GET  |  users  |  @index  |  有  |  一覧画面  |
 |  GET  |  users/create  |  @create  |  有  |  新規作成画面  |
-|  GET  |  users  |  @store  |  無  |  追加処理(新規作成画面：登録ボタン)  |
+|  POST  |  users  |  @store  |  無  |  追加処理(新規作成画面：登録ボタン)  |
 |  GET  |  users/{id}  |  @show  |  有  |  詳細画面  |
 |  GET  |  users/{id}/edit  |  @edit  |  有  |  編集画面  |
 |  PUT  |  users/{id}  |  @update  |  無  |  変更処理(編集画面：更新ボタン)  |
 |  DELETE  |  users/{id}  |  @destroy  |  無  |  変更処理(編集画面：削除ボタン)  |
+
+## 参考サイト<br>
+- TypeORM<br>
+https://typeorm.io/entities

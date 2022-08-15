@@ -72,13 +72,34 @@ export class UsersService {
 
   async createUser(user: Users): Promise<InsertResult> {
     return await this.usersRepository.insert(user);
+
+    // return await getConnection()
+    //   .createQueryBuilder()
+    //   .insert()
+    //   .into(Users)
+    //   .values([user])
+    //   .execute();
   }
 
   async updateUser(id: number, user: Users): Promise<UpdateResult> {
     return await this.usersRepository.update(id, user);
+
+    // return await getConnection()
+    //   .createQueryBuilder()
+    //   .update(Users)
+    //   .set(user)
+    //   .where("id = :id", { id: id })
+    //   .execute();
   }
   
   async deleteUser(id: number): Promise<DeleteResult> {
     return await this.usersRepository.delete(id);
+
+    // return await getConnection()
+    //   .createQueryBuilder()
+    //   .delete()
+    //   .from(Users)
+    //   .where("id = :id", { id: id })
+    //   .execute();
   }
 }
