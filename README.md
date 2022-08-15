@@ -73,5 +73,11 @@ TRUNCATE TABLE nest.users;
 |  DELETE  |  users/{id}  |  @destroy  |  無  |  変更処理(編集画面：削除ボタン)  |
 
 ## 参考サイト<br>
-- TypeORM<br>
+- TypeORM(公式)<br>
 https://typeorm.io/entities
+
+- TypeORM / Repository使い方<br>
+https://www.wakuwakubank.com/posts/732-typeorm-repository/
+
+- TypeORM / QueryBuilder使い方<br>
+https://qiita.com/taisuke-j/items/001dfaa8b61649601d73
