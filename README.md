@@ -47,7 +47,17 @@ nest g module users<br>
 nest g controller users<br>
 nest g service users
 
-## SQL<br>
+## MySQL<br>
+#### MySQLコマンドラインツールの利用<br>
+- 接続<br>
+mysql -u root -p;
+
+- 終了<br>
+exit;
+
+- コマンド一覧<br>
+help;
+
 #### データの追加と削除<br>
 - INSERT 文<br>
 ※データを追加する<br>
