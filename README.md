@@ -41,7 +41,11 @@ curl -X DELETE http://localhost:3000/users/1<br>
 yarn start<br>
 yarn start --watch
 
-## コマンド<br>
+## Prismaコマンド<br>
+- マイグレーションファイル作成<br>
+npx prisma migrate dev --name init
+
+## Nestコマンド<br>
 - モジュール・コントローラー・サービス作成<br>
 nest g module users<br>
 nest g controller users<br>
