@@ -12,94 +12,101 @@ import {
     getRepository
 } from 'typeorm';
 
+import { PrismaService } from '../prisma.service';
+
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(Users)
-    private readonly usersRepository: Repository<Users>,
-  ) {}
+  constructor(private prisma: PrismaService) {}
+  // constructor(
+  //   @InjectRepository(Users)
+  //   private readonly usersRepository: Repository<Users>,
+  // ) {}
 
-  async getUsers(query: {id: number, user_name: string, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number, total_page_count: number}> {
-    let limit = 5;
-    let offset = 1;
-    const conditions = {};
-
-    if(query.limit) limit = query.limit;
-    if(query.page_number) offset = query.page_number;
-    if(query.id) conditions["id"] = query.id;
-    if(query.user_name) conditions["user_name"] = Like(`%${query.user_name}`);
-
-    const [users, total_record_count] = await this.usersRepository.findAndCount({
-      select: ['id', 'user_name', 'password'],
-      where: conditions,
-      order: {
-        id: query.sort
-      },
-      take: limit,
-      skip: (offset - 1) * limit
-    })
-    return {
-      users,
-      total_record_count,
-      total_page_count: Math.ceil(total_record_count / limit),
-    }
+  async prismaTest(): Promise<Users[]> {
+    return this.prisma.users.findMany();
   }
 
-  async getUser(userId: number): Promise<Users> {
-    // Repositoryメソッド：TypeORM
-    return await this.usersRepository.findOne(userId);
+  // async getUsers(query: {id: number, user_name: string, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number, total_page_count: number}> {
+  //   let limit = 5;
+  //   let offset = 1;
+  //   const conditions = {};
 
-    // QueryBuilder(Connection)：TypeORM
-    // return await getConnection()
-    //   .createQueryBuilder()
-    //   .select("users")
-    //   .from(Users, "users")
-    //   .where("users.id = :id", { id: userId })
-    //   .getOne();
+  //   if(query.limit) limit = query.limit;
+  //   if(query.page_number) offset = query.page_number;
+  //   if(query.id) conditions["id"] = query.id;
+  //   if(query.user_name) conditions["user_name"] = Like(`%${query.user_name}`);
 
-    // QueryBuilder(Entity Manager)：TypeORM
-    // return await getManager()
-    //   .createQueryBuilder(Users, "users")
-    //   .where("users.id = :id", { id: userId })
-    //   .getOne();
+  //   const [users, total_record_count] = await this.usersRepository.findAndCount({
+  //     select: ['id', 'user_name', 'password'],
+  //     where: conditions,
+  //     order: {
+  //       id: query.sort
+  //     },
+  //     take: limit,
+  //     skip: (offset - 1) * limit
+  //   })
+  //   return {
+  //     users,
+  //     total_record_count,
+  //     total_page_count: Math.ceil(total_record_count / limit),
+  //   }
+  // }
 
-    // QueryBuilder(Repository)：TypeORM
-    // return await getRepository(Users)
-    //   .createQueryBuilder("users")
-    //   .where("users.id = :id", { id: userId })
-    //   .getRawOne();
-  }
+  // async getUser(userId: number): Promise<Users> {
+  //   // Repositoryメソッド：TypeORM
+  //   return await this.usersRepository.findOne(userId);
 
-  async createUser(user: Users): Promise<InsertResult> {
-    return await this.usersRepository.insert(user);
+  //   // QueryBuilder(Connection)：TypeORM
+  //   // return await getConnection()
+  //   //   .createQueryBuilder()
+  //   //   .select("users")
+  //   //   .from(Users, "users")
+  //   //   .where("users.id = :id", { id: userId })
+  //   //   .getOne();
 
-    // return await getConnection()
-    //   .createQueryBuilder()
-    //   .insert()
-    //   .into(Users)
-    //   .values([user])
-    //   .execute();
-  }
+  //   // QueryBuilder(Entity Manager)：TypeORM
+  //   // return await getManager()
+  //   //   .createQueryBuilder(Users, "users")
+  //   //   .where("users.id = :id", { id: userId })
+  //   //   .getOne();
 
-  async updateUser(id: number, user: Users): Promise<UpdateResult> {
-    return await this.usersRepository.update(id, user);
+  //   // QueryBuilder(Repository)：TypeORM
+  //   // return await getRepository(Users)
+  //   //   .createQueryBuilder("users")
+  //   //   .where("users.id = :id", { id: userId })
+  //   //   .getRawOne();
+  // }
 
-    // return await getConnection()
-    //   .createQueryBuilder()
-    //   .update(Users)
-    //   .set(user)
-    //   .where("id = :id", { id: id })
-    //   .execute();
-  }
+  // async createUser(user: Users): Promise<InsertResult> {
+  //   return await this.usersRepository.insert(user);
+
+  //   // return await getConnection()
+  //   //   .createQueryBuilder()
+  //   //   .insert()
+  //   //   .into(Users)
+  //   //   .values([user])
+  //   //   .execute();
+  // }
+
+  // async updateUser(id: number, user: Users): Promise<UpdateResult> {
+  //   return await this.usersRepository.update(id, user);
+
+  //   // return await getConnection()
+  //   //   .createQueryBuilder()
+  //   //   .update(Users)
+  //   //   .set(user)
+  //   //   .where("id = :id", { id: id })
+  //   //   .execute();
+  // }
   
-  async deleteUser(id: number): Promise<DeleteResult> {
-    return await this.usersRepository.delete(id);
+  // async deleteUser(id: number): Promise<DeleteResult> {
+  //   return await this.usersRepository.delete(id);
 
-    // return await getConnection()
-    //   .createQueryBuilder()
-    //   .delete()
-    //   .from(Users)
-    //   .where("id = :id", { id: id })
-    //   .execute();
-  }
+  //   // return await getConnection()
+  //   //   .createQueryBuilder()
+  //   //   .delete()
+  //   //   .from(Users)
+  //   //   .where("id = :id", { id: id })
+  //   //   .execute();
+  // }
 }
