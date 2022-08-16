@@ -2,6 +2,15 @@
   z-index: 998;
   position: fixed;
   width: 100%;
-  height: 24px;
-  background-color: #fff;
+  height: 90px;
+  background-color: #1867C0;
+}
+.header .title {
+  color: #FFF;
+  font-size: 20px;
+  font-weight: lighter;
+}
+.header .title span {
+  font-size: 30px;
+  font-weight: bold;
 }/*# sourceMappingURL=header.css.map */
