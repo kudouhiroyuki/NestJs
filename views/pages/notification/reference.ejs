@@ -1,12 +1,12 @@
-<%- include('../../../partials/head'); %>
+<%- include('../../partials/head'); %>
 
 <body>
 <div class="layout">
-  <%- include('../../../partials/header'); %>
+  <%- include('../../partials/header'); %>
 
-  <%- include('../../../partials/sidebar'); %>
+  <%- include('../../partials/sidebar'); %>
 
-  <main id="noticeIndex">
+  <main id="notificationReference">
     <form @submit.prevent="onSerch" name="noticeSerch" class="mb-5">
       <div class="d-flex justify-content-between mb-5">
         <p class="fs-4">お知らせ照会</p>
@@ -103,7 +103,7 @@
             <td>{{ item.tag }}</td>
             <td>{{ item.date_time }}</td>
             <td>
-              <a :href=`/facility_management/notice/${item.notice_id}`>
+              <a :href=`/notification/details/${item.notice_id}`>
                 <button type="button" class="btn btn-secondary btn-sm">詳細</button>
               </a>
             </td>
@@ -138,7 +138,7 @@ const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 new Vue({
-  el: "#noticeIndex",
+  el: "#notificationReference",
   data: {
     statusItems: [
       { name: "公開" },
@@ -163,7 +163,7 @@ new Vue({
   methods: {
     onSerch() {
       document.noticeSerch.method="get";
-      document.noticeSerch.action = "/facility_management/notice";
+      document.noticeSerch.action = "/notification/reference";
       document.noticeSerch.submit();
     },
     onCsvDownload() {

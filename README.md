@@ -6,19 +6,19 @@ src/facility_management/facility/facility.controller.ts（index）<br>
 views/pages/facility_management/facility/index.ejs
 
 - お知らせ登録（画面）<br>
-http://localhost:3000/facility_management/notice/create<br>
-src/facility_management/notice/notice.controller.ts（create）<br>
-views/pages/facility_management/notice/create.ejs
+http://localhost:3000/notification/regist<br>
+src/notification/notification.controller.ts（create）<br>
+views/pages/notification/regist.ejs
 
 - お知らせ照会（画面）<br>
-http://localhost:3000/facility_management/notice<br>
-src/facility_management/notice/notice.controller.ts（index）<br>
-views/pages/facility_management/notice/index.ejs
+http://localhost:3000/notification/reference<br>
+src/notification/notification.controller.ts（index）<br>
+views/pages/notification/reference.ejs
 
 - お知らせ詳細（画面）<br>
-http://localhost:3000/facility_management/notice/{id}<br>
-src/facility_management/notice/notice.controller.ts（show）<br>
-views/pages/facility_management/notice/show.ejs
+http://localhost:3000/notification/details/{id}<br>
+src/notification/notification.controller.ts（show）<br>
+views/pages/notification/details.ejs
 
 - 動作確認用（users）<br>
 curl -X GET "http://localhost:3000/users"<br>

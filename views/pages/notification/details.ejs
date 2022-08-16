@@ -1,26 +1,26 @@
-<%- include('../../../partials/head'); %>
+<%- include('../../partials/head'); %>
 
 <body>
 <div class="layout">
-  <%- include('../../../partials/header'); %>
+  <%- include('../../partials/header'); %>
 
-  <%- include('../../../partials/sidebar'); %>
+  <%- include('../../partials/sidebar'); %>
 
-  <main id="noticeShow">
+  <main id="notificationDetails">
     <form>
       <div class="d-flex justify-content-between mb-5">
         <p class="fs-4">お知らせ詳細</p>
         <div>
           <input
             formmethod="post"
-            :formaction=`/facility_management/notice/${notice_id}/edit`
+            :formaction=`/notification/${notice_id}/edit`
             type="submit"
             value="保存"
             class="btn btn-primary"
           />
           <input
             formmethod="post"
-            :formaction=`/facility_management/notice/${notice_id}/delete`
+            :formaction=`/notification/${notice_id}/delete`
             type="submit"
             value="削除"
             class="btn btn-primary"
@@ -176,7 +176,7 @@ Vue.use(window.vuelidate.default);
 const { required } = window.validators;
 
 new Vue({
-  el: "#noticeShow",
+  el: "#notificationDetails",
   data: {
     tagItems: [
       { name: "アトラクション" },
@@ -224,18 +224,6 @@ new Vue({
     setDateNow() {
       this.date_time = moment(new Date()).format('YYYY/MM/DD hh:mm');
     },
-    onPreview() {
-      alert("プレビュー");
-    },
-    onSubmit() {
-      if(this.pickeDate === 'type2') this.setDateNow();
-      this.$v.$touch();
-      if(!this.$v.$invalid) {
-        document.notice.method="post";
-        document.notice.action = "/facility_management/notice/create";
-        document.notice.submit();
-      }
-    }
   }
 })
 </script>

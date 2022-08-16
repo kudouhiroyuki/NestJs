@@ -1,12 +1,12 @@
-<%- include('../../../partials/head'); %>
+<%- include('../../partials/head'); %>
 
 <body>
 <div class="layout">
-  <%- include('../../../partials/header'); %>
+  <%- include('../../partials/header'); %>
 
-  <%- include('../../../partials/sidebar'); %>
+  <%- include('../../partials/sidebar'); %>
 
-  <main id="noticeRegistPage">
+  <main id="notificationRegist">
     <form @submit.prevent="onSubmit" name="notice">
       <div class="d-flex justify-content-between mb-5">
         <p class="fs-4">お知らせ登録</p>
@@ -162,7 +162,7 @@ Vue.use(window.vuelidate.default);
 const { required } = window.validators;
 
 new Vue({
-  el: "#noticeRegistPage",
+  el: "#notificationRegist",
   data: {
     tagItems: [
       { name: "アトラクション" },
@@ -217,7 +217,7 @@ new Vue({
       this.$v.$touch();
       if(!this.$v.$invalid) {
         document.notice.method="post";
-        document.notice.action = "/facility_management/notice/create";
+        document.notice.action = "/notification/regist";
         document.notice.submit();
       }
     }
