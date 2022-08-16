@@ -489,6 +489,8 @@ new Vue({
         document.tenant.method="post";
         document.tenant.action = "/tenant/details/edit";
         document.tenant.submit();
+      } else {
+        this.tabActive = "1";
       }
     },
     onFileDrag(flag) {
