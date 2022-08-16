@@ -98,3 +98,6 @@ https://www.wakuwakubank.com/posts/732-typeorm-repository/
 
 - TypeORM / QueryBuilder使い方<br>
 https://qiita.com/taisuke-j/items/001dfaa8b61649601d73
+
+- Prisma使い方<br>
+https://zenn.dev/tossy_yukky/articles/0075f9f0054b39d4ef59
