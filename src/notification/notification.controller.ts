@@ -5,7 +5,7 @@ export class NotificationController {
   /**
   * GET	お知らせ照会画面（検索処理）
   */
-  @Get('/reference')
+  @Get('reference')
   @Render('notification/reference')
   async index(@Query() query: any) {
     let notices = [];
@@ -28,7 +28,7 @@ export class NotificationController {
   /**
   * GET	お知らせ登録画面
   */
-  @Get('/regist')
+  @Get('regist')
   @Render('notification/regist')
   async create() {
     return {};
@@ -37,7 +37,7 @@ export class NotificationController {
   /**
   * POST お知らせ登録処理
   */
-  @Post('/regist')
+  @Post('regist')
   @Redirect('http://localhost:3000/notification/reference')
   async store(@Body() body: any) {
     console.log("お知らせ登録処理")

@@ -9,4 +9,14 @@ export class TenantController {
   @Render('tenant/details')
   async show() {
   }
+
+  /**
+  * Post 施設情報更新処理
+  */
+  @Post('/details/edit')
+  @Redirect('http://localhost:3000/tenant/details')
+  async edit(@Body() body: any) {
+    console.log("施設情報更新処理")
+    console.log(body)
+  }
 }
