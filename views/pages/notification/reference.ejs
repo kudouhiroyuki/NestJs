@@ -18,47 +18,15 @@
       <div class="container">
         <div class="row mb-3">
           <div class="col-4">
-            <label>ステータス</label>
-          </div>
-          <div class="col-8">
-            <select v-model="status" name="status" class="form-select form-select-sm">
-              <option value=""></option>
-              <option
-                v-for="item in statusItems"
-                :key="item.name"
-                :value="item.name"
-              >{{ item.name }}</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-4">
-            <label>お知らせタイトル</label>
+            <label>キーワード</label>
           </div>
           <div class="col-8">
             <input
-              v-model="notice_title"
-              name="notice_title"
+              v-model="keyword"
+              name="keyword"
               type="text"
               class="form-control form-control-sm"
             />
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-4">
-            <label>タグ</label>
-          </div>
-          <div class="col-8">
-            <select v-model="tag" name="tag" class="form-select form-select-sm">
-              <option value=""></option>
-              <option
-                v-for="item in tagItems"
-                :key="item.name"
-                :value="item.name"
-              >{{ item.name }}</option>
-            </select>
           </div>
         </div>
 
@@ -66,16 +34,28 @@
           <div class="col-4">
             <label>投稿日時</label>
           </div>
-          <div class="col-8">
-            <p>datePicker作り直し</p>
-            <!-- <vue-ctk-date-time-picker
-              name="date_time"
-              v-model="date_time"
-              formatted="YYYY/MM/DD hh:mm"
-              :min-date="minDate"
-              position="bottom"
-              label=""
-            /></vue-ctk-date-time-picker> -->
+          <div class="col-8 row"> 
+            <div class="col-4">
+              <vue-ctk-date-time-picker
+                name="from"
+                v-model="from"
+                formatted="YYYY/MM/DD hh:mm"
+                :min-date="minDate"
+                position="bottom"
+                label=""
+              /></vue-ctk-date-time-picker>
+            </div>
+            <div class="col-1">〜</div>
+            <div class="col-4">
+              <vue-ctk-date-time-picker
+                name="to"
+                v-model="to"
+                formatted="YYYY/MM/DD hh:mm"
+                :min-date="minDate"
+                position="bottom"
+                label=""
+              /></vue-ctk-date-time-picker>
+            </div>
           </div>
         </div>
       </div>
@@ -92,7 +72,6 @@
             <th scope="col">投稿日時</th>
             <th scope="col">詳細</th>
             <th scope="col">コピーして新規</th>
-            <th scope="col">並び替え</th>
           </tr>
         </thead>
         <tbody>
@@ -108,22 +87,6 @@
               </a>
             </td>
             <td><button type="button" class="btn btn-secondary btn-sm">コピーして新規</button></td>
-            <td>
-              <input
-                formmethod="post"
-                :formaction=`/notification/${item.notice_id}/edit`
-                type="submit"
-                value="上へ"
-                class="btn btn-secondary btn-sm"
-              />
-              <input
-                formmethod="post"
-                :formaction=`/notification/${item.notice_id}/edit`
-                type="submit"
-                value="下へ"
-                class="btn btn-secondary btn-sm"
-              />
-            </td>
           </tr>
         </tbody>
       </table>
@@ -155,10 +118,9 @@ new Vue({
     tableItems: notices,
     minDate: moment().format('YYYY-MM-DD'),
     // 検索データ
-    status: "",
-    notice_title: "",
-    tag: "",
-    date_time: null,
+    keyword: "",
+    from: null,
+    to: null,
   },
   methods: {
     onSerch() {

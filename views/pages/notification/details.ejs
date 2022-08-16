@@ -144,15 +144,15 @@
             即時を指定
           </label>
           <template v-if="pickeDate==='type1'">
-            <p>datePicker作り直し</p>
-            <!-- <vue-ctk-date-time-picker
+            <vue-ctk-date-time-picker
               name="date_time"
-              v-model="date_time"
+              v-model="$v.date_time.$model"
+              formatted="YYYY/MM/DD hh:mm"
               :min-date="minDate"
               position="top"
               label=""
               class="mt-2"
-            /></vue-ctk-date-time-picker> -->
+            /></vue-ctk-date-time-picker>
           </template>
           <template v-else>
             <input v-model="$v.date_time.$model" name="date_time" type="hidden">
@@ -187,7 +187,7 @@ new Vue({
       { name: "お知らせ" }
     ],
     pickeDate: "type1",
-    minDate: moment(new Date()).format('YYYY/MM/DD hh:mm'),
+    minDate: moment(new Date()).format("YYYY-MM-DD"),
     // 登録データ
     notice_id: response.notice_id,
     open_range: response.open_range,
