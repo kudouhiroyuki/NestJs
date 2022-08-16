@@ -42,19 +42,26 @@
 */
 import { Controller, Get, Post, Put, Delete, Query, Body, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { users } from '@prisma/client';
+import { users as Users } from '@prisma/client';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly service: UsersService) {}
 
   @Get()
-  async getUsers(): Promise<users[]> {
+  async getUsers(): Promise<Users[]> {
     return await this.service.getUsers();
   }
 
   @Post()
-  async createUser(@Body() user: { user_name: string; password: string }): Promise<users> {
-    return this.service.createUser(user);
+  async createUser(
+    @Body() user: { user_name: string; password: string }
+  ): Promise<Users> {
+    return await this.service.createUser(user);
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param('id') id: string): Promise<Users> {
+    return await this.service.deleteUser({id: Number(id)});
   }
 }

@@ -111,7 +111,7 @@
 /**
 * ORM（Prismaの場合）
 */
-import { users, Prisma } from '@prisma/client';
+import { users as Users, Prisma } from '@prisma/client';
 import { Injectable, Query, } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 
@@ -119,13 +119,17 @@ import { PrismaService } from '../prisma.service';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getUsers(): Promise<users[]> {
-    return this.prisma.users.findMany();
+  async getUsers(): Promise<Users[]> {
+    return await this.prisma.users.findMany();
   }
 
-  async createUser(data: { user_name: string; password: string }): Promise<users> {
-    return this.prisma.users.create({
-      data,
-    });
+  async createUser(
+    data: { user_name: string; password: string }
+  ): Promise<Users> {
+    return await this.prisma.users.create({data});
+  }
+
+  async deleteUser(where: Prisma.usersWhereUniqueInput): Promise<Users> {
+    return await this.prisma.users.delete({where});
   }
 }

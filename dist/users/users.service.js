@@ -17,12 +17,13 @@ let UsersService = class UsersService {
         this.prisma = prisma;
     }
     async getUsers() {
-        return this.prisma.users.findMany();
+        return await this.prisma.users.findMany();
     }
     async createUser(data) {
-        return this.prisma.users.create({
-            data,
-        });
+        return await this.prisma.users.create({ data });
+    }
+    async deleteUser(where) {
+        return await this.prisma.users.delete({ where });
     }
 };
 UsersService = __decorate([
