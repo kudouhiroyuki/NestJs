@@ -260,30 +260,107 @@
       </div>
       <!-- 画像 -->
       <div v-else-if="tabActive === '3'" class="tab-pane fade show active">
-
-        <div class="form-group row mb-4">
+        <div class="form-group row mb-5">
           <label class="col-sm-4 col-form-label">
             ロゴ
           </label>
-          <div class="col-md-8" style="height: 200px; overflow: scroll;">
-            <img :src="logoView">
+          <div class="col-md-8">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <img :src="logo_View">
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <button @click="onModalShow('logo')" type="submit" class="btn btn-secondary ms-auto">編集</button>
+            </div>
           </div>
         </div>
-        
+        <div class="form-group row mb-5">
+          <label class="col-sm-4 col-form-label">
+            カルーセル①
+          </label>
+          <div class="col-md-8">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <img :src="carousel_1_View">
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <button @click="onModalShow('carousel_1')" type="submit" class="btn btn-secondary ms-auto">編集</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row mb-5">
+          <label class="col-sm-4 col-form-label">
+            カルーセル②
+          </label>
+          <div class="col-md-8">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <img :src="carousel_2_View">
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <button @click="onModalShow('carousel_2')" type="submit" class="btn btn-secondary ms-auto">編集</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row mb-5">
+          <label class="col-sm-4 col-form-label">
+            カルーセル③
+          </label>
+          <div class="col-md-8">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <img :src="carousel_3_View">
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <button @click="onModalShow('carousel_3')" type="submit" class="btn btn-secondary ms-auto">編集</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row mb-5">
+          <label class="col-sm-4 col-form-label">
+            カルーセル④
+          </label>
+          <div class="col-md-8">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <img :src="carousel_4_View">
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <button @click="onModalShow('carousel_4')" type="submit" class="btn btn-secondary ms-auto">編集</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row mb-5">
+          <label class="col-sm-4 col-form-label">
+            カルーセル⑤
+          </label>
+          <div class="col-md-8">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <img :src="carousel_5_View">
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <button @click="onModalShow('carousel_5')" type="submit" class="btn btn-secondary ms-auto">編集</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row mb-5">
+          <label class="col-sm-4 col-form-label">
+            カルーセル⑥
+          </label>
+          <div class="col-md-8">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <img :src="carousel_6_View">
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <button @click="onModalShow('carousel_6')" type="submit" class="btn btn-secondary ms-auto">編集</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- モーダル -->
-    <div
-      class="modal"
-      tabindex="-1"
-      style="display: block;"
-    >
+    <div :style="modalCurrent ? 'display: block' : 'display: none'" class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">ファイルアップロード</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button @click="onModalClose" type="button" class="btn-close"></button>
           </div>
           <div
             @dragover.prevent="onFileDrag(true)"
@@ -306,17 +383,35 @@
 new Vue({
   el: "#tenantDetails",
   data: {
-    tabActive: '3',
+    modalCurrent: "",
+    tabActive: "1",
     isFileAreaFocus: false,
     // 表示データ
-    logoView: "",
-
+    logo_View: "",
+    carousel_1_View: "",
+    carousel_2_View: "",
+    carousel_3_View: "",
+    carousel_4_View: "",
+    carousel_5_View: "",
+    carousel_6_View: "",
     // 登録データ
     logo: "",
+    carousel_1: "",
+    carousel_2: "",
+    carousel_3: "",
+    carousel_4: "",
+    carousel_5: "",
+    carousel_6: "",
   },
   methods: {
     onTabChange(num) {
       this.tabActive = num;
+    },
+    onModalShow(name) {
+      this.modalCurrent = name;
+    },
+    onModalClose() {
+      this.modalCurrent = "";
     },
     onFileDrag(flag) {
       this.isFileAreaFocus = flag;
@@ -340,10 +435,11 @@ new Vue({
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
-        this.logo = reader.result;
+        this[this.modalCurrent] = reader.result;
       };
-      this.logoView = URL.createObjectURL(files[0]);
-    }
+      this[this.modalCurrent + "_View"] = URL.createObjectURL(files[0]);
+      this.modalCurrent = "";
+    },
   }
 })
 </script>
