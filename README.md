@@ -1,9 +1,9 @@
 ## Admin画面
 #### 施設管理<br>
 - 施設情報管理（画面）<br>
-http://localhost:3000/facility_management/notice/create<br>
-src/facility_management/facility/facility.controller.ts（index）<br>
-views/pages/facility_management/facility/index.ejs
+http://localhost:3000/tenant/details<br>
+src/tenant/tenant.controller.ts（show）<br>
+views/pages/tenant/details.ejs
 
 - お知らせ登録（画面）<br>
 http://localhost:3000/notification/regist<br>

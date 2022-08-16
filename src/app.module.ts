@@ -41,14 +41,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 // 施設管理
+import { TenantModule } from './tenant/tenant.module';
 import { NotificationModule } from './notification/notification.module';
-import { FacilityModule } from './facility_management/facility/facility.module';
 
 @Module({
   imports: [
     UsersModule,
+    TenantModule,
     NotificationModule,
-    FacilityModule,
   ],
   controllers: [ AppController ],
   providers: [ AppService ],
