@@ -3,5 +3,9 @@ import { users } from '@prisma/client';
 export declare class UsersController {
     private readonly service;
     constructor(service: UsersService);
-    prismaTest(): Promise<users[]>;
+    getUsers(): Promise<users[]>;
+    createUser(user: {
+        user_name: string;
+        password: string;
+    }): Promise<users>;
 }

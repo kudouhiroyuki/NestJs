@@ -16,8 +16,13 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async prismaTest() {
+    async getUsers() {
         return this.prisma.users.findMany();
+    }
+    async createUser(data) {
+        return this.prisma.users.create({
+            data,
+        });
     }
 };
 UsersService = __decorate([

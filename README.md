@@ -27,7 +27,7 @@ curl -X GET "http://localhost:3000/users?sort=DESC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users?id=&user_name=&sort=ASC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users?id=1&user_name=kudou&sort=ASC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users/1"<br>
-curl -X POST http://localhost:3000/users -d "id=10&user_name=name&password=password"<br>
+curl -X POST http://localhost:3000/users -d "user_name=name&password=password"<br>
 curl -X PUT http://localhost:3000/users/1 -d "user_name=name"<br>
 curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
@@ -87,6 +87,9 @@ TRUNCATE TABLE nest.users;
 |  DELETE  |  users/{id}  |  @destroy  |  無  |  変更処理(編集画面：削除ボタン)  |
 
 ## 参考サイト<br>
+- Nestjs(公式)<br>
+https://docs.nestjs.com/
+
 - TypeORM(公式)<br>
 https://typeorm.io/entities
 

@@ -111,7 +111,7 @@
 /**
 * ORM（Prismaの場合）
 */
-import { Users } from '../entities/users.entity';
+import { users, Prisma } from '@prisma/client';
 import { Injectable, Query, } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 
@@ -119,7 +119,13 @@ import { PrismaService } from '../prisma.service';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async prismaTest(): Promise<Users[]> {
+  async getUsers(): Promise<users[]> {
     return this.prisma.users.findMany();
+  }
+
+  async createUser(data: { user_name: string; password: string }): Promise<users> {
+    return this.prisma.users.create({
+      data,
+    });
   }
 }

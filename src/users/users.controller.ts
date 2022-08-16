@@ -49,7 +49,12 @@ export class UsersController {
   constructor(private readonly service: UsersService) {}
 
   @Get()
-  async prismaTest(): Promise<users[]> {
-    return await this.service.prismaTest();
+  async getUsers(): Promise<users[]> {
+    return await this.service.getUsers();
+  }
+
+  @Post()
+  async createUser(@Body() user: { user_name: string; password: string }): Promise<users> {
+    return this.service.createUser(user);
   }
 }
