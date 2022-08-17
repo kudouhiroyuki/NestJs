@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="63" viewBox="0 0 100 63">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="image_mask" data-name="image mask" width="100" height="63" rx="4" transform="translate(0.26 0.26)" fill="#fff"/>
+    </clipPath>
+  </defs>
+  <g id="Image" transform="translate(-0.26 -0.26)" clip-path="url(#clip-path)">
+    <rect id="shape" width="100" height="63" transform="translate(0.26 0.26)" fill="#777"/>
+    <path id="パス_580" data-name="パス 580" d="M16.234,2.175H2.321A1.167,1.167,0,0,0,1.161,3.35V15.1a1.167,1.167,0,0,0,1.159,1.175H16.234A1.167,1.167,0,0,0,17.393,15.1V3.35A1.167,1.167,0,0,0,16.234,2.175ZM2.321,1A2.335,2.335,0,0,0,0,3.35V15.1a2.335,2.335,0,0,0,2.319,2.35H16.234a2.335,2.335,0,0,0,2.319-2.35V3.35A2.335,2.335,0,0,0,16.234,1H2.321Z" transform="translate(41.002 22.938)" fill="#f8f9fa" fill-rule="evenodd"/>
+    <path id="パス_581" data-name="パス 581" d="M13.011,7.684a.616.616,0,0,1,.718-.117l4.7,2.457V15.7H1V13.178L4.3,10.208a.616.616,0,0,1,.784-.078l3.312,2.237,4.619-4.681Z" transform="translate(40.563 23.794)" fill="#f8f9fa"/>
+    <path id="パス_582" data-name="パス 582" d="M4.741,7.525A1.763,1.763,0,1,0,3,5.763,1.751,1.751,0,0,0,4.741,7.525Z" transform="translate(41.481 23.463)" fill="#f8f9fa" fill-rule="evenodd"/>
+  </g>
+</svg>
