@@ -1,4 +1,4 @@
-.sidebar {
+#sidebar {
   z-index: 998;
   box-sizing: border-box;
   overflow-y: scroll;
@@ -10,22 +10,45 @@
   list-style-type: none;
   background-color: #EFF4FC;
 }
-.sidebar .userRow {
+#sidebar .userRow {
   height: 48px;
   background-color: #FFF;
   box-shadow: #E0E0E0;
-  padding: 15px 20px 15px 10px;
+  padding: 12px 20px 15px 10px;
   margin-bottom: 30px;
   border-radius: 4px;
   overflow: hidden;
 }
-.sidebar .userRow .arow {
-  cursor: pointer;
+#sidebar .userRow .topArea {
+  position: relative;
+  margin-bottom: 20px;
 }
-.sidebar .userRow.active {
+#sidebar .userRow .topArea .name {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 160px;
+}
+#sidebar .userRow .topArea .icon {
+  margin-right: 10px;
+  vertical-align: inherit;
+}
+#sidebar .userRow .topArea .arow {
+  cursor: pointer;
+  position: absolute;
+  top: 7px;
+  right: 0;
+  transform: scale(1, -1);
+}
+#sidebar .userRow.active {
   height: auto;
 }
-.sidebar a {
+#sidebar .userRow.active .topArea .arow {
+  cursor: pointer;
+  transform: inherit;
+}
+#sidebar a {
   display: block;
   font-size: 14px;
   color: #3265BA;
@@ -33,13 +56,13 @@
   margin-bottom: 10px;
   border-radius: 8px;
 }
-.sidebar a:last-child {
+#sidebar a:last-child {
   margin-bottom: 0;
 }
-.sidebar a img {
+#sidebar a img {
   vertical-align: middle;
   margin-right: 10px;
 }
-.sidebar a.active {
+#sidebar a.active {
   background-color: #D6E5FF;
 }/*# sourceMappingURL=sidebar.css.map */

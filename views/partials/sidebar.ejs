@@ -1,8 +1,10 @@
-<nav class="sidebar">
-  <div class="userRow">
-    <img src="/images/icon/icon.svg">
-    富士急　太郎
-    <img class="arow" src="/images/icon/arow.svg">
+<nav id="sidebar">
+  <div :class="{active: isTabStatus}" class="userRow">
+    <div class="topArea">
+      <img class="icon" src="/images/icon/icon.svg">
+      <span class="name">名前名前名前名前名前名前</span>
+      <img @click="onTabToggle" class="arow" src="/images/icon/arow.svg">
+    </div>
     <p>グループ切替</p>
     <button type="button">アカウントグループ</button>
   </div>
@@ -21,3 +23,17 @@
   <a href="" class=""><img src="/images/icon/logging.svg">ログ照会</a>
   <a href="" class=""><img src="/images/icon/logout.svg">ログアウト</a>
 </nav>
+
+<script type="text/javascript">
+new Vue({
+  el: "#sidebar",
+  data: {
+    isTabStatus: false,
+  },
+  methods: {
+    onTabToggle() {
+      this.isTabStatus = !this.isTabStatus;
+    },
+  }
+})
+</script>
