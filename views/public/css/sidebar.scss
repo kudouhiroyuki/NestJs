@@ -4,28 +4,42 @@
   overflow-y: scroll;
   position: fixed;
   top: 90px;
-  width: 260px;
+  width: 300px;
   height: 100%;
   padding: 20px 20px;
   list-style-type: none;
-  background-color: #222d32;
-  li {
-    margin-bottom: 15px;
-    >span {
-      display: block;
-      font-size: 16px;
-      color: #fff;
-      margin-bottom: 5px;
+  background-color: #EFF4FC;
+  .userRow {
+    height: 48px;
+    background-color: #FFF;
+    box-shadow: #E0E0E0;
+    padding: 15px 20px 15px 10px;
+    margin-bottom: 30px;
+    border-radius: 4px;
+    overflow: hidden;
+    .arow {
+      cursor: pointer;
     }
-    >a {
-      display: block;
-      font-size: 14px;
-      color: #fff;
-      padding: 0 15px;
-      margin-bottom: 5px;
-      &:last-child {
-        margin-bottom: 0;
-      }
+  }
+  .userRow.active {
+    height: auto;
+  }
+  a {
+    display: block;
+    font-size: 14px;
+    color: #3265BA;
+    padding: 4px 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    &:last-child {
+      margin-bottom: 0;
     }
+    img {
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+  }
+  a.active {
+    background-color: #D6E5FF;
   }
 }
