@@ -1,0 +1,66 @@
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="productsReference">    
+    <h4 class="mb-4 fw-bold">商品一覧</h4>
+    <div class="d-flex flex-row-reverse">
+      <button class="dropdown border-0 bg-white" type="button" data-bs-toggle="dropdown">
+        <img src="/images/icon/plus.svg">
+      </button>
+      <ul class="dropdown-menu">
+        <li class="dropdown-item small">商品を新しく登録する</li>
+        <li class="dropdown-item small">セット商品を登録する</li>
+      </ul>
+    </div>
+
+
+    <div class="p-3 baseShadow">
+      <h5 class="mb-4 fw-bold">条件</h5>
+
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col"></th>
+          <th scope="col">商品ID</th>
+          <th scope="col">商品名</th>
+          <th scope="col">表示期間</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td colspan="2">Larry the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    
+  </main>
+</div>
+
+<script type="text/javascript">
+</script>
+</body>
+</html>
