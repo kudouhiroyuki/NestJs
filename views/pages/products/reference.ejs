@@ -14,30 +14,42 @@
         <img src="/images/icon/plus.svg">
       </button>
       <ul class="dropdown-menu">
-        <li class="dropdown-item small">商品を新しく登録する</li>
-        <li class="dropdown-item small">セット商品を登録する</li>
+        <a href="/products/regist"><li class="dropdown-item small">商品を新しく登録する</li></a>
+        <a href="/products/regist-set"><li class="dropdown-item small">セット商品を登録する</li></a>
       </ul>
     </div>
 
-    <div class="baseShadow p-3 mb-5">
-      <h5 class="mb-4 fw-bold">条件</h5>
-      <div class="row">
-        <div class="col-4">
-          <label class="form-label">商品ID</label>
-          <input type="text" class="form-control" placeholder="商品ID">
-        </div>
-        <div class="col-4">
-          <label class="form-label">キーワード</label>
-          <input type="text" class="form-control" placeholder="キーワード">
-        </div>
-        <div class="col-4 text-end">
-          <button type="button" class="btn w-50 mt-4 baseBtnGrey">
-            <img src="/images/icon/serch.svg">
-            検索
-          </button>
+    <form @submit.prevent="onSerch" name="noticeSerch" class="mb-5">
+      <div class="baseShadow p-3 mb-5">
+        <h5 class="mb-4 fw-bold">条件</h5>
+        <div class="row">
+          <div class="col-4">
+            <label class="form-label">商品ID</label>
+            <input
+              name="product_id"
+              type="text"
+              class="form-control"
+              placeholder="商品ID"
+            >
+          </div>
+          <div class="col-4">
+            <label class="form-label">キーワード</label>
+            <input
+              name="keyword"
+              type="text"
+              class="form-control"
+              placeholder="キーワード"
+            >
+          </div>
+          <div class="col-4 text-end">
+            <button type="submit" class="btn w-50 mt-4 baseBtnGrey">
+              <img src="/images/icon/serch.svg">
+              検索
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
 
     <table class="table align-middle mb-5">
       <thead>
