@@ -6,7 +6,7 @@
 
   <%- include('../../partials/sidebar'); %>
 
-  <main id="productsReference">    
+  <main id="productsRegist">    
     <h4 class="mb-4 fw-bold">商品登録</h4>
 
     <form @submit.prevent="onSerch" class="mb-5">
@@ -34,6 +34,24 @@
       <!-- 年齢区分 -->
       <div class="baseShadow p-3 mb-5">
         <h5 class="mb-4 fw-bold">年齢区分</h5>
+        <div class="col-8">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">年齢区分</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in oldItems" :key="index">
+                <th>{{ index + 1 }}</th>
+                <td>{{ item.name }}</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <!-- 利用方法 -->
       <div class="baseShadow p-3 mb-5">
@@ -49,8 +67,6 @@
       </div>
       <div class="d-flex flex-row-reverse mb-4">
         <input
-          formmethod="post"
-          :formaction=`/notification/${notice_id}/edit`
           type="submit"
           value="保存"
           class="btn w-25 mt-4 baseBtnGrey"
@@ -60,7 +76,25 @@
   </main>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript"> 
+new Vue({
+  el: "#productsRegist",
+  data: {
+    // 固定値データ
+    oldItems: [
+      { name: "大人" },
+      { name: "中人" },
+      { name: "小人" },
+      { name: "幼児" },
+      { name: "シニア" }
+    ],
+    // 登録データ
+  },
+  created() {
+  },
+  methods: {
+  }
+})
 </script>
 </body>
 </html>
