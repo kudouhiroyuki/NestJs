@@ -10,9 +10,9 @@
     <h4 class="mb-4 fw-bold">商品登録</h4>
 
     <form @submit.prevent="onSerch" class="mb-5">
+      <!-- 基本情報 -->
       <div class="baseShadow p-3 mb-5">
         <h5 class="mb-4 fw-bold">基本情報</h5>
-
         <div class="col-4 mb-4">
           <label class="form-label">商品名</label>
           <input
@@ -22,7 +22,6 @@
             placeholder="商品名"
           >
         </div>
-        
         <div class="col-6">
           <label class="form-label">商品説明</label>
           <textarea
@@ -31,6 +30,31 @@
             class="form-control mb-2"
           ></textarea>
         </div>
+      </div>
+      <!-- 年齢区分 -->
+      <div class="baseShadow p-3 mb-5">
+        <h5 class="mb-4 fw-bold">年齢区分</h5>
+      </div>
+      <!-- 利用方法 -->
+      <div class="baseShadow p-3 mb-5">
+        <h5 class="mb-4 fw-bold">利用方法</h5>
+      </div>
+      <!-- 商品タグ -->
+      <div class="baseShadow p-3 mb-5">
+        <h5 class="mb-4 fw-bold">商品タグ</h5>
+      </div>
+      <!-- 商品画像 -->
+      <div class="baseShadow p-3 mb-5">
+        <h5 class="mb-4 fw-bold">商品画像</h5>
+      </div>
+      <div class="d-flex flex-row-reverse mb-4">
+        <input
+          formmethod="post"
+          :formaction=`/notification/${notice_id}/edit`
+          type="submit"
+          value="保存"
+          class="btn w-25 mt-4 baseBtnGrey"
+        />
       </div>
     </form>
   </main>
