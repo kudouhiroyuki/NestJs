@@ -128,10 +128,6 @@ a {
   box-sizing: border-box;
 }
 
-textarea {
-  resize: none;
-}
-
 input[type=file] {
   color: transparent;
 }

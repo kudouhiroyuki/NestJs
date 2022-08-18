@@ -1,0 +1,42 @@
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="productsReference">    
+    <h4 class="mb-4 fw-bold">商品登録</h4>
+
+    <form @submit.prevent="onSerch" class="mb-5">
+      <div class="baseShadow p-3 mb-5">
+        <h5 class="mb-4 fw-bold">基本情報</h5>
+
+        <div class="col-4 mb-4">
+          <label class="form-label">商品名</label>
+          <input
+            name="product_name"
+            type="text"
+            class="form-control"
+            placeholder="商品名"
+          >
+        </div>
+        
+        <div class="col-6">
+          <label class="form-label">商品説明</label>
+          <textarea
+            name="product_setumei"
+            rows="3"
+            class="form-control mb-2"
+          ></textarea>
+        </div>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script type="text/javascript">
+</script>
+</body>
+</html>

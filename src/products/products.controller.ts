@@ -7,7 +7,7 @@ export class ProductsController {
   */
   @Get('/reference')
   @Render('products/reference')
-  async index(@Query() query: any) {
+  async reference(@Query() query: any) {
     console.log("商品一覧画面:query")
     console.log(query)
     const products = [
@@ -17,6 +17,26 @@ export class ProductsController {
     return {
       products: JSON.stringify(products),
       total_page_count: 3
+    };
+  }
+
+  /**
+  * GET	商品登録画面（単体）
+  */
+  @Get('/regist')
+  @Render('products/regist')
+  async regist() {
+    return {
+    };
+  }
+
+  /**
+  * GET	商品登録画面（セット）
+  */
+  @Get('/regist-set')
+  @Render('products/registSet')
+  async registSet() {
+    return {
     };
   }
 }
