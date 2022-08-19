@@ -22,13 +22,90 @@
             placeholder="商品名"
           >
         </div>
-        <div class="col-6">
+        <div class="col-6 mb-4">
           <label class="form-label">商品説明</label>
           <textarea
             name="product_setumei"
             rows="3"
             class="form-control mb-2"
           ></textarea>
+        </div>
+        <div class="col-12 mb-4">
+          <label class="form-label w-100">在庫管理</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="stock" id="stock_1" value="1">
+            <label class="form-check-label" for="stock_1">在庫管理なし</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="stock" id="stock_2" value="2">
+            <label class="form-check-label" for="stock_2">DMP在庫管理</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="stock" id="stock_3" value="3">
+            <label class="form-check-label" for="stock_3">HL在庫管理</label>
+          </div>
+          <div class="col-3 mt-2">
+            <select class="form-select">
+              <option hidden>在庫ID</option>
+              <option
+                v-for="item in stockDmps"
+                :key="item.name"
+                :value="item.name"
+              >{{ item.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 mb-4">
+          <label class="form-label w-100">表示期間</label>
+          <div class="d-inline-block">
+            <input
+              name="hyouji_from"
+              type="text"
+              class="form-control"
+              placeholder="From"
+            >
+          </div>
+          <div class="d-inline-block">〜</div>
+          <div class="d-inline-block">
+            <input
+              name="hyouji_to"
+              type="text"
+              class="form-control"
+              placeholder="To"
+            >
+          </div>
+          <div class="d-inline-block">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+              表示停止
+            </label>
+          </div>
+        </div>
+        <div class="col-12 mb-4">
+          <label class="form-label w-100">販売期間</label>
+          <div class="d-inline-block">
+            <input
+              name="hyouji_from"
+              type="text"
+              class="form-control"
+              placeholder="From"
+            >
+          </div>
+          <div class="d-inline-block">〜</div>
+          <div class="d-inline-block">
+            <input
+              name="hyouji_to"
+              type="text"
+              class="form-control"
+              placeholder="To"
+            >
+          </div>
+          <div class="d-inline-block">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+              表示停止
+            </label>
+          </div>
         </div>
       </div>
       <!-- 年齢区分 -->
@@ -44,10 +121,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in oldItems" :key="index">
+              <tr v-for="(item, index) in ages" :key="index">
                 <th>{{ index + 1 }}</th>
                 <td>{{ item.name }}</td>
-                <td></td>
+                <td><input class="form-check-input" type="checkbox"></td>
               </tr>
             </tbody>
           </table>
@@ -56,6 +133,57 @@
       <!-- 利用方法 -->
       <div class="baseShadow p-3 mb-5">
         <h5 class="mb-4 fw-bold">利用方法</h5>
+
+        <div class="col-12 mb-4">
+          <label class="form-label w-100">利用方法</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="riyou" id="riyou_1" value="1">
+            <label class="form-check-label" for="riyou_1">画面提示</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="zaiko" id="riyou_2" value="2">
+            <label class="form-check-label" for="riyou_2">電子もぎり</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="zaiko" id="riyou_3" value="3">
+            <label class="form-check-label" for="riyou_3">顔認証</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="zaiko" id="riyou_3" value="3">
+            <label class="form-check-label" for="riyou_3">QR提示</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="zaiko" id="riyou_3" value="3">
+            <label class="form-check-label" for="riyou_3">QR読込</label>
+          </div>
+        </div>
+
+        <div class="col-12 mb-4">
+          <label class="form-label w-100">利用施設</label>
+          <div class="col-8">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">施設ID</th>
+                  <th scope="col">施設名</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in tenants" :key="index">
+                  <th>{{ index + 1 }}</th>
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.name }}</td>
+                  <td><input class="form-check-input" type="checkbox"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+
       </div>
       <!-- 商品タグ -->
       <div class="baseShadow p-3 mb-5">
@@ -76,18 +204,18 @@
   </main>
 </div>
 
-<script type="text/javascript"> 
+<script type="text/javascript">
+const stockDmps= `<%- stock_dmps %>`;
+const ages= `<%- ages %>`;
+const tenants= `<%- tenants %>`;
+
 new Vue({
   el: "#productsRegist",
   data: {
-    // 固定値データ
-    oldItems: [
-      { name: "大人" },
-      { name: "中人" },
-      { name: "小人" },
-      { name: "幼児" },
-      { name: "シニア" }
-    ],
+    // APIデータ
+    stockDmps: JSON.parse(stockDmps),
+    ages: JSON.parse(ages),
+    tenants: JSON.parse(tenants),
     // 登録データ
   },
   created() {

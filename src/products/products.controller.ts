@@ -26,7 +26,27 @@ export class ProductsController {
   @Get('/regist')
   @Render('products/regist')
   async regist() {
+    const stock_dmps = [
+      { name: "1******01: ○○チケット" },
+      { name: "1******02: ○○チケット" },
+      { name: "1******03: ○○チケット" },
+    ];
+    const ages = [
+      { name: "大人" },
+      { name: "中人" },
+      { name: "小人" },
+      { name: "幼児" },
+      { name: "シニア" }
+    ]
+    const tenants = [
+      { id: "1001", name: "施設１" },
+      { id: "1002", name: "施設２" },
+      { id: "1003", name: "施設３" },
+    ];
     return {
+      stock_dmps: JSON.stringify(stock_dmps),
+      ages: JSON.stringify(ages),
+      tenants: JSON.stringify(tenants),
     };
   }
 
