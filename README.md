@@ -28,7 +28,7 @@ curl -X GET "http://localhost:3000/users?id=&user_name=&sort=ASC&limit=5&page_nu
 curl -X GET "http://localhost:3000/users?id=1&user_name=kudou&sort=ASC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users/1"<br>
 curl -X POST http://localhost:3000/users -d "user_name=name&password=password"<br>
-curl -X PUT http://localhost:3000/users/1 -d "user_name=name"<br>
+curl -X PUT http://localhost:3000/users/1 -d "user_name=updateName&password=updatePassword"<br>
 curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
 
@@ -65,7 +65,7 @@ help;
 #### データの追加と削除<br>
 - INSERT 文<br>
 ※データを追加する<br>
-INSERT INTO nest.users (id, user_name, password) VALUES(1, 'name', 'password');
+INSERT INTO nest.users (user_name, password) VALUES('name', 'password');
 
 - UPDATE 文<br>
 ※データを更新する<br>

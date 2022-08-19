@@ -16,11 +16,15 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async getUsers() {
-        return await this.prisma.users.findMany();
-    }
     async createUser(data) {
         return await this.prisma.users.create({ data });
+    }
+    async updateUser(params) {
+        const { where, data } = params;
+        return this.prisma.users.update({
+            where,
+            data
+        });
     }
     async deleteUser(where) {
         return await this.prisma.users.delete({ where });

@@ -49,9 +49,9 @@ export class UsersController {
   constructor(private readonly service: UsersService) {}
 
   @Get()
-  async getUsers(): Promise<Users[]> {
-    return await this.service.getUsers();
-  }
+  // async getUsers(@Query() query: { id: number; sort: "asc" | "desc" }): Promise<Users[]> {
+  //   return await this.service.getUsers(query);
+  // }
 
   @Post()
   async createUser(
@@ -60,8 +60,16 @@ export class UsersController {
     return await this.service.createUser(user);
   }
 
+  @Put(':id')
+  async updateUser(@Param('id') id: string, @Body() user: Users): Promise<Users> {
+    return this.service.updateUser({
+      where: { id: Number(id) },
+      data: user,
+    });
+  }
+
   @Delete(':id')
   async deleteUser(@Param('id') id: string): Promise<Users> {
-    return await this.service.deleteUser({id: Number(id)});
+    return await this.service.deleteUser({ id: Number(id) });
   }
 }

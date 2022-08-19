@@ -119,17 +119,42 @@ import { PrismaService } from '../prisma.service';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getUsers(): Promise<Users[]> {
-    return await this.prisma.users.findMany();
-  }
+  // http://localhost:3000/users?id=1&sort=
+
+  // http://localhost:3000/users?id=&sort=asc
+  // http://localhost:3000/users?id=&sort=desc
+
+  // async getUsers(query: { id: number; sort: "asc" | "desc" }): Promise<Users[]> {
+  //   let whereConditions = {};
+  //   let orderConditions = {id: query.sort};
+  //   if(query.id) whereConditions["id"] = Number(query.id);
+  //   return await this.prisma.users.findMany({
+  //     where: whereConditions,
+  //     orderBy: {
+  //       orderConditions
+  //     },
+  //     skip: 0,
+  //   });
+  // }
 
   async createUser(
     data: { user_name: string; password: string }
   ): Promise<Users> {
-    return await this.prisma.users.create({data});
+    return await this.prisma.users.create({ data });
+  }
+
+  async updateUser(params: {
+    where: Prisma.usersWhereUniqueInput;
+    data: Prisma.usersUpdateInput;
+  }): Promise<Users> {
+    const { where, data } = params;
+    return this.prisma.users.update({
+      where,
+      data
+    });
   }
 
   async deleteUser(where: Prisma.usersWhereUniqueInput): Promise<Users> {
-    return await this.prisma.users.delete({where});
+    return await this.prisma.users.delete({ where });
   }
 }
