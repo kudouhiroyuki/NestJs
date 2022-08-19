@@ -133,7 +133,6 @@
       <!-- 利用方法 -->
       <div class="baseShadow p-3 mb-5">
         <h5 class="mb-4 fw-bold">利用方法</h5>
-
         <div class="col-12 mb-4">
           <label class="form-label w-100">利用方法</label>
           <div class="form-check form-check-inline">
@@ -157,7 +156,44 @@
             <label class="form-check-label" for="riyou_3">QR読込</label>
           </div>
         </div>
-
+        <div class="col-12 mb-3">
+          <label class="form-label w-100">利用期間</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="riyou" id="riyou_1" value="1">
+            <label class="form-check-label" for="riyou_1">日付指定</label>
+          </div>
+          <div class="d-inline-block">
+            <input
+              name="hyouji_from"
+              type="text"
+              class="form-control"
+              placeholder="From"
+            >
+          </div>
+          <div class="d-inline-block">〜</div>
+          <div class="d-inline-block">
+            <input
+              name="hyouji_to"
+              type="text"
+              class="form-control"
+              placeholder="To"
+            >
+          </div>
+        </div>
+        <div class="col-12 mb-4">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="riyou" id="riyou_1" value="1">
+            <label class="form-check-label" for="riyou_1">期限指定</label>
+          </div>
+          <div class="d-inline-block">
+            <input
+              name="hyouji_from"
+              type="text"
+              class="form-control"
+              placeholder="有効期限"
+            >
+          </div>
+        </div>
         <div class="col-12 mb-4">
           <label class="form-label w-100">利用施設</label>
           <div class="col-8">
@@ -181,17 +217,21 @@
             </table>
           </div>
         </div>
-
-
-
       </div>
       <!-- 商品タグ -->
       <div class="baseShadow p-3 mb-5">
         <h5 class="mb-4 fw-bold">商品タグ</h5>
+        <vue-tags-input
+          v-model="tag"
+          :tags="tags"
+          :autocomplete-items="onTagsFilter"
+          @tags-changed="replaceTags"
+        />
       </div>
       <!-- 商品画像 -->
       <div class="baseShadow p-3 mb-5">
         <h5 class="mb-4 fw-bold">商品画像</h5>
+        
       </div>
       <div class="d-flex flex-row-reverse mb-4">
         <input
@@ -209,18 +249,53 @@ const stockDmps= `<%- stock_dmps %>`;
 const ages= `<%- ages %>`;
 const tenants= `<%- tenants %>`;
 
+const VoerroTagsInput = window.VoerroTagsInput;
+Vue.component('tags-input', VoerroTagsInput);
+
 new Vue({
   el: "#productsRegist",
   data: {
+    tag: '',
     // APIデータ
     stockDmps: JSON.parse(stockDmps),
     ages: JSON.parse(ages),
     tenants: JSON.parse(tenants),
     // 登録データ
+    tags: [],
+
+    autocompleteItems: [
+      {
+        text: 'チケット',
+      },
+      {
+        text: '宿泊',
+      },
+      {
+        text: '室内',
+      }
+    ],
   },
   created() {
   },
+  computed: {
+    onTagsFilter() {
+      return this.autocompleteItems.filter(i => {
+        return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
+      });
+    },
+  },
   methods: {
+    replaceTags(item) {
+    let resultTags = [];
+      item.forEach((value) => {
+        this.autocompleteItems.forEach((i) => {
+          if(i.text.toLowerCase().indexOf(value.text.toLowerCase()) !== -1) {
+            resultTags.push(value)
+          } 
+        })
+      });
+      this.tags = resultTags;
+    },
   }
 })
 </script>
