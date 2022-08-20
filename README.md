@@ -53,13 +53,6 @@ docker start {CONTAINER ID}（コンテナ起動）<br>
 docker stop {CONTAINER ID}（コンテナ停止）<br>
 docker rm {CONTAINER ID}（コンテナ削除）<br>
 docker rmi {IMAGE ID}（イメージ削除）
-- 動作確認1
-docker run hello-world<br>
-※コンテナ + イメージを削除すること
-- 動作確認2
-docker run -d -p 80:80 docker/getting-started<br>
-http://localhost/tutorial/<br>
-※コンテナ + イメージを削除すること
 
 ## Prismaコマンド<br>
 - マイグレーションファイル作成<br>
