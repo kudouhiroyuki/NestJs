@@ -38,27 +38,27 @@ curl -X DELETE http://localhost:3000/users/1<br>
 - Live Sass Compiler（VSCode）
 
 ## 起動<br>
-cd NestJs
-docker compose up -d --build
-docker container exec -it app sh
-npm i
+cd NestJs<br>
+docker compose up -d --build<br>
+docker container exec -it app sh<br>
+npm i<br>
 npm run start:dev
 
 ## Dockerコマンド<br>
-docker version（バージョン）
-docker images（イメージ一覧）
-docker ps（起動中コンテナ）
-docker ps -a（起動中/停止中コンテナ）
-docker start {CONTAINER ID}（コンテナ起動）
-docker stop {CONTAINER ID}（コンテナ停止）
-docker rm {CONTAINER ID}（コンテナ削除）
+docker version（バージョン）<br>
+docker images（イメージ一覧）<br>
+docker ps（起動中コンテナ）<br>
+docker ps -a（起動中/停止中コンテナ）<br>
+docker start {CONTAINER ID}（コンテナ起動）<br>
+docker stop {CONTAINER ID}（コンテナ停止）<br>
+docker rm {CONTAINER ID}（コンテナ削除）<br>
 docker rmi {IMAGE ID}（イメージ削除）
 - 動作確認1
-docker run hello-world
+docker run hello-world<br>
 ※コンテナ + イメージを削除すること
 - 動作確認2
-docker run -d -p 80:80 docker/getting-started
-http://localhost/tutorial/
+docker run -d -p 80:80 docker/getting-started<br>
+http://localhost/tutorial/<br>
 ※コンテナ + イメージを削除すること
 
 ## Prismaコマンド<br>
