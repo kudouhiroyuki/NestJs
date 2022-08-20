@@ -32,11 +32,6 @@ curl -X PUT http://localhost:3000/users/1 -d "user_name=updateName&password=upda
 curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
 
-## 環境構築<br>
-- npm install
-
-- Live Sass Compiler（VSCode）
-
 ## 起動<br>
 cd NestJs<br>
 docker compose up -d --build<br>
