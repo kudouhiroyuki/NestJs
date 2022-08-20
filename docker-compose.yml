@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  app:
+    container_name: app
+    build: .
+    tty: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+
+  mysql:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nest
+      MYSQL_PASSWORD:
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - 3306:3306
