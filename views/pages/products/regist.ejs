@@ -157,46 +157,64 @@
             <label class="form-check-label" for="riyou_3">QR読込</label>
           </div>
         </div>
-        <div class="col-12 mb-3">
+        <!-- 利用期間 -->
+        <div class="form-group mb-4">
           <label class="form-label w-100">利用期間</label>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="riyou" id="riyou_1" value="1">
-            <label class="form-check-label" for="riyou_1">日付指定</label>
+          <div class="col-12 mb-3">
+            <div class="form-check form-check-inline">
+              <input
+                v-model="usagePeriodActive"
+                value="1"
+                class="form-check-input"
+                type="radio"
+                id="usagePeriod_1"
+              >
+              <label class="form-check-label" for="usagePeriod_1">日付指定</label>
+            </div>
+            <div class="d-inline-block">
+              <input
+                name="hyouji_from"
+                type="text"
+                class="form-control"
+                placeholder="From"
+                :disabled="usagePeriodActive === '2'"
+              >
+            </div>
+            <div class="d-inline-block">〜</div>
+            <div class="d-inline-block">
+              <input
+                name="hyouji_to"
+                type="text"
+                class="form-control"
+                placeholder="To"
+                :disabled="usagePeriodActive === '2'"
+              >
+            </div>
           </div>
-          <div class="d-inline-block">
-            <input
-              name="hyouji_from"
-              type="text"
-              class="form-control"
-              placeholder="From"
-            >
-          </div>
-          <div class="d-inline-block">〜</div>
-          <div class="d-inline-block">
-            <input
-              name="hyouji_to"
-              type="text"
-              class="form-control"
-              placeholder="To"
-            >
-          </div>
-        </div>
-        <!-- 期限指定 -->
-        <div class="col-12 mb-4">
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="riyou" id="riyou_1" value="1">
-            <label class="form-check-label" for="riyou_1">期限指定</label>
-          </div>
-          <div class="d-inline-block">
-            <vue-ctk-date-time-picker
-              name="usage_period"
-              v-model="usage_period"
-              formatted="YYYY/MM/DD"
-              only-date
-              :min-date="minDate"
-              :label="'有効期限'"
-              position="top"
-            /></vue-ctk-date-time-picker>
+          <div class="col-12">
+            <div class="form-check form-check-inline">
+              <input
+                v-model="usagePeriodActive"
+                value="2"
+                class="form-check-input"
+                type="radio"
+                id="usagePeriod_2"
+              >
+              <label class="form-check-label" for="usagePeriod_2">期限指定</label>
+            </div>
+            <div class="d-inline-block">
+              <input v-model="usage_period_from" type="hidden" name="usage_period_from">
+              <vue-ctk-date-time-picker
+                name="usage_period_to"
+                v-model="usage_period_to"
+                formatted="YYYY/MM/DD"
+                only-date
+                :min-date="minDate"
+                :label="'有効期限'"
+                position="top"
+                :disabled="usagePeriodActive === '1'"
+              /></vue-ctk-date-time-picker>
+            </div>
           </div>
         </div>
         <!-- 利用施設 -->
@@ -319,6 +337,7 @@ Vue.component('tags-input', VoerroTagsInput);
 new Vue({
   el: "#productsRegist",
   data: {
+    usagePeriodActive: "1",
     minDate: moment(new Date()).format("YYYY-MM-DD"),
     tag: '',
     isFileAreaFocus: false,
@@ -331,7 +350,8 @@ new Vue({
     // 登録データ
     product_name: "",
     product_setumei: "",
-    usage_period: null,
+    usage_period_from: null,
+    usage_period_to: null,
     tenants_used: [],
     tags: [],
     images: [],
