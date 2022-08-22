@@ -172,23 +172,29 @@
               <label class="form-check-label" for="usagePeriod_1">日付指定</label>
             </div>
             <div class="d-inline-block">
-              <input
-                name="hyouji_from"
-                type="text"
-                class="form-control"
-                placeholder="From"
+              <vue-ctk-date-time-picker
+                name="usage_period_from"
+                v-model="usage_period_from"
+                formatted="YYYY/MM/DD"
+                only-date
+                :min-date="minDate"
+                :label="'From'"
+                position="top"
                 :disabled="usagePeriodActive === '2'"
-              >
+              /></vue-ctk-date-time-picker>
             </div>
             <div class="d-inline-block">〜</div>
             <div class="d-inline-block">
-              <input
-                name="hyouji_to"
-                type="text"
-                class="form-control"
-                placeholder="To"
+              <vue-ctk-date-time-picker
+                name="usage_period_to"
+                v-model="usage_period_to"
+                formatted="YYYY/MM/DD"
+                only-date
+                :min-date="minDate"
+                :label="'To'"
+                position="top"
                 :disabled="usagePeriodActive === '2'"
-              >
+              /></vue-ctk-date-time-picker>
             </div>
           </div>
           <div class="col-12">
@@ -203,7 +209,12 @@
               <label class="form-check-label" for="usagePeriod_2">期限指定</label>
             </div>
             <div class="d-inline-block">
-              <input v-model="usage_period_from" type="hidden" name="usage_period_from">
+              <input
+                v-model="usage_period_from"
+                :disabled="usagePeriodActive === '1'"
+                type="hidden"
+                name="usage_period_from"
+              >
               <vue-ctk-date-time-picker
                 name="usage_period_to"
                 v-model="usage_period_to"
