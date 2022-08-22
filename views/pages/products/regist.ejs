@@ -210,21 +210,13 @@
             </div>
             <div class="d-inline-block">
               <input
-                v-model="usage_period_from"
+                v-model="usage_period_deadline"
                 :disabled="usagePeriodActive === '1'"
-                type="hidden"
-                name="usage_period_from"
-              >
-              <vue-ctk-date-time-picker
-                name="usage_period_to"
-                v-model="usage_period_to"
-                formatted="YYYY/MM/DD"
-                only-date
-                :min-date="minDate"
-                :label="'有効期限'"
-                position="top"
-                :disabled="usagePeriodActive === '1'"
-              /></vue-ctk-date-time-picker>
+                name="usage_period_deadline"
+                type="text"
+                class="form-control mb-2"
+                placeholder="有効期限"
+              />
             </div>
           </div>
         </div>
@@ -363,6 +355,7 @@ new Vue({
     product_setumei: "",
     usage_period_from: null,
     usage_period_to: null,
+    usage_period_deadline: "",
     tenants_used: [],
     tags: [],
     images: [],
