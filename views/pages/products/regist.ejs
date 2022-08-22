@@ -231,8 +231,21 @@
       <!-- 商品画像 -->
       <div class="baseShadow p-3 mb-5">
         <h5 class="mb-4 fw-bold">商品画像</h5>
-        
+        <div class="form-check-inline mb-3">
+          <input type="hidden" name="images">
+          <img :src="imagesView[0].path" style="width: 136px; object-fit: cover; height: 86px;">
+        </div>
+        <div class="form-check-inline mb-3">
+          <input type="hidden" name="images">
+          <img :src="imagesView[0].path" style="width: 136px; object-fit: cover; height: 86px;">
+        </div>
+        <div class="form-check-inline">
+          <button @click="onModalShow" class="border-0 bg-white" type="button">
+            <img src="/images/icon/plus.svg">
+          </button>
+        </div>        
       </div>
+      <!-- 保存ボタン -->
       <div class="d-flex flex-row-reverse mb-4">
         <input
           type="submit"
@@ -241,6 +254,33 @@
         />
       </div>
     </form>
+
+    <!-- モーダル -->
+    <div :style="modalShow ? 'display: block' : 'display: none'" class="modalMain">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">ファイルアップロード</h5>
+            <button @click="onModalClose" type="button" class="btn-close"></button>
+          </div>
+          <div
+            @dragover.prevent="onFileDrag(true)"
+            @dragleave="onFileDrag(false)"
+            @drop.prevent="onFileDrop" 
+            :class="{fileAreaFocus: isFileAreaFocus}"
+            class="modal-body m-3"
+          >
+            <p>ここにファイルをドラッグ＆ドロップ<br>または</p>
+            <input type="file" @change="onFileChange"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      :style="modalShow ? 'display: block' : 'display: none'"
+      class="modalBg"
+      @click="onModalClose">
+    </div>
   </main>
 </div>
 
@@ -256,12 +296,19 @@ new Vue({
   el: "#productsRegist",
   data: {
     tag: '',
+    isFileAreaFocus: false,
+    imagesView: [
+      { path: "/images/photo/user.png" },
+      { path: "/images/photo/user.png" },
+    ],
+    modalShow: false,
     // APIデータ
     stockDmps: JSON.parse(stockDmps),
     ages: JSON.parse(ages),
     tenants: JSON.parse(tenants),
     // 登録データ
     tags: [],
+    images: [],
 
     autocompleteItems: [
       {
@@ -295,6 +342,39 @@ new Vue({
         })
       });
       this.tags = resultTags;
+    },
+    onModalShow() {
+      this.modalShow = true;
+    },
+    onModalClose() {
+      this.modalShow = false;
+    },
+    onFileDrag(flag) {
+      this.isFileAreaFocus = flag;
+    },
+    onFileDrop(event) {
+      this.isFileAreaFocus = false;
+      const files = event.dataTransfer.files;
+      if (files.length !== 1 || files[0].type.indexOf("image") !== 0) {
+        return;
+      }
+      this.createFileData(files);
+    },
+    onFileChange(event) {
+      const files = event.target.files;
+      if (files.length !== 1 || files[0].type.indexOf("image") !== 0) {
+        return;
+      }
+      this.createFileData(files);
+    },
+    createFileData(files) {
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onloadend = () => {
+        this[this.modalCurrent] = reader.result;
+        this.modalShow = false;
+      };
+      this[this.modalCurrent + "_View"] = URL.createObjectURL(files[0]);
     },
   }
 })
