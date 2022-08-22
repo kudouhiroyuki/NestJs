@@ -191,6 +191,11 @@ input[type=file] {
   opacity: 0.3;
 }
 
+.date-time-picker .field-input {
+  height: 37px;
+  min-height: 37px;
+}
+
 .ti-tag {
   border-radius: 10px !important;
   background-color: #6C757D !important;

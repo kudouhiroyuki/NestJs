@@ -72,6 +72,13 @@ input[type='file'] { color: transparent; }
   opacity: .3;
 }
 
+// vue-ctk-date-time-picker（ライブラリ）
+.date-time-picker {
+  .field-input {
+    height: 37px;
+    min-height: 37px;
+  }
+}
 // vue-tags-input（ライブラリ）
 .ti-tag {
   border-radius: 10px!important;
