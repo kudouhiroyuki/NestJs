@@ -49,6 +49,15 @@ export class ProductsController {
       tenants: JSON.stringify(tenants),
     };
   }
+  /** 
+  * POST 商品登録処理（単体）
+  */
+     @Post('regist')
+     @Redirect('http://localhost:3000/products/regist')
+     async store(@Body() body: any) {
+       console.log("商品登録処理（単体）")
+       console.log(body)
+     }
 
   /**
   * GET	商品登録画面（セット）
