@@ -8,15 +8,15 @@ export class ProductsController {
   @Get('/reference')
   @Render('products/reference')
   async reference(@Query() query: any) {
-    console.log("商品一覧画面:query")
-    console.log(query)
+    console.log('商品一覧画面:query');
+    console.log(query);
     const products = [
       { path: "/images/icon/products_item.svg", id: "1111", name: "商品A", date: "2022/08/01 - 2023/02/15" },
       { path: "/images/icon/products_item.svg", id: "2222", name: "商品B", date: "2022/08/01 - 2023/02/15" },
-    ]
+    ];
     return {
       products: JSON.stringify(products),
-      total_page_count: 3
+      total_page_count: 3,
     };
   }
 
@@ -27,9 +27,9 @@ export class ProductsController {
   @Render('products/regist')
   async regist() {
     const stock_dmps = [
-      { name: "1******01: ○○チケット" },
-      { name: "1******02: ○○チケット" },
-      { name: "1******03: ○○チケット" },
+      { id: '1', name: '1******01: ○○チケット' },
+      { id: '2', name: '1******02: ○○チケット' },
+      { id: '3', name: '1******03: ○○チケット' },
     ];
     const ages = [
       { name: "大人" },

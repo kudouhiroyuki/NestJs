@@ -35,88 +35,174 @@
             placeholder="商品名"
           >
         </div>
+        <!-- 商品説明 -->
         <div class="col-6 mb-4">
           <label class="form-label">商品説明</label>
           <textarea
-            v-model="product_setumei"
-            name="product_setumei"
+            v-model="product_explanation"
+            name="product_explanation"
             rows="3"
             class="form-control mb-2"
           ></textarea>
         </div>
+
+        
+        <!-- 販売種別 -->
+        <!-- sales_kind_type: "1",  // 商品説明(type) -->
+        <!-- sales_kind_item: "",   // 商品説明(item) -->
+        <div class="col-6 mb-4">
+          <label class="form-label">販売種別</label>
+          <div class="form-check mb-2 w-50">
+            <input
+              v-model="usageMethodActive"
+              class="form-check-input"
+              type="radio"
+              id="riyou_1"
+              value="1"
+            >
+            <label class="form-check-label" for="sales_1">設定を引継ぐ</label>
+          </div>  
+        </div>
+
+        
+
+  
+
+
+
+        <!-- 在庫管理 -->
         <div class="col-12 mb-4">
           <label class="form-label w-100">在庫管理</label>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="stock" id="stock_1" value="1">
-            <label class="form-check-label" for="stock_1">在庫管理なし</label>
+            <input
+              v-model="stock_management_type"
+              name="stock_management_type"
+              class="form-check-input"
+              type="radio"
+              id="stock_1"
+              value="1"
+            >
+            <label class="form-check-label" for="stock_1">設定を引継ぐ</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="stock" id="stock_2" value="2">
-            <label class="form-check-label" for="stock_2">DMP在庫管理</label>
+            <input
+              v-model="stock_management_type"
+              name="stock_management_type"
+              class="form-check-input"
+              type="radio"
+              id="stock_2"
+              value="2"
+            >
+            <label class="form-check-label" for="stock_2">在庫管理なし</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="stock" id="stock_3" value="3">
-            <label class="form-check-label" for="stock_3">HL在庫管理</label>
+            <input
+              v-model="stock_management_type"
+              name="stock_management_type"
+              class="form-check-input"
+              type="radio"
+              id="stock_3"
+              value="3"
+            >
+            <label class="form-check-label" for="stock_3">DMP在庫管理</label>
           </div>
-          <div class="col-3 mt-2">
-            <select class="form-select">
-              <option hidden>在庫ID</option>
+          <div class="form-check form-check-inline">
+            <input
+              v-model="stock_management_type"
+              name="stock_management_type"
+              class="form-check-input"
+              type="radio"
+              id="stock_4"
+              value="4"
+            >
+            <label class="form-check-label" for="stock_4">HL在庫管理</label>
+          </div>
+          <div v-if="stock_management_type === '1'" class="col-4 mt-2">
+            <input v-model="JSON.stringify(stock_management_item)" type="hidden" name="stock_management_item">
+            <select v-model="stock_management_item" class="form-select">
+              <option hidden value="">在庫ID</option>
               <option
                 v-for="item in stockDmps"
-                :key="item.name"
-                :value="item.name"
+                :key="item.id"
+                :value="item"
               >{{ item.name }}</option>
             </select>
           </div>
         </div>
+        <!-- 表示期間 -->
         <div class="col-12 mb-4">
           <label class="form-label w-100">表示期間</label>
           <div class="d-inline-block">
-            <input
-              name="hyouji_from"
-              type="text"
-              class="form-control"
-              placeholder="From"
-            >
+            <vue-ctk-date-time-picker
+              name="display_period_from"
+              v-model="display_period_from"
+              formatted="YYYY/MM/DD"
+              only-date
+              :min-date="minDate"
+              :label="'From'"
+              position="top"
+            /></vue-ctk-date-time-picker>
           </div>
           <div class="d-inline-block">〜</div>
           <div class="d-inline-block">
-            <input
-              name="hyouji_to"
-              type="text"
-              class="form-control"
-              placeholder="To"
-            >
+            <vue-ctk-date-time-picker
+              name="display_period_to"
+              v-model="display_period_to"
+              formatted="YYYY/MM/DD"
+              only-date
+              :min-date="minDate"
+              :label="'To'"
+              position="top"
+            /></vue-ctk-date-time-picker>
           </div>
           <div class="d-inline-block">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
+            <input v-model="JSON.stringify(display_period_stop)" type="hidden" name="display_period_stop">
+            <input
+              @click="display_period_stop=$event.target.checked"
+              class="form-check-input"
+              type="checkbox"
+              id="displayPeriodStop"
+            >
+            <label class="form-check-label" for="displayPeriodStop">
               表示停止
             </label>
           </div>
         </div>
+        <!-- 販売期間 -->
         <div class="col-12 mb-4">
           <label class="form-label w-100">販売期間</label>
           <div class="d-inline-block">
-            <input
-              name="hyouji_from"
-              type="text"
-              class="form-control"
-              placeholder="From"
-            >
+            <vue-ctk-date-time-picker
+              name="display_sales_from"
+              v-model="display_sales_from"
+              formatted="YYYY/MM/DD"
+              only-date
+              :min-date="minDate"
+              :label="'From'"
+              position="top"
+            /></vue-ctk-date-time-picker>
           </div>
           <div class="d-inline-block">〜</div>
           <div class="d-inline-block">
-            <input
-              name="hyouji_to"
-              type="text"
-              class="form-control"
-              placeholder="To"
-            >
+            <vue-ctk-date-time-picker
+              name="display_sales_to"
+              v-model="display_sales_to"
+              formatted="YYYY/MM/DD"
+              only-date
+              :min-date="minDate"
+              :label="'To'"
+              position="top"
+            /></vue-ctk-date-time-picker>
           </div>
           <div class="d-inline-block">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
+            <input v-model="JSON.stringify(display_sales_stop)" type="hidden" name="display_sales_stop">
+            <input
+              @click="display_sales_stop=$event.target.checked"
+              class="form-check-input"
+              type="checkbox"
+              id="displaySalesStop"
+            >
+            <label class="form-check-label" for="displaySalesStop">
               表示停止
             </label>
           </div>
@@ -125,6 +211,7 @@
 
       <!-- 年齢区分 -->
       <div :style="agesTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <input v-model="JSON.stringify(age_category)" type="hidden" name="age_category">
         <div class="d-flex">
           <div class="me-auto">
             <h5 class="mb-4 fw-bold">年齢区分</h5>
@@ -150,7 +237,7 @@
               <tr v-for="(item, index) in ages" :key="index">
                 <th>{{ index + 1 }}</th>
                 <td>{{ item.name }}</td>
-                <td><input class="form-check-input" type="checkbox"></td>
+                <td><input @change="onAgeCategoryChange($event, item)" class="form-check-input" type="checkbox"></td>
               </tr>
             </tbody>
           </table>
@@ -412,7 +499,7 @@
           ></button>
         </div>
         <div class="form-check-inline">
-          <button @click="onModalShow" class="border-0 bg-white" type="button">
+          <button @click="modalShow=true" class="border-0 bg-white" type="button">
             <img src="/images/icon/plus.svg">
           </button>
         </div>        
@@ -435,7 +522,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">ファイルアップロード</h5>
-            <button @click="onModalClose" type="button" class="btn-close"></button>
+            <button @click="modalShow=false" type="button" class="btn-close"></button>
           </div>
           <div
             @dragover.prevent="onFileDrag(true)"
@@ -453,7 +540,7 @@
     <div
       :style="modalShow ? 'display: block' : 'display: none'"
       class="modalBg"
-      @click="onModalClose">
+      @click="modalShow=false">
     </div>
   </main>
 </div>
@@ -489,8 +576,20 @@ new Vue({
     ages: JSON.parse(ages),
     tenants: JSON.parse(tenants),
     // 登録データ
-    product_name: "",
-    product_setumei: "",
+    product_name: "",            // 商品名
+    product_explanation: "",     // 商品説明
+    sales_kind_type: "1",        // 販売種別(type)
+    sales_kind_item: "",         // 販売種別(item)
+    stock_management_type: "1",  // 在庫管理(type)
+    stock_management_item: "",   // 在庫管理(item)
+    display_period_from: null,   // 表示期間 (From)
+    display_period_to: null,     // 表示期間 (To)
+    display_period_stop: false,  // 表示期間 (表示停止)
+    display_sales_from: null,    // 販売期間 (From)
+    display_sales_to: null,      // 販売期間 (To)
+    display_sales_stop: false,   // 販売期間 (表示停止)
+    age_category: [],            // 年齢区分
+
     usage_period_from: null,
     usage_period_to: null,
     usage_period_deadline: "",
@@ -523,6 +622,13 @@ new Vue({
     onTabToggle(target) {
       this[target] = !this[target];
     },
+    onAgeCategoryChange(event, value) {
+      if(event.target.checked) {
+        this.age_category.push(value)
+      } else {
+        this.age_category = this.age_category.filter(o => o.id !== value.id);
+      }
+    },
     onTenantChange(event, value) {
       if(event.target.checked) {
         this.tenants_used.push(value)
@@ -540,12 +646,6 @@ new Vue({
         })
       });
       this.tags = resultTags;
-    },
-    onModalShow() {
-      this.modalShow = true;
-    },
-    onModalClose() {
-      this.modalShow = false;
     },
     onFileDrag(flag) {
       this.isFileAreaFocus = flag;
