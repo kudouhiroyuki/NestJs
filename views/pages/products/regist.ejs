@@ -11,8 +11,20 @@
 
     <form @submit.prevent="onSubmit" name="productsForm" class="mb-5">
       <!-- 基本情報 -->
-      <div class="baseShadow p-3 mb-5">
-        <h5 class="mb-4 fw-bold">基本情報</h5>
+      <div :style="basicTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">基本情報</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('basicTabStatus')"
+              :style="basicTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <!-- 商品名 -->
         <div class="col-4 mb-4">
           <label class="form-label">商品名</label>
           <input
@@ -110,9 +122,21 @@
           </div>
         </div>
       </div>
+
       <!-- 年齢区分 -->
-      <div class="baseShadow p-3 mb-5">
-        <h5 class="mb-4 fw-bold">年齢区分</h5>
+      <div :style="agesTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">年齢区分</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('agesTabStatus')"
+              :style="agesTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
         <div class="col-8">
           <table class="table align-middle">
             <thead>
@@ -132,28 +156,71 @@
           </table>
         </div>
       </div>
-      <div class="baseShadow p-3 mb-5">
-        <h5 class="mb-4 fw-bold">利用方法</h5>
+
+      <!-- 利用方法 -->
+      <div :style="usageTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">利用方法</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('usageTabStatus')"
+              :style="usageTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
         <div class="col-12 mb-4">
           <label class="form-label w-100">利用方法</label>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="riyou" id="riyou_1" value="1">
+          <div class="form-check mb-2">
+            <input
+              v-model="usageMethodActive"
+              class="form-check-input"
+              type="radio"
+              id="riyou_1"
+              value="1"
+            >
             <label class="form-check-label" for="riyou_1">画面提示</label>
           </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="zaiko" id="riyou_2" value="2">
+          <div class="form-check mb-2">
+            <input
+              v-model="usageMethodActive"
+              class="form-check-input"
+              type="radio"
+              id="riyou_2"
+              value="2"
+            >
             <label class="form-check-label" for="riyou_2">電子もぎり</label>
           </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="zaiko" id="riyou_3" value="3">
+          <div class="form-check mb-2">
+            <input
+              v-model="usageMethodActive"
+              class="form-check-input"
+              type="radio"
+              id="riyou_3"
+              value="3"
+            >
             <label class="form-check-label" for="riyou_3">顔認証</label>
           </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="zaiko" id="riyou_3" value="3">
+          <div class="form-check mb-2">
+            <input
+              v-model="usageMethodActive"
+              class="form-check-input"
+              type="radio"
+              id="riyou_4"
+              value="4"
+            >
             <label class="form-check-label" for="riyou_3">QR提示</label>
           </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="zaiko" id="riyou_3" value="3">
+          <div class="form-check">
+            <input
+              v-model="usageMethodActive"
+              class="form-check-input"
+              type="radio"
+              id="riyou_5"
+              value="5"
+            >
             <label class="form-check-label" for="riyou_3">QR読込</label>
           </div>
         </div>
@@ -251,10 +318,22 @@
           </div>
         </div>
       </div>
+
       <!-- 商品タグ -->
-      <div class="baseShadow p-3 mb-5">
-        <h5 class="mb-4 fw-bold">商品タグ</h5>
+      <div :style="tagTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
         <input v-model="JSON.stringify(tags)" type="hidden" name="tags">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">商品タグ</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('tagTabStatus')"
+              :style="tagTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
         <vue-tags-input
           v-model="tag"
           :tags="tags"
@@ -262,10 +341,22 @@
           @tags-changed="replaceTags"
         />
       </div>
+
       <!-- 商品画像 -->
-      <div class="baseShadow p-3 mb-5">
-        <h5 class="mb-4 fw-bold">商品画像</h5>
+      <div :style="imageTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
         <input v-model="JSON.stringify(images)" type="hidden" name="images">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">商品画像</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('imageTabStatus')"
+              :style="imageTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
         <div
           v-for="(item, index) of imagesView"
           :key="index"
@@ -286,6 +377,7 @@
           </button>
         </div>        
       </div>
+
       <!-- 保存ボタン -->
       <div class="d-flex flex-row-reverse mb-4">
         <input
@@ -340,7 +432,13 @@ Vue.component('tags-input', VoerroTagsInput);
 new Vue({
   el: "#productsRegist",
   data: {
-    usagePeriodActive: "1",
+    basicTabStatus: true,   // 基本情報（タブ）
+    agesTabStatus: true,    // 年齢区分（タブ）
+    usageTabStatus: true,   // 利用方法（タブ）
+    tagTabStatus: true,     // 商品タグ（タブ）
+    imageTabStatus: true,   // 商品画像（タブ）
+    usageMethodActive: "1", // 利用方法
+    usagePeriodActive: "1", // 利用期間
     minDate: moment(new Date()).format("YYYY-MM-DD"),
     tag: '',
     isFileAreaFocus: false,
@@ -382,6 +480,9 @@ new Vue({
     },
   },
   methods: {
+    onTabToggle(target) {
+      this[target] = !this[target];
+    },
     onTenantChange(event, value) {
       if(event.target.checked) {
         this.tenants_used.push(value)
