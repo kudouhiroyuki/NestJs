@@ -46,30 +46,95 @@
           ></textarea>
         </div>
 
-        
         <!-- 販売種別 -->
-        <!-- sales_kind_type: "1",  // 商品説明(type) -->
-        <!-- sales_kind_item: "",   // 商品説明(item) -->
-        <div class="col-6 mb-4">
+        <div class="mb-4">
           <label class="form-label">販売種別</label>
           <div class="form-check mb-2 w-50">
             <input
-              v-model="usageMethodActive"
+              v-model="sales_kind_type"
+              name="sales_kind_type"
               class="form-check-input"
               type="radio"
-              id="riyou_1"
+              id="sales_1"
               value="1"
             >
             <label class="form-check-label" for="sales_1">設定を引継ぐ</label>
-          </div>  
+          </div>
+          <div class="form-check mb-2 w-50">
+            <input
+              v-model="sales_kind_type"
+              name="sales_kind_type"
+              class="form-check-input"
+              type="radio"
+              id="sales_2"
+              value="2"
+            >
+            <label class="form-check-label" for="sales_2">指定なし</label>
+          </div>
+          <div class="form-check mb-2 w-50">
+            <input
+              v-model="sales_kind_type"
+              name="sales_kind_type"
+              class="form-check-input"
+              type="radio"
+              id="sales_3"
+              value="3"
+            >
+            <label class="form-check-label" for="sales_3">利用日指定</label>
+          </div>
+          <div class="form-check mb-2 w-50">
+            <input
+              v-model="sales_kind_type"
+              name="sales_kind_type"
+              class="form-check-input"
+              type="radio"
+              id="sales_4"
+              value="4"
+            >
+            <label class="form-check-label" for="sales_4">利用日・時間帯指定</label>
+          </div>
+          <div v-if="sales_kind_type === '3' || sales_kind_type === '4'" class="d-flex mb-3">
+            <div class="col-1"></div>
+            <div class="col-11">
+              <label class="form-label w-100">取扱時間</label>
+              <div class="d-inline-block">
+                <vue-ctk-date-time-picker
+                  name="sales_kind_from"
+                  v-model="sales_kind_from"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :min-date="minDate"
+                  :label="'From'"
+                  position="top"
+                /></vue-ctk-date-time-picker>
+              </div>
+              <div class="d-inline-block">〜</div>
+              <div class="d-inline-block">
+                <vue-ctk-date-time-picker
+                  name="sales_kind_to"
+                  v-model="sales_kind_to"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :min-date="minDate"
+                  :label="'To'"
+                  position="top"
+                /></vue-ctk-date-time-picker>
+              </div>
+            </div>
+          </div>
+          <div v-if="sales_kind_type === '4'" class="d-flex">
+            <div class="col-1"></div>
+            <div class="col-11">
+              <label class="form-label w-100">時間間隔</label>
+              <select v-model="sales_kind_interval" name="sales_kind_interval" class="form-select w-25">
+                <option selected></option>
+                <option value="15">15分</option>
+                <option value="30">30分</option>
+                <option value="60">60分</option>
+              </select>
+            </div>
+          </div>
         </div>
-
-        
-
-  
-
-
-
         <!-- 在庫管理 -->
         <div class="col-12 mb-4">
           <label class="form-label w-100">在庫管理</label>
@@ -117,7 +182,7 @@
             >
             <label class="form-check-label" for="stock_4">HL在庫管理</label>
           </div>
-          <div v-if="stock_management_type === '1'" class="col-4 mt-2">
+          <div v-if="stock_management_type === '3'" class="col-4 mt-2">
             <input v-model="JSON.stringify(stock_management_item)" type="hidden" name="stock_management_item">
             <select v-model="stock_management_item" class="form-select">
               <option hidden value="">在庫ID</option>
@@ -263,7 +328,8 @@
           <label class="form-label w-100">利用方法</label>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usageMethodActive"
+              v-model="usage_method_type"
+              name="usage_method_type"
               class="form-check-input"
               type="radio"
               id="riyou_1"
@@ -273,7 +339,8 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usageMethodActive"
+              v-model="usage_method_type"
+              name="usage_method_type"
               class="form-check-input"
               type="radio"
               id="riyou_2"
@@ -283,7 +350,8 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usageMethodActive"
+              v-model="usage_method_type"
+              name="usage_method_type"
               class="form-check-input"
               type="radio"
               id="riyou_3"
@@ -293,7 +361,8 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usageMethodActive"
+              v-model="usage_method_type"
+              name="usage_method_type"
               class="form-check-input"
               type="radio"
               id="riyou_4"
@@ -304,7 +373,8 @@
           <div>
             <div class="form-check d-inline-block w-25">
               <input
-                v-model="usageMethodActive"
+                v-model="usage_method_type"
+                name="usage_method_type"
                 class="form-check-input"
                 type="radio"
                 id="riyou_5"
@@ -357,7 +427,8 @@
           <div class="col-12 mb-3">
             <div class="form-check form-check-inline">
               <input
-                v-model="usagePeriodActive"
+                v-model="usage_period_type"
+                name="usage_period_type"
                 value="1"
                 class="form-check-input"
                 type="radio"
@@ -374,7 +445,7 @@
                 :min-date="minDate"
                 :label="'From'"
                 position="top"
-                :disabled="usagePeriodActive === '2'"
+                :disabled="usage_period_type === '2'"
               /></vue-ctk-date-time-picker>
             </div>
             <div class="d-inline-block">〜</div>
@@ -387,14 +458,15 @@
                 :min-date="minDate"
                 :label="'To'"
                 position="top"
-                :disabled="usagePeriodActive === '2'"
+                :disabled="usage_period_type === '2'"
               /></vue-ctk-date-time-picker>
             </div>
           </div>
           <div class="col-12">
             <div class="form-check form-check-inline">
               <input
-                v-model="usagePeriodActive"
+                v-model="usage_period_type"
+                name="usage_period_type"
                 value="2"
                 class="form-check-input"
                 type="radio"
@@ -405,7 +477,7 @@
             <div class="d-inline-block">
               <input
                 v-model="usage_period_deadline"
-                :disabled="usagePeriodActive === '1'"
+                :disabled="usage_period_type === '1'"
                 name="usage_period_deadline"
                 type="text"
                 class="form-control mb-2"
@@ -564,8 +636,6 @@ new Vue({
     usageTabStatus: true,   // 利用方法（タブ）
     tagTabStatus: true,     // 商品タグ（タブ）
     imageTabStatus: true,   // 商品画像（タブ）
-    usageMethodActive: "1", // 利用方法
-    usagePeriodActive: "1", // 利用期間
     minDate: moment(new Date()).format("YYYY-MM-DD"),
     tag: '',
     isFileAreaFocus: false,
@@ -579,7 +649,9 @@ new Vue({
     product_name: "",            // 商品名
     product_explanation: "",     // 商品説明
     sales_kind_type: "1",        // 販売種別(type)
-    sales_kind_item: "",         // 販売種別(item)
+    sales_kind_from: "",         // 販売種別(取扱時間 From)
+    sales_kind_to: "",           // 販売種別(取扱時間 To)
+    sales_kind_interval: "",     // 販売種別(時間間隔)
     stock_management_type: "1",  // 在庫管理(type)
     stock_management_item: "",   // 在庫管理(item)
     display_period_from: null,   // 表示期間 (From)
@@ -589,10 +661,12 @@ new Vue({
     display_sales_to: null,      // 販売期間 (To)
     display_sales_stop: false,   // 販売期間 (表示停止)
     age_category: [],            // 年齢区分
+    usage_method_type: "1",      // 利用方法(type)
 
-    usage_period_from: null,
-    usage_period_to: null,
-    usage_period_deadline: "",
+    usage_period_type: "1",      // 利用期間(type)
+    usage_period_from: null,     // 利用期間(日付指定 From)
+    usage_period_to: null,       // 利用期間(日付指定 To)
+    usage_period_deadline: "",   // 利用期間(期限指定 To)
     tenants_used: [],
     tags: [],
     images: [],
