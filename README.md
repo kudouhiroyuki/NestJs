@@ -32,20 +32,10 @@ curl -X PUT http://localhost:3000/users/1 -d "user_name=updateName&password=upda
 curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
 
-## バックオフィス環境？？<br>
-docker build -t nest-image .（イメージ作成）<br>
-docker images（イメージ詳細）imageMAGE ID：4085871b71b7<br>
-docker create --name nest-container 4085871b71b7（コンテナ作成）<br>
-docker ps -a（コンテナ詳細）CONTAINER ID：53930c732bed<br>
-docker start 53930c732bed（コンテナ起動）<br>
-docker exec -it 53930c732bed sh（コンテナログイン）
-
 ## 起動<br>
 cd NestJs<br>
 docker compose up -d --build<br>
-docker container exec -it app sh<br>
-npm i<br>
-npm run start:dev
+docker compose exec nest npm run start:dev<br>
 
 ## Dockerコマンド<br>
 docker version（バージョン）<br>
