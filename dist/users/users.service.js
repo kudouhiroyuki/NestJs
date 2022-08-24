@@ -16,6 +16,16 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async getUsers(query) {
+        const whereConditions = {};
+        if (query.id)
+            whereConditions['id'] = Number(query.id);
+        return await this.prisma.users.findMany({
+            where: whereConditions,
+            orderBy: {},
+            skip: 0
+        });
+    }
     async createUser(data) {
         return await this.prisma.users.create({ data });
     }

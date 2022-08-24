@@ -110,9 +110,9 @@
 /**
  * ORM（Prismaの場合）
  */
-import { users as Users, Prisma } from '@prisma/client';
-import { Injectable, Query, } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { users as Users, Prisma } from '@prisma/client'
+import { Injectable, Query } from '@nestjs/common'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class UsersService {
@@ -123,18 +123,18 @@ export class UsersService {
   // http://localhost:3000/users?id=&sort=asc
   // http://localhost:3000/users?id=&sort=desc
 
-  // async getUsers(query: { id: number; sort: "asc" | "desc" }): Promise<Users[]> {
-  //   let whereConditions = {};
-  //   let orderConditions = {id: query.sort};
-  //   if(query.id) whereConditions["id"] = Number(query.id);
-  //   return await this.prisma.users.findMany({
-  //     where: whereConditions,
-  //     orderBy: {
-  //       orderConditions
-  //     },
-  //     skip: 0,
-  //   });
-  // }
+  async getUsers(query: { id: number; sort: 'asc' | 'desc' }): Promise<Users[]> {
+    const whereConditions = {}
+    // let orderConditions = {id: query.sort}
+    if (query.id) whereConditions['id'] = Number(query.id)
+    return await this.prisma.users.findMany({
+      where: whereConditions,
+      orderBy: {
+        // orderConditions
+      },
+      skip: 0
+    })
+  }
 
   async createUser(data: { user_name: string; password: string }): Promise<Users> {
     return await this.prisma.users.create({ data })

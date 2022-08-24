@@ -21,7 +21,10 @@ src/notification/notification.controller.ts（show）<br>
 views/pages/notification/details.ejs
 
 - 動作確認用（users）<br>
-curl -X GET "http://localhost:3000/users"<br>
+OK curl -X GET "http://localhost:3000/users"<br>
+OK curl -X GET "http://localhost:3000/users?id=1"<br>
+
+
 curl -X GET "http://localhost:3000/users?sort=ASC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users?sort=DESC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users?id=&user_name=&sort=ASC&limit=5&page_number=1"<br>

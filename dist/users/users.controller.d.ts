@@ -3,6 +3,10 @@ import { users as Users } from '@prisma/client';
 export declare class UsersController {
     private readonly service;
     constructor(service: UsersService);
+    getUsers(query: {
+        id: number;
+        sort: 'asc' | 'desc';
+    }): Promise<Users[]>;
     createUser(user: {
         user_name: string;
         password: string;
