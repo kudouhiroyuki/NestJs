@@ -203,4 +203,10 @@ input[type=file] {
 
 .ti-selected-item {
   background-color: #6C757D !important;
+}
+
+.vue-tags-input,
+.ti-input,
+.ti-autocomplete {
+  position: inherit !important;
 }/*# sourceMappingURL=app.css.map */

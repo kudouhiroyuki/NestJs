@@ -382,43 +382,44 @@
               >
               <label class="form-check-label" for="riyou_3">QR読込</label>
             </div>
-            <div class="d-inline-block">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="パラメータ"
-                style="width: 214px; margin-right: 5px;"
-              >
-            </div>
-            <button class="border-0 bg-white" type="button">
-              <img src="/images/icon/plus.svg">
-            </button>
-
-            <div class="d-flex mt-2">
-              <div class="w-25"></div>
-              <table class="table align-middle w-50">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">パラメータ</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th>1</th>
-                    <td>1001</td>
-                    <td>
-                      <input
-                        type="button"
-                        value="QRコード"
-                        class="btn baseBtnGrey"
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <template v-if="usage_method_type==='5'">
+              <div class="d-inline-block">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="パラメータ"
+                  style="width: 214px; margin-right: 5px;"
+                >
+              </div>
+              <button class="border-0 bg-white" type="button">
+                <img src="/images/icon/plus.svg">
+              </button>
+              <div class="d-flex mt-2">
+                <div class="w-25"></div>
+                <table class="table align-middle w-50">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">パラメータ</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>1001</td>
+                      <td>
+                        <input
+                          type="button"
+                          value="QRコード"
+                          class="btn baseBtnGrey"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </template>
           </div>
         </div>
         <!-- 利用期間 -->
@@ -436,32 +437,33 @@
               >
               <label class="form-check-label" for="usagePeriod_1">日付指定</label>
             </div>
-            <div class="d-inline-block">
-              <vue-ctk-date-time-picker
-                name="usage_period_from"
-                v-model="usage_period_from"
-                formatted="YYYY/MM/DD"
-                only-date
-                :min-date="minDate"
-                :label="'From'"
-                position="top"
-                :disabled="usage_period_type === '2'"
-              /></vue-ctk-date-time-picker>
-            </div>
-            <div class="d-inline-block">〜</div>
-            <div class="d-inline-block">
-              <vue-ctk-date-time-picker
-                name="usage_period_to"
-                v-model="usage_period_to"
-                formatted="YYYY/MM/DD"
-                only-date
-                :min-date="minDate"
-                :label="'To'"
-                position="top"
-                :disabled="usage_period_type === '2'"
-              /></vue-ctk-date-time-picker>
-            </div>
-          </div>
+            <template v-if="usage_period_type === '1'">
+              <div class="d-inline-block">
+                <vue-ctk-date-time-picker
+                  name="usage_period_from"
+                  v-model="usage_period_from"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :min-date="minDate"
+                  :label="'From'"
+                  position="top"
+                /></vue-ctk-date-time-picker>
+              </div>
+              <div class="d-inline-block">〜</div>
+              <div class="d-inline-block">
+                <vue-ctk-date-time-picker
+                  name="usage_period_to"
+                  v-model="usage_period_to"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :min-date="minDate"
+                  :label="'To'"
+                  position="top"
+                  :disabled="usage_period_type === '2'"
+                /></vue-ctk-date-time-picker>
+              </div>
+            </template>
+          </div> 
           <div class="col-12">
             <div class="form-check form-check-inline">
               <input
@@ -474,16 +476,17 @@
               >
               <label class="form-check-label" for="usagePeriod_2">期限指定</label>
             </div>
-            <div class="d-inline-block">
-              <input
-                v-model="usage_period_deadline"
-                :disabled="usage_period_type === '1'"
-                name="usage_period_deadline"
-                type="text"
-                class="form-control mb-2"
-                placeholder="有効期限"
-              />
-            </div>
+            <template v-if="usage_period_type === '2'">
+              <div class="d-inline-block">
+                <input
+                  v-model="usage_period_deadline"
+                  name="usage_period_deadline"
+                  type="text"
+                  class="form-control mb-2"
+                  placeholder="有効期限"
+                />
+              </div>
+            </template>
           </div>
         </div>
         <!-- 利用施設 -->
@@ -520,7 +523,7 @@
 
       <!-- 商品タグ -->
       <div :style="tagTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
-        <input v-model="JSON.stringify(tags)" type="hidden" name="tags">
+        <input v-model="JSON.stringify(product_tag)" type="hidden" name="product_tag">
         <div class="d-flex">
           <div class="me-auto">
             <h5 class="mb-4 fw-bold">商品タグ</h5>
@@ -535,7 +538,7 @@
         </div>
         <vue-tags-input
           v-model="tag"
-          :tags="tags"
+          :tags="product_tag"
           :autocomplete-items="onTagsFilter"
           @tags-changed="replaceTags"
         />
@@ -621,6 +624,7 @@
 const stockDmps= `<%- stock_dmps %>`;
 const ages= `<%- ages %>`;
 const tenants= `<%- tenants %>`;
+const tags= `<%- tags %>`;
 
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
@@ -639,12 +643,13 @@ new Vue({
     minDate: moment(new Date()).format("YYYY-MM-DD"),
     tag: '',
     isFileAreaFocus: false,
-    imagesView: [],
-    modalShow: false,
+    imagesView: [],         // 商品画像(表示用)
+    modalShow: false,       // ファイルアップロード(モーダル)
     // APIデータ
     stockDmps: JSON.parse(stockDmps),
     ages: JSON.parse(ages),
     tenants: JSON.parse(tenants),
+    tags: JSON.parse(tags),
     // 登録データ
     product_name: "",            // 商品名
     product_explanation: "",     // 商品説明
@@ -662,32 +667,18 @@ new Vue({
     display_sales_stop: false,   // 販売期間 (表示停止)
     age_category: [],            // 年齢区分
     usage_method_type: "1",      // 利用方法(type)
-
+    usage_method_item: [],       // 利用方法(item)
     usage_period_type: "1",      // 利用期間(type)
     usage_period_from: null,     // 利用期間(日付指定 From)
     usage_period_to: null,       // 利用期間(日付指定 To)
     usage_period_deadline: "",   // 利用期間(期限指定 To)
-    tenants_used: [],
-    tags: [],
-    images: [],
-
-    autocompleteItems: [
-      {
-        text: 'チケット',
-      },
-      {
-        text: '宿泊',
-      },
-      {
-        text: '室内',
-      }
-    ],
-  },
-  created() {
+    tenants_used: [],            // 利用施設
+    product_tag: [],             // 商品タグ
+    images: [],                  // 商品画像
   },
   computed: {
     onTagsFilter() {
-      return this.autocompleteItems.filter(i => {
+      return this.tags.filter(i => {
         return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
       });
     },
@@ -711,15 +702,15 @@ new Vue({
       }
     },
     replaceTags(item) {
-    let resultTags = [];
+      let resultTags = [];
       item.forEach((value) => {
-        this.autocompleteItems.forEach((i) => {
+        this.tags.forEach((i) => {
           if(i.text.toLowerCase().indexOf(value.text.toLowerCase()) !== -1) {
-            resultTags.push({ text:value.text })
+            resultTags.push({ text: value.text })
           } 
         })
       });
-      this.tags = resultTags;
+      this.product_tag = resultTags;
     },
     onFileDrag(flag) {
       this.isFileAreaFocus = flag;

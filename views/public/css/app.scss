@@ -87,3 +87,8 @@ input[type='file'] { color: transparent; }
 .ti-selected-item {
   background-color: #6C757D!important;
 }
+.vue-tags-input,
+.ti-input,
+.ti-autocomplete {
+  position: inherit!important;
+}
