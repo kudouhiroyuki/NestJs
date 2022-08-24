@@ -6,12 +6,749 @@
 
   <%- include('../../partials/sidebar'); %>
 
-  <main id="productsReference">    
+  <main id="productsRegistSet">    
     <h4 class="mb-4 fw-bold">商品登録</h4>
+
+    <form @submit.prevent="onSubmit" name="productsForm" class="mb-5">
+      <!-- 基本情報 -->
+      <div :style="basicTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">基本情報</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('basicTabStatus')"
+              :style="basicTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <!-- 商品名 -->
+        <div class="col-4 mb-4">
+          <label class="form-label">商品名</label>
+          <input
+            v-model="product_name"
+            name="product_name"
+            type="text"
+            class="form-control"
+            placeholder="商品名"
+          >
+        </div>
+        <!-- 商品説明 -->
+        <div class="col-6 mb-4">
+          <label class="form-label">商品説明</label>
+          <textarea
+            v-model="product_explanation"
+            name="product_explanation"
+            rows="3"
+            class="form-control mb-2"
+          ></textarea>
+        </div>
+        <!-- 販売種別 -->
+        <div class="mb-4">
+          <label class="form-label">販売種別</label>
+          <div class="form-check mb-2 w-50">
+            <input
+              v-model="sales_kind_type"
+              name="sales_kind_type"
+              class="form-check-input"
+              type="radio"
+              id="sales_1"
+              value="1"
+            >
+            <label class="form-check-label" for="sales_1">設定を引継ぐ</label>
+          </div>
+          <div class="form-check mb-2 w-50">
+            <input
+              v-model="sales_kind_type"
+              name="sales_kind_type"
+              class="form-check-input"
+              type="radio"
+              id="sales_2"
+              value="2"
+            >
+            <label class="form-check-label" for="sales_2">指定なし</label>
+          </div>
+          <div class="form-check mb-2 w-50">
+            <input
+              v-model="sales_kind_type"
+              name="sales_kind_type"
+              class="form-check-input"
+              type="radio"
+              id="sales_3"
+              value="3"
+            >
+            <label class="form-check-label" for="sales_3">利用日指定</label>
+          </div>
+          <div class="form-check mb-2 w-50">
+            <input
+              v-model="sales_kind_type"
+              name="sales_kind_type"
+              class="form-check-input"
+              type="radio"
+              id="sales_4"
+              value="4"
+            >
+            <label class="form-check-label" for="sales_4">利用日・時間帯指定</label>
+          </div>
+          <div v-if="sales_kind_type === '3' || sales_kind_type === '4'" class="d-flex mb-3">
+            <div class="col-1"></div>
+            <div class="col-11">
+              <label class="form-label w-100">取扱時間</label>
+              <div class="d-inline-block">
+                <vue-ctk-date-time-picker
+                  name="sales_kind_from"
+                  v-model="sales_kind_from"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :min-date="minDate"
+                  :label="'From'"
+                  position="top"
+                /></vue-ctk-date-time-picker>
+              </div>
+              <div class="d-inline-block">〜</div>
+              <div class="d-inline-block">
+                <vue-ctk-date-time-picker
+                  name="sales_kind_to"
+                  v-model="sales_kind_to"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :min-date="minDate"
+                  :label="'To'"
+                  position="top"
+                /></vue-ctk-date-time-picker>
+              </div>
+            </div>
+          </div>
+          <div v-if="sales_kind_type === '4'" class="d-flex">
+            <div class="col-1"></div>
+            <div class="col-11">
+              <label class="form-label w-100">時間間隔</label>
+              <select v-model="sales_kind_interval" name="sales_kind_interval" class="form-select w-25">
+                <option selected></option>
+                <option value="15">15分</option>
+                <option value="30">30分</option>
+                <option value="60">60分</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- 在庫管理 -->
+        <div class="col-12 mb-4">
+          <label class="form-label w-100">在庫管理</label>
+          <div class="form-check form-check-inline">
+            <input
+              v-model="stock_management_type"
+              name="stock_management_type"
+              class="form-check-input"
+              type="radio"
+              id="stock_1"
+              value="1"
+            >
+            <label class="form-check-label" for="stock_1">設定を引継ぐ</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              v-model="stock_management_type"
+              name="stock_management_type"
+              class="form-check-input"
+              type="radio"
+              id="stock_2"
+              value="2"
+            >
+            <label class="form-check-label" for="stock_2">在庫管理なし</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              v-model="stock_management_type"
+              name="stock_management_type"
+              class="form-check-input"
+              type="radio"
+              id="stock_3"
+              value="3"
+            >
+            <label class="form-check-label" for="stock_3">DMP在庫管理</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              v-model="stock_management_type"
+              name="stock_management_type"
+              class="form-check-input"
+              type="radio"
+              id="stock_4"
+              value="4"
+            >
+            <label class="form-check-label" for="stock_4">HL在庫管理</label>
+          </div>
+          <div v-if="stock_management_type === '3'" class="col-4 mt-2">
+            <input v-model="JSON.stringify(stock_management_item)" type="hidden" name="stock_management_item">
+            <select v-model="stock_management_item" class="form-select">
+              <option hidden value="">在庫ID</option>
+              <option
+                v-for="item in stockDmps"
+                :key="item.id"
+                :value="item"
+              >{{ item.name }}</option>
+            </select>
+          </div>
+        </div>
+        <!-- 表示期間 -->
+        <div class="col-12 mb-4">
+          <label class="form-label w-100">表示期間</label>
+          <div class="d-inline-block">
+            <vue-ctk-date-time-picker
+              name="display_period_from"
+              v-model="display_period_from"
+              formatted="YYYY/MM/DD"
+              only-date
+              :min-date="minDate"
+              :label="'From'"
+              position="top"
+            /></vue-ctk-date-time-picker>
+          </div>
+          <div class="d-inline-block">〜</div>
+          <div class="d-inline-block">
+            <vue-ctk-date-time-picker
+              name="display_period_to"
+              v-model="display_period_to"
+              formatted="YYYY/MM/DD"
+              only-date
+              :min-date="minDate"
+              :label="'To'"
+              position="top"
+            /></vue-ctk-date-time-picker>
+          </div>
+          <div class="d-inline-block">
+            <input v-model="JSON.stringify(display_period_stop)" type="hidden" name="display_period_stop">
+            <input
+              @click="display_period_stop=$event.target.checked"
+              class="form-check-input"
+              type="checkbox"
+              id="displayPeriodStop"
+            >
+            <label class="form-check-label" for="displayPeriodStop">
+              表示停止
+            </label>
+          </div>
+        </div>
+        <!-- 販売期間 -->
+        <div class="col-12 mb-4">
+          <label class="form-label w-100">販売期間</label>
+          <div class="d-inline-block">
+            <vue-ctk-date-time-picker
+              name="display_sales_from"
+              v-model="display_sales_from"
+              formatted="YYYY/MM/DD"
+              only-date
+              :min-date="minDate"
+              :label="'From'"
+              position="top"
+            /></vue-ctk-date-time-picker>
+          </div>
+          <div class="d-inline-block">〜</div>
+          <div class="d-inline-block">
+            <vue-ctk-date-time-picker
+              name="display_sales_to"
+              v-model="display_sales_to"
+              formatted="YYYY/MM/DD"
+              only-date
+              :min-date="minDate"
+              :label="'To'"
+              position="top"
+            /></vue-ctk-date-time-picker>
+          </div>
+          <div class="d-inline-block">
+            <input v-model="JSON.stringify(display_sales_stop)" type="hidden" name="display_sales_stop">
+            <input
+              @click="display_sales_stop=$event.target.checked"
+              class="form-check-input"
+              type="checkbox"
+              id="displaySalesStop"
+            >
+            <label class="form-check-label" for="displaySalesStop">
+              表示停止
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 年齢区分 -->
+      <div :style="agesTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <input v-model="JSON.stringify(age_category)" type="hidden" name="age_category">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">年齢区分</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('agesTabStatus')"
+              :style="agesTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <div class="col-8">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">年齢区分</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in ages" :key="index">
+                <th>{{ index + 1 }}</th>
+                <td>{{ item.name }}</td>
+                <td><input @change="onAgeCategoryChange($event, item)" class="form-check-input" type="checkbox"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 利用方法 -->
+      <div :style="usageTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">利用方法</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('usageTabStatus')"
+              :style="usageTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <!-- 利用方法 -->
+        <div class="col-12 mb-4">
+          <label class="form-label w-100">利用方法</label>
+          <div class="form-check mb-2 w-25">
+            <input
+              v-model="usage_method_type"
+              name="usage_method_type"
+              class="form-check-input"
+              type="radio"
+              id="riyou_1"
+              value="1"
+            >
+            <label class="form-check-label" for="riyou_1">画面提示</label>
+          </div>
+          <div class="form-check mb-2 w-25">
+            <input
+              v-model="usage_method_type"
+              name="usage_method_type"
+              class="form-check-input"
+              type="radio"
+              id="riyou_2"
+              value="2"
+            >
+            <label class="form-check-label" for="riyou_2">電子もぎり</label>
+          </div>
+          <div class="form-check mb-2 w-25">
+            <input
+              v-model="usage_method_type"
+              name="usage_method_type"
+              class="form-check-input"
+              type="radio"
+              id="riyou_3"
+              value="3"
+            >
+            <label class="form-check-label" for="riyou_3">顔認証</label>
+          </div>
+          <div class="form-check mb-2 w-25">
+            <input
+              v-model="usage_method_type"
+              name="usage_method_type"
+              class="form-check-input"
+              type="radio"
+              id="riyou_4"
+              value="4"
+            >
+            <label class="form-check-label" for="riyou_3">QR提示</label>
+          </div>
+          <div>
+            <div class="form-check d-inline-block w-25">
+              <input
+                v-model="usage_method_type"
+                name="usage_method_type"
+                class="form-check-input"
+                type="radio"
+                id="riyou_5"
+                value="5"
+              >
+              <label class="form-check-label" for="riyou_3">QR読込</label>
+            </div>
+            <template v-if="usage_method_type==='5'">
+              <div class="d-inline-block">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="パラメータ"
+                  style="width: 214px; margin-right: 5px;"
+                >
+              </div>
+              <button class="border-0 bg-white" type="button">
+                <img src="/images/icon/plus.svg">
+              </button>
+              <div class="d-flex mt-2">
+                <div class="w-25"></div>
+                <table class="table align-middle w-50">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">パラメータ</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>1001</td>
+                      <td>
+                        <input
+                          type="button"
+                          value="QRコード"
+                          class="btn baseBtnGrey"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </template>
+          </div>
+        </div>
+        <!-- 利用期間 -->
+        <div class="form-group mb-4">
+          <label class="form-label w-100">利用期間</label>
+          <div class="col-12 mb-3">
+            <div class="form-check form-check-inline">
+              <input
+                v-model="usage_period_type"
+                name="usage_period_type"
+                value="1"
+                class="form-check-input"
+                type="radio"
+                id="usagePeriod_1"
+              >
+              <label class="form-check-label" for="usagePeriod_1">日付指定</label>
+            </div>
+            <template v-if="usage_period_type === '1'">
+              <div class="d-inline-block">
+                <vue-ctk-date-time-picker
+                  name="usage_period_from"
+                  v-model="usage_period_from"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :min-date="minDate"
+                  :label="'From'"
+                  position="top"
+                /></vue-ctk-date-time-picker>
+              </div>
+              <div class="d-inline-block">〜</div>
+              <div class="d-inline-block">
+                <vue-ctk-date-time-picker
+                  name="usage_period_to"
+                  v-model="usage_period_to"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :min-date="minDate"
+                  :label="'To'"
+                  position="top"
+                  :disabled="usage_period_type === '2'"
+                /></vue-ctk-date-time-picker>
+              </div>
+            </template>
+          </div> 
+          <div class="col-12">
+            <div class="form-check form-check-inline">
+              <input
+                v-model="usage_period_type"
+                name="usage_period_type"
+                value="2"
+                class="form-check-input"
+                type="radio"
+                id="usagePeriod_2"
+              >
+              <label class="form-check-label" for="usagePeriod_2">期限指定</label>
+            </div>
+            <template v-if="usage_period_type === '2'">
+              <div class="d-inline-block">
+                <input
+                  v-model="usage_period_deadline"
+                  name="usage_period_deadline"
+                  type="text"
+                  class="form-control mb-2"
+                  placeholder="有効期限"
+                />
+              </div>
+            </template>
+          </div>
+        </div>
+        <!-- 利用施設 -->
+        <div class="col-12 mb-4">
+          <label class="form-label w-100">利用施設</label>
+          <input v-model="JSON.stringify(tenants_used)" type="hidden" name="tenants_used">
+          <div class="col-8">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">施設ID</th>
+                  <th scope="col">施設名</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in tenants" :key="index">
+                  <th>{{ index + 1 }}</th>
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>
+                    <input
+                      @change="onTenantChange($event, item)"
+                      class="form-check-input"
+                      type="checkbox">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品タグ -->
+      <div :style="tagTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <input v-model="JSON.stringify(product_tag)" type="hidden" name="product_tag">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">商品タグ</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('tagTabStatus')"
+              :style="tagTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <vue-tags-input
+          v-model="tag"
+          :tags="product_tag"
+          :autocomplete-items="onTagsFilter"
+          @tags-changed="replaceTags"
+        />
+      </div>
+
+      <!-- 商品画像 -->
+      <div :style="imageTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <input v-model="JSON.stringify(images)" type="hidden" name="images">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">商品画像</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('imageTabStatus')"
+              :style="imageTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <div
+          v-for="(item, index) of imagesView"
+          :key="index"
+          class="form-check-inline mb-3 position-relative"
+        >
+          <img :src="item.path" style="width: 136px; object-fit: cover; height: 86px;">
+          <button
+            @click="onDeleteFileData"
+            type="button"
+            class="btn-close position-absolute"
+            style="right: 5px; top: 5px; font-size: 14px"
+            :value="index"
+          ></button>
+        </div>
+        <div class="form-check-inline">
+          <button @click="modalShow=true" class="border-0 bg-white" type="button">
+            <img src="/images/icon/plus.svg">
+          </button>
+        </div>        
+      </div>
+
+      <!-- 保存ボタン -->
+      <div class="d-flex flex-row-reverse mb-4">
+        <input
+          type="submit"
+          value="保存"
+          class="btn mt-4 baseBtnGrey"
+          style="width: 156px;"
+        />
+      </div>
+    </form>
+
+    <!-- モーダル -->
+    <div :style="modalShow ? 'display: block' : 'display: none'" class="modalMain">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">ファイルアップロード</h5>
+            <button @click="modalShow=false" type="button" class="btn-close"></button>
+          </div>
+          <div
+            @dragover.prevent="onFileDrag(true)"
+            @dragleave="onFileDrag(false)"
+            @drop.prevent="onFileDrop" 
+            :class="{fileAreaFocus: isFileAreaFocus}"
+            class="modal-body m-3"
+          >
+            <p>ここにファイルをドラッグ＆ドロップ<br>または</p>
+            <input type="file" @change="onFileChange"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      :style="modalShow ? 'display: block' : 'display: none'"
+      class="modalBg"
+      @click="modalShow=false">
+    </div>
   </main>
 </div>
 
 <script type="text/javascript">
+const stockDmps= `<%- stock_dmps %>`;
+const ages= `<%- ages %>`;
+const tenants= `<%- tenants %>`;
+const tags= `<%- tags %>`;
+
+const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
+Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
+
+const VoerroTagsInput = window.VoerroTagsInput;
+Vue.component('tags-input', VoerroTagsInput);
+
+new Vue({
+  el: "#productsRegistSet",
+  data: {
+    basicTabStatus: true,   // 基本情報（タブ）
+    agesTabStatus: true,    // 年齢区分（タブ）
+    usageTabStatus: true,   // 利用方法（タブ）
+    tagTabStatus: true,     // 商品タグ（タブ）
+    imageTabStatus: true,   // 商品画像（タブ）
+    minDate: moment(new Date()).format("YYYY-MM-DD"),
+    tag: '',
+    isFileAreaFocus: false,
+    imagesView: [],         // 商品画像(表示用)
+    modalShow: false,       // ファイルアップロード(モーダル)
+    // APIデータ
+    stockDmps: JSON.parse(stockDmps),
+    ages: JSON.parse(ages),
+    tenants: JSON.parse(tenants),
+    tags: JSON.parse(tags),
+    // 登録データ
+    product_name: "",            // 商品名
+    product_explanation: "",     // 商品説明
+    sales_kind_type: "1",        // 販売種別(type)
+    sales_kind_from: "",         // 販売種別(取扱時間 From)
+    sales_kind_to: "",           // 販売種別(取扱時間 To)
+    sales_kind_interval: "",     // 販売種別(時間間隔)
+    stock_management_type: "1",  // 在庫管理(type)
+    stock_management_item: "",   // 在庫管理(item)
+    display_period_from: null,   // 表示期間 (From)
+    display_period_to: null,     // 表示期間 (To)
+    display_period_stop: false,  // 表示期間 (表示停止)
+    display_sales_from: null,    // 販売期間 (From)
+    display_sales_to: null,      // 販売期間 (To)
+    display_sales_stop: false,   // 販売期間 (表示停止)
+    age_category: [],            // 年齢区分
+    usage_method_type: "1",      // 利用方法(type)
+    usage_method_item: [],       // 利用方法(item)
+    usage_period_type: "1",      // 利用期間(type)
+    usage_period_from: null,     // 利用期間(日付指定 From)
+    usage_period_to: null,       // 利用期間(日付指定 To)
+    usage_period_deadline: "",   // 利用期間(期限指定)
+    tenants_used: [],            // 利用施設
+    product_tag: [],             // 商品タグ
+    images: [],                  // 商品画像
+  },
+  computed: {
+    onTagsFilter() {
+      return this.tags.filter(i => {
+        return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
+      });
+    },
+  },
+  methods: {
+    onTabToggle(target) {
+      this[target] = !this[target];
+    },
+    onAgeCategoryChange(event, value) {
+      if(event.target.checked) {
+        this.age_category.push(value)
+      } else {
+        this.age_category = this.age_category.filter(o => o.id !== value.id);
+      }
+    },
+    onTenantChange(event, value) {
+      if(event.target.checked) {
+        this.tenants_used.push(value)
+      } else {
+        this.tenants_used = this.tenants_used.filter(o => o.id !== value.id);
+      }
+    },
+    replaceTags(item) {
+      let resultTags = [];
+      item.forEach((value) => {
+        this.tags.forEach((i) => {
+          if(i.text.toLowerCase().indexOf(value.text.toLowerCase()) !== -1) {
+            resultTags.push({ text: value.text })
+          } 
+        })
+      });
+      this.product_tag = resultTags;
+    },
+    onFileDrag(flag) {
+      this.isFileAreaFocus = flag;
+    },
+    onFileDrop(event) {
+      this.isFileAreaFocus = false;
+      const files = event.dataTransfer.files;
+      if (files.length !== 1 || files[0].type.indexOf("image") !== 0) {
+        return;
+      }
+      this.createFileData(files);
+    },
+    onFileChange(event) {
+      const files = event.target.files;
+      if (files.length !== 1 || files[0].type.indexOf("image") !== 0) {
+        return;
+      }
+      this.createFileData(files);
+    },
+    onDeleteFileData(event) {
+      this.images.splice(event.target.value, 1);
+      this.imagesView.splice(event.target.value, 1);
+    },
+    createFileData(files) {
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onloadend = () => {
+        this.images.push({ path: reader.result })
+        this.modalShow = false;
+      };
+      this.imagesView.push({ path: URL.createObjectURL(files[0]) });
+    },
+    onSubmit() {
+      document.productsForm.method="post";
+      document.productsForm.action = "/products/regist";
+      document.productsForm.submit();
+    }
+  }
+})
 </script>
 </body>
 </html>

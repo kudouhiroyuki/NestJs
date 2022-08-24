@@ -32,7 +32,12 @@ curl -X PUT http://localhost:3000/users/1 -d "user_name=updateName&password=upda
 curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
 
-## 起動<br>
+## 起動（Docker無）<br>
+npx prisma migrate dev --name init
+npm i
+start:dev
+
+## 起動（Docker有）<br>
 cd NestJs<br>
 docker compose up -d --build<br>
 docker compose exec nest npm run start:dev<br>
