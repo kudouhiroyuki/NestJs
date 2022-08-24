@@ -7,7 +7,7 @@ export class ProductsController {
    */
   @Get('/reference')
   @Render('products/reference')
-  async reference(@Query() query: any) {
+  async getReference(@Query() query: any) {
     console.log('商品一覧画面:query')
     console.log(query)
     const products = [
@@ -35,7 +35,7 @@ export class ProductsController {
    */
   @Get('/regist')
   @Render('products/regist')
-  async regist() {
+  async getRegist() {
     const stock_dmps = [
       { id: '1', name: '1******01: ○○チケット' },
       { id: '2', name: '1******02: ○○チケット' },
@@ -60,7 +60,7 @@ export class ProductsController {
    */
   @Post('regist')
   @Redirect('http://localhost:3000/products/reference')
-  async store(@Body() body: any) {
+  async postRegist(@Body() body: any) {
     console.log('商品登録処理（単体）')
     console.log(body)
   }
@@ -70,7 +70,7 @@ export class ProductsController {
    */
   @Get('/regist-set')
   @Render('products/registSet')
-  async registSet() {
+  async getRegistSet() {
     const stock_dmps = [
       { id: '1', name: '1******01: ○○チケット' },
       { id: '2', name: '1******02: ○○チケット' },
@@ -89,5 +89,14 @@ export class ProductsController {
       tenants: JSON.stringify(tenants),
       tags: JSON.stringify(tags)
     }
+  }
+  /**
+   * POST 商品登録処理（単体）
+   */
+  @Post('regist-set')
+  @Redirect('http://localhost:3000/products/reference')
+  async postRegistSet(@Body() body: any) {
+    console.log('商品登録処理（単体）')
+    console.log(body)
   }
 }
