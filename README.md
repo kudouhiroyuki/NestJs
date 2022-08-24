@@ -36,6 +36,10 @@ curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
 
 ## 起動（Docker無）<br>
+MySQL
+mysql -u root -p;
+CREATE DATABASE nest;
+
 .env<br>
 DATABASE_URL="mysql://root:@localhost:3306/nest"<br>
 
@@ -79,6 +83,15 @@ exit;
 
 - コマンド一覧<br>
 help;
+
+#### データベースの作成<br>
+- CREATE DATABASE 文<br>
+※データベースを作成する<br>
+CREATE DATABASE nest;
+
+- SHOW DATABASES 文<br>
+※データベースの一覧を取得する<br>
+SHOW DATABASES;
 
 #### データの追加と削除<br>
 - INSERT 文<br>
