@@ -36,12 +36,12 @@ curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
 
 ## 起動（Docker無）<br>
-MySQL
-mysql -u root -p;
-CREATE DATABASE nest;
+MySQL<br>
+mysql -u root -p;<br>
+CREATE DATABASE nest;<br>
 
 .env<br>
-DATABASE_URL="mysql://root:@localhost:3306/nest"<br>
+DATABASE_URL="mysql://root:@localhost:3306/nest"
 
 cd NestJs<br>
 npx prisma migrate dev --name init<br>
