@@ -33,10 +33,13 @@ curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
 
 ## 起動（Docker無）<br>
+.env<br>
+DATABASE_URL="mysql://root:@localhost:3306/nest"<br>
+
 cd NestJs<br>
 npx prisma migrate dev --name init<br>
 npm i<br>
-start:dev
+npm run start:dev
 
 ## 起動（Docker有）<br>
 cd NestJs<br>

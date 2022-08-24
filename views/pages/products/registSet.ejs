@@ -673,7 +673,7 @@
 
     <!-- 組み込み商品(モーダル) -->
     <div :style="productModal.show ? 'display: block' : 'display: none'" class="modalMain">
-      <div class="modal-dialog">
+      <div class="modal-dialog" style="width: 400px">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">組み込み商品選択</h5>
@@ -681,14 +681,25 @@
           </div>
           <!-- 自社 -->
           <div v-if="productModal.type === 'privateCompany'" class="modal-body m-3">
-            <div class="col-4 mb-4">
+            <div class="col-12 mb-4">
+              {{ products }}
               <label class="form-label">商品ID</label>
               <input
-                v-model="product_name"
+                @input="onProductsFilter"
+                :value="product_name"
                 type="text"
                 class="form-control"
                 placeholder="商品ID"
               >
+              <div class="d-flex flex-row-reverse">
+                <div class="list-group w-75">
+                  <a
+                    style="cursor: pointer"
+                    class="list-group-item list-group-item-action"
+                  >A second link item</a>
+                </div>
+              </div>
+              
             </div>
 
           </div>
@@ -786,6 +797,9 @@ new Vue({
     onProductModal(type) {
       this.productModalShow = true;
       this.productModalType = type;
+    },
+    onProductsFilter(event) {
+      console.log(event.target.value)
     },
     onTabToggle(target) {
       this[target] = !this[target];

@@ -1,6 +1,6 @@
 /**
-* ORM（typeORMの場合）
-*/
+ * ORM（typeORMの場合）
+ */
 // import { Users } from '../entities/users.entity';
 // import { Injectable, Query, } from '@nestjs/common';
 // import { InjectRepository } from '@nestjs/typeorm';
@@ -94,7 +94,7 @@
 //     //   .where("id = :id", { id: id })
 //     //   .execute();
 //   }
-  
+
 //   async deleteUser(id: number): Promise<DeleteResult> {
 //     return await this.usersRepository.delete(id);
 
@@ -107,10 +107,9 @@
 //   }
 // }
 
-
 /**
-* ORM（Prismaの場合）
-*/
+ * ORM（Prismaの場合）
+ */
 import { users as Users, Prisma } from '@prisma/client';
 import { Injectable, Query, } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
@@ -137,24 +136,19 @@ export class UsersService {
   //   });
   // }
 
-  async createUser(
-    data: { user_name: string; password: string }
-  ): Promise<Users> {
-    return await this.prisma.users.create({ data });
+  async createUser(data: { user_name: string; password: string }): Promise<Users> {
+    return await this.prisma.users.create({ data })
   }
 
-  async updateUser(params: {
-    where: Prisma.usersWhereUniqueInput;
-    data: Prisma.usersUpdateInput;
-  }): Promise<Users> {
-    const { where, data } = params;
+  async updateUser(params: { where: Prisma.usersWhereUniqueInput; data: Prisma.usersUpdateInput }): Promise<Users> {
+    const { where, data } = params
     return this.prisma.users.update({
       where,
       data
-    });
+    })
   }
 
   async deleteUser(where: Prisma.usersWhereUniqueInput): Promise<Users> {
-    return await this.prisma.users.delete({ where });
+    return await this.prisma.users.delete({ where })
   }
 }

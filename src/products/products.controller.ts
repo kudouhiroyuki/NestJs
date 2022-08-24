@@ -79,17 +79,17 @@ export class ProductsController {
     const ages = [{ name: '大人' }, { name: '中人' }, { name: '小人' }, { name: '幼児' }, { name: 'シニア' }]
     const products = [
       {
-        product_id: '商品ID',
-        product_name: '商品名１',
+        product_id: '1001',
+        product_name: '商品名1001-A商品',
         tenant_name: 'テナント名',
-        plan_name: 'プランID プラン名',
+        plan_id: 'プランID プラン名',
         stock_id: '在庫ID 在庫名'
       },
       {
-        product_id: '商品ID',
-        product_name: '商品名２',
+        product_id: '1001',
+        product_name: '商品名1001-B商品',
         tenant_name: 'テナント名',
-        plan_name: 'プランID プラン名',
+        plan_id: 'プランID プラン名',
         stock_id: '在庫ID 在庫名'
       }
     ]
