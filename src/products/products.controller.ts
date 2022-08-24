@@ -77,6 +77,22 @@ export class ProductsController {
       { id: '3', name: '1******03: ○○チケット' }
     ]
     const ages = [{ name: '大人' }, { name: '中人' }, { name: '小人' }, { name: '幼児' }, { name: 'シニア' }]
+    const products = [
+      {
+        product_id: '商品ID',
+        product_name: '商品名１',
+        tenant_name: 'テナント名',
+        plan_name: 'プランID プラン名',
+        stock_id: '在庫ID 在庫名'
+      },
+      {
+        product_id: '商品ID',
+        product_name: '商品名２',
+        tenant_name: 'テナント名',
+        plan_name: 'プランID プラン名',
+        stock_id: '在庫ID 在庫名'
+      }
+    ]
     const tenants = [
       { id: '1001', name: '施設１' },
       { id: '1002', name: '施設２' },
@@ -86,12 +102,13 @@ export class ProductsController {
     return {
       stock_dmps: JSON.stringify(stock_dmps),
       ages: JSON.stringify(ages),
+      products: JSON.stringify(products),
       tenants: JSON.stringify(tenants),
       tags: JSON.stringify(tags)
     }
   }
   /**
-   * POST 商品登録処理（単体）
+   * POST 商品登録処理（セット）
    */
   @Post('regist-set')
   @Redirect('http://localhost:3000/products/reference')
