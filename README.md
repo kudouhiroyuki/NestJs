@@ -33,14 +33,15 @@ curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
 
 ## 起動（Docker無）<br>
-npx prisma migrate dev --name init
-npm i
+cd NestJs<br>
+npx prisma migrate dev --name init<br>
+npm i<br>
 start:dev
 
 ## 起動（Docker有）<br>
 cd NestJs<br>
 docker compose up -d --build<br>
-docker compose exec nest npm run start:dev<br>
+docker compose exec nest npm run start:dev
 
 ## Dockerコマンド<br>
 docker version（バージョン）<br>
