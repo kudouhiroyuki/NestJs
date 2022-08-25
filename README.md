@@ -25,6 +25,10 @@ OK curl -X GET "http://localhost:3000/users"<br>
 OK curl -X GET "http://localhost:3000/users?id=&sort="<br>
 OK curl -X GET "http://localhost:3000/users?id=1"<br>
 OK curl -X GET "http://localhost:3000/users?id=2"<br>
+
+curl -X GET "http://localhost:3000/users?user_name=kudou"<br>
+
+
 OK curl -X GET "http://localhost:3000/users?id=&sort=asc"<br>
 OK curl -X GET "http://localhost:3000/users?id=&sort=desc"<br>
 

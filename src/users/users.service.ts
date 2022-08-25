@@ -114,11 +114,15 @@ import { users as Users, Prisma } from '@prisma/client'
 import { Injectable, Query } from '@nestjs/common'
 import { PrismaService } from '../prisma.service'
 
+// SQL直書き
+// return await this.prisma.$queryRaw`SELECT * FROM nest.users`
+// return await this.prisma.$queryRaw(Prisma.sql`SELECT * FROM nest.users`);
+
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getUsers(query: { id: number; sort: 'asc' | 'desc' }): Promise<Users[]> {
+  async getUsers(query: { id: number; user_name: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
     const whereConditions = {}
     const orderConditions = {}
     if (query.id) whereConditions['id'] = Number(query.id)

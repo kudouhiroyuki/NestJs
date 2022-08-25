@@ -48,7 +48,7 @@ export class UsersController {
   constructor(private readonly service: UsersService) {}
 
   @Get()
-  async getUsers(@Query() query: { id: number; sort: 'asc' | 'desc' }): Promise<Users[]> {
+  async getUsers(@Query() query: { id: number; user_name: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
     return await this.service.getUsers(query)
   }
 

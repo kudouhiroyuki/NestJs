@@ -5,6 +5,7 @@ export declare class UsersController {
     constructor(service: UsersService);
     getUsers(query: {
         id: number;
+        user_name: string;
         sort: 'asc' | 'desc';
     }): Promise<Users[]>;
     createUser(user: {

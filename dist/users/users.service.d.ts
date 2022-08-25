@@ -5,6 +5,7 @@ export declare class UsersService {
     constructor(prisma: PrismaService);
     getUsers(query: {
         id: number;
+        user_name: string;
         sort: 'asc' | 'desc';
     }): Promise<Users[]>;
     createUser(data: {
