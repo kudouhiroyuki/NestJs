@@ -18,11 +18,14 @@ let UsersService = class UsersService {
     }
     async getUsers(query) {
         const whereConditions = {};
+        const orderConditions = {};
         if (query.id)
             whereConditions['id'] = Number(query.id);
+        if (query.sort)
+            orderConditions['id'] = query.sort;
         return await this.prisma.users.findMany({
             where: whereConditions,
-            orderBy: {},
+            orderBy: orderConditions,
             skip: 0
         });
     }

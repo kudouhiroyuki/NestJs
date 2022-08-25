@@ -22,8 +22,11 @@ views/pages/notification/details.ejs
 
 - 動作確認用（users）<br>
 OK curl -X GET "http://localhost:3000/users"<br>
+OK curl -X GET "http://localhost:3000/users?id=&sort="<br>
 OK curl -X GET "http://localhost:3000/users?id=1"<br>
-
+OK curl -X GET "http://localhost:3000/users?id=2"<br>
+OK curl -X GET "http://localhost:3000/users?id=&sort=asc"<br>
+OK curl -X GET "http://localhost:3000/users?id=&sort=desc"<br>
 
 curl -X GET "http://localhost:3000/users?sort=ASC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users?sort=DESC&limit=5&page_number=1"<br>

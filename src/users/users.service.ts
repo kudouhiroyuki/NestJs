@@ -118,20 +118,14 @@ import { PrismaService } from '../prisma.service'
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  // http://localhost:3000/users?id=1&sort=
-
-  // http://localhost:3000/users?id=&sort=asc
-  // http://localhost:3000/users?id=&sort=desc
-
   async getUsers(query: { id: number; sort: 'asc' | 'desc' }): Promise<Users[]> {
     const whereConditions = {}
-    // let orderConditions = {id: query.sort}
+    const orderConditions = {}
     if (query.id) whereConditions['id'] = Number(query.id)
+    if (query.sort) orderConditions['id'] = query.sort
     return await this.prisma.users.findMany({
       where: whereConditions,
-      orderBy: {
-        // orderConditions
-      },
+      orderBy: orderConditions,
       skip: 0
     })
   }
