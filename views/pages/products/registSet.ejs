@@ -681,7 +681,6 @@
           </div>
           <!-- 自社 -->
           <div v-if="productModal.type === 'privateCompany'" class="modal-body m-3">
-            <!-- {{ products }} -->
             <div class="col-12 mb-4">
               <label class="form-label">商品ID</label>
               <input
@@ -829,7 +828,7 @@ new Vue({
       this.productModal.planIdShow = false;
       if(target==='productId') this.productModal.productIdShow = true;
       if(target==='planId') this.productModal.planIdShow = true;
-      // フィルタリング処理
+      // フィルタリング
       this.set_products = this.products.filter((item) => {
         if(
           item.product_id.indexOf(String(this.productModal.productId)) !== -1
