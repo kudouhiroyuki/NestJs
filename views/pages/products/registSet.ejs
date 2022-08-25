@@ -681,27 +681,45 @@
           </div>
           <!-- 自社 -->
           <div v-if="productModal.type === 'privateCompany'" class="modal-body m-3">
+            <!-- {{ products }} -->
             <div class="col-12 mb-4">
-              {{ products }}
               <label class="form-label">商品ID</label>
               <input
-                @input="onProductsFilter"
-                :value="product_name"
+                v-model="productModal.productId"
+                @input="onProductsFilter('productId')"
+                @blur="onProductsBlur"
                 type="text"
                 class="form-control"
                 placeholder="商品ID"
               >
-              <div class="d-flex flex-row-reverse">
-                <div class="list-group w-75">
+              <template v-if="productModal.productIdShow">
+                <div v-for="(item, index) of set_products" class="list-group w-75 float-end">
                   <a
+                    @click="productModal.productIdShow=false"
                     style="cursor: pointer"
                     class="list-group-item list-group-item-action"
-                  >A second link item</a>
+                  >{{ item.product_id }}:{{ item.product_name }}</a>
                 </div>
-              </div>
-              
+              </template>
+              <label class="form-label">料金プランID</label>
+              <input
+                v-model="productModal.planId"
+                @input="onProductsFilter('planId')"
+                @blur="onProductsBlur"
+                type="text"
+                class="form-control"
+                placeholder="料金プランID"
+              >
+              <template v-if="productModal.planIdShow">
+                <div v-for="(item, index) of set_products" :key="index" class="list-group w-75 float-end">
+                  <a
+                    @click="productModal.planIdShow=false"
+                    style="cursor: pointer"
+                    class="list-group-item list-group-item-action"
+                  >{{ item.plan_id }}:{{ item.plan_name }}</a>
+                </div>
+              </template>
             </div>
-
           </div>
           <!-- 他社 -->
           <div v-if="productModal.type === 'otherCompany'" class="modal-body m-3">
@@ -752,6 +770,8 @@ new Vue({
       productId: "",           // 商品ID
       planId: "",              // 料金プランID
       stockId: "",             // 在庫ID
+      productIdShow: false,    // 商品ID（検索エリア）
+      planIdShow: false,       // 料金プランID（検索エリア）
     },
     // APIデータ
     stockDmps: JSON.parse(stockDmps),
@@ -798,8 +818,24 @@ new Vue({
       this.productModalShow = true;
       this.productModalType = type;
     },
-    onProductsFilter(event) {
-      console.log(event.target.value)
+    onProductsBlur: function() {
+      this.productModal.productIdShow = false;
+      this.productModal.planIdShow = false;
+    },
+    onProductsFilter(target) {
+      // 初期化
+      this.set_products = [];
+      this.productModal.productIdShow = false;
+      this.productModal.planIdShow = false;
+      if(target==='productId') this.productModal.productIdShow = true;
+      if(target==='planId') this.productModal.planIdShow = true;
+      // フィルタリング処理
+      this.set_products = this.products.filter((item) => {
+        if(
+          item.product_id.indexOf(String(this.productModal.productId)) !== -1
+          && item.plan_id.indexOf(String(this.productModal.planId)) !== -1
+        ) return item;
+      });
     },
     onTabToggle(target) {
       this[target] = !this[target];

@@ -80,16 +80,18 @@ export class ProductsController {
     const products = [
       {
         product_id: '1001',
-        product_name: '商品名1001-A商品',
+        product_name: 'A商品',
+        plan_id: '1111',
+        plan_name: 'プランA',
         tenant_name: 'テナント名',
-        plan_id: 'プランID プラン名',
         stock_id: '在庫ID 在庫名'
       },
       {
         product_id: '1001',
-        product_name: '商品名1001-B商品',
+        product_name: 'B商品',
+        plan_id: '2222',
+        plan_name: 'プランB',
         tenant_name: 'テナント名',
-        plan_id: 'プランID プラン名',
         stock_id: '在庫ID 在庫名'
       }
     ]
