@@ -694,13 +694,13 @@
               <template v-if="productModal.productIdShow">
                 <div v-for="(item, index) of set_products" class="list-group w-75 float-end">
                   <a
-                    @click="productModal.productIdShow=false"
+                    @click="onProductsClick('productId', item)"
                     style="cursor: pointer"
                     class="list-group-item list-group-item-action"
                   >{{ item.product_id }}:{{ item.product_name }}</a>
                 </div>
               </template>
-              <label class="form-label">料金プランID</label>
+              <label class="form-label mt-4">料金プランID</label>
               <input
                 v-model="productModal.planId"
                 @input="onProductsFilter('planId')"
@@ -712,12 +712,21 @@
               <template v-if="productModal.planIdShow">
                 <div v-for="(item, index) of set_products" :key="index" class="list-group w-75 float-end">
                   <a
-                    @click="productModal.planIdShow=false"
+                    @click="onProductsClick('planId', item)"
                     style="cursor: pointer"
                     class="list-group-item list-group-item-action"
                   >{{ item.plan_id }}:{{ item.plan_name }}</a>
                 </div>
               </template>
+              <label class="form-label mt-4">在庫ID</label>
+              <input
+                v-model="productModal.stockId"
+                @input="onProductsFilter('stockId')"
+                @blur="onProductsBlur"
+                type="text"
+                class="form-control"
+                placeholder="在庫ID"
+              >
             </div>
           </div>
           <!-- 他社 -->
@@ -769,8 +778,8 @@ new Vue({
       productId: "",           // 商品ID
       planId: "",              // 料金プランID
       stockId: "",             // 在庫ID
-      productIdShow: false,    // 商品ID（検索エリア）
-      planIdShow: false,       // 料金プランID（検索エリア）
+      productIdShow: false,    // 商品ID（プルダウン）
+      planIdShow: false,       // 料金プランID（プルダウン）
     },
     // APIデータ
     stockDmps: JSON.parse(stockDmps),
@@ -817,9 +826,17 @@ new Vue({
       this.productModalShow = true;
       this.productModalType = type;
     },
-    onProductsBlur: function() {
+    onProductsClick(target, item) {
+      if(target === 'productId') this.productModal.productId = item.product_id;
+      if(target === 'planId') this.productModal.planId = item.plan_id
       this.productModal.productIdShow = false;
       this.productModal.planIdShow = false;
+    },
+    onProductsBlur() {
+      if(!this.set_products.length) {
+        this.productModal.productIdShow = false;
+        this.productModal.planIdShow = false;
+      }
     },
     onProductsFilter(target) {
       // 初期化
