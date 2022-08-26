@@ -87,7 +87,7 @@ export class ProductsController {
         stock_setting_management: 'dmp',
         stock_id: '1001',
         stock_name: '在庫(1001)',
-        pegging_settings: [{ name: '紐付設定A(1001)' }, { name: '紐付設定B(1001)' }],
+        peggingSettings: [{ name: '紐付設定A(1001)' }, { name: '紐付設定B(1001)' }],
         tenant_name: 'テナント名'
       },
       {
@@ -99,7 +99,7 @@ export class ProductsController {
         stock_setting_management: 'dmp',
         stock_id: '1002',
         stock_name: '在庫(1002)',
-        pegging_settings: [{ name: '紐付設定A(1002)' }, { name: '紐付設定B(1002)' }],
+        peggingSettings: [{ name: '紐付設定A(1002)' }, { name: '紐付設定B(1002)' }],
         tenant_name: 'テナント名'
       },
       {
@@ -111,7 +111,7 @@ export class ProductsController {
         stock_setting_management: 'dmp',
         stock_id: '1003',
         stock_name: '在庫(1003)',
-        pegging_settings: [{ name: '紐付設定A(1003)' }, { name: '紐付設定B(1003)' }],
+        peggingSettings: [{ name: '紐付設定A(1003)' }, { name: '紐付設定B(1003)' }],
         tenant_name: 'テナント名'
       }
     ]
