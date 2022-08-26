@@ -328,8 +328,8 @@
             <img src="/images/icon/plus.svg">
           </button>
           <ul class="dropdown-menu">
-            <li @click="onProductModal('privateCompany')" class="dropdown-item small">自社商品を追加する</li>
-            <li @click="onProductModal('otherCompany')" class="dropdown-item small">他社商品を追加する</li>
+            <li @click="onProductsModalShow('privateCompany')" class="dropdown-item small">自社商品を追加する</li>
+            <li @click="onProductsModalShow('otherCompany')" class="dropdown-item small">他社商品を追加する</li>
           </ul>
         </div>
         <div class="col-12">
@@ -681,7 +681,7 @@
           </div>
           <!-- 自社 -->
           <div v-if="productModal.type === 'privateCompany'" class="modal-body m-3">
-            <div class="col-12 mb-4">
+            <div v-if="productModal.current === '1'" class="col-12 mb-4">
               <label class="form-label">商品ID</label>
               <input
                 v-model="productModal.productId"
@@ -692,9 +692,9 @@
                 placeholder="商品ID"
               >
               <template v-if="productModal.productIdShow">
-                <div v-for="(item, index) of set_products" class="list-group w-75 float-end">
+                <div v-for="(item, index) of resultItems" class="list-group w-75 float-end">
                   <a
-                    @click="onProductsClick('productId', item)"
+                    @click="onProductsSelect('productId', item)"
                     style="cursor: pointer"
                     class="list-group-item list-group-item-action"
                   >{{ item.product_id }}:{{ item.product_name }}</a>
@@ -710,9 +710,9 @@
                 placeholder="料金プランID"
               >
               <template v-if="productModal.planIdShow">
-                <div v-for="(item, index) of set_products" :key="index" class="list-group w-75 float-end">
+                <div v-for="(item, index) of resultItems" :key="index" class="list-group w-75 float-end">
                   <a
-                    @click="onProductsClick('planId', item)"
+                    @click="onProductsSelect('planId', item)"
                     style="cursor: pointer"
                     class="list-group-item list-group-item-action"
                   >{{ item.plan_id }}:{{ item.plan_name }}</a>
@@ -728,14 +728,55 @@
                 placeholder="在庫ID"
               >
               <template v-if="productModal.stockIdShow">
-                <div v-for="(item, index) of set_products" :key="index" class="list-group w-75 float-end">
+                <div v-for="(item, index) of resultItems" :key="index" class="list-group w-75 float-end">
                   <a
-                    @click="onProductsClick('stockId', item)"
+                    @click="onProductsSelect('stockId', item)"
                     style="cursor: pointer"
                     class="list-group-item list-group-item-action"
                   >{{ item.stock_id }}:{{ item.stock_name }}</a>
                 </div>
               </template>
+              <input
+                @click="productModal.current='2'"
+                type="button"
+                value="次へ"
+                class="btn mt-4 baseBtnGrey"
+                style="width: 156px; float: right;"
+              />
+            </div>
+            <div v-if="productModal.current === '2'" class="col-12 mb-4">
+              <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">年齢区分</th>
+                    <th scope="col">紐付設定</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in resultItems" :key="index">
+                    <th>{{ index + 1 }}</th>
+                    <td>{{ item.age_category }}</td>
+                    <td>
+                      <select class="form-select">
+                        <option hidden value="">年齢区分</option>
+                        <option
+                          v-for="item in ageRelations"
+                          :key="item.id"
+                          :value="item"
+                        >{{ item.name }}</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <input
+                @click="onProductsRegist"
+                type="button"
+                value="登録"
+                class="btn mt-4 baseBtnGrey"
+                style="width: 156px; float: right;"
+              />
             </div>
           </div>
           <!-- 他社 -->
@@ -748,7 +789,7 @@
     <div
       :style="productModal.show ? 'display: block' : 'display: none'"
       class="modalBg"
-      @click="productModal.show=false">
+      @click="onProductsModalClear">
     </div>
   </main>
 </div>
@@ -756,6 +797,7 @@
 <script type="text/javascript">
 const stockDmps= `<%- stock_dmps %>`;
 const ages= `<%- ages %>`;
+const ageRelations= `<%- age_relations %>`;
 const tenants= `<%- tenants %>`;
 const tags= `<%- tags %>`;
 const products= `<%- products %>`;
@@ -784,16 +826,19 @@ new Vue({
     productModal: {
       show: true,              // 表示ステータス
       type: "privateCompany",                // 表示タイプ
+      current: "1",            // カレントページ
       productId: "",           // 商品ID
       planId: "",              // 料金プランID
       stockId: "",             // 在庫ID
       productIdShow: false,    // 商品ID（プルダウン）
       planIdShow: false,       // 料金プランID（プルダウン）
       stockIdShow: false,      // 在庫ID（プルダウン）
+      resultItems: [],         // フィルタリング結果
     },
     // APIデータ
     stockDmps: JSON.parse(stockDmps),
     ages: JSON.parse(ages),
+    ageRelations: JSON.parse(ageRelations),
     tenants: JSON.parse(tenants),
     tags: JSON.parse(tags),
     products: JSON.parse(products),
@@ -832,11 +877,26 @@ new Vue({
     },
   },
   methods: {
-    onProductModal(type) {
-      this.productModalShow = true;
-      this.productModalType = type;
+    // 組み込み商品モーダル（初期化）
+    onProductsModalClear() {
+      this.productModal.show = false;
+      this.productModal.type = "";
+      this.productModal.current = "1";
+      this.productModal.productId = "";
+      this.productModal.planId = "";
+      this.productModal.stockId = "";
     },
-    onProductsClick(target, item) {
+    // 組み込み商品モーダル（表示）
+    onProductsModalShow(type) {
+      this.productModal.show = true;
+      this.productModal.type = type;
+    },
+    // 組み込み商品モーダル（登録）
+    onProductsRegist() {
+      this.set_products = this.resultItems;
+      this.onProductsModalClear();
+    },
+    onProductsSelect(target, item) {
       if(target === 'productId') this.productModal.productId = item.product_id;
       if(target === 'planId') this.productModal.planId = item.plan_id
       if(target === 'stockId') this.productModal.stockId = item.stock_id
@@ -850,16 +910,11 @@ new Vue({
       this.productModal.stockIdShow = false;
     },
     onProductsFilter(target) {
-      // 初期化
-      this.set_products = [];
-      this.productModal.productIdShow = false;
-      this.productModal.planIdShow = false;
-      this.productModal.stockIdShow = false;
+      this.resultItems = [];
       if(target==='productId') this.productModal.productIdShow = true;
       if(target==='planId') this.productModal.planIdShow = true;
       if(target==='stockId') this.productModal.stockIdShow = true;
-      // フィルタリング
-      this.set_products = this.products.filter((item) => {
+      this.resultItems = this.products.filter((item) => {
         if(
           item.product_id.indexOf(String(this.productModal.productId)) !== -1
           && item.plan_id.indexOf(String(this.productModal.planId)) !== -1
