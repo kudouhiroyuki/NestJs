@@ -77,42 +77,41 @@ export class ProductsController {
       { id: '3', name: '1******03: ○○チケット' }
     ]
     const ages = [{ name: '大人' }, { name: '中人' }, { name: '小人' }, { name: '幼児' }, { name: 'シニア' }]
-    const age_relations = [{ name: '大人' }, { name: '高校生' }, { name: '中学生以下' }]
     const products = [
       {
         product_id: '1001',
         product_name: 'A商品',
-        plan_id: '1111',
-        plan_name: 'プランA',
+        plan_id: '1001',
+        plan_name: 'プラン(1001)',
         stock_setting_handover: true,
         stock_setting_management: 'dmp',
-        stock_id: '1111',
-        stock_name: '在庫A',
-        age_category: '中人',
+        stock_id: '1001',
+        stock_name: '在庫(1001)',
+        pegging_settings: [{ name: '紐付設定A(1001)' }, { name: '紐付設定B(1001)' }],
         tenant_name: 'テナント名'
       },
       {
-        product_id: '1001',
+        product_id: '1002',
         product_name: 'B商品',
-        plan_id: '2222',
-        plan_name: 'プランB-1',
+        plan_id: '1002',
+        plan_name: 'プラン(1002)',
         stock_setting_handover: true,
         stock_setting_management: 'dmp',
-        stock_id: '2222',
-        stock_name: '在庫B-1',
-        age_category: '大人',
+        stock_id: '1002',
+        stock_name: '在庫(1002)',
+        pegging_settings: [{ name: '紐付設定A(1002)' }, { name: '紐付設定B(1002)' }],
         tenant_name: 'テナント名'
       },
       {
-        product_id: '1001',
-        product_name: 'B商品',
-        plan_id: '2222',
-        plan_name: 'プランB-2',
+        product_id: '1003',
+        product_name: 'C商品',
+        plan_id: '1003',
+        plan_name: 'プラン(1003)',
         stock_setting_handover: true,
         stock_setting_management: 'dmp',
-        stock_id: '2222',
-        stock_name: '在庫B-2',
-        age_category: '小人',
+        stock_id: '1003',
+        stock_name: '在庫(1003)',
+        pegging_settings: [{ name: '紐付設定A(1003)' }, { name: '紐付設定B(1003)' }],
         tenant_name: 'テナント名'
       }
     ]
@@ -125,7 +124,6 @@ export class ProductsController {
     return {
       stock_dmps: JSON.stringify(stock_dmps),
       ages: JSON.stringify(ages),
-      age_relations: JSON.stringify(age_relations),
       products: JSON.stringify(products),
       tenants: JSON.stringify(tenants),
       tags: JSON.stringify(tags)
