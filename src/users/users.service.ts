@@ -122,6 +122,11 @@ import { PrismaService } from '../prisma.service'
 // SQL直書き
 // return await this.prisma.$queryRaw`SELECT * FROM nest.users`
 // return await this.prisma.$queryRaw(Prisma.sql`SELECT * FROM nest.users`);
+// return await this.prisma.$queryRaw(Prisma.sql`
+//   SELECT * FROM nest.users
+//   WHERE user_name LIKE ${'kudou'}
+//   LIMIT ${'1'};
+// `)
 
 @Injectable()
 export class UsersService {
