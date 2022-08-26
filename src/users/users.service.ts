@@ -114,6 +114,11 @@ import { users as Users, Prisma } from '@prisma/client'
 import { Injectable, Query } from '@nestjs/common'
 import { PrismaService } from '../prisma.service'
 
+// findFirst  条件に一致する最初のレコードを取得
+// findMany   条件に一致する全てのレコードを取得
+// delete     条件に一致するレコードを削除する
+// deleteMany 条件に一致する全てのレコードを削除する
+
 // SQL直書き
 // return await this.prisma.$queryRaw`SELECT * FROM nest.users`
 // return await this.prisma.$queryRaw(Prisma.sql`SELECT * FROM nest.users`);
@@ -126,8 +131,14 @@ export class UsersService {
     const whereConditions = {}
     const orderConditions = {}
     if (query.id) whereConditions['id'] = Number(query.id)
+    if (query.user_name) whereConditions['user_name'] = { contains: query.user_name }
     if (query.sort) orderConditions['id'] = query.sort
     return await this.prisma.users.findMany({
+      select: {
+        id: true,
+        user_name: true,
+        password: true
+      },
       where: whereConditions,
       orderBy: orderConditions,
       skip: 0
