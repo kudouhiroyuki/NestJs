@@ -83,16 +83,22 @@ export class ProductsController {
         product_name: 'A商品',
         plan_id: '1111',
         plan_name: 'プランA',
-        tenant_name: 'テナント名',
-        stock_id: '在庫ID 在庫名'
+        stock_setting_handover: true,
+        stock_setting_management: 'dmp',
+        stock_id: '1111',
+        stock_name: '在庫A',
+        tenant_name: 'テナント名'
       },
       {
         product_id: '1001',
         product_name: 'B商品',
         plan_id: '2222',
         plan_name: 'プランB',
-        tenant_name: 'テナント名',
-        stock_id: '在庫ID 在庫名'
+        stock_setting_handover: true,
+        stock_setting_management: 'dmp',
+        stock_id: '2222',
+        stock_name: '在庫B',
+        tenant_name: 'テナント名'
       }
     ]
     const tenants = [
