@@ -104,9 +104,20 @@ INSERT INTO nest.users (user_name, password) VALUES('name', 'password');
 
 - UPDATE 文<br>
 ※データを更新する<br>
-UPDATE nest.users SET user_name='kudou' WHERE id='1';
+UPDATE nest.users SET user_name='user_name' WHERE id='1';<br>
+UPDATE nest.users SET user_name='user_name', password='password' WHERE id='1';<br>
+UPDATE nest.users SET user_name='user_name', password='password' WHERE id IN ('1', '2');<br>
+UPDATE nest.users SET user_name='user_name', password='password' ORDER BY id DESC LIMIT 2;
+
+- DELETE文<br>
+※データを削除する<br>
+※AUTO_INCREMENTリセットされない<br>
+DELETE FROM nest.users WHERE id = '1';<br>
+DELETE FROM nest.users WHERE id IN ('1', '2');<br>
+DELETE FROM nest.users ORDER BY id DESC LIMIT 2;
 
 - TRUNCATE TABLE文<br>
+※AUTO_INCREMENTリセットされる<br>
 ※全てのデータを削除する<br>
 TRUNCATE TABLE nest.users;
 
