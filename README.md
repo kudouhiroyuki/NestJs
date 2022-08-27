@@ -68,7 +68,8 @@ docker rm {CONTAINER ID}（コンテナ削除）<br>
 docker rmi {IMAGE ID}（イメージ削除）
 
 ## Prismaコマンド<br>
-- マイグレーションファイル作成<br>
+- マイグレーションファイル（作成・更新）<br>
+※テーブルにデータがあれば実行できない
 npx prisma migrate dev --name init
 
 ## Nestコマンド<br>
@@ -109,17 +110,31 @@ UPDATE nest.users SET user_name='user_name', password='password' WHERE id='1';<b
 UPDATE nest.users SET user_name='user_name', password='password' WHERE id IN ('1', '2');<br>
 UPDATE nest.users SET user_name='user_name', password='password' ORDER BY id DESC LIMIT 2;
 
-- DELETE文<br>
+- DELETE 文<br>
 ※データを削除する<br>
 ※AUTO_INCREMENTリセットされない<br>
 DELETE FROM nest.users WHERE id = '1';<br>
 DELETE FROM nest.users WHERE id IN ('1', '2');<br>
 DELETE FROM nest.users ORDER BY id DESC LIMIT 2;
 
-- TRUNCATE TABLE文<br>
+- TRUNCATE TABLE 文<br>
 ※AUTO_INCREMENTリセットされる<br>
 ※全てのデータを削除する<br>
 TRUNCATE TABLE nest.users;
+
+#### データの取得<br>
+- SELECT 文<br>
+※データを取得する<br>
+SELECT * FROM nest.users;<br>
+SELECT id, user_name, password FROM nest.users;<br>
+SELECT id*1.08, user_name, password FROM nest.users;
+
+#### MySQL関数の使い方<br>
+- CONCAT 関数<br>
+※複数の文字列を連結した文字列を取得する<br>
+SELECT CONCAT('first_name','last_name');<br>
+SELECT CONCAT(id, user_name, password) FROM nest.users;<br>
+SELECT CONCAT(id, user_name, password), id, user_name, password FROM nest.users;
 
 ## CRUD<br>
 |  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
