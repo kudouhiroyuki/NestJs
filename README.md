@@ -69,7 +69,7 @@ docker rmi {IMAGE ID}（イメージ削除）
 
 ## Prismaコマンド<br>
 - マイグレーションファイル（作成・更新）<br>
-※テーブルにデータがあれば実行できない
+※テーブル内にデータがあれば更新できない
 npx prisma migrate dev --name init
 
 ## Nestコマンド<br>
