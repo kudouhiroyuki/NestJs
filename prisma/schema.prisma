@@ -13,3 +13,7 @@ model users {
   password  String
   department_id  String
 }
+model departments {
+  department_id String @unique
+  department_name  String
+}

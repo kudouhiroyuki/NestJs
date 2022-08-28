@@ -142,7 +142,8 @@ export class UsersService {
       select: {
         id: true,
         user_name: true,
-        password: true
+        password: true,
+        department_id: true
       },
       where: whereConditions,
       orderBy: orderConditions,
@@ -150,7 +151,7 @@ export class UsersService {
     })
   }
 
-  async createUser(data: { user_name: string; password: string }): Promise<Users> {
+  async createUser(data: { user_name: string; password: string; department_id: string }): Promise<Users> {
     return await this.prisma.users.create({ data })
   }
 

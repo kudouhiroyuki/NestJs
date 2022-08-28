@@ -11,6 +11,7 @@ export declare class UsersController {
     createUser(user: {
         user_name: string;
         password: string;
+        department_id: string;
     }): Promise<Users>;
     updateUser(id: string, user: Users): Promise<Users>;
     deleteUser(id: string): Promise<Users>;

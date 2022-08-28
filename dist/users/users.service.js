@@ -29,7 +29,8 @@ let UsersService = class UsersService {
             select: {
                 id: true,
                 user_name: true,
-                password: true
+                password: true,
+                department_id: true
             },
             where: whereConditions,
             orderBy: orderConditions,

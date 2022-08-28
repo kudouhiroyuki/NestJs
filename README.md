@@ -69,7 +69,7 @@ docker rmi {IMAGE ID}（イメージ削除）
 
 ## Prismaコマンド<br>
 - マイグレーションファイル（作成・更新）<br>
-※テーブル内にデータがあれば更新できない
+※テーブル内にデータがあれば更新できない<br>
 npx prisma migrate dev --name init
 
 ## Nestコマンド<br>
@@ -101,7 +101,10 @@ SHOW DATABASES;
 #### データの追加と削除<br>
 - INSERT 文<br>
 ※データを追加する<br>
-INSERT INTO nest.users (user_name, password) VALUES('name', 'password');
+INSERT INTO nest.users (user_name, password, department_id) VALUES('name', 'password', 'A0001');
+INSERT INTO nest.users (user_name, password, department_id) VALUES('name', 'password', '');
+INSERT INTO nest.departments (department_id, department_name) VALUES('A0001', 'アプリケーション');
+INSERT INTO nest.departments (department_id, department_name) VALUES('B0001', 'デザイン');
 
 - UPDATE 文<br>
 ※データを更新する<br>
@@ -135,6 +138,16 @@ SELECT id*1.08, user_name, password FROM nest.users;
 SELECT CONCAT('first_name','last_name');<br>
 SELECT CONCAT(id, user_name, password) FROM nest.users;<br>
 SELECT CONCAT(id, user_name, password), id, user_name, password FROM nest.users;
+
+#### テーブルとデータの結合<br>
+- INNER JOIN 句（内部結合）<br>
+※結合カラムに同じ値が格納されているデータのみ取得<br>
+SELECT * FROM nest.users INNER JOIN nest.departments USING(department_id);
+SELECT * FROM nest.users INNER JOIN nest.departments ON users.department_id = departments.department_id;
+
+SELECT users.id, departments.department_name FROM nest.users INNER JOIN nest.departments USING(department_id);
+
+
 
 ## CRUD<br>
 |  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
