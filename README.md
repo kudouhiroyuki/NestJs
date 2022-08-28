@@ -142,9 +142,8 @@ SELECT CONCAT(id, user_name, password), id, user_name, password FROM nest.users;
 #### テーブルとデータの結合<br>
 - INNER JOIN 句（内部結合）<br>
 ※結合カラムに同じ値が格納されているデータのみ取得<br>
-SELECT * FROM nest.users INNER JOIN nest.departments USING(department_id);
-SELECT * FROM nest.users INNER JOIN nest.departments ON users.department_id = departments.department_id;
-
+SELECT * FROM nest.users INNER JOIN nest.departments USING(department_id);<br>
+SELECT * FROM nest.users INNER JOIN nest.departments ON users.department_id = departments.department_id;<br>
 SELECT users.id, departments.department_name FROM nest.users INNER JOIN nest.departments USING(department_id);
 
 
