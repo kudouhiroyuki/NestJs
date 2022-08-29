@@ -141,12 +141,18 @@ SELECT CONCAT(id, user_name, password), id, user_name, password FROM nest.users;
 
 #### テーブルとデータの結合<br>
 - INNER JOIN 句（内部結合）<br>
-※結合カラムに同じ値が格納されているデータのみ取得<br>
+※一致しないデータは取得しない<br>
 SELECT * FROM nest.users INNER JOIN nest.departments USING(department_id);<br>
 SELECT * FROM nest.users INNER JOIN nest.departments ON users.department_id = departments.department_id;<br>
 SELECT users.id, departments.department_name FROM nest.users INNER JOIN nest.departments USING(department_id);
 
+- LEFT JOIN 句（外部結合 左外部結合）<br>
+※左側のテーブルにしかないデータも取得<br>
+SELECT * FROM nest.users LEFT JOIN nest.departments ON users.department_id = departments.department_id;
 
+- RIGHT JOIN 句（外部結合 右外部結合）<br>
+※右側のテーブルにしかないデータも取得<br>
+SELECT * FROM nest.users RIGHT JOIN nest.departments ON users.department_id = departments.department_id;
 
 ## CRUD<br>
 |  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
