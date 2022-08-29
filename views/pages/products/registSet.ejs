@@ -275,7 +275,7 @@
 
       <!-- 年齢区分 -->
       <div :style="agesTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
-        <input v-model="JSON.stringify(age_category)" type="hidden" name="age_category">
+        <input v-model="JSON.stringify(ageCategory)" type="hidden" name="ageCategory">
         <div class="d-flex">
           <div class="me-auto">
             <h5 class="mb-4 fw-bold">年齢区分</h5>
@@ -328,8 +328,8 @@
             <img src="/images/icon/plus.svg">
           </button>
           <ul class="dropdown-menu">
-            <li @click="onProductsModalShow('privateCompany')" class="dropdown-item small">自社商品を追加する</li>
-            <li @click="onProductsModalShow('otherCompany')" class="dropdown-item small">他社商品を追加する</li>
+            <button type="button" @click="onProductsModalShow('privateCompany')" class="dropdown-item small">自社商品を追加する</button>
+            <button type="button" @click="onProductsModalShow('otherCompany')" class="dropdown-item small">他社商品を追加する</button>
           </ul>
         </div>
         <div class="col-12">
@@ -765,7 +765,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(category, index) in age_category" :key="index">
+                  <tr v-for="(category, index) in ageCategory" :key="index">
                     <th>{{ index + 1 }}</th>
                     <td>{{ category.name }}</td>
                     <td>
@@ -834,14 +834,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(category, index) in age_category" :key="index">
+                  <tr v-for="(category, index) in ageCategory" :key="index">
                     <th>{{ index + 1 }}</th>
                     <td>{{ category.name }}</td>
                     <td>
-                      <select class="form-select">
+                      <select @change="onPeggingSettingChange($event, index)" class="form-select">
                         <option hidden value="">年齢区分</option>
                         <option
                           v-for="(result, index) in productModal.resultItems[0].peggingSettings"
+                          :value="result.name"
                           :key="index"
                         >{{ result.name }}</option>
                       </select>
@@ -950,7 +951,7 @@ new Vue({
     display_sales_from: null,    // 販売期間 (From)
     display_sales_to: null,      // 販売期間 (To)
     display_sales_stop: false,   // 販売期間 (表示停止)
-    age_category: [],            // 年齢区分
+    ageCategory: [],             // 年齢区分
     setProducts: [],             // 組み込み商品
     usage_method_type: "1",      // 利用方法(type)
     usage_method_item: [],       // 利用方法(item)
@@ -983,10 +984,12 @@ new Vue({
       this.productModal.productId = "";
       this.productModal.planId = "";
       this.productModal.stockId = "";
+      this.systemAlert.show = false;
+      this.systemAlert.text = "";
     },
     // 組み込み商品モーダル（表示）
     onProductsModalShow(type) {
-      if(this.age_category.length) {
+      if(this.ageCategory.length) {
         this.productModal.show = true;
         this.productModal.type = type;
         this.productModal.current = "1";
@@ -1006,10 +1009,37 @@ new Vue({
         if(item.productId.indexOf(String(target.productId)) === -1) return item;
       });
     },
-    // 組み込み商品モーダル（入力値チェック）
-    validationProducts() {
- 
-      console.log(this.productModal)
+    // 組み込み商品モーダル（ページ遷移）
+    onProductsModalMove() {
+      this.productModal.resultItemsError = false;
+      let itemsCheck = this.productModal.resultItems.filter((item) => {
+        if(
+          item.productId === String(this.productModal.productId)
+          && item.plan_id === String(this.productModal.planId)
+          && item.stock_id === String(this.productModal.stockId)
+        ) return item;
+      });
+      if(this.validationFirstPage() && itemsCheck.length) {
+        this.createAgePegging();
+        this.productModal.current = "2";
+      } else {
+        this.productModal.resultItemsError = true;
+      }
+    },
+    // 組み込み商品モーダル（API 商品存在チェック + ページ遷移）
+    onProductsApi() {
+      if(this.validationFirstPage()) {
+        this.getProductsApi().then((res) => {
+          if(res) {
+            this.createAgePegging();
+            this.productModal.current = "2";
+            this.productModal.resultItems = res;
+          }
+        });
+      }
+    },
+    // 組み込み商品モーダル（入力値チェック Firstページ）
+    validationFirstPage() {
       this.productModal.productIdError = false;
       this.productModal.planIdError = false;
       this.productModal.stockIdError = false;
@@ -1026,28 +1056,26 @@ new Vue({
         return true;
       }
     },
-    // 組み込み商品モーダル（ページ遷移）
-    onProductsModalMove() {
-      console.log(this.productModal.resultItems)
+    // 組み込み商品モーダル（年齢区分: 紐付設定 データ作成）
+    createAgePegging(event, index) {
+      let resultData = [];
+      this.ageCategory.forEach((element, index) => {
+        let obj = {};
+        obj['pegging'] = element.name; 
+        resultData.push(obj);
+      })
+      this.productModal.resultItems[0].agePeggings = resultData;
+    },
+    // 組み込み商品モーダル（紐付設定 更新）
+    onPeggingSettingChange(event, index) {
+      // let tying = [{ hoge: 1111 }];
+      // console.log(index)
+      // console.log(event.target.value)
+      // this.productModal.resultItems.push(tying);
+    },
 
-      this.productModal.resultItemsError = false;
-      if(this.validationProducts() && this.productModal.resultItems.length === 1) {
-        this.productModal.current = "2";
-      } else {
-        this.productModal.resultItemsError = true;
-      }
-    },
-    // 組み込み商品モーダル（API 商品存在チェック + ページ遷移）
-    onProductsApi() {
-      if(this.validationProducts()) {
-        this.getProductsApi().then((res) => {
-          if(res) {
-            this.productModal.current = "2";
-            this.productModal.resultItems = res;
-          }
-        });
-      }
-    },
+    
+
     onProductsSelect(target, item) {
       this.productModal.resultItems = [];
       if(target === 'productId') this.productModal.productId = item.productId;
@@ -1087,9 +1115,9 @@ new Vue({
     },
     onAgeCategoryChange(event, value) {
       if(event.target.checked) {
-        this.age_category.push(value)
+        this.ageCategory.push(value)
       } else {
-        this.age_category = this.age_category.filter(o => o.id !== value.id);
+        this.ageCategory = this.ageCategory.filter(o => o.id !== value.id);
       }
     },
     onTenantChange(event, value) {
