@@ -689,6 +689,7 @@
           <!-- 自社商品 -->
           <div v-if="productModal.type === 'privateCompany'" class="modal-body m-3">
             <div v-if="productModal.current === '1'" class="col-12 mb-4">
+              <p v-if="productModal.resultItemsError" class="text-danger fw-bold mt-2">商品が見つかりません。</p>
               <label class="form-label">商品ID</label>
               <input
                 v-model="productModal.productId"
@@ -698,6 +699,7 @@
                 class="form-control"
                 placeholder="商品ID"
               >
+              <p v-if="productModal.productIdError" class="text-danger fw-bold mt-2">必須項目が入力されていません。</p>
               <template v-if="productModal.productIdShow">
                 <div v-for="(item, index) of productModal.resultItems" class="list-group w-75 float-end">
                   <a
@@ -716,6 +718,7 @@
                 class="form-control"
                 placeholder="料金プランID"
               >
+              <p v-if="productModal.planIdError" class="text-danger fw-bold mt-2">必須項目が入力されていません。</p>
               <template v-if="productModal.planIdShow">
                 <div v-for="(item, index) of productModal.resultItems" :key="index" class="list-group w-75 float-end">
                   <a
@@ -734,6 +737,7 @@
                 class="form-control"
                 placeholder="在庫ID"
               >
+              <p v-if="productModal.stockIdError" class="text-danger fw-bold mt-2">必須項目が入力されていません。</p>
               <template v-if="productModal.stockIdShow">
                 <div v-for="(item, index) of productModal.resultItems" :key="index" class="list-group w-75 float-end">
                   <a
@@ -744,7 +748,7 @@
                 </div>
               </template>
               <input
-                @click="productModal.current='2'"
+                @click="onProductsModalMove"
                 type="button"
                 value="次へ"
                 class="btn mt-4 baseBtnGrey"
@@ -795,6 +799,7 @@
                 class="form-control"
                 placeholder="商品ID"
               >
+              <p v-if="productModal.productIdError" class="text-danger fw-bold mt-2">必須項目が入力されていません。</p>
               <label class="form-label mt-4">料金プランID</label>
               <input
                 v-model="productModal.planId"
@@ -802,6 +807,7 @@
                 class="form-control"
                 placeholder="料金プランID"
               >
+              <p v-if="productModal.planIdError" class="text-danger fw-bold mt-2">必須項目が入力されていません。</p>
               <label class="form-label mt-4">在庫ID</label>
               <input
                 v-model="productModal.stockId"
@@ -809,8 +815,9 @@
                 class="form-control"
                 placeholder="在庫ID"
               >
+              <p v-if="productModal.stockIdError" class="text-danger fw-bold mt-2">必須項目が入力されていません。</p>
               <input
-                @click="onGetProductsApi"
+              @click="onProductsApi"
                 type="button"
                 value="次へ"
                 class="btn mt-4 baseBtnGrey"
@@ -859,6 +866,17 @@
       class="modalBg"
       @click="onProductsModalClear">
     </div>
+
+    <!-- システムアラート -->
+    <div
+      v-if="systemAlert.show"
+      style="position: fixed; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+      class="alert alert-danger alert-dismissible fade show"
+      role="alert"
+    >
+      <span>{{ systemAlert.text }}</span>
+      <button @click="onSystemAlertClear" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
   </main>
 </div>
 
@@ -891,16 +909,25 @@ new Vue({
     fileModalShow: false,      // ファイルアップロード(モーダル)
     // 組み込み商品(モーダル)
     productModal: {
+      show: false,              // 表示ステータス
+      type: "",                 // 表示タイプ
+      current: "",              // カレントページ
+      productId: "",            // 商品ID
+      planId: "",               // 料金プランID
+      stockId: "",              // 在庫ID
+      productIdShow: false,     // 商品ID（プルダウン）
+      planIdShow: false,        // 料金プランID（プルダウン）
+      stockIdShow: false,       // 在庫ID（プルダウン）
+      resultItems: [],          // フィルタリング結果（値）
+      resultItemsError: false,  // フィルタリング結果（フラグ）
+      productIdError: false,    // バリデーション結果（商品ID）
+      planIdError: false,       // バリデーション結果（料金プランID）
+      stockIdError: false       // バリデーション結果（在庫ID）
+    },
+    // システムアラート
+    systemAlert: {
       show: false,             // 表示ステータス
-      type: "",                // 表示タイプ
-      current: "",             // カレントページ
-      productId: "",           // 商品ID
-      planId: "",              // 料金プランID
-      stockId: "",             // 在庫ID
-      productIdShow: false,    // 商品ID（プルダウン）
-      planIdShow: false,       // 料金プランID（プルダウン）
-      stockIdShow: false,      // 在庫ID（プルダウン）
-      resultItems: [],         // フィルタリング結果
+      text: "",                // エラー文言
     },
     // APIデータ
     stockDmps: JSON.parse(stockDmps),
@@ -943,6 +970,11 @@ new Vue({
     },
   },
   methods: {
+    // システムアラート（初期化）
+    onSystemAlertClear() {
+      this.systemAlert.show = false;
+      this.systemAlert.text = "";
+    },
     // 組み込み商品モーダル（初期化）
     onProductsModalClear() {
       this.productModal.show = false;
@@ -954,9 +986,14 @@ new Vue({
     },
     // 組み込み商品モーダル（表示）
     onProductsModalShow(type) {
-      this.productModal.show = true;
-      this.productModal.type = type;
-      this.productModal.current = "1";
+      if(this.age_category.length) {
+        this.productModal.show = true;
+        this.productModal.type = type;
+        this.productModal.current = "1";
+      } else {
+        this.systemAlert.show = true;
+        this.systemAlert.text = "年齢区分を選択してください";
+      }
     },
     // 組み込み商品モーダル（登録）
     onProductsRegist() {
@@ -969,20 +1006,53 @@ new Vue({
         if(item.productId.indexOf(String(target.productId)) === -1) return item;
       });
     },
-    // 組み込み商品モーダル（API 商品存在チェック）
-    onGetProductsApi() {
-      this.getProductsApi().then((res) => {
-        if(res) {
-          this.productModal.current = "2";
-          this.productModal.resultItems = res;
-        }
-      });     
+    // 組み込み商品モーダル（入力値チェック）
+    validationProducts() {
+ 
+      console.log(this.productModal)
+      this.productModal.productIdError = false;
+      this.productModal.planIdError = false;
+      this.productModal.stockIdError = false;
+      if(this.productModal.productId === "") this.productModal.productIdError = true;
+      if(this.productModal.planId === "") this.productModal.planIdError = true;
+      if(this.productModal.stockId === "") this.productModal.stockIdError = true;
+      if(
+        this.productModal.productIdError === true
+        || this.productModal.planIdError === true
+        || this.productModal.stockIdError === true
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    // 組み込み商品モーダル（ページ遷移）
+    onProductsModalMove() {
+      console.log(this.productModal.resultItems)
+
+      this.productModal.resultItemsError = false;
+      if(this.validationProducts() && this.productModal.resultItems.length === 1) {
+        this.productModal.current = "2";
+      } else {
+        this.productModal.resultItemsError = true;
+      }
+    },
+    // 組み込み商品モーダル（API 商品存在チェック + ページ遷移）
+    onProductsApi() {
+      if(this.validationProducts()) {
+        this.getProductsApi().then((res) => {
+          if(res) {
+            this.productModal.current = "2";
+            this.productModal.resultItems = res;
+          }
+        });
+      }
     },
     onProductsSelect(target, item) {
       this.productModal.resultItems = [];
       if(target === 'productId') this.productModal.productId = item.productId;
-      if(target === 'planId') this.productModal.planId = item.plan_id
-      if(target === 'stockId') this.productModal.stockId = item.stock_id
+      if(target === 'planId') this.productModal.planId = item.plan_id;
+      if(target === 'stockId') this.productModal.stockId = item.stock_id;
       this.productModal.productIdShow = false;
       this.productModal.planIdShow = false;
       this.productModal.stockIdShow = false;
