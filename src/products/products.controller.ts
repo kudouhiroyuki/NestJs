@@ -13,14 +13,14 @@ export class ProductsController {
     const products = [
       {
         path: '/images/icon/products_item.svg',
-        id: 1111,
-        name: '商品A',
+        id: 1001,
+        name: '単体商品',
         date: '2022/08/01 - 2023/02/15'
       },
       {
         path: '/images/icon/products_item.svg',
-        id: '2222',
-        name: '商品B',
+        id: '1001',
+        name: 'セット商品',
         date: '2022/08/01 - 2023/02/15'
       }
     ]
