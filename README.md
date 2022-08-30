@@ -127,10 +127,17 @@ TRUNCATE TABLE nest.users;
 
 #### データの取得<br>
 - SELECT 文<br>
-※データを取得する<br>
+※データを取得する<br><br>
 SELECT * FROM nest.users;<br>
 SELECT id, user_name, password FROM nest.users;<br>
-SELECT id*1.08, user_name, password FROM nest.users;
+SELECT id*1.08, user_name, password FROM nest.users;<br>
+
+- GROUP BY 句<br>
+※データをグループ化する<br>
+
+- AS句（エイリアス）<br>
+※カラムに別名を付ける<br><br>
+SELECT * FROM nest.users AS u;
 
 #### MySQL関数の使い方<br>
 - CONCAT 関数<br>
