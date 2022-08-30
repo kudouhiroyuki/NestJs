@@ -332,6 +332,9 @@
             <button type="button" @click="onProductsModalShow('otherCompany')" class="dropdown-item small">他社商品を追加する</button>
           </ul>
         </div>
+        <div v-if="productModal.ageCategoryError" class="d-flex flex-row-reverse">
+          <p class="text-danger fw-bold">年齢区分を選択してください</p>
+        </div>
         <div class="col-12">
           <table class="table align-middle">
             <thead>
@@ -693,7 +696,7 @@
               <label class="form-label">商品ID</label>
               <input
                 v-model="productModal.productId"
-                @input="onProductsFilter('productId')"
+                @input="onProductsInput('productId')"
                 @focus="onProductsFocus"
                 type="text"
                 class="form-control"
@@ -712,7 +715,7 @@
               <label class="form-label mt-4">料金プランID</label>
               <input
                 v-model="productModal.planId"
-                @input="onProductsFilter('planId')"
+                @input="onProductsInput('planId')"
                 @focus="onProductsFocus"
                 type="text"
                 class="form-control"
@@ -725,13 +728,13 @@
                     @click="onProductsSelect('planId', item)"
                     style="cursor: pointer"
                     class="list-group-item list-group-item-action"
-                  >{{ item.plan_id }}:{{ item.plan_name }}</a>
+                  >{{ item.planId }}:{{ item.plan_name }}</a>
                 </div>
               </template>
               <label class="form-label mt-4">在庫ID</label>
               <input
                 v-model="productModal.stockId"
-                @input="onProductsFilter('stockId')"
+                @input="onProductsInput('stockId')"
                 @focus="onProductsFocus"
                 type="text"
                 class="form-control"
@@ -744,7 +747,7 @@
                     @click="onProductsSelect('stockId', item)"
                     style="cursor: pointer"
                     class="list-group-item list-group-item-action"
-                  >{{ item.stock_id }}:{{ item.stock_name }}</a>
+                  >{{ item.stockId }}:{{ item.stock_name }}</a>
                 </div>
               </template>
               <input
@@ -756,6 +759,8 @@
               />
             </div>
             <div v-if="productModal.current === '2'" class="col-12 mb-4">
+              <p v-if="productModal.diffItemsError" class="text-danger fw-bold mt-2">既に商品追加されています。</p>
+              <p v-if="productModal.peggingError" class="text-danger fw-bold mt-2">紐付設定が入力されていません。</p>
               <table class="table align-middle">
                 <thead>
                   <tr>
@@ -769,10 +774,11 @@
                     <th>{{ index + 1 }}</th>
                     <td>{{ category.name }}</td>
                     <td>
-                      <select class="form-select">
+                      <select @change="onAgePeggingChange($event, index)" class="form-select">
                         <option hidden value="">年齢区分</option>
                         <option
                           v-for="(result, index) in productModal.resultItems[0].peggingSettings"
+                          :value="JSON.stringify(result)"
                           :key="index"
                         >{{ result.name }}</option>
                       </select>
@@ -825,6 +831,8 @@
               />
             </div>
             <div v-if="productModal.current === '2'" class="col-12 mb-4">
+              <p v-if="productModal.diffItemsError" class="text-danger fw-bold mt-2">既に商品追加されています。</p>
+              <p v-if="productModal.peggingError" class="text-danger fw-bold mt-2">紐付設定が入力されていません。</p>
               <table class="table align-middle">
                 <thead>
                   <tr>
@@ -838,11 +846,11 @@
                     <th>{{ index + 1 }}</th>
                     <td>{{ category.name }}</td>
                     <td>
-                      <select @change="onPeggingSettingChange($event, index)" class="form-select">
+                      <select @change="onAgePeggingChange($event, index)" class="form-select">
                         <option hidden value="">年齢区分</option>
                         <option
                           v-for="(result, index) in productModal.resultItems[0].peggingSettings"
-                          :value="result.name"
+                          :value="JSON.stringify(result)"
                           :key="index"
                         >{{ result.name }}</option>
                       </select>
@@ -866,17 +874,6 @@
       :style="productModal.show ? 'display: block' : 'display: none'"
       class="modalBg"
       @click="onProductsModalClear">
-    </div>
-
-    <!-- システムアラート -->
-    <div
-      v-if="systemAlert.show"
-      style="position: fixed; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);"
-      class="alert alert-danger alert-dismissible fade show"
-      role="alert"
-    >
-      <span>{{ systemAlert.text }}</span>
-      <button @click="onSystemAlertClear" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   </main>
 </div>
@@ -919,16 +916,14 @@ new Vue({
       productIdShow: false,     // 商品ID（プルダウン）
       planIdShow: false,        // 料金プランID（プルダウン）
       stockIdShow: false,       // 在庫ID（プルダウン）
+      ageCategoryError: false,  // チェック結果（年齢区分）
       resultItems: [],          // フィルタリング結果（値）
       resultItemsError: false,  // フィルタリング結果（フラグ）
-      productIdError: false,    // バリデーション結果（商品ID）
-      planIdError: false,       // バリデーション結果（料金プランID）
-      stockIdError: false       // バリデーション結果（在庫ID）
-    },
-    // システムアラート
-    systemAlert: {
-      show: false,             // 表示ステータス
-      text: "",                // エラー文言
+      productIdError: false,    // バリデーション結果（商品ID　必須チェック）
+      planIdError: false,       // バリデーション結果（料金プランID　必須チェック）
+      stockIdError: false,      // バリデーション結果（在庫ID　必須チェック）
+      peggingError: false,      // バリデーション結果（紐付設定 必須チェック）
+      diffItemsError: false     // バリデーション結果（重複チェック）
     },
     // APIデータ
     stockDmps: JSON.parse(stockDmps),
@@ -971,11 +966,6 @@ new Vue({
     },
   },
   methods: {
-    // システムアラート（初期化）
-    onSystemAlertClear() {
-      this.systemAlert.show = false;
-      this.systemAlert.text = "";
-    },
     // 組み込み商品モーダル（初期化）
     onProductsModalClear() {
       this.productModal.show = false;
@@ -984,24 +974,34 @@ new Vue({
       this.productModal.productId = "";
       this.productModal.planId = "";
       this.productModal.stockId = "";
-      this.systemAlert.show = false;
-      this.systemAlert.text = "";
+      this.productModal.ageCategoryError = false;
+      this.productModal.resultItemsError = false;
+      this.productModal.peggingError = false;
+      this.productModal.diffItemsError = false;
     },
     // 組み込み商品モーダル（表示）
     onProductsModalShow(type) {
       if(this.ageCategory.length) {
+        this.onProductsModalClear();
         this.productModal.show = true;
         this.productModal.type = type;
         this.productModal.current = "1";
       } else {
-        this.systemAlert.show = true;
-        this.systemAlert.text = "年齢区分を選択してください";
+        this.productModal.ageCategoryError = true;
       }
     },
     // 組み込み商品モーダル（登録）
     onProductsRegist() {
-      this.setProducts = this.productModal.resultItems;
-      this.onProductsModalClear();
+      this.validationLastPage();
+      if(this.productModal.peggingError === false && this.productModal.diffItemsError === false) {
+        if(this.setProducts.length === 0) {
+          this.setProducts = this.productModal.resultItems;
+          this.onProductsModalClear();
+        } else {
+          this.setProducts.push(this.productModal.resultItems[0]);
+          this.onProductsModalClear();
+        }
+      }
     },
     // 組み込み商品モーダル（削除）
     onProductsDelete(target) {
@@ -1011,15 +1011,12 @@ new Vue({
     },
     // 組み込み商品モーダル（ページ遷移）
     onProductsModalMove() {
-      this.productModal.resultItemsError = false;
-      let itemsCheck = this.productModal.resultItems.filter((item) => {
-        if(
-          item.productId === String(this.productModal.productId)
-          && item.plan_id === String(this.productModal.planId)
-          && item.stock_id === String(this.productModal.stockId)
-        ) return item;
+      let items = this.productModal.resultItems.filter((item) => {
+        return item.productId === String(this.productModal.productId)
+        && item.planId === String(this.productModal.planId)
+        && item.stockId === String(this.productModal.stockId);
       });
-      if(this.validationFirstPage() && itemsCheck.length) {
+      if(this.validationFirstPage() && items.length) {
         this.createAgePegging();
         this.productModal.current = "2";
       } else {
@@ -1031,9 +1028,9 @@ new Vue({
       if(this.validationFirstPage()) {
         this.getProductsApi().then((res) => {
           if(res) {
-            this.createAgePegging();
             this.productModal.current = "2";
             this.productModal.resultItems = res;
+            this.createAgePegging();
           }
         });
       }
@@ -1056,69 +1053,107 @@ new Vue({
         return true;
       }
     },
-    // 組み込み商品モーダル（年齢区分: 紐付設定 データ作成）
-    createAgePegging(event, index) {
-      let resultData = [];
-      this.ageCategory.forEach((element, index) => {
-        let obj = {};
-        obj['pegging'] = element.name; 
-        resultData.push(obj);
-      })
-      this.productModal.resultItems[0].agePeggings = resultData;
+    // 組み込み商品モーダル（入力値チェック Lastページ）
+      validationLastPage() {
+      // 紐付設定の入力チェック
+      const peggingCheck = this.productModal.resultItems[0].agePeggings.filter(element => {
+        return element.pegging === "";
+      });
+      if(peggingCheck.length) this.productModal.peggingError = true;
+      // 重複登録チェック
+      if(this.setProducts.length !== 0) {
+        const diffCheck = this.setProducts.filter(element => {
+          return String(element.productId) === String(this.productModal.resultItems[0].productId)
+          && String(element.planId) === String(this.productModal.resultItems[0].planId)
+          && String(element.stockId) === String(this.productModal.resultItems[0].stockId)
+        });
+        if(diffCheck.length !== 0) this.productModal.diffItemsError = true;
+      }
     },
-    // 組み込み商品モーダル（紐付設定 更新）
-    onPeggingSettingChange(event, index) {
-      // let tying = [{ hoge: 1111 }];
-      // console.log(index)
-      // console.log(event.target.value)
-      // this.productModal.resultItems.push(tying);
-    },
-
-    
-
-    onProductsSelect(target, item) {
-      this.productModal.resultItems = [];
-      if(target === 'productId') this.productModal.productId = item.productId;
-      if(target === 'planId') this.productModal.planId = item.plan_id;
-      if(target === 'stockId') this.productModal.stockId = item.stock_id;
-      this.productModal.productIdShow = false;
-      this.productModal.planIdShow = false;
-      this.productModal.stockIdShow = false;
+    // 組み込み商品モーダル（検索候補 フィルタリング）
+    productsFilter() {
       this.productModal.resultItems = this.products.filter((item) => {
-        if(
-          item.productId.indexOf(String(this.productModal.productId)) !== -1
-          && item.plan_id.indexOf(String(this.productModal.planId)) !== -1
-          && item.stock_id.indexOf(String(this.productModal.stockId)) !== -1
-        ) return item;
+        return item.productId.indexOf(String(this.productModal.productId)) !== -1
+        && item.planId.indexOf(String(this.productModal.planId)) !== -1
+        && item.stockId.indexOf(String(this.productModal.stockId)) !== -1;
       });
     },
-    onProductsFocus() {  
-      this.productModal.productIdShow = false;
-      this.productModal.planIdShow = false;
-      this.productModal.stockIdShow = false;
-    },
-    onProductsFilter(target) {
+    // 組み込み商品モーダル（検索候補 入力）
+    onProductsInput(target) {
       this.productModal.resultItems = [];
       if(target==='productId') this.productModal.productIdShow = true;
       if(target==='planId') this.productModal.planIdShow = true;
       if(target==='stockId') this.productModal.stockIdShow = true;
-      this.productModal.resultItems = this.products.filter((item) => {
-        if(
-          item.productId.indexOf(String(this.productModal.productId)) !== -1
-          && item.plan_id.indexOf(String(this.productModal.planId)) !== -1
-          && item.stock_id.indexOf(String(this.productModal.stockId)) !== -1
-        ) return item;
-      });
+      this.productsFilter();
     },
-    onTabToggle(target) {
-      this[target] = !this[target];
+    // 組み込み商品モーダル（検索候補 確定）
+    onProductsSelect(target, item) {
+      this.productModal.resultItems = [];
+      if(target === 'productId') this.productModal.productId = item.productId;
+      if(target === 'planId') this.productModal.planId = item.planId;
+      if(target === 'stockId') this.productModal.stockId = item.stockId;
+      this.productModal.productIdShow = false;
+      this.productModal.planIdShow = false;
+      this.productModal.stockIdShow = false;
+      this.productsFilter();
     },
+    // 組み込み商品モーダル（検索候補 フォーカス）
+    onProductsFocus() {
+      this.productModal.productIdShow = false;
+      this.productModal.planIdShow = false;
+      this.productModal.stockIdShow = false;
+    },
+    // 組み込み商品モーダル（年齢区分 + 紐付設定 データ作成）
+    createAgePegging(event, index) {
+      let resultData = [];
+      this.ageCategory.forEach((element, index) => {
+        let obj = {};
+        obj['age'] = element.name;
+        obj['pegging'] = "";
+        resultData.push(obj);
+      })
+      this.productModal.resultItems[0].agePeggings = resultData;
+    },
+    // 組み込み商品モーダル（紐付設定 データ更新）
+    onAgePeggingChange(event, index) {
+      this.productModal.peggingError = false;
+      this.productModal.resultItems[0].agePeggings[index].pegging = JSON.parse(event.target.value).name;
+    },
+    // 年齢区分（更新）
     onAgeCategoryChange(event, value) {
       if(event.target.checked) {
         this.ageCategory.push(value)
       } else {
         this.ageCategory = this.ageCategory.filter(o => o.id !== value.id);
       }
+    },
+    // 商品存在チェックAPI
+    async getProductsApi() {
+      return await axios.get('https://beauty.tsuku2.jp/api/menus?category_id=1').then((res) => {
+        if (typeof res !== 'undefined') {
+          return [
+            {
+              productId: '1001',
+              product_name: 'A商品',
+              planId: '1001',
+              plan_name: 'プラン(1001)',
+              stock_setting_handover: true,
+              stock_setting_management: 'dmp',
+              stockId: '1001',
+              stock_name: '在庫(1001)',
+              peggingSettings: [{ name: '紐付設定A(1001)' }, { name: '紐付設定B(1001)' }],
+              tenant_name: 'テナント名'
+            }
+          ]
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
+
+
+    onTabToggle(target) {
+      this[target] = !this[target];
     },
     onTenantChange(event, value) {
       if(event.target.checked) {
@@ -1174,30 +1209,6 @@ new Vue({
       document.productsForm.action = "/products/regist-set";
       document.productsForm.submit();
     },
-
-    // 商品存在チェックAPI
-    async getProductsApi() {
-      return await axios.get('https://beauty.tsuku2.jp/api/menus?category_id=1').then((res) => {
-        if (typeof res !== 'undefined') {
-          return [
-            {
-              productId: '1001',
-              product_name: 'A商品',
-              plan_id: '1001',
-              plan_name: 'プラン(1001)',
-              stock_setting_handover: true,
-              stock_setting_management: 'dmp',
-              stock_id: '1001',
-              stock_name: '在庫(1001)',
-              peggingSettings: [{ name: '紐付設定A(1001)' }, { name: '紐付設定B(1001)' }],
-              tenant_name: 'テナント名'
-            }
-          ]
-        }
-      }).catch((error) => {
-        console.log(error);
-      })
-    }
   }
 })
 </script>

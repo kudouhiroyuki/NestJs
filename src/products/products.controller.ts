@@ -81,11 +81,11 @@ export class ProductsController {
       {
         productId: '1001',
         product_name: 'A商品',
-        plan_id: '1001',
+        planId: '1001',
         plan_name: 'プラン(1001)',
         stock_setting_handover: true,
         stock_setting_management: 'dmp',
-        stock_id: '1001',
+        stockId: '1001',
         stock_name: '在庫(1001)',
         peggingSettings: [{ name: '紐付設定A(1001)' }, { name: '紐付設定B(1001)' }],
         tenant_name: 'テナント名'
@@ -93,11 +93,11 @@ export class ProductsController {
       {
         productId: '1002',
         product_name: 'B商品',
-        plan_id: '1002',
+        planId: '1002',
         plan_name: 'プラン(1002)',
         stock_setting_handover: true,
         stock_setting_management: 'dmp',
-        stock_id: '1002',
+        stockId: '1002',
         stock_name: '在庫(1002)',
         peggingSettings: [{ name: '紐付設定A(1002)' }, { name: '紐付設定B(1002)' }],
         tenant_name: 'テナント名'
@@ -105,11 +105,11 @@ export class ProductsController {
       {
         productId: '1003',
         product_name: 'C商品',
-        plan_id: '1003',
+        planId: '1003',
         plan_name: 'プラン(1003)',
         stock_setting_handover: true,
         stock_setting_management: 'dmp',
-        stock_id: '1003',
+        stockId: '1003',
         stock_name: '在庫(1003)',
         peggingSettings: [{ name: '紐付設定A(1003)' }, { name: '紐付設定B(1003)' }],
         tenant_name: 'テナント名'
