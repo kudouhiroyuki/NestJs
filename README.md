@@ -138,10 +138,10 @@ SELECT id*1.08, user_name, password FROM nest.users;<br>
 
 - AS句（エイリアス）<br>
 ※カラムに別名を付ける<br>
-SELECT * FROM nest.users AS u;
-SELECT * FROM nest.users u;
-SELECT id, user_name, password, department_id AS dept from nest.users;
-SELECT id, user_name, password, department_id dept from nest.users;
+SELECT * FROM nest.users AS u;<br>
+SELECT * FROM nest.users u;<br>
+SELECT id, user_name, password, department_id AS dept from nest.users;<br>
+SELECT id, user_name, password, department_id dept from nest.users;<br>
 
 #### MySQL関数の使い方<br>
 - CONCAT 関数<br>
@@ -158,8 +158,7 @@ SELECT u.id, u.user_name, u.password, u.department_id<br>
 FROM nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
 ON u.department_id = d.department_id<br>
-WHERE u.id = 1;<br><br>
-SELECT users.id, departments.department_name FROM nest.users INNER JOIN nest.departments USING(department_id);
+WHERE u.id = 1;<br>
 
 - LEFT JOIN 句（外部結合 左外部結合）<br>
 ※左側のテーブルにしかないデータも取得<br>
