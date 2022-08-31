@@ -94,7 +94,14 @@ export class ProductsController {
       salesKindTo: '2022/09/01',
       salesKindInterval: '15',
       stockManagementType: '3',
-      stockManagementItem: { id: '2', name: '1******02: ○○チケット' }
+      stockManagementItem: { id: '2', name: '1******02: ○○チケット' },
+      displayPeriodFrom: '2022/08/31',
+      displayPeriodTo: '2022/09/01',
+      displayPeriodStop: true,
+      displaySalesFrom: '2022/08/31',
+      displaySalesTo: '2022/09/01',
+      displaySalesStop: true,
+      ageCategory: [{ name: '大人' }, { name: '中人' }]
     }
     return {
       stock_dmps: JSON.stringify(stock_dmps),

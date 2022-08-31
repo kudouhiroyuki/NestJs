@@ -198,8 +198,8 @@
           <label class="form-label w-100">表示期間</label>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              name="display_period_from"
-              v-model="display_period_from"
+              name="displayPeriodFrom"
+              v-model="displayPeriodFrom"
               formatted="YYYY/MM/DD"
               only-date
               :min-date="minDate"
@@ -210,8 +210,8 @@
           <div class="d-inline-block">〜</div>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              name="display_period_to"
-              v-model="display_period_to"
+              name="displayPeriodTo"
+              v-model="displayPeriodTo"
               formatted="YYYY/MM/DD"
               only-date
               :min-date="minDate"
@@ -220,9 +220,10 @@
             /></vue-ctk-date-time-picker>
           </div>
           <div class="d-inline-block">
-            <input v-model="JSON.stringify(display_period_stop)" type="hidden" name="display_period_stop">
+            <input v-model="JSON.stringify(displayPeriodStop)" type="hidden" name="displayPeriodStop">
             <input
-              @click="display_period_stop=$event.target.checked"
+              v-model="displayPeriodStop"
+              @click="displayPeriodStop=$event.target.checked"
               class="form-check-input"
               type="checkbox"
               id="displayPeriodStop"
@@ -237,8 +238,8 @@
           <label class="form-label w-100">販売期間</label>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              name="display_sales_from"
-              v-model="display_sales_from"
+              name="displaySalesFrom"
+              v-model="displaySalesFrom"
               formatted="YYYY/MM/DD"
               only-date
               :min-date="minDate"
@@ -249,8 +250,8 @@
           <div class="d-inline-block">〜</div>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              name="display_sales_to"
-              v-model="display_sales_to"
+              name="displaySalesTo"
+              v-model="displaySalesTo"
               formatted="YYYY/MM/DD"
               only-date
               :min-date="minDate"
@@ -259,9 +260,10 @@
             /></vue-ctk-date-time-picker>
           </div>
           <div class="d-inline-block">
-            <input v-model="JSON.stringify(display_sales_stop)" type="hidden" name="display_sales_stop">
+            <input v-model="JSON.stringify(displaySalesStop)" type="hidden" name="displaySalesStop">
             <input
-              @click="display_sales_stop=$event.target.checked"
+              v-model="displaySalesStop"
+              @click="displaySalesStop=$event.target.checked"
               class="form-check-input"
               type="checkbox"
               id="displaySalesStop"
@@ -275,7 +277,7 @@
 
       <!-- 年齢区分 -->
       <div :style="agesTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
-        <input v-model="JSON.stringify(age_category)" type="hidden" name="age_category">
+        <input v-model="JSON.stringify(ageCategory)" type="hidden" name="ageCategory">
         <div class="d-flex">
           <div class="me-auto">
             <h5 class="mb-4 fw-bold">年齢区分</h5>
@@ -660,15 +662,15 @@ new Vue({
     salesKindInterval: "",       // 販売種別(時間間隔)
     stockManagementType: "1",    // 在庫管理(type)
     stockManagementItem: [],     // 在庫管理(item)
+    displayPeriodFrom: null,     // 表示期間 (From)
+    displayPeriodTo: null,       // 表示期間 (To)
+    displayPeriodStop: false,    // 表示期間 (表示停止)
+    displaySalesFrom: null,      // 販売期間 (From)
+    displaySalesTo: null,        // 販売期間 (To)
+    displaySalesStop: false,     // 販売期間 (表示停止)
+    ageCategory: [],             // 年齢区分
 
-
-    display_period_from: null,   // 表示期間 (From)
-    display_period_to: null,     // 表示期間 (To)
-    display_period_stop: false,  // 表示期間 (表示停止)
-    display_sales_from: null,    // 販売期間 (From)
-    display_sales_to: null,      // 販売期間 (To)
-    display_sales_stop: false,   // 販売期間 (表示停止)
-    age_category: [],            // 年齢区分
+    
     usage_method_type: "1",      // 利用方法(type)
     usage_method_item: [],       // 利用方法(item)
     usage_period_type: "1",      // 利用期間(type)
@@ -700,19 +702,24 @@ new Vue({
       this.salesKindInterval = this.forms.salesKindInterval;
       this.stockManagementType = this.forms.stockManagementType;
       this.stockManagementItem = this.forms.stockManagementItem;
+      this.displayPeriodFrom = this.forms.displayPeriodFrom;
+      this.displayPeriodTo = this.forms.displayPeriodTo;
+      this.displayPeriodStop = this.forms.displayPeriodStop;
+      this.displaySalesFrom = this.forms.displaySalesFrom;
+      this.displaySalesTo = this.forms.displaySalesTo;
+      this.displaySalesStop = this.forms.displaySalesStop;
+      this.ageCategory = this.forms.ageCategory;
 
-     
-    
-      
+
     },
     onTabToggle(target) {
       this[target] = !this[target];
     },
     onAgeCategoryChange(event, value) {
       if(event.target.checked) {
-        this.age_category.push(value)
+        this.ageCategory.push(value)
       } else {
-        this.age_category = this.age_category.filter(o => o.id !== value.id);
+        this.ageCategory = this.ageCategory.filter(o => o.id !== value.id);
       }
     },
     onTenantChange(event, value) {
