@@ -327,8 +327,8 @@
           <label class="form-label w-100">利用方法</label>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usage_method_type"
-              name="usage_method_type"
+              v-model="usageMethodType"
+              name="usageMethodType"
               class="form-check-input"
               type="radio"
               id="riyou_1"
@@ -338,8 +338,8 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usage_method_type"
-              name="usage_method_type"
+              v-model="usageMethodType"
+              name="usageMethodType"
               class="form-check-input"
               type="radio"
               id="riyou_2"
@@ -349,8 +349,8 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usage_method_type"
-              name="usage_method_type"
+              v-model="usageMethodType"
+              name="usageMethodType"
               class="form-check-input"
               type="radio"
               id="riyou_3"
@@ -360,8 +360,8 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usage_method_type"
-              name="usage_method_type"
+              v-model="usageMethodType"
+              name="usageMethodType"
               class="form-check-input"
               type="radio"
               id="riyou_4"
@@ -372,8 +372,8 @@
           <div>
             <div class="form-check d-inline-block w-25">
               <input
-                v-model="usage_method_type"
-                name="usage_method_type"
+                v-model="usageMethodType"
+                name="usageMethodType"
                 class="form-check-input"
                 type="radio"
                 id="riyou_5"
@@ -381,16 +381,18 @@
               >
               <label class="form-check-label" for="riyou_3">QR読込</label>
             </div>
-            <template v-if="usage_method_type==='5'">
+            <template v-if="usageMethodType==='5'">
+              <input v-model="JSON.stringify(usageMethodItem)" type="hidden" name="usageMethodItem">
               <div class="d-inline-block">
                 <input
+                  v-model="qrParam"
                   type="text"
                   class="form-control"
                   placeholder="パラメータ"
                   style="width: 214px; margin-right: 5px;"
                 >
               </div>
-              <button class="border-0 bg-white" type="button">
+              <button @click="onQrParamAdd" class="border-0 bg-white" type="button">
                 <img src="/images/icon/plus.svg">
               </button>
               <div class="d-flex mt-2">
@@ -404,11 +406,12 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th>1</th>
-                      <td>1001</td>
+                    <tr v-for="(item, index) in usageMethodItem" :key="index">
+                      <th>{{ index + 1 }}</th>
+                      <td>{{ item  }}</td>
                       <td>
                         <input
+                          @click="onQrDownload"
                           type="button"
                           value="QRコード"
                           class="btn baseBtnGrey"
@@ -639,6 +642,7 @@ new Vue({
     usageTabStatus: true,   // 利用方法（タブ）
     tagTabStatus: true,     // 商品タグ（タブ）
     imageTabStatus: true,   // 商品画像（タブ）
+    qrParam: '',            // 利用方法（QR読込）
     minDate: moment(new Date()).format("YYYY-MM-DD"),
     tag: '',
     isFileAreaFocus: false,
@@ -665,8 +669,8 @@ new Vue({
     display_sales_to: null,      // 販売期間 (To)
     display_sales_stop: false,   // 販売期間 (表示停止)
     age_category: [],            // 年齢区分
-    usage_method_type: "1",      // 利用方法(type)
-    usage_method_item: [],       // 利用方法(item)
+    usageMethodType: "1",        // 利用方法(type)
+    usageMethodItem: [],         // 利用方法(item)
     usage_period_type: "1",      // 利用期間(type)
     usage_period_from: null,     // 利用期間(日付指定 From)
     usage_period_to: null,       // 利用期間(日付指定 To)
@@ -685,13 +689,26 @@ new Vue({
   methods: {
     onTabToggle(target) {
       this[target] = !this[target];
-    },
+    },    
     onAgeCategoryChange(event, value) {
       if(event.target.checked) {
         this.age_category.push(value)
       } else {
         this.age_category = this.age_category.filter(o => o.id !== value.id);
       }
+    },
+    // 利用方法（QR読込 追加）    
+    onQrParamAdd() {
+      if(this.qrParam) this.usageMethodItem.push(this.qrParam);
+    },
+    // 利用方法（QR読込 画像取得）    
+    onQrDownload() {
+      const link = document.createElement('a');
+      link.href = "";
+      link.download = `画像`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     },
     onTenantChange(event, value) {
       if(event.target.checked) {

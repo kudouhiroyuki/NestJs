@@ -12,18 +12,20 @@ export class ProductsController {
     console.log(query)
     const products = [
       {
+        status: '1',
         path: '/images/icon/products_item.svg',
         id: '1001',
         name: '単体商品',
         date: '2022/08/01 - 2023/02/15',
-        type: '0'
+        type: 'product'
       },
       {
+        status: '1',
         path: '/images/icon/products_item.svg',
         id: '1002',
         name: 'セット商品',
         date: '2022/08/01 - 2023/02/15',
-        type: '1'
+        type: 'setProduct'
       }
     ]
     return {

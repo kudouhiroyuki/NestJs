@@ -68,14 +68,16 @@
         </thead>
         <tbody>
           <tr v-for="(item, index) in products" :key="index">
-            <th>1</th>
-            <td><img :src="item.path"></td>
-            <td>
-              <a @click="onRedirect(item)" style="cursor: pointer">{{ item.id }}</a>
-            </td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.date }}</td>
-            <td><button type="button" class="btn baseBtnGrey">Copy</button></td>
+            <template v-if="item.status==='1'">
+              <th>1</th>
+              <td><img :src="item.path"></td>
+              <td>
+                <a @click="onRedirect(item)" style="cursor: pointer">{{ item.id }}</a>
+              </td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.date }}</td>
+              <td><button type="button" class="btn baseBtnGrey">Copy</button></td>
+            </template>
           </tr>
         </tbody>
       </table>
@@ -149,7 +151,7 @@ new Vue({
     },
     onRedirect(item) {
       let url = "detail";
-      if(item.type == "1") url = "detail-set";
+      if(item.type == "setProduct") url = "detail-set";
       window.location.href = `/products/${url}`;
     },
   }
