@@ -101,7 +101,8 @@ SHOW DATABASES;
 #### データの追加と削除<br>
 - INSERT 文<br>
 ※データを追加する<br>
-INSERT INTO nest.users (user_name, password, department_id) VALUES('name', 'password', 'A0001');
+INSERT INTO nest.users (user_name, password, department_id) VALUES('name1', 'password', 'A0001');
+INSERT INTO nest.users (user_name, password, department_id) VALUES('name2', 'password', 'A0001');
 INSERT INTO nest.users (user_name, password, department_id) VALUES('name', 'password', '');
 INSERT INTO nest.departments (department_id, department_name) VALUES('A0001', 'アプリケーション');
 INSERT INTO nest.departments (department_id, department_name) VALUES('B0001', 'デザイン');
@@ -127,7 +128,7 @@ TRUNCATE TABLE nest.users;
 
 #### データの取得<br>
 - SELECT 文<br>
-※データを取得する<br><br>
+※データを取得する<br>
 SELECT * FROM nest.users;<br>
 SELECT id, user_name, password FROM nest.users;<br>
 SELECT id*1.08, user_name, password FROM nest.users;<br>
@@ -136,8 +137,11 @@ SELECT id*1.08, user_name, password FROM nest.users;<br>
 ※データをグループ化する<br>
 
 - AS句（エイリアス）<br>
-※カラムに別名を付ける<br><br>
+※カラムに別名を付ける<br>
 SELECT * FROM nest.users AS u;
+SELECT * FROM nest.users u;
+SELECT id, user_name, password, department_id AS dept from nest.users;
+SELECT id, user_name, password, department_id dept from nest.users;
 
 #### MySQL関数の使い方<br>
 - CONCAT 関数<br>
@@ -149,13 +153,12 @@ SELECT CONCAT(id, user_name, password), id, user_name, password FROM nest.users;
 #### テーブルとデータの結合<br>
 - INNER JOIN 句（内部結合）<br>
 ※一致しないデータは取得しない<br>
-
-SELECT * FROM nest.users INNER JOIN nest.departments USING(department_id);<br>
-
+SELECT * FROM nest.users INNER JOIN nest.departments USING(department_id);<br><br>
 SELECT u.id, u.user_name, u.password, u.department_id<br>
 FROM nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
-ON u.department_id = d.department_id;<br>
+ON u.department_id = d.department_id<br>
+WHERE u.id = 1;
 
 SELECT users.id, departments.department_name FROM nest.users INNER JOIN nest.departments USING(department_id);
 
