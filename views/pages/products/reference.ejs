@@ -70,7 +70,9 @@
           <tr v-for="(item, index) in products" :key="index">
             <th>1</th>
             <td><img :src="item.path"></td>
-            <td><a href="">{{ item.id }}</a></td>
+            <td>
+              <a @click="onRedirect(item)" style="cursor: pointer">{{ item.id }}</a>
+            </td>
             <td>{{ item.name }}</td>
             <td>{{ item.date }}</td>
             <td><button type="button" class="btn baseBtnGrey">Copy</button></td>
@@ -144,6 +146,11 @@ new Vue({
     },
     onSerch() {
       window.location.href = "/products/reference?" + queryParam;
+    },
+    onRedirect(item) {
+      let url = "detail";
+      if(item.type == "1") url = "detail-set";
+      window.location.href = `/products/${url}`;
     },
   }
 })

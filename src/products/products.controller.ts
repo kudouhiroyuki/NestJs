@@ -15,13 +15,15 @@ export class ProductsController {
         path: '/images/icon/products_item.svg',
         id: '1001',
         name: '単体商品',
-        date: '2022/08/01 - 2023/02/15'
+        date: '2022/08/01 - 2023/02/15',
+        type: '0'
       },
       {
         path: '/images/icon/products_item.svg',
         id: '1002',
         name: 'セット商品',
-        date: '2022/08/01 - 2023/02/15'
+        date: '2022/08/01 - 2023/02/15',
+        type: '1'
       }
     ]
     return {
@@ -71,7 +73,36 @@ export class ProductsController {
   @Get('/detail')
   @Render('products/detail')
   async getDetail() {
-    return {}
+    const stock_dmps = [
+      { id: '1', name: '1******01: ○○チケット' },
+      { id: '2', name: '1******02: ○○チケット' },
+      { id: '3', name: '1******03: ○○チケット' }
+    ]
+    const ages = [{ name: '大人' }, { name: '中人' }, { name: '小人' }, { name: '幼児' }, { name: 'シニア' }]
+    const tenants = [
+      { id: '1001', name: '施設１' },
+      { id: '1002', name: '施設２' },
+      { id: '1003', name: '施設３' }
+    ]
+    const tags = [{ text: 'チケット' }, { text: '宿泊' }, { text: '室内' }]
+
+    const forms = {
+      productName: '商品名',
+      productExplanation: '商品説明',
+      salesKindType: '4',
+      salesKindFrom: '2022/08/31',
+      salesKindTo: '2022/09/01',
+      salesKindInterval: '15',
+      stockManagementType: '3',
+      stockManagementItem: { id: '2', name: '1******02: ○○チケット' }
+    }
+    return {
+      stock_dmps: JSON.stringify(stock_dmps),
+      ages: JSON.stringify(ages),
+      tenants: JSON.stringify(tenants),
+      tags: JSON.stringify(tags),
+      forms: JSON.stringify(forms)
+    }
   }
 
   /**
