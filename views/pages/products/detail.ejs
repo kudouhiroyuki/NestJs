@@ -303,7 +303,14 @@
               <tr v-for="(item, index) in ages" :key="index">
                 <th>{{ index + 1 }}</th>
                 <td>{{ item.name }}</td>
-                <td><input @change="onAgeCategoryChange($event, item)" class="form-check-input" type="checkbox"></td>
+                <td>
+                  <input
+                    :checked="ageCategory.some(i => i.name === item.name)"
+                    @change="onAgeCategoryChange($event, item)"
+                    class="form-check-input"
+                    type="checkbox"
+                  >
+                </td>
               </tr>
             </tbody>
           </table>
@@ -670,7 +677,7 @@ new Vue({
     displaySalesStop: false,     // 販売期間 (表示停止)
     ageCategory: [],             // 年齢区分
 
-    
+
     usage_method_type: "1",      // 利用方法(type)
     usage_method_item: [],       // 利用方法(item)
     usage_period_type: "1",      // 利用期間(type)
@@ -715,11 +722,12 @@ new Vue({
     onTabToggle(target) {
       this[target] = !this[target];
     },
+    // 年齢区分（データ更新） 
     onAgeCategoryChange(event, value) {
       if(event.target.checked) {
         this.ageCategory.push(value)
       } else {
-        this.ageCategory = this.ageCategory.filter(o => o.id !== value.id);
+        this.ageCategory = this.ageCategory.filter(o => o.name !== value.name);
       }
     },
     onTenantChange(event, value) {

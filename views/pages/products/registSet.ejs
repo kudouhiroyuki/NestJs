@@ -1122,12 +1122,12 @@ new Vue({
       this.productModal.peggingError = false;
       this.productModal.resultItems[0].agePeggings[index].pegging = JSON.parse(event.target.value).name;
     },
-    // 年齢区分（更新）
+    // 年齢区分（データ更新） 
     onAgeCategoryChange(event, value) {
       if(event.target.checked) {
         this.ageCategory.push(value)
       } else {
-        this.ageCategory = this.ageCategory.filter(o => o.id !== value.id);
+        this.ageCategory = this.ageCategory.filter(o => o.name !== value.name);
       }
     },
     // 利用方法（QR読込 追加）    

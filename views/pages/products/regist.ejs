@@ -275,7 +275,7 @@
 
       <!-- 年齢区分 -->
       <div :style="agesTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
-        <input v-model="JSON.stringify(age_category)" type="hidden" name="age_category">
+        <input v-model="JSON.stringify(ageCategory)" type="hidden" name="ageCategory">
         <div class="d-flex">
           <div class="me-auto">
             <h5 class="mb-4 fw-bold">年齢区分</h5>
@@ -668,7 +668,7 @@ new Vue({
     display_sales_from: null,    // 販売期間 (From)
     display_sales_to: null,      // 販売期間 (To)
     display_sales_stop: false,   // 販売期間 (表示停止)
-    age_category: [],            // 年齢区分
+    ageCategory: [],             // 年齢区分
     usageMethodType: "1",        // 利用方法(type)
     usageMethodItem: [],         // 利用方法(item)
     usage_period_type: "1",      // 利用期間(type)
@@ -689,12 +689,13 @@ new Vue({
   methods: {
     onTabToggle(target) {
       this[target] = !this[target];
-    },    
+    },
+    // 年齢区分（データ更新） 
     onAgeCategoryChange(event, value) {
       if(event.target.checked) {
-        this.age_category.push(value)
+        this.ageCategory.push(value)
       } else {
-        this.age_category = this.age_category.filter(o => o.id !== value.id);
+        this.ageCategory = this.ageCategory.filter(o => o.name !== value.name);
       }
     },
     // 利用方法（QR読込 追加）    
