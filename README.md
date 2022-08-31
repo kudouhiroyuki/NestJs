@@ -101,11 +101,11 @@ SHOW DATABASES;
 #### データの追加と削除<br>
 - INSERT 文<br>
 ※データを追加する<br>
-INSERT INTO nest.users (user_name, password, department_id) VALUES('name1', 'password', 'A0001');
-INSERT INTO nest.users (user_name, password, department_id) VALUES('name2', 'password', 'A0001');
-INSERT INTO nest.users (user_name, password, department_id) VALUES('name', 'password', '');
-INSERT INTO nest.departments (department_id, department_name) VALUES('A0001', 'アプリケーション');
-INSERT INTO nest.departments (department_id, department_name) VALUES('B0001', 'デザイン');
+INSERT INTO nest.users (user_name, password, department_id) VALUES('name1', 'password', 'A0001');<br>
+INSERT INTO nest.users (user_name, password, department_id) VALUES('name2', 'password', 'A0001');<br>
+INSERT INTO nest.users (user_name, password, department_id) VALUES('name', 'password', '');<br>
+INSERT INTO nest.departments (department_id, department_name) VALUES('A0001', 'アプリケーション');<br>
+INSERT INTO nest.departments (department_id, department_name) VALUES('B0001', 'デザイン');<br>
 
 - UPDATE 文<br>
 ※データを更新する<br>
@@ -158,8 +158,7 @@ SELECT u.id, u.user_name, u.password, u.department_id<br>
 FROM nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
 ON u.department_id = d.department_id<br>
-WHERE u.id = 1;
-
+WHERE u.id = 1;<br><br>
 SELECT users.id, departments.department_name FROM nest.users INNER JOIN nest.departments USING(department_id);
 
 - LEFT JOIN 句（外部結合 左外部結合）<br>
