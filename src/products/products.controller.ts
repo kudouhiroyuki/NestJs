@@ -13,13 +13,13 @@ export class ProductsController {
     const products = [
       {
         path: '/images/icon/products_item.svg',
-        id: 1001,
+        id: '1001',
         name: '単体商品',
         date: '2022/08/01 - 2023/02/15'
       },
       {
         path: '/images/icon/products_item.svg',
-        id: '1001',
+        id: '1002',
         name: 'セット商品',
         date: '2022/08/01 - 2023/02/15'
       }
@@ -63,6 +63,15 @@ export class ProductsController {
   async postRegist(@Body() body: any) {
     console.log('商品登録処理（単体）')
     console.log(body)
+  }
+
+  /**
+   * GET	商品詳細画面（単体）
+   */
+  @Get('/detail')
+  @Render('products/detail')
+  async getDetail() {
+    return {}
   }
 
   /**
@@ -137,5 +146,14 @@ export class ProductsController {
   async postRegistSet(@Body() body: any) {
     console.log('商品登録処理（単体）')
     console.log(body)
+  }
+
+  /**
+   * GET 商品詳細画面（セット）
+   */
+  @Get('/detail-set')
+  @Render('products/detailSet')
+  async getDetailSet() {
+    return {}
   }
 }
