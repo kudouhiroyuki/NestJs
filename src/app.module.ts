@@ -1,6 +1,6 @@
 /**
-* ORM（typeORMの場合）
-*/
+ * ORM（typeORMの場合）
+ */
 // import { Module } from '@nestjs/common';
 // import { AppController } from './app.controller';
 // import { AppService } from './app.service';
@@ -40,14 +40,13 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
 import { ProductsModule } from './products/products.module'
-import { PlansModule } from './plans/plans.module'
 
 import { UsersModule } from './users/users.module'
 import { TenantModule } from './tenant/tenant.module'
 import { NotificationModule } from './notification/notification.module'
 
 @Module({
-  imports: [ProductsModule, PlansModule, UsersModule, TenantModule, NotificationModule],
+  imports: [ProductsModule, UsersModule, TenantModule, NotificationModule],
   controllers: [AppController],
   providers: [AppService]
 })

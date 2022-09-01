@@ -24,6 +24,11 @@
             >
           </div>
         </div>
+        <!-- 商品ID -->
+        <div v-if="forms.status==='1'" class="col-4 mb-4">
+          <label class="form-label">商品ID</label>
+          <p style="font-size: 18px">{{ productId }}</p>
+        </div>
         <!-- 商品名 -->
         <div class="col-4 mb-4">
           <label class="form-label">商品名</label>
@@ -640,14 +645,13 @@
           </table>
         </div>
         <div style="text-align: right;">
-          <a href="/plans/reference" style="margin-right: 10px;">
+          <a href="/products/plan/reference?productId=1001" style="margin-right: 10px;">
             <input type="button" value="料金プラン" class="btn baseBtnGrey"/>
           </a>
-          <a href="/divisions/reference">
+          <a href="/products/price-category/reference?productId=1001">
             <input type="button" value="料金区分" class="btn baseBtnGrey"/>
           </a>
         </div>
-       
       </div>
 
       <!-- 保存ボタン -->
@@ -724,6 +728,7 @@ new Vue({
     tags: JSON.parse(tags),
     forms: JSON.parse(forms),
     // 登録データ
+    productId: "",               // 商品ID
     productName: "",             // 商品名
     productExplanation: "",      // 商品説明
     salesKindType: "1",          // 販売種別(type)
@@ -763,6 +768,7 @@ new Vue({
   methods: {
     // 登録情報セット
     setInitData() {
+      this.productId = this.forms.productId;
       this.productName = this.forms.productName;
       this.productExplanation = this.forms.productExplanation;
       this.salesKindType = this.forms.salesKindType;

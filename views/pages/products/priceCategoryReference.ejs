@@ -6,8 +6,8 @@
 
   <%- include('../../partials/sidebar'); %>
 
-  <main id="plansReference">    
-    <h4 class="mb-4 fw-bold">料金プラン一覧</h4>
+  <main id="priceCategoryReference">    
+    <h4 class="mb-4 fw-bold">料金区分一覧</h4>
 
     <div class="d-flex flex-row-reverse mb-4">
       <button class="dropdown border-0 bg-white" type="button" data-bs-toggle="dropdown">
@@ -102,7 +102,7 @@ const totalPageCount= `<%- totalPageCount %>`;
 const queryParam = new URLSearchParams(location.search);
   
 new Vue({
-  el: "#plansReference",
+  el: "#priceCategoryReference",
   data: {
     // APIデータ
     plans: JSON.parse(plans),

@@ -1,0 +1,142 @@
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="planReference">    
+    <h4 class="mb-4 fw-bold">料金プラン一覧</h4>
+
+    <div class="d-flex flex-row-reverse mb-4">
+      <button class="dropdown border-0 bg-white" type="button" data-bs-toggle="dropdown">
+        <img src="/images/icon/plus.svg">
+      </button>
+      <ul class="dropdown-menu">
+        <a href="/products/regist"><li class="dropdown-item small">プランを新しく登録する</li></a>
+      </ul>
+    </div>
+
+    <form @submit.prevent="onSerch" class="mb-5">
+      <!-- 条件フォーム -->
+      <div class="baseShadow p-3 mb-5">
+        <h5 class="mb-4 fw-bold">条件</h5>
+        <div class="row">
+          <div class="col-4">
+            <label class="form-label">キーワード</label>
+            <input
+              @change="onFormChange"
+              :value="keyword"
+              name="keyword"
+              type="text"
+              class="form-control"
+              placeholder="キーワード"
+            >
+          </div>
+          <div class="col-4 text-end">
+            <button type="submit" class="btn w-50 mt-4 baseBtnGrey">
+              <img src="/images/icon/serch.svg">
+              検索
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- 一覧テーブル -->
+      <table class="table align-middle mb-5">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">料金プランID</th>
+            <th scope="col">料金プラン名</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr v-for="(item, index) in plans" :key="index">
+            <th>{{ index + 1 }}</th>
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- ページネーション -->
+      <nav class="d-flex justify-content-center" aria-label="Page navigation">
+        <ul class="pagination">
+          <li :class="{'disabled': Number(pageNumber) === 1}" class="page-item">
+            <button
+              @click="onPageChange(Number(pageNumber) - 1)"
+              type="button"
+              class="page-link">Previous
+            </button>
+          </li>
+          <li
+            v-for="value of totalPageCount"
+            :key="value"
+            :class="{'active': value === Number(pageNumber)}"
+            class="page-item"
+          >
+            <button
+              @click="onPageChange(value)"
+              type="button"
+              class="page-link">{{value}}
+            </button>
+          </li>
+          <li :class="{'disabled': Number(pageNumber) === Number(totalPageCount)}" class="page-item">
+            <button
+              @click="onPageChange(Number(pageNumber) + 1)"
+              type="button"
+              class="page-link">Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </form>
+  </main>
+</div>
+
+<script type="text/javascript">
+const plans= `<%- plans %>`;
+const totalPageCount= `<%- totalPageCount %>`;
+
+const queryParam = new URLSearchParams(location.search);
+  
+new Vue({
+  el: "#planReference",
+  data: {
+    // APIデータ
+    plans: JSON.parse(plans),
+    totalPageCount: JSON.parse(totalPageCount),
+    // 検索データ
+    keyword: queryParam.get('keyword') ?? "",
+    pageNumber: queryParam.get('pageNumber') ?? 1,
+  },
+  created() {
+    queryParam.set("keyword", this.keyword);
+    queryParam.set("pageNumber", this.pageNumber);
+  },
+  methods: {
+    // キーワード（検索条件 更新）
+    onFormChange(e) {
+      queryParam.set(e.target.name, e.target.value);
+    },
+    // 検索条件セット
+    onPageChange(page) {
+      queryParam.set("pageNumber", page);
+      this.onSerch();
+    },
+    // 再レンダリング
+    onSerch() {
+      window.location.href = "/plans/reference?" + queryParam;
+    },
+    // リダイレクト
+    onRedirect(item) {
+      let url = "detail";
+      if(item.type == "setProduct") url = "detail-set";
+      window.location.href = `/products/${ url }/${ item.id }`;
+    },
+  }
+})
+</script>
+</body>
+</html>

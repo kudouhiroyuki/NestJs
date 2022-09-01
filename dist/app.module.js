@@ -11,7 +11,6 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const products_module_1 = require("./products/products.module");
-const plans_module_1 = require("./plans/plans.module");
 const users_module_1 = require("./users/users.module");
 const tenant_module_1 = require("./tenant/tenant.module");
 const notification_module_1 = require("./notification/notification.module");
@@ -19,7 +18,7 @@ let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [products_module_1.ProductsModule, plans_module_1.PlansModule, users_module_1.UsersModule, tenant_module_1.TenantModule, notification_module_1.NotificationModule],
+        imports: [products_module_1.ProductsModule, users_module_1.UsersModule, tenant_module_1.TenantModule, notification_module_1.NotificationModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService]
     })

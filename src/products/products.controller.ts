@@ -95,6 +95,7 @@ export class ProductsController {
     const forms = {
       status: '1',
       type: 'product',
+      productId: '1001',
       productName: '商品名',
       productExplanation: '商品説明',
       salesKindType: '4',
@@ -213,5 +214,55 @@ export class ProductsController {
   @Render('products/detailSet')
   async getDetailSet() {
     return {}
+  }
+
+  /**
+   * GET 料金プラン一覧画面
+   */
+  @Get('/plan/reference')
+  @Render('products/planReference')
+  async getPlansReference(@Query() query: any) {
+    console.log('料金プラン一覧画面:query')
+    console.log(query)
+    // 検索結果データ（料金プラン一覧）
+    const plans = [
+      {
+        id: '料金プランID',
+        name: '料金プラン名'
+      },
+      {
+        id: '料金プランID',
+        name: '料金プラン名'
+      }
+    ]
+    return {
+      plans: JSON.stringify(plans),
+      totalPageCount: 3
+    }
+  }
+
+  /**
+   * GET 料金区分一覧画面
+   */
+  @Get('/price-category/reference')
+  @Render('products/priceCategoryReference')
+  async getPriceCategoryReference(@Query() query: any) {
+    console.log('料金区分一覧:query')
+    console.log(query)
+    // 検索結果データ（料金区分一覧）
+    const plans = [
+      {
+        id: '料金プランID',
+        name: '料金プラン名'
+      },
+      {
+        id: '料金プランID',
+        name: '料金プラン名'
+      }
+    ]
+    return {
+      plans: JSON.stringify(plans),
+      totalPageCount: 3
+    }
   }
 }
