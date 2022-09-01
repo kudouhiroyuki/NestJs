@@ -152,7 +152,7 @@ new Vue({
     onRedirect(item) {
       let url = "detail";
       if(item.type == "setProduct") url = "detail-set";
-      window.location.href = `/products/${url}`;
+      window.location.href = `/products/${ url }/${ item.id }`;
     },
   }
 })

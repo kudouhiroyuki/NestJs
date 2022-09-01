@@ -605,6 +605,51 @@
         </div>        
       </div>
 
+      <!-- 料金設定 -->
+      <div :style="priceTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <input v-model="JSON.stringify(productTag)" type="hidden" name="productTag">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">料金設定</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('priceTabStatus')"
+              :style="priceTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <input v-model="priceSetting" type="hidden" name="priceSetting">
+        <div class="col-8">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">料金プランID</th>
+                <th scope="col">料金プラン名</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in priceSetting" :key="index">
+                <th>{{ index + 1 }}</th>
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="text-align: right;">
+          <a href="/plans/reference" style="margin-right: 10px;">
+            <input type="button" value="料金プラン" class="btn baseBtnGrey"/>
+          </a>
+          <a href="/divisions/reference">
+            <input type="button" value="料金区分" class="btn baseBtnGrey"/>
+          </a>
+        </div>
+       
+      </div>
+
       <!-- 保存ボタン -->
       <div class="d-flex flex-row-reverse mb-4">
         <input
@@ -666,6 +711,7 @@ new Vue({
     usageTabStatus: true,   // 利用方法（タブ）
     tagTabStatus: true,     // 商品タグ（タブ）
     imageTabStatus: true,   // 商品画像（タブ）
+    priceTabStatus: true,   // 料金設定（タブ）
     qrParam: '',            // 利用方法（QR読込）
     minDate: moment(new Date()).format("YYYY-MM-DD"),
     tag: '',
@@ -702,6 +748,7 @@ new Vue({
     tenantsUsed: [],             // 利用施設
     productTag: [],              // 商品タグ
     images: [],                  // 商品画像
+    priceSetting: [],            // 料金設定
   },
   computed: {
     onTagsFilter() {

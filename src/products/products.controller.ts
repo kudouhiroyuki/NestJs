@@ -72,7 +72,7 @@ export class ProductsController {
   /**
    * GET 商品詳細画面（単体）
    */
-  @Get('/detail')
+  @Get('/detail/:id')
   @Render('products/detail')
   async getDetail() {
     // マスターデータ（基本情報 在庫管理 DMP在庫管理）
@@ -209,7 +209,7 @@ export class ProductsController {
   /**
    * GET 商品詳細画面（セット）
    */
-  @Get('/detail-set')
+  @Get('/detail-set/:id')
   @Render('products/detailSet')
   async getDetailSet() {
     return {}
