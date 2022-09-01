@@ -69,7 +69,7 @@
         <tbody>
           <tr v-for="(item, index) in products" :key="index">
             <template v-if="item.status==='1'">
-              <th>1</th>
+              <th>{{ index + 1 }}</th>
               <td><img :src="item.path"></td>
               <td>
                 <a @click="onRedirect(item)" style="cursor: pointer; color: #1867C0">{{ item.id }}</a>
@@ -118,7 +118,7 @@
 
 <script type="text/javascript">
 const products= `<%- products %>`;
-const totalPageCount= `<%- total_page_count %>`;
+const totalPageCount= `<%- totalPageCount %>`;
 
 const queryParam = new URLSearchParams(location.search);
   

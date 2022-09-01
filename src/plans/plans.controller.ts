@@ -3,11 +3,27 @@ import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect } from
 @Controller('plans')
 export class PlansController {
   /**
-   * GET 商品一覧画面
+   * GET 料金プラン一覧画面
    */
   @Get('/reference')
   @Render('plans/reference')
   async getReference(@Query() query: any) {
-    return {}
+    console.log('料金プラン一覧画面:query')
+    console.log(query)
+    // 検索結果データ（料金プラン一覧）
+    const plans = [
+      {
+        id: '料金プランID',
+        name: '料金プラン名'
+      },
+      {
+        id: '料金プランID',
+        name: '料金プラン名'
+      }
+    ]
+    return {
+      plans: JSON.stringify(plans),
+      totalPageCount: 3
+    }
   }
 }

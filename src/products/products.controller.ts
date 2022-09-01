@@ -25,12 +25,12 @@ export class ProductsController {
         path: '/images/icon/products_item.svg',
         id: '1002',
         name: 'セット商品',
-        date: '2022/08/01 - 2023/02/15',
+        date: '2022/08/01 - 2023/02/15'
       }
     ]
     return {
       products: JSON.stringify(products),
-      total_page_count: 3
+      totalPageCount: 3
     }
   }
 
