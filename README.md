@@ -162,11 +162,20 @@ WHERE u.id = 1;<br>
 
 - LEFT JOIN 句（外部結合 左外部結合）<br>
 ※左側のテーブルにしかないデータも取得<br>
-SELECT * FROM nest.users LEFT JOIN nest.departments ON users.department_id = departments.department_id;
+※正式名(LEFT OUTER JOIN)<br>
+SELECT * FROM nest.users LEFT JOIN nest.departments ON users.department_id = departments.department_id;<br>
 
 - RIGHT JOIN 句（外部結合 右外部結合）<br>
 ※右側のテーブルにしかないデータも取得<br>
-SELECT * FROM nest.users RIGHT JOIN nest.departments ON users.department_id = departments.department_id;
+※正式名(RIGHT OUTER JOIN)<br>
+SELECT * FROM nest.users RIGHT JOIN nest.departments ON users.department_id = departments.department_id;<br>
+
+- 自己結合<br>
+※同じテーブルを結合する<br>
+SELECT u1.id, u1.user_name, u1.password, u1.department_id<br>
+FROM nest.users AS u1<br>
+INNER JOIN nest.users AS u2<br>
+ON u1.id = u2.id;<br>
 
 ## CRUD<br>
 |  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
