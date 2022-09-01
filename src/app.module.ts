@@ -32,28 +32,23 @@
 // })
 // export class AppModule {}
 
-
 /**
-* ORM（Prismaの場合）
-*/
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+ * ORM（Prismaの場合）
+ */
+import { Module } from '@nestjs/common'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
 
-import { ProductsModule } from './products/products.module';
+import { ProductsModule } from './products/products.module'
+import { PlansModule } from './plans/plans.module'
 
-import { UsersModule } from './users/users.module';
-import { TenantModule } from './tenant/tenant.module';
-import { NotificationModule } from './notification/notification.module';
+import { UsersModule } from './users/users.module'
+import { TenantModule } from './tenant/tenant.module'
+import { NotificationModule } from './notification/notification.module'
 
 @Module({
-  imports: [
-    ProductsModule,
-    UsersModule,
-    TenantModule,
-    NotificationModule,
-  ],
-  controllers: [ AppController ],
-  providers: [ AppService ],
+  imports: [ProductsModule, PlansModule, UsersModule, TenantModule, NotificationModule],
+  controllers: [AppController],
+  providers: [AppService]
 })
 export class AppModule {}
