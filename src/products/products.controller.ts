@@ -3,7 +3,7 @@ import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect } from
 @Controller('products')
 export class ProductsController {
   /**
-   * GET	商品一覧画面
+   * GET 商品一覧画面
    */
   @Get('/reference')
   @Render('products/reference')
@@ -35,7 +35,7 @@ export class ProductsController {
   }
 
   /**
-   * GET	商品登録画面（単体）
+   * GET 商品登録画面（単体）
    */
   @Get('/regist')
   @Render('products/regist')
@@ -70,24 +70,28 @@ export class ProductsController {
   }
 
   /**
-   * GET	商品詳細画面（単体）
+   * GET 商品詳細画面（単体）
    */
   @Get('/detail')
   @Render('products/detail')
   async getDetail() {
+    // マスターデータ（基本情報 在庫管理 DMP在庫管理）
     const stock_dmps = [
       { id: '1', name: '1******01: ○○チケット' },
       { id: '2', name: '1******02: ○○チケット' },
       { id: '3', name: '1******03: ○○チケット' }
     ]
+    // マスターデータ（年齢区分）
     const ages = [{ name: '大人' }, { name: '中人' }, { name: '小人' }, { name: '幼児' }, { name: 'シニア' }]
+    // マスターデータ（利用方法 利用施設）
     const tenants = [
       { id: '1001', name: '施設１' },
       { id: '1002', name: '施設２' },
       { id: '1003', name: '施設３' }
     ]
+    // マスターデータ（商品タグ）
     const tags = [{ text: 'チケット' }, { text: '宿泊' }, { text: '室内' }]
-
+    // 商品詳細データ
     const forms = {
       status: '1',
       type: 'product',
@@ -129,7 +133,7 @@ export class ProductsController {
   }
 
   /**
-   * GET	商品登録画面（セット）
+   * GET 商品登録画面（セット）
    */
   @Get('/regist-set')
   @Render('products/registSet')
