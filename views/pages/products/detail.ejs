@@ -336,8 +336,8 @@
           <label class="form-label w-100">利用方法</label>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usage_method_type"
-              name="usage_method_type"
+              v-model="usageMethodType"
+              name="usageMethodType"
               class="form-check-input"
               type="radio"
               id="riyou_1"
@@ -347,8 +347,8 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usage_method_type"
-              name="usage_method_type"
+              v-model="usageMethodType"
+              name="usageMethodType"
               class="form-check-input"
               type="radio"
               id="riyou_2"
@@ -358,8 +358,8 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usage_method_type"
-              name="usage_method_type"
+              v-model="usageMethodType"
+              name="usageMethodType"
               class="form-check-input"
               type="radio"
               id="riyou_3"
@@ -369,8 +369,8 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usage_method_type"
-              name="usage_method_type"
+              v-model="usageMethodType"
+              name="usageMethodType"
               class="form-check-input"
               type="radio"
               id="riyou_4"
@@ -381,8 +381,8 @@
           <div>
             <div class="form-check d-inline-block w-25">
               <input
-                v-model="usage_method_type"
-                name="usage_method_type"
+                v-model="usageMethodType"
+                name="usageMethodType"
                 class="form-check-input"
                 type="radio"
                 id="riyou_5"
@@ -390,16 +390,18 @@
               >
               <label class="form-check-label" for="riyou_3">QR読込</label>
             </div>
-            <template v-if="usage_method_type==='5'">
+            <template v-if="usageMethodType==='5'">
+              <input v-model="JSON.stringify(usageMethodItem)" type="hidden" name="usageMethodItem">
               <div class="d-inline-block">
                 <input
+                  v-model="qrParam"
                   type="text"
                   class="form-control"
                   placeholder="パラメータ"
                   style="width: 214px; margin-right: 5px;"
                 >
               </div>
-              <button class="border-0 bg-white" type="button">
+              <button @click="onQrParamAdd" class="border-0 bg-white" type="button">
                 <img src="/images/icon/plus.svg">
               </button>
               <div class="d-flex mt-2">
@@ -413,11 +415,12 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th>1</th>
-                      <td>1001</td>
+                    <tr v-for="(item, index) in usageMethodItem" :key="index">
+                      <th>{{ index + 1 }}</th>
+                      <td>{{ item  }}</td>
                       <td>
                         <input
+                          @click="onQrDownload"
                           type="button"
                           value="QRコード"
                           class="btn baseBtnGrey"
@@ -436,8 +439,8 @@
           <div class="col-12 mb-3">
             <div class="form-check form-check-inline">
               <input
-                v-model="usage_period_type"
-                name="usage_period_type"
+                v-model="usagePeriodType"
+                name="usagePeriodType"
                 value="1"
                 class="form-check-input"
                 type="radio"
@@ -445,11 +448,11 @@
               >
               <label class="form-check-label" for="usagePeriod_1">日付指定</label>
             </div>
-            <template v-if="usage_period_type === '1'">
+            <template v-if="usagePeriodType === '1'">
               <div class="d-inline-block">
                 <vue-ctk-date-time-picker
-                  name="usage_period_from"
-                  v-model="usage_period_from"
+                  name="usagePeriodFrom"
+                  v-model="usagePeriodFrom"
                   formatted="YYYY/MM/DD"
                   only-date
                   :min-date="minDate"
@@ -460,23 +463,23 @@
               <div class="d-inline-block">〜</div>
               <div class="d-inline-block">
                 <vue-ctk-date-time-picker
-                  name="usage_period_to"
-                  v-model="usage_period_to"
+                  name="usagePeriodTo"
+                  v-model="usagePeriodTo"
                   formatted="YYYY/MM/DD"
                   only-date
                   :min-date="minDate"
                   :label="'To'"
                   position="top"
-                  :disabled="usage_period_type === '2'"
+                  :disabled="usagePeriodType === '2'"
                 /></vue-ctk-date-time-picker>
               </div>
             </template>
           </div> 
-          <div class="col-12">
+          <div class="col-12 mb-3">
             <div class="form-check form-check-inline">
               <input
-                v-model="usage_period_type"
-                name="usage_period_type"
+                v-model="usagePeriodType"
+                name="usagePeriodType"
                 value="2"
                 class="form-check-input"
                 type="radio"
@@ -484,11 +487,11 @@
               >
               <label class="form-check-label" for="usagePeriod_2">期限指定</label>
             </div>
-            <template v-if="usage_period_type === '2'">
+            <template v-if="usagePeriodType === '2'">
               <div class="d-inline-block">
                 <input
-                  v-model="usage_period_deadline"
-                  name="usage_period_deadline"
+                  v-model="usagePeriodDeadline"
+                  name="usagePeriodDeadline"
                   type="text"
                   class="form-control mb-2"
                   placeholder="有効期限"
@@ -496,11 +499,24 @@
               </div>
             </template>
           </div>
+          <div class="col-12">
+            <div class="form-check form-check-inline">
+              <input
+                v-model="usagePeriodType"
+                name="usagePeriodType"
+                value="3"
+                class="form-check-input"
+                type="radio"
+                id="usagePeriod_3"
+              >
+              <label class="form-check-label" for="usagePeriod_3">無期限</label>
+            </div>
+          </div>
         </div>
         <!-- 利用施設 -->
         <div class="col-12 mb-4">
           <label class="form-label w-100">利用施設</label>
-          <input v-model="JSON.stringify(tenants_used)" type="hidden" name="tenants_used">
+          <input v-model="JSON.stringify(tenantsUsed)" type="hidden" name="tenantsUsed">
           <div class="col-8">
             <table class="table align-middle">
               <thead>
@@ -518,6 +534,7 @@
                   <td>{{ item.name }}</td>
                   <td>
                     <input
+                      :checked="tenantsUsed.some(i => i.id === item.id)"
                       @change="onTenantChange($event, item)"
                       class="form-check-input"
                       type="checkbox">
@@ -531,7 +548,7 @@
 
       <!-- 商品タグ -->
       <div :style="tagTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
-        <input v-model="JSON.stringify(product_tag)" type="hidden" name="product_tag">
+        <input v-model="JSON.stringify(productTag)" type="hidden" name="productTag">
         <div class="d-flex">
           <div class="me-auto">
             <h5 class="mb-4 fw-bold">商品タグ</h5>
@@ -546,7 +563,7 @@
         </div>
         <vue-tags-input
           v-model="tag"
-          :tags="product_tag"
+          :tags="productTag"
           :autocomplete-items="onTagsFilter"
           @tags-changed="replaceTags"
         />
@@ -568,13 +585,13 @@
           </div>
         </div>
         <div
-          v-for="(item, index) of imagesView"
+          v-for="(item, index) of images"
           :key="index"
           class="form-check-inline mb-3 position-relative"
         >
           <img :src="item.path" style="width: 136px; object-fit: cover; height: 86px;">
           <button
-            @click="onDeleteFileData"
+            @click="onDeleteFileData(index)"
             type="button"
             class="btn-close position-absolute"
             style="right: 5px; top: 5px; font-size: 14px"
@@ -649,10 +666,10 @@ new Vue({
     usageTabStatus: true,   // 利用方法（タブ）
     tagTabStatus: true,     // 商品タグ（タブ）
     imageTabStatus: true,   // 商品画像（タブ）
+    qrParam: '',            // 利用方法（QR読込）
     minDate: moment(new Date()).format("YYYY-MM-DD"),
     tag: '',
     isFileAreaFocus: false,
-    imagesView: [],         // 商品画像(表示用)
     modalShow: false,       // ファイルアップロード(モーダル)
     // APIデータ
     stockDmps: JSON.parse(stockDmps),
@@ -676,16 +693,14 @@ new Vue({
     displaySalesTo: null,        // 販売期間 (To)
     displaySalesStop: false,     // 販売期間 (表示停止)
     ageCategory: [],             // 年齢区分
-
-
-    usage_method_type: "1",      // 利用方法(type)
-    usage_method_item: [],       // 利用方法(item)
-    usage_period_type: "1",      // 利用期間(type)
-    usage_period_from: null,     // 利用期間(日付指定 From)
-    usage_period_to: null,       // 利用期間(日付指定 To)
-    usage_period_deadline: "",   // 利用期間(期限指定)
-    tenants_used: [],            // 利用施設
-    product_tag: [],             // 商品タグ
+    usageMethodType: "1",        // 利用方法(type)
+    usageMethodItem: [],         // 利用方法(item)
+    usagePeriodType: "1",        // 利用期間(type)
+    usagePeriodFrom: null,       // 利用期間(日付指定 From)
+    usagePeriodTo: null,         // 利用期間(日付指定 To)
+    usagePeriodDeadline: "",     // 利用期間(期限指定)
+    tenantsUsed: [],             // 利用施設
+    productTag: [],              // 商品タグ
     images: [],                  // 商品画像
   },
   computed: {
@@ -716,13 +731,20 @@ new Vue({
       this.displaySalesTo = this.forms.displaySalesTo;
       this.displaySalesStop = this.forms.displaySalesStop;
       this.ageCategory = this.forms.ageCategory;
-
-
+      this.usageMethodType = this.forms.usageMethodType;
+      this.usageMethodItem = this.forms.usageMethodItem;
+      this.usagePeriodType = this.forms.usagePeriodType;
+      this.usagePeriodFrom = this.forms.usagePeriodFrom;
+      this.usagePeriodTo = this.forms.usagePeriodTo;
+      this.tenantsUsed = this.forms.tenantsUsed;
+      this.productTag = this.forms.productTag;
+      this.images = this.forms.images;
     },
+    // UIアコーディオン
     onTabToggle(target) {
       this[target] = !this[target];
     },
-    // 年齢区分（データ更新） 
+    // 年齢区分（データ更新）
     onAgeCategoryChange(event, value) {
       if(event.target.checked) {
         this.ageCategory.push(value)
@@ -730,13 +752,28 @@ new Vue({
         this.ageCategory = this.ageCategory.filter(o => o.name !== value.name);
       }
     },
+    // 利用方法（QR読込 追加）    
+    onQrParamAdd() {
+      if(this.qrParam) this.usageMethodItem.push(this.qrParam);
+    },
+    // 利用方法（QR読込 画像取得）    
+    onQrDownload() {
+      const link = document.createElement('a');
+      link.href = "";
+      link.download = `画像`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+    // 利用施設（データ更新）
     onTenantChange(event, value) {
       if(event.target.checked) {
-        this.tenants_used.push(value)
+        this.tenantsUsed.push(value)
       } else {
-        this.tenants_used = this.tenants_used.filter(o => o.id !== value.id);
+        this.tenantsUsed = this.tenantsUsed.filter(o => o.id !== value.id);
       }
     },
+    // 商品タグ（データ更新）
     replaceTags(item) {
       let resultTags = [];
       item.forEach((value) => {
@@ -746,11 +783,13 @@ new Vue({
           } 
         })
       });
-      this.product_tag = resultTags;
+      this.productTag = resultTags;
     },
+    // 商品画像（ドラッグ）
     onFileDrag(flag) {
       this.isFileAreaFocus = flag;
     },
+    // 商品画像（ドロップ操作 更新）
     onFileDrop(event) {
       this.isFileAreaFocus = false;
       const files = event.dataTransfer.files;
@@ -759,6 +798,7 @@ new Vue({
       }
       this.createFileData(files);
     },
+    // 商品画像（ファイル選択 更新）
     onFileChange(event) {
       const files = event.target.files;
       if (files.length !== 1 || files[0].type.indexOf("image") !== 0) {
@@ -766,10 +806,11 @@ new Vue({
       }
       this.createFileData(files);
     },
-    onDeleteFileData(event) {
-      this.images.splice(event.target.value, 1);
-      this.imagesView.splice(event.target.value, 1);
+    // 商品画像（削除）
+    onDeleteFileData(target) {
+      this.images.splice(target, 1);
     },
+    // 商品画像（データ作成）
     createFileData(files) {
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
@@ -777,7 +818,6 @@ new Vue({
         this.images.push({ path: reader.result })
         this.modalShow = false;
       };
-      this.imagesView.push({ path: URL.createObjectURL(files[0]) });
     },
     onSubmit() {
       document.productsForm.method="post";
