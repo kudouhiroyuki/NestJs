@@ -177,6 +177,9 @@ FROM nest.users AS u1<br>
 INNER JOIN nest.users AS u2<br>
 ON u1.id = u2.id;<br>
 
+#### 用語<br>
+- ステートメント（構築された文全体）<br>
+
 ## CRUD<br>
 |  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
 |  ----  | ----  |  ----  |  ----  |  ----  |
