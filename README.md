@@ -148,7 +148,7 @@ SELECT id, user_name, password, department_id dept from nest.users;<br>
 SELECT *<br>
 FROM nest.users<br>
 WHERE department_id = (<br>
-  SELECT department_id<br>
+␣␣SELECT department_id<br>
   FROM nest.departments<br>
   LIMIT 1<br>
 );<br>
