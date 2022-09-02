@@ -149,18 +149,17 @@ SELECT *<br>
 FROM nest.users<br>
 WHERE department_id = (<br>
 &emsp;SELECT department_id<br>
-  FROM nest.departments<br>
-  LIMIT 1<br>
-);<br>
-
-SELECT *
-FROM nest.users u
-WHERE EXISTS (
-	SELECT *
-    FROM nest.departments d
-    WHERE u.department_id = d.department_id
+&emsp;FROM nest.departments<br>
+&emsp;LIMIT 1<br>
 );
 
+SELECT *<br>
+FROM nest.users u<br>
+WHERE EXISTS (<br>
+&emsp;SELECT *<br>
+&emsp;FROM nest.departments d<br>
+&emsp;WHERE u.department_id = d.department_id<br>
+);
 
 #### MySQL関数の使い方<br>
 - CONCAT 関数<br>
