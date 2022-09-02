@@ -143,7 +143,7 @@ SELECT * FROM nest.users u;<br>
 SELECT id, user_name, password, department_id AS dept from nest.users;<br>
 SELECT id, user_name, password, department_id dept from nest.users;<br>
 
-- サブクエリ<br>
+■サブクエリ<br>
 ※SELECT文で取得した結果を他のSELECTやUPDATEの中で利用する<br>
 
 SELECT *<br>
