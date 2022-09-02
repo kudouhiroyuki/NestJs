@@ -14,7 +14,7 @@
         <img src="/images/icon/plus.svg">
       </button>
       <ul class="dropdown-menu">
-        <a href="/products/plan/regist/3"><li class="dropdown-item small">プランを新しく登録する</li></a>
+        <a href="/plans/1001/regist"><li class="dropdown-item small">プランを新しく登録する</li></a>
       </ul>
     </div>
 
@@ -132,7 +132,7 @@ new Vue({
     },
     // リダイレクト
     onRedirect(item) {
-      window.location.href = `/products/plan/${ item.planId }`;
+      window.location.href = `/plans/1001/detail/${ item.planId }`;
     },
   }
 })

@@ -143,6 +143,25 @@ SELECT * FROM nest.users u;<br>
 SELECT id, user_name, password, department_id AS dept from nest.users;<br>
 SELECT id, user_name, password, department_id dept from nest.users;<br>
 
+- サブクエリ<br>
+※SELECT文で取得した結果を他のSELECTやUPDATEの中で利用する<br>
+SELECT *<br>
+FROM nest.users<br>
+WHERE department_id = (<br>
+  SELECT department_id<br>
+  FROM nest.departments<br>
+  LIMIT 1<br>
+);<br>
+
+SELECT *
+FROM nest.users u
+WHERE EXISTS (
+	SELECT *
+    FROM nest.departments d
+    WHERE u.department_id = d.department_id
+);
+
+
 #### MySQL関数の使い方<br>
 - CONCAT 関数<br>
 ※複数の文字列を連結した文字列を取得する<br>
