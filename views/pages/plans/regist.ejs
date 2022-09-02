@@ -1,1 +1,69 @@
-プラン登録
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="plansRegist">    
+    <h4 class="mb-4 fw-bold">料金プラン登録</h4>
+    <div class="row">
+      <div class="col-4">
+        <label class="form-label">料金プラン名</label>
+        <input
+          v-model="planName"
+          name="planName"
+          type="text"
+          class="form-control"
+          placeholder="料金プラン名"
+        >
+      </div>
+    </div>
+    
+    
+    <div class="row">
+      <div class="col-6">
+        <div class='calendar'></div>
+      </div>
+      <div class="col-6">
+        <div class='calendar'></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script type="text/javascript">
+const calendars = document.querySelectorAll('.calendar');
+calendars.forEach(function(calendarEl) {
+  let calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    headerToolbar: {
+      left: '',
+      center: '',
+      right: ''
+    },
+    events: [
+    ],
+  });
+  calendar.render();
+});
+
+new Vue({
+  el: "#plansRegist",
+  data: {
+    // 登録データ
+    planName: "",            // 料金プラン名
+  },
+  created() {
+  },
+  methods: {
+    handleDateClick: function(info) {
+      console.log(info);
+      alert('click day :' + info.dateStr);
+    }
+  }
+})
+</script>
+</body>
+</html>

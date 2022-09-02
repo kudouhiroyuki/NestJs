@@ -6,7 +6,7 @@
 
   <%- include('../../partials/sidebar'); %>
 
-  <main id="planReference">    
+  <main id="plansReference">    
     <h4 class="mb-4 fw-bold">料金プラン一覧</h4>
 
     <div class="d-flex flex-row-reverse mb-4">
@@ -57,7 +57,7 @@
             <td>
               <a @click="onRedirect(item)" style="cursor: pointer; color: #1867C0">{{ item.planId }}</a>
             </td>
-            <td>{{ item.name }}</td>
+            <td>{{ item.planName }}</td>
           </tr>
         </tbody>
       </table>
@@ -97,15 +97,17 @@
 </div>
 
 <script type="text/javascript">
+const productId= `<%- productId %>`;
 const plans= `<%- plans %>`;
 const totalPageCount= `<%- totalPageCount %>`;
 
 const queryParam = new URLSearchParams(location.search);
   
 new Vue({
-  el: "#planReference",
+  el: "#plansReference",
   data: {
     // APIデータ
+    productId: JSON.parse(productId),
     plans: JSON.parse(plans),
     totalPageCount: JSON.parse(totalPageCount),
     // 検索データ
@@ -128,11 +130,11 @@ new Vue({
     },
     // 再レンダリング
     onSerch() {
-      window.location.href = "/plans/reference?" + queryParam;
+      window.location.href = `/plans/${ this.productId }/reference?${ queryParam }`;
     },
     // リダイレクト
     onRedirect(item) {
-      window.location.href = `/plans/1001/detail/${ item.planId }`;
+      window.location.href = `/plans/${ this.productId }/detail/${ item.planId }`;
     },
   }
 })
