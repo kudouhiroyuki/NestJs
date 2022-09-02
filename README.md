@@ -145,6 +145,7 @@ SELECT id, user_name, password, department_id dept from nest.users;<br>
 
 - サブクエリ<br>
 ※SELECT文で取得した結果を他のSELECTやUPDATEの中で利用する<br>
+
 SELECT *<br>
 FROM nest.users<br>
 WHERE department_id = (<br>
