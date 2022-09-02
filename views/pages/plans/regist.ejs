@@ -34,9 +34,8 @@
 </div>
 
 <script type="text/javascript">
-const baseDate = new Date();
-let thisMonth = baseDate;
-let calcuNext = new Date(moment(baseDate).format("YYYY"), (moment(baseDate).format("M") - 1));
+const baseMonth = new Date();
+let calcuNext = new Date(moment(baseMonth).format("YYYY"), (moment(baseMonth).format("M") - 1));
 let nextMonth = calcuNext.setMonth(calcuNext.getMonth() + 1);
 
 const calendars = document.querySelectorAll('.calendar');
@@ -44,10 +43,9 @@ calendars.forEach(function(calendarEl) {
   let calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     locale: 'ja',
-    initialDate: calendarEl.dataset['initialdate'] === '0' ? thisMonth : nextMonth,
+    initialDate: calendarEl.dataset['initialdate'] === '0' ? baseMonth : nextMonth,
     headerToolbar: {
-      // left: '',
-      // center: '',
+      center: '',
       right: ''
     },
     events: [
