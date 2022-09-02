@@ -143,20 +143,25 @@ SELECT * FROM nest.users u;<br>
 SELECT id, user_name, password, department_id AS dept from nest.users;<br>
 SELECT id, user_name, password, department_id dept from nest.users;<br>
 
-■サブクエリ<br>
-※SELECT文で取得した結果を他のSELECTやUPDATEの中で利用する<br>
-
+■EXISTS 句<br>
+※サブクエリを使った検索条件の設定<br>
 SELECT *<br>
 FROM nest.users<br>
 WHERE department_id = (<br>
 &emsp;SELECT department_id<br>
 &emsp;FROM nest.departments<br>
 &emsp;LIMIT 1<br>
-);
-
+);<br>
 SELECT *<br>
 FROM nest.users u<br>
 WHERE EXISTS (<br>
+&emsp;SELECT *<br>
+&emsp;FROM nest.departments d<br>
+&emsp;WHERE u.department_id = d.department_id<br>
+);<br>
+SELECT *<br>
+FROM nest.users u<br>
+WHERE NOT EXISTS (<br>
 &emsp;SELECT *<br>
 &emsp;FROM nest.departments d<br>
 &emsp;WHERE u.department_id = d.department_id<br>
