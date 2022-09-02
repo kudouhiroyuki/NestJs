@@ -35,8 +35,35 @@ export class PlansController {
   @Get('/:productId/regist')
   @Render('plans/regist')
   async getRegist(@Param('productId') productId: string) {
+    // カレンダーデータ
+    const calendars = {
+      events: [
+        {
+          id: '1',
+          type: '0',
+          title: '料金区分A',
+          start: '2022-09-01',
+          end: ''
+        },
+        {
+          id: '2',
+          type: '1',
+          title: '料金区分B',
+          start: '2022-09-05',
+          end: '2022-09-10'
+        },
+        {
+          id: '3',
+          type: '2',
+          title: '売り止め',
+          start: '2022-09-19',
+          end: '2022-09-23'
+        }
+      ]
+    }
     return {
-      productId: JSON.stringify(productId)
+      productId: JSON.stringify(productId),
+      calendars: JSON.stringify(calendars)
     }
   }
 }

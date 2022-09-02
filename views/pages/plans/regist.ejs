@@ -20,7 +20,11 @@
         >
       </div>
     </div>
-    
+
+    <div style="text-align: right;">
+      <input @click="onDownload" type="button" class="btn baseBtnGrey" value="ダウンロード" />
+      <input @click="onImport" type="button" class="btn baseBtnGrey" value="ファイル取込み" />
+    </div>
     
     <div class="row">
       <div class="col-6">
@@ -34,28 +38,53 @@
 </div>
 
 <script type="text/javascript">
+const calendars= `<%- calendars %>`;
+console.log()
+
 new Vue({
   el: "#plansRegist",
   data: {
+    title: '',
     calendar: {
       initialView: 'dayGridMonth',
       locale: 'ja',
       initialDate: new Date(),
       headerToolbar: {
-        center: '',
+        left: '',
+        center: 'title',
         right: ''
       },
-      events: [
-      ],
+      events: JSON.parse(calendars).events,
+      dayCellContent(e) {
+        e.dayNumberText = e.dayNumberText.replace('日', '');
+      }
     },
     // 登録データ
     planName: "",            // 料金プラン名
   },
-  // created mounted
+  created() {
+    
+  },
   mounted() {
     this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
   },
   methods: {
+    // ダウンロード
+    onDownload() {
+      let csv = '\ufeff' + 'id,type,title,start,end\n';
+      this.calendar.events.forEach(el => {
+        let line = `${el['id']},${el['type']},${el['title']},${el['start']},${el['end']}`;
+        csv += (line + '\n');
+      })
+      let link = document.createElement('a');
+      link.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      link.download = 'お知らせ一覧.csv';
+      link.click();
+    },
+    // ファイル取込み
+    onImport () {
+      alert("ファイル取込み")
+    },
     // 基準日の作成
     createBaseDate(date) {
       let year = moment(date).format("YYYY");

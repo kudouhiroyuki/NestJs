@@ -207,4 +207,40 @@ input[type=file] {
 .ti-input,
 .ti-autocomplete {
   position: inherit !important;
+}
+
+.fc-header-toolbar {
+  margin-bottom: 15px !important;
+}
+.fc-header-toolbar .fc-toolbar-title {
+  font-size: 16px;
+}
+
+.fc-view-harness .fc-scrollgrid {
+  overflow: hidden;
+  border: 0;
+  border-radius: 5px;
+}
+.fc-view-harness .fc-scrollgrid .fc-col-header {
+  color: #FFF;
+  background-color: #0069D9;
+}
+.fc-view-harness .fc-scrollgrid .fc-col-header .fc-col-header-cell {
+  font-size: 12px;
+  font-weight: normal;
+  border: 0;
+}
+.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-day {
+  border: 1px solid #FFF;
+  background-color: #EFF4FC;
+}
+.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-day-other {
+  background-color: #FFFFFF;
+}
+.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-event {
+  font-size: 10px;
+  text-align: center;
+}
+.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-day-number {
+  font-size: 12px;
 }/*# sourceMappingURL=app.css.map */
