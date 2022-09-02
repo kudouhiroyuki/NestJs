@@ -24,48 +24,56 @@
     
     <div class="row">
       <div class="col-6">
-        <div class='calendar' data-initialDate="0"></div>
+        <div class='renderCalendar' data-month="thisMonth"></div>
       </div>
       <div class="col-6">
-        <div class='calendar' data-initialDate="1"></div>
+        <div class='renderCalendar' data-month="nextMonth"></div>
       </div>
     </div>
   </main>
 </div>
 
 <script type="text/javascript">
-const baseMonth = new Date();
-let calcuNext = new Date(moment(baseMonth).format("YYYY"), (moment(baseMonth).format("M") - 1));
-let nextMonth = calcuNext.setMonth(calcuNext.getMonth() + 1);
-
-const calendars = document.querySelectorAll('.calendar');
-calendars.forEach(function(calendarEl) {
-  let calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
-    locale: 'ja',
-    initialDate: calendarEl.dataset['initialdate'] === '0' ? baseMonth : nextMonth,
-    headerToolbar: {
-      center: '',
-      right: ''
-    },
-    events: [
-    ],
-  });
-  calendar.render();
-});
-
 new Vue({
   el: "#plansRegist",
   data: {
+    calendar: {
+      initialView: 'dayGridMonth',
+      locale: 'ja',
+      initialDate: new Date(),
+      headerToolbar: {
+        center: '',
+        right: ''
+      },
+      events: [
+      ],
+    },
     // 登録データ
     planName: "",            // 料金プラン名
   },
-  created() {
+  // created mounted
+  mounted() {
+    this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
   },
   methods: {
-    handleDateClick: function(info) {
-      console.log(info);
-      alert('click day :' + info.dateStr);
+    // 基準日の作成
+    createBaseDate(date) {
+      let year = moment(date).format("YYYY");
+      let month = moment(date).format("M");
+      let retultDate = new Date(year, (month - 1));
+      return retultDate;
+    },
+    // カレンダー描画
+    renderCalendar(calendarObj, nextMonth) {
+      const calendars = document.querySelectorAll('.renderCalendar');
+      calendars.forEach(function(calendarEl) {
+        if(calendarEl.dataset['month'] === 'nextMonth') {    
+          nextMonth.setMonth(nextMonth.getMonth() + 1);
+          calendarObj.initialDate = nextMonth;
+        }
+        let calendar = new FullCalendar.Calendar(calendarEl, calendarObj);
+        calendar.render();
+      });
     }
   }
 })
