@@ -24,23 +24,30 @@
     
     <div class="row">
       <div class="col-6">
-        <div class='calendar'></div>
+        <div class='calendar' data-initialDate="0"></div>
       </div>
       <div class="col-6">
-        <div class='calendar'></div>
+        <div class='calendar' data-initialDate="1"></div>
       </div>
     </div>
   </main>
 </div>
 
 <script type="text/javascript">
+const baseDate = new Date();
+let thisMonth = baseDate;
+let calcuNext = new Date(moment(baseDate).format("YYYY"), (moment(baseDate).format("M") - 1));
+let nextMonth = calcuNext.setMonth(calcuNext.getMonth() + 1);
+
 const calendars = document.querySelectorAll('.calendar');
 calendars.forEach(function(calendarEl) {
   let calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
+    locale: 'ja',
+    initialDate: calendarEl.dataset['initialdate'] === '0' ? thisMonth : nextMonth,
     headerToolbar: {
-      left: '',
-      center: '',
+      // left: '',
+      // center: '',
       right: ''
     },
     events: [
