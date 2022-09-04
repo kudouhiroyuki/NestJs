@@ -17,3 +17,8 @@ model departments {
   department_id String @unique
   department_name  String
 }
+model log {
+  id    Int     @default(autoincrement()) @id
+  log String
+  dt  DateTime
+}

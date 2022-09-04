@@ -98,6 +98,14 @@ CREATE DATABASE nest;
 ※データベースの一覧を取得する<br>
 SHOW DATABASES;
 
+#### トリガーの作成<br>
+■CREATE TRIGGER 文<br>
+CREATE TRIGGER insert_trigger<br>
+AFTER INSERT<br>
+ON nest.users FOR EACH ROW<br>
+INSERT INTO log (log, dt)<br>
+VALUES('Insert', now());
+
 #### データの追加と削除<br>
 - INSERT 文<br>
 ※データを追加する<br>
@@ -142,6 +150,13 @@ SELECT * FROM nest.users AS u;<br>
 SELECT * FROM nest.users u;<br>
 SELECT id, user_name, password, department_id AS dept from nest.users;<br>
 SELECT id, user_name, password, department_id dept from nest.users;<br>
+
+■WHERE 句<br>
+※データを取得する条件を設定する<br>
+SELECT *<br>
+FROM nest.users<br>
+WHERE id = 1<br>
+OR id = 2;<br>
 
 ■EXISTS 句<br>
 ※サブクエリを使った検索条件の設定<br>
