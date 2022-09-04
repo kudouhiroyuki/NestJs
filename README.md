@@ -98,7 +98,7 @@ CREATE DATABASE nest;
 ※データベースの一覧を取得する<br>
 SHOW DATABASES;
 
-#### トリガーの作成<br>
+#### <----- トリガーの作成 -----><br>
 ■CREATE TRIGGER 文<br>
 CREATE TRIGGER insert_trigger<br>
 AFTER INSERT<br>
