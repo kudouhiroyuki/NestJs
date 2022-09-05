@@ -56,8 +56,8 @@ export class PlansController {
           id: '3',
           type: '2',
           title: '売り止め',
-          start: '2022-09-19',
-          end: '2022-09-23'
+          start: '2022-09-23',
+          end: '2022-09-26'
         },
         {
           id: '4',

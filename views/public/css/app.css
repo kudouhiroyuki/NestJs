@@ -237,9 +237,16 @@ input[type=file] {
 .fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-day-other {
   background-color: #FFFFFF;
 }
+.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-day-other .fc-daygrid-day-events {
+  display: none;
+}
 .fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-event {
   font-size: 10px;
   text-align: center;
+  border-radius: 10px;
+}
+.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-event .fc-event-time {
+  display: none;
 }
 .fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-day-number {
   font-size: 12px;

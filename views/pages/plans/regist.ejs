@@ -64,16 +64,19 @@ new Vue({
         center: 'title',
         right: ''
       },
-      events: JSON.parse(calendars).events,
+      events: [],
       dayCellContent(e) {
         e.dayNumberText = e.dayNumberText.replace('日', '');
-      }
+      },
+      eventClick: (e) => {
+        console.log("eventClick:", e);
+      },
     },
     // 登録データ
     planName: "",            // 料金プラン名
   },
   created() {
-    
+    this.createEventData(JSON.parse(calendars).events);
   },
   mounted() {
     this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
@@ -94,6 +97,17 @@ new Vue({
     // ファイル取込み
     onImport () {
       alert("ファイル取込み")
+    },
+    // イベントデータ作成
+    createEventData(events) {
+      events.forEach(item => {
+        let retultDate = this.createBaseDate(item.end);
+        if(item.start && item.end) {
+          item.start = `${item.start}T00:00`;
+          item.end = `${item.end}T24:00`;
+        }
+        this.calendar.events.push(item);
+      });
     },
     // 基準日の作成
     createBaseDate(date) {
@@ -135,7 +149,7 @@ new Vue({
       this.calendar.events = [];
       this.getCalendarApi().then(res => {
         if (typeof res !== 'undefined') {
-          this.calendar.events = res;          
+          this.createEventData(res.events);    
           this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
         }
       })
@@ -144,15 +158,24 @@ new Vue({
     async getCalendarApi(args) {
       return await axios.get('https://beauty.tsuku2.jp/api/menus?category_id=1').then((res) => {
         if (typeof res !== 'undefined') {
-          return [
-            {
-              id: '5',
-              type: '0',
-              title: '料金区分A',
-              start: '2022-11-07',
-              end: ''
-            },
-          ]
+          return {
+            events: [
+              {
+                id: '5',
+                type: '0',
+                title: '料金区分A',
+                start: '2022-11-07',
+                end: ''
+              },
+              {
+                id: '6',
+                type: '2',
+                title: '売り止め',
+                start: '2022-11-20',
+                end: '2022-11-23'
+              }
+            ]
+          } 
         }
       }).catch((error) => {
         console.log(error);
