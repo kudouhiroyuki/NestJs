@@ -110,7 +110,13 @@ CREATE TRIGGER update_trigger<br>
 AFTER UPDATE<br>
 ON nest.users FOR EACH ROW<br>
 INSERT INTO log (log, dt)<br>
-VALUES('Update', now());
+VALUES('Update', now());<br>
+
+CREATE TRIGGER delete_trigger<br>
+AFTER DELETE<br>
+ON nest.users FOR EACH ROW<br>
+INSERT INTO log (log, dt)<br>
+VALUES('Delete', now());<br>
 
 #### データの追加と削除<br>
 - INSERT 文<br>
