@@ -21,28 +21,38 @@
       </div>
     </div>
 
-    <div style="text-align: right;">
+    <div class="mb-5" style="text-align: right;">
       <input @click="onDownload" type="button" class="btn baseBtnGrey" value="ダウンロード" />
       <input @click="onImport" type="button" class="btn baseBtnGrey" value="ファイル取込み" />
     </div>
     
     <div class="row">
-      <div class="col-6">
+      <div style="position: relative;" class="col-6">
         <img
           @click="onPrev"
-          style="cursor: pointer; transform: rotate(360deg);"
+          style="cursor: pointer; transform: rotate(360deg); position: absolute; top: -5px; left: 20px;"
           src="/images/icon/arow_calendar.svg"
         />
         <div class='renderCalendar' data-month="thisMonth"></div>
       </div>
-      <div class="col-6">
+      <div style="position: relative;" class="col-6">
         <img
           @click="onNext"
-          style="cursor: pointer; transform: rotate(180deg)"
+          style="cursor: pointer; transform: rotate(180deg); position: absolute; top: -5px; right: 20px;"
           src="/images/icon/arow_calendar.svg"
         />
         <div class='renderCalendar' data-month="nextMonth"></div>
       </div>
+    </div>
+
+    <!-- 保存ボタン -->
+    <div class="d-flex flex-row-reverse">
+      <input
+        type="submit"
+        value="保存"
+        class="btn mt-5 baseBtnGrey"
+        style="width: 156px;"
+      />
     </div>
   </main>
 </div>

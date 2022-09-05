@@ -18,7 +18,7 @@
       </ul>
     </div>
 
-    <form @submit.prevent="onSerch" class="mb-5">
+    <form @submit.prevent="onSerch">
       <!-- 条件フォーム -->
       <div class="baseShadow p-3 mb-5">
         <h5 class="mb-4 fw-bold">条件</h5>
@@ -63,7 +63,7 @@
       </table>
       <!-- ページネーション -->
       <nav class="d-flex justify-content-center" aria-label="Page navigation">
-        <ul class="pagination">
+        <ul class="pagination mb-0">
           <li :class="{'disabled': Number(pageNumber) === 1}" class="page-item">
             <button
               @click="onPageChange(Number(pageNumber) - 1)"

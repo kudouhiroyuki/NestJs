@@ -9,7 +9,7 @@
   <main id="productsRegistSet">    
     <h4 class="mb-4 fw-bold">商品登録</h4>
 
-    <form @submit.prevent="onSubmit" name="productsForm" class="mb-5">
+    <form @submit.prevent="onSubmit" name="productsForm">
       <!-- 基本情報 -->
       <div :style="basicTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
         <div class="d-flex">
@@ -647,7 +647,7 @@
       </div>
 
       <!-- 保存ボタン -->
-      <div class="d-flex flex-row-reverse mb-4">
+      <div class="d-flex flex-row-reverse">
         <input
           type="submit"
           value="保存"
