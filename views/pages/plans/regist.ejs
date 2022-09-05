@@ -28,9 +28,19 @@
     
     <div class="row">
       <div class="col-6">
+        <img
+          @click="onPrev"
+          style="cursor: pointer; transform: rotate(360deg);"
+          src="/images/icon/arow_calendar.svg"
+        />
         <div class='renderCalendar' data-month="thisMonth"></div>
       </div>
       <div class="col-6">
+        <img
+          @click="onNext"
+          style="cursor: pointer; transform: rotate(180deg)"
+          src="/images/icon/arow_calendar.svg"
+        />
         <div class='renderCalendar' data-month="nextMonth"></div>
       </div>
     </div>
@@ -92,6 +102,22 @@ new Vue({
       let retultDate = new Date(year, (month - 1));
       return retultDate;
     },
+    // 表示切り替え(1ヶ月前)
+    onPrev() {
+      let retultDate = this.createBaseDate(this.calendar.initialDate);
+      retultDate.setMonth(retultDate.getMonth() - 3);
+      retultDate.setDate(1);
+      this.calendar.initialDate = retultDate;
+      this.updateCalendarView();
+    },
+    // 表示切り替え(1ヶ月後)
+    onNext() {
+      let retultDate = this.createBaseDate(this.calendar.initialDate);
+      retultDate.setMonth(retultDate.getMonth() + 1);
+      retultDate.setDate(1);
+      this.calendar.initialDate = retultDate;
+      this.updateCalendarView();
+    },
     // カレンダー描画
     renderCalendar(calendarObj, nextMonth) {
       const calendars = document.querySelectorAll('.renderCalendar');
@@ -103,7 +129,35 @@ new Vue({
         let calendar = new FullCalendar.Calendar(calendarEl, calendarObj);
         calendar.render();
       });
-    }
+    },
+    // カレンダー表示更新
+    updateCalendarView() {
+      this.calendar.events = [];
+      this.getCalendarApi().then(res => {
+        if (typeof res !== 'undefined') {
+          this.calendar.events = res;          
+          this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
+        }
+      })
+    },
+    // カレンダーAPI
+    async getCalendarApi(args) {
+      return await axios.get('https://beauty.tsuku2.jp/api/menus?category_id=1').then((res) => {
+        if (typeof res !== 'undefined') {
+          return [
+            {
+              id: '5',
+              type: '0',
+              title: '料金区分A',
+              start: '2022-11-07',
+              end: ''
+            },
+          ]
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
   }
 })
 </script>

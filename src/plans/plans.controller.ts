@@ -58,6 +58,13 @@ export class PlansController {
           title: '売り止め',
           start: '2022-09-19',
           end: '2022-09-23'
+        },
+        {
+          id: '4',
+          type: '0',
+          title: '料金区分A',
+          start: '2022-10-05',
+          end: ''
         }
       ]
     }
