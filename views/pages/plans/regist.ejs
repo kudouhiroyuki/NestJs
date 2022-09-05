@@ -32,7 +32,7 @@
       </button>
       <ul class="dropdown-menu">
         <button
-          @click="onPlanModalShow"
+          @click="onPlanModalShow('new')"
           type="button"
           class="dropdown-item small">
           プランを追加する
@@ -128,14 +128,34 @@
                 >{{ item.feeName }}</option>
               </select>
             </div>
-            <!-- 登録 -->
             <div class="d-flex flex-row-reverse">
-              <input
-                type="button"
-                value="登録"
-                class="btn mt-5 baseBtnGrey"
-                style="width: 156px;"
-              />
+              <!-- 登録 -->
+              <template v-if="planModal.type === 'new'">
+                <input
+                  @click="onPlanAdd"
+                  type="button"
+                  value="登録"
+                  class="btn mt-5 baseBtnGrey"
+                  style="width: 156px;"
+                />
+              </template>
+              <!-- 編集・削除 -->
+              <template v-if="planModal.type === 'edit'">
+                <input
+                  @click="onPlanEdit"
+                  type="button"
+                  value="編集"
+                  class="btn mt-5 baseBtnGrey"
+                  style="width: 156px;"
+                />
+                <input
+                  @click="onPlanDelete"
+                  type="button"
+                  value="削除"
+                  class="btn mt-5 baseBtnGrey"
+                  style="width: 156px; margin-right: 10px;"
+                />
+              </template>
             </div>
           </div>
         </div>
@@ -163,15 +183,12 @@ new Vue({
     // 料金設定（モーダル）
     planModal: {
       show: false,            // 表示ステータス
+      type: '',               // 表示タイプ
       setPeriodFrom: null,    // 設定期間 (From)
       setPeriodTo: null,      // 設定期間 (To)
       minDate: null,
       maxDate: null,
     },
-    // APIデータ
-    calendars: JSON.parse(calendars),
-    feeCategorys: JSON.parse(feeCategorys),
-
     calendar: {
       initialView: 'dayGridMonth',
       locale: 'ja',
@@ -190,12 +207,15 @@ new Vue({
         console.log("eventClick:", e);
       },
     },
+    // APIデータ
+    calendars: JSON.parse(calendars),
+    feeCategorys: JSON.parse(feeCategorys),
     // 登録データ
     planName: "",            // 料金プラン名
   },
   created() {
     this.createEventData(this.calendars);
-    // this.createDateControlData(this.calendars);
+    // this.createMinData(this.calendars);
 
     // moment(new Date()).format("YYYY-MM-DD")
   },
@@ -222,10 +242,24 @@ new Vue({
     // 料金設定モーダル（初期化）
     onPlanModalClear() {
       this.planModal.show = false;
+      this.planModal.type = '';
     },
     // 料金設定モーダル（表示）
-    onPlanModalShow() {
+    onPlanModalShow(type) {
       this.planModal.show = true;
+      this.planModal.type = type;
+    },
+    // 料金設定モーダル（登録）
+    onPlanAdd() {
+      alert('登録')
+    },
+    // 料金設定モーダル（編集）
+    onPlanEdit() {
+      alert('編集')
+    },
+    // 料金設定モーダル（削除）
+    onPlanDelete() {
+      alert('削除')
     },
     // イベントデータ作成
     createEventData(events) {

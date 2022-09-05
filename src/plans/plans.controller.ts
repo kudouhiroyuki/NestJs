@@ -39,44 +39,32 @@ export class PlansController {
     const calendars = [
       {
         id: '1',
-        feeId: '1',
-        title: '料金区分A',
-        start: '2022-09-01'
+        feeId: '3',
+        title: '売り止め',
+        start: '2022-10-23',
+        end: '2022-10-26'
       },
       {
         id: '2',
-        feeId: '3',
-        title: '売り止め',
-        start: '2022-09-23',
-        end: '2022-09-26'
+        feeId: '2',
+        priority: '1',
+        title: '料金区分B',
+        start: '2022-09-05'
       },
       {
         id: '3',
-        feeId: '1',
-        title: '料金区分A',
-        start: '2022-10-05'
+        feeId: '2',
+        priority: '1',
+        title: '料金区分B',
+        start: '2022-09-05'
       },
       {
         id: '4',
         feeId: '2',
         priority: '1',
         title: '料金区分B',
-        start: '2022-09-05'
-      },
-      {
-        id: '5',
-        feeId: '2',
-        priority: '1',
-        title: '料金区分B',
         start: '2022-09-05',
         end: '2022-09-10'
-      },
-      {
-        id: '6',
-        feeId: '1',
-        priority: '1',
-        title: '料金区分A',
-        start: '2022-09-05'
       }
     ]
     // マスターデータ（料金区分）
