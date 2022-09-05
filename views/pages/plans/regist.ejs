@@ -25,6 +25,20 @@
       <input @click="onDownload" type="button" class="btn baseBtnGrey" value="ダウンロード" />
       <input @click="onImport" type="button" class="btn baseBtnGrey" value="ファイル取込み" />
     </div>
+
+    <div class="d-flex flex-row-reverse mb-4">
+      <button class="dropdown border-0 bg-white" type="button" data-bs-toggle="dropdown">
+        <img src="/images/icon/plus.svg">
+      </button>
+      <ul class="dropdown-menu">
+        <button
+          @click="onPlanModalShow"
+          type="button"
+          class="dropdown-item small">
+          プランを追加する
+        </button>
+      </ul>
+    </div>
     
     <div class="row">
       <div style="position: relative;" class="col-6">
@@ -54,17 +68,110 @@
         style="width: 156px;"
       />
     </div>
+
+    <!-- 料金設定（モーダル） -->
+    <div :style="planModal.show ? 'display: block' : 'display: none'" class="modalMain">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">料金設定</h5>
+            <button @click="onPlanModalClear" type="button" class="btn-close"></button>
+          </div>
+          <div class="modal-body m-3">
+            <!-- 設定期間 -->
+            <div class="mb-4">
+              <label class="form-label w-100">設定期間</label>
+              <div class="d-inline-block col-5">
+                <vue-ctk-date-time-picker
+                  name="setPeriodFrom"
+                  v-model="planModal.setPeriodFrom"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :min-date="planModal.minDate"
+                  :max-date="planModal.maxDate"
+                  :label="'From'"
+                  position="bottom"
+                /></vue-ctk-date-time-picker>
+              </div>
+              <div class="d-inline-block col-1" style="text-align: center;">〜</div>
+              <div class="d-inline-block col-5">
+                <vue-ctk-date-time-picker
+                  name="setPeriodTo"
+                  v-model="planModal.setPeriodTo"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :min-date="planModal.minDate"
+                  :max-date="planModal.maxDate"
+                  :label="'To'"
+                  position="bottom"
+                /></vue-ctk-date-time-picker>
+              </div>
+            </div>
+            <!-- 優先順位 -->
+            <div class="col-7 mb-4">
+              <label class="form-label w-100">優先順位</label>
+              <input
+                name="keyword"
+                type="text"
+                class="form-control"
+                placeholder="優先順位"
+              >
+            </div>
+            <!-- 料金区分 -->
+            <div class="col-6 mb-4">
+              <label class="form-label w-100">料金区分</label>
+              <select class="form-select mb-2">
+                <option
+                  v-for="item in feeCategorys"
+                  :key="item.feeName"
+                  :value="item.feeName"
+                >{{ item.feeName }}</option>
+              </select>
+            </div>
+            <!-- 登録 -->
+            <div class="d-flex flex-row-reverse">
+              <input
+                type="button"
+                value="登録"
+                class="btn mt-5 baseBtnGrey"
+                style="width: 156px;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      :style="planModal.show ? 'display: block' : 'display: none'"
+      class="modalBg"
+      @click="onPlanModalClear">
+    </div>
   </main>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript">  
 const calendars= `<%- calendars %>`;
-console.log()
+const feeCategorys= `<%- feeCategorys %>`;
+
+const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
+Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 new Vue({
   el: "#plansRegist",
   data: {
     title: '',
+    // 料金設定（モーダル）
+    planModal: {
+      show: false,            // 表示ステータス
+      setPeriodFrom: null,    // 設定期間 (From)
+      setPeriodTo: null,      // 設定期間 (To)
+      minDate: null,
+      maxDate: null,
+    },
+    // APIデータ
+    calendars: JSON.parse(calendars),
+    feeCategorys: JSON.parse(feeCategorys),
+
     calendar: {
       initialView: 'dayGridMonth',
       locale: 'ja',
@@ -74,6 +181,7 @@ new Vue({
         center: 'title',
         right: ''
       },
+      eventOrder: 'priority, id',
       events: [],
       dayCellContent(e) {
         e.dayNumberText = e.dayNumberText.replace('日', '');
@@ -86,7 +194,10 @@ new Vue({
     planName: "",            // 料金プラン名
   },
   created() {
-    this.createEventData(JSON.parse(calendars).events);
+    this.createEventData(this.calendars);
+    // this.createDateControlData(this.calendars);
+
+    // moment(new Date()).format("YYYY-MM-DD")
   },
   mounted() {
     this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
@@ -107,6 +218,14 @@ new Vue({
     // ファイル取込み
     onImport () {
       alert("ファイル取込み")
+    },
+    // 料金設定モーダル（初期化）
+    onPlanModalClear() {
+      this.planModal.show = false;
+    },
+    // 料金設定モーダル（表示）
+    onPlanModalShow() {
+      this.planModal.show = true;
     },
     // イベントデータ作成
     createEventData(events) {
@@ -159,7 +278,7 @@ new Vue({
       this.calendar.events = [];
       this.getCalendarApi().then(res => {
         if (typeof res !== 'undefined') {
-          this.createEventData(res.events);    
+          this.createEventData(res);    
           this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
         }
       })
@@ -168,24 +287,22 @@ new Vue({
     async getCalendarApi(args) {
       return await axios.get('https://beauty.tsuku2.jp/api/menus?category_id=1').then((res) => {
         if (typeof res !== 'undefined') {
-          return {
-            events: [
-              {
-                id: '5',
-                type: '0',
-                title: '料金区分A',
-                start: '2022-11-07',
-                end: ''
-              },
-              {
-                id: '6',
-                type: '2',
-                title: '売り止め',
-                start: '2022-11-20',
-                end: '2022-11-23'
-              }
-            ]
-          } 
+          return [
+            {
+              id: '5',
+              type: '0',
+              title: '料金区分A',
+              start: '2022-11-07',
+              end: ''
+            },
+            {
+              id: '6',
+              type: '2',
+              title: '売り止め',
+              start: '2022-11-20',
+              end: '2022-11-23'
+            }  
+          ]
         }
       }).catch((error) => {
         console.log(error);

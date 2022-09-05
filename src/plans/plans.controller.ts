@@ -36,41 +36,59 @@ export class PlansController {
   @Render('plans/regist')
   async getRegist(@Param('productId') productId: string) {
     // カレンダーデータ
-    const calendars = {
-      events: [
-        {
-          id: '1',
-          type: '0',
-          title: '料金区分A',
-          start: '2022-09-01',
-          end: ''
-        },
-        {
-          id: '2',
-          type: '1',
-          title: '料金区分B',
-          start: '2022-09-05',
-          end: '2022-09-10'
-        },
-        {
-          id: '3',
-          type: '2',
-          title: '売り止め',
-          start: '2022-09-23',
-          end: '2022-09-26'
-        },
-        {
-          id: '4',
-          type: '0',
-          title: '料金区分A',
-          start: '2022-10-05',
-          end: ''
-        }
-      ]
-    }
+    const calendars = [
+      {
+        id: '1',
+        feeId: '1',
+        title: '料金区分A',
+        start: '2022-09-01'
+      },
+      {
+        id: '2',
+        feeId: '3',
+        title: '売り止め',
+        start: '2022-09-23',
+        end: '2022-09-26'
+      },
+      {
+        id: '3',
+        feeId: '1',
+        title: '料金区分A',
+        start: '2022-10-05'
+      },
+      {
+        id: '4',
+        feeId: '2',
+        priority: '1',
+        title: '料金区分B',
+        start: '2022-09-05'
+      },
+      {
+        id: '5',
+        feeId: '2',
+        priority: '1',
+        title: '料金区分B',
+        start: '2022-09-05',
+        end: '2022-09-10'
+      },
+      {
+        id: '6',
+        feeId: '1',
+        priority: '1',
+        title: '料金区分A',
+        start: '2022-09-05'
+      }
+    ]
+    // マスターデータ（料金区分）
+    const feeCategorys = [
+      { feeId: '1', feeName: '料金区分A' },
+      { feeId: '2', feeName: '料金区分B' },
+      { feeId: '3', feeName: '売り止め' }
+    ]
     return {
       productId: JSON.stringify(productId),
-      calendars: JSON.stringify(calendars)
+      calendars: JSON.stringify(calendars),
+      feeCategorys: JSON.stringify(feeCategorys)
     }
   }
 }
