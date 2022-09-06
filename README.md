@@ -232,8 +232,8 @@ ON u1.id = u2.id;<br>
 #### <----- 集計に関する関数 -----><br>
 ■AVG 関数<br>
 ※指定カラムの平均値を取得する<br>
-※DISTINCTを指定すると、重複値を除外して集計
-※GROUP BYを指定すると、グループ化して集計
+※DISTINCTを指定すると、重複値を除外して集計<br>
+※GROUP BYを指定すると、グループ化して集計<br>
 SELECT AVG(point) from nest.users;<br>
 SELECT AVG(DISTINCT point) from nest.users;<br>
 SELECT department_id, AVG(point) FROM nest.users GROUP BY department_id;<br>
