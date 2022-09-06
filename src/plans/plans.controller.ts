@@ -35,8 +35,8 @@ export class PlansController {
   @Get('/:productId/regist')
   @Render('plans/regist')
   async getRegist(@Param('productId') productId: string) {
-    // カレンダーデータ
-    const calendars = [
+    // 料金プランデータ
+    const ratePlans = [
       {
         id: '1',
         feeId: '2',
@@ -44,30 +44,30 @@ export class PlansController {
         title: '料金区分B',
         start: '2022-09-05',
         end: '2022-09-05'
-      },
-      {
-        id: '2',
-        feeId: '2',
-        priority: '1',
-        title: '料金区分B',
-        start: '2022-09-05',
-        end: '2022-09-05'
-      },
-      {
-        id: '3',
-        feeId: '2',
-        priority: '1',
-        title: '料金区分B',
-        start: '2022-09-05',
-        end: '2022-09-10'
-      },
-      {
-        id: '4',
-        feeId: '3',
-        title: '売り止め',
-        start: '2022-10-23',
-        end: '2022-10-26'
       }
+      // {
+      //   id: '2',
+      //   feeId: '2',
+      //   priority: '1',
+      //   title: '料金区分B',
+      //   start: '2022-09-05',
+      //   end: '2022-09-05'
+      // },
+      // {
+      //   id: '3',
+      //   feeId: '2',
+      //   priority: '1',
+      //   title: '料金区分B',
+      //   start: '2022-09-05',
+      //   end: '2022-09-10'
+      // },
+      // {
+      //   id: '4',
+      //   feeId: '3',
+      //   title: '売り止め',
+      //   start: '2022-10-23',
+      //   end: '2022-10-26'
+      // }
     ]
     // マスターデータ（料金区分）
     const feeCategorys = [
@@ -77,7 +77,7 @@ export class PlansController {
     ]
     return {
       productId: JSON.stringify(productId),
-      calendars: JSON.stringify(calendars),
+      ratePlans: JSON.stringify(ratePlans),
       feeCategorys: JSON.stringify(feeCategorys)
     }
   }

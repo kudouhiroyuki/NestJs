@@ -90,8 +90,6 @@
                   format="YYYY/MM/DD"
                   formatted="YYYY/MM/DD"
                   only-date
-                  :min-date="planModal.minDate"
-                  :max-date="planModal.maxDate"
                   :label="'From'"
                   position="bottom"
                 /></vue-ctk-date-time-picker>
@@ -104,8 +102,6 @@
                   format="YYYY/MM/DD"
                   formatted="YYYY/MM/DD"
                   only-date
-                  :min-date="planModal.minDate"
-                  :max-date="planModal.maxDate"
                   :label="'To'"
                   position="bottom"
                 /></vue-ctk-date-time-picker>
@@ -174,7 +170,7 @@
 </div>
 
 <script type="text/javascript">  
-const calendars= `<%- calendars %>`;
+const ratePlans= `<%- ratePlans %>`;
 const feeCategorys= `<%- feeCategorys %>`;
 
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
@@ -183,16 +179,14 @@ Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 new Vue({
   el: "#plansRegist",
   data: {
-    title: '',
     // 料金設定（モーダル）
     planModal: {
       show: false,            // 表示ステータス
       type: '',               // 表示タイプ
       setPeriodFrom: null,    // 設定期間 (From)
       setPeriodTo: null,      // 設定期間 (To)
-      minDate: null,
-      maxDate: null,
     },
+    // カレンダー（イベント表示用）
     calendar: {
       initialView: 'dayGridMonth',
       locale: 'ja',
@@ -212,16 +206,14 @@ new Vue({
       },
     },
     // APIデータ
-    calendars: JSON.parse(calendars),
+    ratePlans: JSON.parse(ratePlans),
     feeCategorys: JSON.parse(feeCategorys),
     // 登録データ
-    planName: "",    // 料金プラン名
+    planName: "",        // 料金プラン名
+    changeRatePlans: []  // カレンダー（登録・更新・削除データ）
   },
   created() {
-    this.createEventData(this.calendars);
-    // this.createMinData(this.calendars);
-
-    // moment(new Date()).format("YYYY-MM-DD")
+    this.createEventData(this.ratePlans);
   },
   mounted() {
     this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
@@ -229,15 +221,17 @@ new Vue({
   methods: {
     // ダウンロード
     onDownload() {
-      let csv = '\ufeff' + 'id,type,title,start,end\n';
-      this.calendar.events.forEach(el => {
-        let line = `${el['id']},${el['type']},${el['title']},${el['start']},${el['end']}`;
-        csv += (line + '\n');
-      })
-      let link = document.createElement('a');
-      link.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-      link.download = 'お知らせ一覧.csv';
-      link.click();
+      console.log(this.ratePlans)
+      console.log(this.changeRatePlans)
+      // let csv = '\ufeff' + 'id,type,title,start,end\n';
+      // this.calendar.events.forEach(el => {
+      //   let line = `${el['id']},${el['type']},${el['title']},${el['start']},${el['end']}`;
+      //   csv += (line + '\n');
+      // })
+      // let link = document.createElement('a');
+      // link.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      // link.download = 'お知らせ一覧.csv';
+      // link.click();
     },
     // ファイル取込み
     onImport () {
@@ -253,30 +247,45 @@ new Vue({
       this.planModal.show = true;
       this.planModal.type = type;
     },
-    // 料金設定モーダル（登録）
+    
+    /**
+     * 料金設定モーダル（登録）
+     */
     onPlanAdd() {
-      let event = [{
+      let event = {
+        queryAction: 'INSERT',
         type: '0',
         title: '料金区分A',
         start: moment(new Date(this.planModal.setPeriodFrom)).format("YYYY-MM-DD"),
         end: moment(new Date(this.planModal.setPeriodTo)).format("YYYY-MM-DD")
-      }];
+      };
+      // カレンダー再描画
       let baseDate = new Date(this.calendar.initialDate);
       baseDate.setMonth(baseDate.getMonth() - 1);
       this.calendar.initialDate = baseDate;
-      this.createEventData(event);
+      this.createEventData([event]);
       this.renderCalendar(this.calendar, baseDate);
+      // 登録データ追加
+      this.changeRatePlans.push(event);
+      // モーダル初期化
       this.onPlanModalClear();
     },
-    // 料金設定モーダル（編集）
+
+    /**
+     * 料金設定モーダル（編集）
+     */
     onPlanEdit() {
       alert('編集')
     },
-    // 料金設定モーダル（削除）
+
+    /**
+     * 料金設定モーダル（削除）
+     */
     onPlanDelete() {
       alert('削除')
     },
-    // イベントデータ作成
+
+    // イベントデータ作成（表示用）
     createEventData(events) {
       events.forEach(item => {
         let retultDate = this.createBaseDate(item.end);
