@@ -30,6 +30,8 @@ let UsersService = class UsersService {
                 id: true,
                 user_name: true,
                 password: true,
+                address: true,
+                age: true,
                 department_id: true,
                 point: true
             },

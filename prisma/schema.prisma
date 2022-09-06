@@ -11,6 +11,8 @@ model users {
   id    Int     @default(autoincrement()) @id
   user_name String
   password  String
+  address String
+  age String
   department_id  String
   point  Int
 }

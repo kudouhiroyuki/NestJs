@@ -121,12 +121,15 @@ VALUES('Delete', now());<br>
 #### データの追加と削除<br>
 - INSERT 文<br>
 ※データを追加する<br>
-INSERT INTO nest.users (user_name, password, department_id, point) VALUES('name1', 'password', 'A0001', 100);<br>
-INSERT INTO nest.users (user_name, password, department_id, point) VALUES('name2', 'password', 'A0001', 500);<br>
-INSERT INTO nest.users (user_name, password, department_id, point) VALUES('name3', 'password', 'B0001', 500);<br>
-INSERT INTO nest.users (user_name, password, department_id, point) VALUES('name4', 'password', '', 400);<br>
-INSERT INTO nest.departments (department_id, department_name) VALUES('A0001', 'アプリケーション');<br>
-INSERT INTO nest.departments (department_id, department_name) VALUES('B0001', 'デザイン');<br>
+INSERT INTO nest.users (user_name, password, address, age, department_id, point) VALUES<br>
+('name1', 'password', 'address', 30, 'A0001', 100),<br>
+('name2', 'password', 'address', 20, 'A0001', 500),<br>
+('name3', 'password', 'address', 17, 'B0001', 500),<br>
+('name4', 'password', 'address', 58, '', 400);<br>
+
+INSERT INTO nest.departments (department_id, department_name) VALUES<br>
+('A0001', 'アプリケーション'),<br>
+('B0001', 'デザイン');<br>
 
 - UPDATE 文<br>
 ※データを更新する<br>

@@ -11,6 +11,8 @@ export declare class UsersService {
     createUser(data: {
         user_name: string;
         password: string;
+        address: string;
+        age: string;
         department_id: string;
         point: number;
     }): Promise<Users>;
