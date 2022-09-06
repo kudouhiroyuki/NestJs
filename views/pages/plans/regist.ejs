@@ -266,6 +266,7 @@ new Vue({
       this.calendar.initialDate = baseDate;
       this.createEventData(event);
       this.renderCalendar(this.calendar, baseDate);
+      this.onPlanModalClear();
     },
     // 料金設定モーダル（編集）
     onPlanEdit() {
