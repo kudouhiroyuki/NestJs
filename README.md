@@ -121,9 +121,10 @@ VALUES('Delete', now());<br>
 #### データの追加と削除<br>
 - INSERT 文<br>
 ※データを追加する<br>
-INSERT INTO nest.users (user_name, password, department_id) VALUES('name1', 'password', 'A0001');<br>
-INSERT INTO nest.users (user_name, password, department_id) VALUES('name2', 'password', 'A0001');<br>
-INSERT INTO nest.users (user_name, password, department_id) VALUES('name', 'password', '');<br>
+INSERT INTO nest.users (user_name, password, department_id, point) VALUES('name1', 'password', 'A0001', 100);<br>
+INSERT INTO nest.users (user_name, password, department_id, point) VALUES('name2', 'password', 'A0001', 500);<br>
+INSERT INTO nest.users (user_name, password, department_id, point) VALUES('name3', 'password', 'B0001', 500);<br>
+INSERT INTO nest.users (user_name, password, department_id, point) VALUES('name4', 'password', '', 400);<br>
 INSERT INTO nest.departments (department_id, department_name) VALUES('A0001', 'アプリケーション');<br>
 INSERT INTO nest.departments (department_id, department_name) VALUES('B0001', 'デザイン');<br>
 
@@ -227,6 +228,15 @@ SELECT u1.id, u1.user_name, u1.password, u1.department_id<br>
 FROM nest.users AS u1<br>
 INNER JOIN nest.users AS u2<br>
 ON u1.id = u2.id;<br>
+
+#### <----- 集計に関する関数 -----><br>
+■AVG 関数<br>
+※指定カラムの平均値を取得する<br>
+※DISTINCTを指定すると、重複値を除外して集計
+※GROUP BYを指定すると、グループ化して集計
+SELECT AVG(point) from nest.users;<br>
+SELECT AVG(DISTINCT point) from nest.users;<br>
+SELECT department_id, AVG(point) FROM nest.users GROUP BY department_id;<br>
 
 #### 用語<br>
 - ステートメント（構築された文全体）<br>

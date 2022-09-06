@@ -12,6 +12,7 @@ model users {
   user_name String
   password  String
   department_id  String
+  point  Int
 }
 model departments {
   department_id String @unique
