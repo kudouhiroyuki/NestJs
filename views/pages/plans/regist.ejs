@@ -6,7 +6,9 @@
 
   <%- include('../../partials/sidebar'); %>
 
-  <main id="plansRegist">    
+  <main id="plansRegist">
+    {{ calendar.events}}
+
     <h4 class="mb-4 fw-bold">料金プラン登録</h4>
     <div class="row">
       <div class="col-4">
@@ -85,6 +87,7 @@
                 <vue-ctk-date-time-picker
                   name="setPeriodFrom"
                   v-model="planModal.setPeriodFrom"
+                  format="YYYY/MM/DD"
                   formatted="YYYY/MM/DD"
                   only-date
                   :min-date="planModal.minDate"
@@ -98,6 +101,7 @@
                 <vue-ctk-date-time-picker
                   name="setPeriodTo"
                   v-model="planModal.setPeriodTo"
+                  format="YYYY/MM/DD"
                   formatted="YYYY/MM/DD"
                   only-date
                   :min-date="planModal.minDate"
@@ -211,7 +215,7 @@ new Vue({
     calendars: JSON.parse(calendars),
     feeCategorys: JSON.parse(feeCategorys),
     // 登録データ
-    planName: "",            // 料金プラン名
+    planName: "",    // 料金プラン名
   },
   created() {
     this.createEventData(this.calendars);
@@ -251,7 +255,17 @@ new Vue({
     },
     // 料金設定モーダル（登録）
     onPlanAdd() {
-      alert('登録')
+      let event = [{
+        type: '0',
+        title: '料金区分A',
+        start: moment(new Date(this.planModal.setPeriodFrom)).format("YYYY-MM-DD"),
+        end: moment(new Date(this.planModal.setPeriodTo)).format("YYYY-MM-DD")
+      }];
+      let baseDate = new Date(this.calendar.initialDate);
+      baseDate.setMonth(baseDate.getMonth() - 1);
+      this.calendar.initialDate = baseDate;
+      this.createEventData(event);
+      this.renderCalendar(this.calendar, baseDate);
     },
     // 料金設定モーダル（編集）
     onPlanEdit() {
@@ -281,39 +295,39 @@ new Vue({
     },
     // 表示切り替え(1ヶ月前)
     onPrev() {
-      let retultDate = this.createBaseDate(this.calendar.initialDate);
-      retultDate.setMonth(retultDate.getMonth() - 2);
-      retultDate.setDate(1);
-      this.calendar.initialDate = retultDate;
-      this.updateCalendarView();
+      let baseDate = this.createBaseDate(this.calendar.initialDate);
+      baseDate.setMonth(baseDate.getMonth() - 2);
+      baseDate.setDate(1);
+      this.calendar.initialDate = baseDate;
+      this.updateCalendarView(baseDate);
     },
     // 表示切り替え(1ヶ月後)
     onNext() {
-      let retultDate = this.createBaseDate(this.calendar.initialDate);
-      retultDate.setMonth(retultDate.getMonth());
-      retultDate.setDate(1);
-      this.calendar.initialDate = retultDate;
-      this.updateCalendarView();
+      let baseDate = this.createBaseDate(this.calendar.initialDate);
+      baseDate.setMonth(baseDate.getMonth());
+      baseDate.setDate(1);
+      this.calendar.initialDate = baseDate;
+      this.updateCalendarView(baseDate);
     },
     // カレンダー描画
-    renderCalendar(calendarObj, nextMonth) {
+    renderCalendar(calendarObj, baseDate) {
       const calendars = document.querySelectorAll('.renderCalendar');
       calendars.forEach(function(calendarEl) {
         if(calendarEl.dataset['month'] === 'nextMonth') {    
-          nextMonth.setMonth(nextMonth.getMonth() + 1);
-          calendarObj.initialDate = nextMonth;
+          baseDate.setMonth(baseDate.getMonth() + 1);
+          calendarObj.initialDate = baseDate;
         }
         let calendar = new FullCalendar.Calendar(calendarEl, calendarObj);
         calendar.render();
       });
     },
     // カレンダー表示更新
-    updateCalendarView() {
+    updateCalendarView(baseDate) {
       this.calendar.events = [];
       this.getCalendarApi().then(res => {
         if (typeof res !== 'undefined') {
-          this.createEventData(res);    
-          this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
+          this.createEventData(res);
+          this.renderCalendar(this.calendar, baseDate);
         }
       })
     },
@@ -323,19 +337,19 @@ new Vue({
         if (typeof res !== 'undefined') {
           return [
             {
-              id: '5',
-              type: '0',
-              title: '料金区分A',
-              start: '2022-11-07',
-              end: ''
+              id: '4',
+              type: '3',
+              title: '売り止め',
+              start: '2022-10-23',
+              end: '2022-10-26'
             },
             {
-              id: '6',
-              type: '2',
-              title: '売り止め',
-              start: '2022-11-20',
-              end: '2022-11-23'
-            }  
+              id: '5',
+              type: '1',
+              title: '料金区分A',
+              start: '2022-11-07',
+              end: '2022-11-07'
+            }
           ]
         }
       }).catch((error) => {
