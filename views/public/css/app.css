@@ -241,12 +241,15 @@ input[type=file] {
 .fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-day-other .fc-daygrid-day-events {
   display: none;
 }
-.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-event {
+.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-event-harness {
+  cursor: pointer;
+}
+.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-event-harness .fc-daygrid-event {
   font-size: 10px;
   text-align: center;
   border-radius: 10px;
 }
-.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-event .fc-event-time {
+.fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-event-harness .fc-daygrid-event .fc-event-time {
   display: none;
 }
 .fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-day-number {

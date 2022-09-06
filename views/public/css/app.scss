@@ -123,12 +123,15 @@ input[type='file'] { color: transparent; }
           display: none;
         }
       }
-      .fc-daygrid-event {
-        font-size: 10px;
-        text-align: center;
-        border-radius: 10px;
-        .fc-event-time {
-          display: none;
+      .fc-daygrid-event-harness {
+        cursor: pointer;
+        .fc-daygrid-event {
+          font-size: 10px;
+          text-align: center;
+          border-radius: 10px;
+          .fc-event-time {
+            display: none;
+          }
         }
       }
       .fc-daygrid-day-number {

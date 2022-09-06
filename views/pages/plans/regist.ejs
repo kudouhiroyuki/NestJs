@@ -7,7 +7,9 @@
   <%- include('../../partials/sidebar'); %>
 
   <main id="plansRegist">
-    {{ calendar.events}}
+    {{ ratePlans }}
+
+    {{ changeRatePlans }}
 
     <h4 class="mb-4 fw-bold">料金プラン登録</h4>
     <div class="row">
@@ -45,19 +47,19 @@
     <div class="row">
       <div style="position: relative;" class="col-6">
         <img
-          @click="onPrev"
+          @click="onCalendarPrev"
           style="cursor: pointer; transform: rotate(360deg); position: absolute; top: -5px; left: 20px;"
           src="/images/icon/arow_calendar.svg"
         />
-        <div class='renderCalendar' data-month="thisMonth"></div>
+        <div @click="onCalendarEvent" class='renderCalendar' data-month="thisMonth"></div>
       </div>
       <div style="position: relative;" class="col-6">
         <img
-          @click="onNext"
+          @click="onCalendarNext"
           style="cursor: pointer; transform: rotate(180deg); position: absolute; top: -5px; right: 20px;"
           src="/images/icon/arow_calendar.svg"
         />
-        <div class='renderCalendar' data-month="nextMonth"></div>
+        <div @click="onCalendarEvent" class='renderCalendar' data-month="nextMonth"></div>
       </div>
     </div>
 
@@ -201,9 +203,6 @@ new Vue({
       dayCellContent(e) {
         e.dayNumberText = e.dayNumberText.replace('日', '');
       },
-      eventClick: (e) => {
-        console.log("eventClick:", e);
-      },
     },
     // APIデータ
     ratePlans: JSON.parse(ratePlans),
@@ -219,13 +218,20 @@ new Vue({
     this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
   },
   methods: {
-    // ダウンロード
+    /**
+     * ダウンロード
+     */
     onDownload() {
       console.log(this.ratePlans)
       console.log(this.changeRatePlans)
-      // let csv = '\ufeff' + 'id,type,title,start,end\n';
-      // this.calendar.events.forEach(el => {
-      //   let line = `${el['id']},${el['type']},${el['title']},${el['start']},${el['end']}`;
+
+      let csvObjs = this.ratePlans.concat(this.changeRatePlans);
+
+      console.log(csvObjs)
+
+      // let csv = '\ufeff' + 'id,feeId,優先順位,料金区分,設定期間 From,設定期間 To\n';
+      // csvObjs.forEach(el => {
+      //   let line = `${el['id']},${el['feeId']},${el['priority']},${el['title']},${el['start']},${el['end']}`;
       //   csv += (line + '\n');
       // })
       // let link = document.createElement('a');
@@ -237,11 +243,17 @@ new Vue({
     onImport () {
       alert("ファイル取込み")
     },
-    // 料金設定モーダル（初期化）
+
+    /**
+     * 料金設定モーダル（初期化）
+     */
     onPlanModalClear() {
       this.planModal.show = false;
       this.planModal.type = '';
+      this.planModal.setPeriodFrom = null;
+      this.planModal.setPeriodTo = null;
     },
+
     // 料金設定モーダル（表示）
     onPlanModalShow(type) {
       this.planModal.show = true;
@@ -303,16 +315,22 @@ new Vue({
       let retultDate = new Date(year, (month - 1));
       return retultDate;
     },
-    // 表示切り替え(1ヶ月前)
-    onPrev() {
+    // 料金カレンダー（イベント）
+    onCalendarEvent(event) {
+      if(event.target.closest('.fc-daygrid-event-harness')) {
+        alert(111)
+      }
+    },
+    // 料金カレンダー（表示切り替え 1ヶ月前）
+    onCalendarPrev() {
       let baseDate = this.createBaseDate(this.calendar.initialDate);
       baseDate.setMonth(baseDate.getMonth() - 2);
       baseDate.setDate(1);
       this.calendar.initialDate = baseDate;
       this.updateCalendarView(baseDate);
     },
-    // 表示切り替え(1ヶ月後)
-    onNext() {
+    // 料金カレンダー（表示切り替え 1ヶ月後）
+    onCalendarNext() {
       let baseDate = this.createBaseDate(this.calendar.initialDate);
       baseDate.setMonth(baseDate.getMonth());
       baseDate.setDate(1);
