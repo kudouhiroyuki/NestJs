@@ -203,6 +203,18 @@ new Vue({
       dayCellContent(e) {
         e.dayNumberText = e.dayNumberText.replace('日', '');
       },
+      eventDidMount(info) {
+        let event = {
+          id: info.event.id,
+          feeId: info.event._def.extendedProps.feeId,
+          priority: info.event._def.extendedProps.priority,
+          title: info.event.title,
+          start: info.event._instance.range.start,
+          end: info.event._instance.range.end
+        }
+        let target = info.el.closest('.fc-daygrid-event-harness');
+        target.dataset.event = JSON.stringify(event);
+      },
     },
     // APIデータ
     ratePlans: JSON.parse(ratePlans),
@@ -317,8 +329,9 @@ new Vue({
     },
     // 料金カレンダー（イベント）
     onCalendarEvent(event) {
-      if(event.target.closest('.fc-daygrid-event-harness')) {
-        alert(111)
+      const target = event.target.closest('.fc-daygrid-event-harness');
+      if(target) {
+        console.log(JSON.parse(target.dataset.event))
       }
     },
     // 料金カレンダー（表示切り替え 1ヶ月前）
@@ -337,7 +350,7 @@ new Vue({
       this.calendar.initialDate = baseDate;
       this.updateCalendarView(baseDate);
     },
-    // カレンダー描画
+    // 料金カレンダー（描画）
     renderCalendar(calendarObj, baseDate) {
       const calendars = document.querySelectorAll('.renderCalendar');
       calendars.forEach(function(calendarEl) {
