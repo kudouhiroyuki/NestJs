@@ -265,7 +265,7 @@ new Vue({
     createEventData(events) {
       events.forEach(item => {
         let retultDate = this.createBaseDate(item.end);
-        if(item.start && item.end) {
+        if(item.start !== item.end) {
           item.start = `${item.start}T00:00`;
           item.end = `${item.end}T24:00`;
         }
@@ -282,7 +282,7 @@ new Vue({
     // 表示切り替え(1ヶ月前)
     onPrev() {
       let retultDate = this.createBaseDate(this.calendar.initialDate);
-      retultDate.setMonth(retultDate.getMonth() - 3);
+      retultDate.setMonth(retultDate.getMonth() - 2);
       retultDate.setDate(1);
       this.calendar.initialDate = retultDate;
       this.updateCalendarView();
@@ -290,7 +290,7 @@ new Vue({
     // 表示切り替え(1ヶ月後)
     onNext() {
       let retultDate = this.createBaseDate(this.calendar.initialDate);
-      retultDate.setMonth(retultDate.getMonth() + 1);
+      retultDate.setMonth(retultDate.getMonth());
       retultDate.setDate(1);
       this.calendar.initialDate = retultDate;
       this.updateCalendarView();

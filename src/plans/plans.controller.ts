@@ -49,14 +49,16 @@ export class PlansController {
         feeId: '2',
         priority: '1',
         title: '料金区分B',
-        start: '2022-09-05'
+        start: '2022-09-05',
+        end: '2022-09-05'
       },
       {
         id: '3',
         feeId: '2',
         priority: '1',
         title: '料金区分B',
-        start: '2022-09-05'
+        start: '2022-09-05',
+        end: '2022-09-05'
       },
       {
         id: '4',
