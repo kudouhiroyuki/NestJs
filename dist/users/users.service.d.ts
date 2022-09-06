@@ -12,6 +12,7 @@ export declare class UsersService {
         user_name: string;
         password: string;
         department_id: string;
+        point: number;
     }): Promise<Users>;
     updateUser(params: {
         where: Prisma.usersWhereUniqueInput;

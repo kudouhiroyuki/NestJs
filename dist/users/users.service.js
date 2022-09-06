@@ -30,7 +30,8 @@ let UsersService = class UsersService {
                 id: true,
                 user_name: true,
                 password: true,
-                department_id: true
+                department_id: true,
+                point: true
             },
             where: whereConditions,
             orderBy: orderConditions,
