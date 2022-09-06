@@ -118,8 +118,8 @@ ON nest.users FOR EACH ROW<br>
 INSERT INTO log (log, dt)<br>
 VALUES('Delete', now());<br>
 
-#### データの追加と削除<br>
-- INSERT 文<br>
+#### <----- データの追加と削除 -----><br>
+■CINSERT 文<br>
 ※データを追加する<br>
 INSERT INTO nest.users (user_name, password, address, age, department_id, point) VALUES<br>
 ('name1', 'password', 'address', 30, 'A0001', 100),<br>
