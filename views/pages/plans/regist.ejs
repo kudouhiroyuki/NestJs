@@ -7,10 +7,6 @@
   <%- include('../../partials/sidebar'); %>
 
   <main id="plansRegist">
-    {{ ratePlans }}
-
-    {{ changeRatePlans }}
-
     <h4 class="mb-4 fw-bold">料金プラン登録</h4>
     <div class="row">
       <div class="col-4">
@@ -82,6 +78,10 @@
             <button @click="onPlanModalClear" type="button" class="btn-close"></button>
           </div>
           <div class="modal-body m-3">
+            <!-- id -->
+            <input v-model="planModal.id" type="hidden" class="form-control">
+            <!-- dummyId -->
+            <input v-model="planModal.dummyId" type="hidden" class="form-control">
             <!-- 設定期間 -->
             <div class="mb-4">
               <label class="form-label w-100">設定期間</label>
@@ -183,6 +183,8 @@ new Vue({
     planModal: {
       show: false,            // 表示ステータス
       type: '',               // 表示タイプ
+      id: '',                 // ID (隠しデータ)
+      dummyId: '',            // フロント管理用ID (隠しデータ)
       start: null,            // 設定期間 (From)
       end: null,              // 設定期間 (To)
       priority: '',           // 優先順位
@@ -206,6 +208,7 @@ new Vue({
       eventDidMount(info) {
         let event = {
           id: info.event.id,
+          dummyId: info.event._def.extendedProps.dummyId,
           start: info.event._instance.range.start,
           end: info.event._instance.range.end,
           priority: info.event._def.extendedProps.priority,
@@ -242,8 +245,10 @@ new Vue({
 
       // let csv = '\ufeff' + 'id,feeId,優先順位,料金区分,設定期間 From,設定期間 To\n';
       // csvObjs.forEach(el => {
-      //   let line = `${el['id']},${el['feeId']},${el['priority']},${el['title']},${el['start']},${el['end']}`;
-      //   csv += (line + '\n');
+      //   if(el.queryAction !== 'DELETE') {
+      //     let line = `${el['id']},${el['feeId']},${el['priority']},${el['title']},${el['start']},${el['end']}`;
+      //     csv += (line + '\n');
+      //   }
       // })
       // let link = document.createElement('a');
       // link.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
@@ -261,6 +266,8 @@ new Vue({
     onPlanModalClear() {
       this.planModal.show = false;
       this.planModal.type = '';
+      this.planModal.id = '';
+      this.planModal.dummyId = '';
       this.planModal.start = null;
       this.planModal.end = null;
       this.planModal.priority = '';
@@ -278,6 +285,7 @@ new Vue({
      */
     onPlanAdd() {
       let event = {
+        dummyId: moment(new Date()).format("YYYY-MM-DD-HH-mm-ss"),
         queryAction: 'INSERT',
         start: moment(new Date(this.planModal.start)).format("YYYY-MM-DD"),
         end: moment(new Date(this.planModal.end)).format("YYYY-MM-DD"),
@@ -306,8 +314,25 @@ new Vue({
     /**
      * 料金設定モーダル（削除）
      */
-    onPlanDelete() {
-      alert('削除')
+    onPlanDelete(e) {
+      if(this.planModal.id) {
+        let event = {
+          queryAction: 'DELETE',
+          id: this.planModal.id,
+        };
+        this.calendar.events = this.calendar.events.filter((value) => this.planModal.id !== value.id);
+        this.changeRatePlans.push(event);
+      } else {     
+        this.calendar.events = this.calendar.events.filter((value) => this.planModal.dummyId !== value.dummyId);
+        this.changeRatePlans = this.changeRatePlans.filter((value) => this.planModal.dummyId !== value.dummyId);
+      }
+      // カレンダー再描画
+      let baseDate = new Date(this.calendar.initialDate);
+      baseDate.setMonth(baseDate.getMonth() - 1);
+      this.calendar.initialDate = baseDate;
+      this.renderCalendar(this.calendar, baseDate);
+      // モーダル初期化
+      this.onPlanModalClear();
     },
 
     /**
@@ -344,6 +369,8 @@ new Vue({
       if(target) {
         let endDate = this.createBaseDate(JSON.parse(target.dataset.event).end);
         endDate.setDate(endDate.getDate() - 1);
+        this.planModal.id = JSON.parse(target.dataset.event).id;
+        this.planModal.dummyId = JSON.parse(target.dataset.event).dummyId;
         this.planModal.start = JSON.parse(target.dataset.event).start;
         this.planModal.end = moment(new Date(endDate)).format("YYYY-MM-DD");
         this.planModal.priority = JSON.parse(target.dataset.event).priority;
@@ -385,6 +412,7 @@ new Vue({
      * 料金カレンダー（API再取得）
      */
     updateCalendarView(baseDate) {
+      this.ratePlans = [];
       this.calendar.events = [];
       this.getCalendarApi().then(res => {
         this.createEventData(this.ratePlans.concat(this.changeRatePlans));

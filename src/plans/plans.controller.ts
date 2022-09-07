@@ -37,21 +37,20 @@ export class PlansController {
   async getRegist(@Param('productId') productId: string) {
     // 料金プランデータ
     const ratePlans = [
-      {
-        id: '1',
-        start: '2022-09-05',
-        end: '2022-09-05',
-        priority: '1',
-        feeId: '2'
-      }
+      // {
+      //   id: '1',
+      //   start: '2022-09-05',
+      //   end: '2022-09-05',
+      //   priority: '1',
+      //   feeId: '1'
+      // },
       // {
       //   id: '2',
-      //   feeId: '2',
-      //   priority: '1',
-      //   title: '料金区分B',
       //   start: '2022-09-05',
-      //   end: '2022-09-05'
-      // },
+      //   end: '2022-09-05',
+      //   priority: '1',
+      //   feeId: '2'
+      // }
       // {
       //   id: '3',
       //   feeId: '2',
