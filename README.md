@@ -119,7 +119,7 @@ INSERT INTO log (log, dt)<br>
 VALUES('Delete', now());<br>
 
 #### <----- データの追加と削除 -----><br>
-■CINSERT 文<br>
+■INSERT 文<br>
 ※データを追加する<br>
 INSERT INTO nest.users (user_name, password, address, age, department_id, point) VALUES<br>
 ('name1', 'password', 'address', 30, 'A0001', 100),<br>
@@ -131,7 +131,7 @@ INSERT INTO nest.departments (department_id, department_name) VALUES<br>
 ('A0001', 'アプリケーション'),<br>
 ('B0001', 'デザイン');<br>
 
-- UPDATE 文<br>
+■UPDATE 文<br>
 ※データを更新する<br>
 UPDATE nest.users SET user_name='user_name' WHERE id='1';<br>
 UPDATE nest.users SET user_name='user_name', password='password' WHERE id='1';<br>
@@ -240,6 +240,7 @@ ON u1.id = u2.id;<br>
 SELECT AVG(point) from nest.users;<br>
 SELECT AVG(DISTINCT point) from nest.users;<br>
 SELECT department_id, AVG(point) FROM nest.users GROUP BY department_id;<br>
+SELECT AVG(point) FROM nest.users WHERE department_id = 'A0001';<br>
 
 #### 用語<br>
 - ステートメント（構築された文全体）<br>
