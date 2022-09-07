@@ -51,7 +51,7 @@
           style="cursor: pointer; transform: rotate(360deg); position: absolute; top: -5px; left: 20px;"
           src="/images/icon/arow_calendar.svg"
         />
-        <div @click="onCalendarEvent" class='renderCalendar' data-month="thisMonth"></div>
+        <div @click="onCalendarEventSet" class='renderCalendar' data-month="thisMonth"></div>
       </div>
       <div style="position: relative;" class="col-6">
         <img
@@ -59,7 +59,7 @@
           style="cursor: pointer; transform: rotate(180deg); position: absolute; top: -5px; right: 20px;"
           src="/images/icon/arow_calendar.svg"
         />
-        <div @click="onCalendarEvent" class='renderCalendar' data-month="nextMonth"></div>
+        <div @click="onCalendarEventSet" class='renderCalendar' data-month="nextMonth"></div>
       </div>
     </div>
 
@@ -87,8 +87,7 @@
               <label class="form-label w-100">設定期間</label>
               <div class="d-inline-block col-5">
                 <vue-ctk-date-time-picker
-                  name="setPeriodFrom"
-                  v-model="planModal.setPeriodFrom"
+                  v-model="planModal.start"
                   format="YYYY/MM/DD"
                   formatted="YYYY/MM/DD"
                   only-date
@@ -99,8 +98,7 @@
               <div class="d-inline-block col-1" style="text-align: center;">〜</div>
               <div class="d-inline-block col-5">
                 <vue-ctk-date-time-picker
-                  name="setPeriodTo"
-                  v-model="planModal.setPeriodTo"
+                  v-model="planModal.end"
                   format="YYYY/MM/DD"
                   formatted="YYYY/MM/DD"
                   only-date
@@ -113,7 +111,7 @@
             <div class="col-7 mb-4">
               <label class="form-label w-100">優先順位</label>
               <input
-                name="keyword"
+                v-model="planModal.priority"
                 type="text"
                 class="form-control"
                 placeholder="優先順位"
@@ -122,11 +120,11 @@
             <!-- 料金区分 -->
             <div class="col-6 mb-4">
               <label class="form-label w-100">料金区分</label>
-              <select class="form-select mb-2">
+              <select v-model="planModal.feeId" class="form-select mb-2">
                 <option
                   v-for="item in feeCategorys"
-                  :key="item.feeName"
-                  :value="item.feeName"
+                  :key="item.feeId"
+                  :value="item.feeId"
                 >{{ item.feeName }}</option>
               </select>
             </div>
@@ -185,8 +183,10 @@ new Vue({
     planModal: {
       show: false,            // 表示ステータス
       type: '',               // 表示タイプ
-      setPeriodFrom: null,    // 設定期間 (From)
-      setPeriodTo: null,      // 設定期間 (To)
+      start: null,            // 設定期間 (From)
+      end: null,              // 設定期間 (To)
+      priority: '',           // 優先順位
+      feeId: '',              // 料金区分
     },
     // カレンダー（イベント表示用）
     calendar: {
@@ -206,11 +206,10 @@ new Vue({
       eventDidMount(info) {
         let event = {
           id: info.event.id,
-          feeId: info.event._def.extendedProps.feeId,
-          priority: info.event._def.extendedProps.priority,
-          title: info.event.title,
           start: info.event._instance.range.start,
-          end: info.event._instance.range.end
+          end: info.event._instance.range.end,
+          priority: info.event._def.extendedProps.priority,
+          feeId: info.event._def.extendedProps.feeId
         }
         let target = info.el.closest('.fc-daygrid-event-harness');
         target.dataset.event = JSON.stringify(event);
@@ -262,8 +261,10 @@ new Vue({
     onPlanModalClear() {
       this.planModal.show = false;
       this.planModal.type = '';
-      this.planModal.setPeriodFrom = null;
-      this.planModal.setPeriodTo = null;
+      this.planModal.start = null;
+      this.planModal.end = null;
+      this.planModal.priority = '';
+      this.planModal.feeId = '';
     },
 
     // 料金設定モーダル（表示）
@@ -278,10 +279,10 @@ new Vue({
     onPlanAdd() {
       let event = {
         queryAction: 'INSERT',
-        type: '0',
-        title: '料金区分A',
-        start: moment(new Date(this.planModal.setPeriodFrom)).format("YYYY-MM-DD"),
-        end: moment(new Date(this.planModal.setPeriodTo)).format("YYYY-MM-DD")
+        start: moment(new Date(this.planModal.start)).format("YYYY-MM-DD"),
+        end: moment(new Date(this.planModal.end)).format("YYYY-MM-DD"),
+        priority: this.planModal.priority,
+        feeId: this.planModal.feeId
       };
       // カレンダー再描画
       let baseDate = new Date(this.calendar.initialDate);
@@ -309,31 +310,48 @@ new Vue({
       alert('削除')
     },
 
-    // イベントデータ作成（表示用）
+    /**
+     * イベントデータ作成（表示用）
+     */
     createEventData(events) {
       events.forEach(item => {
         let retultDate = this.createBaseDate(item.end);
-        if(item.start !== item.end) {
+        // イベントタイトル作成
+        this.feeCategorys.filter((value) => {
+          if(item.feeId === value.feeId) item.title = value.feeName;
+        });
+        // イベント開始・終了日の調整
+        if((item.start !== item.end) && item.start.indexOf('T00:00') === -1) {
           item.start = `${item.start}T00:00`;
           item.end = `${item.end}T24:00`;
         }
         this.calendar.events.push(item);
       });
     },
+
     // 基準日の作成
     createBaseDate(date) {
       let year = moment(date).format("YYYY");
       let month = moment(date).format("M");
-      let retultDate = new Date(year, (month - 1));
+      let day = moment(date).format("D");
+      let retultDate = new Date(year, (month - 1), day);
       return retultDate;
     },
-    // 料金カレンダー（イベント）
-    onCalendarEvent(event) {
+
+    // 料金カレンダー（イベントセット）
+    onCalendarEventSet(event) {
       const target = event.target.closest('.fc-daygrid-event-harness');
       if(target) {
-        console.log(JSON.parse(target.dataset.event))
+        let endDate = this.createBaseDate(JSON.parse(target.dataset.event).end);
+        endDate.setDate(endDate.getDate() - 1);
+        this.planModal.start = JSON.parse(target.dataset.event).start;
+        this.planModal.end = moment(new Date(endDate)).format("YYYY-MM-DD");
+        this.planModal.priority = JSON.parse(target.dataset.event).priority;
+        this.planModal.feeId = JSON.parse(target.dataset.event).feeId;
+        this.onPlanModalShow('edit');
       }
     },
+
     // 料金カレンダー（表示切り替え 1ヶ月前）
     onCalendarPrev() {
       let baseDate = this.createBaseDate(this.calendar.initialDate);
@@ -362,35 +380,39 @@ new Vue({
         calendar.render();
       });
     },
-    // カレンダー表示更新
+
+    /**
+     * 料金カレンダー（API再取得）
+     */
     updateCalendarView(baseDate) {
       this.calendar.events = [];
       this.getCalendarApi().then(res => {
-        if (typeof res !== 'undefined') {
-          this.createEventData(res);
-          this.renderCalendar(this.calendar, baseDate);
-        }
+        this.createEventData(this.ratePlans.concat(this.changeRatePlans));
+        this.renderCalendar(this.calendar, baseDate);
       })
     },
-    // カレンダーAPI
+
+    /**
+     * 料金カレンダーAPI
+     */
     async getCalendarApi(args) {
-      return await axios.get('https://beauty.tsuku2.jp/api/menus?category_id=1').then((res) => {
+      await axios.get('https://beauty.tsuku2.jp/api/menus?category_id=1').then((res) => {
         if (typeof res !== 'undefined') {
-          return [
-            {
-              id: '4',
-              type: '3',
-              title: '売り止め',
-              start: '2022-10-23',
-              end: '2022-10-26'
-            },
-            {
-              id: '5',
-              type: '1',
-              title: '料金区分A',
-              start: '2022-11-07',
-              end: '2022-11-07'
-            }
+          return this.ratePlans = [
+            // {
+            //   id: '4',
+            //   start: '2022-10-23',
+            //   end: '2022-10-26',
+            //   priority: '1',
+            //   feeId: '3'
+            // },
+            // {
+            //   id: '5',
+            //   start: '2022-11-07',
+            //   end: '2022-11-07',
+            //   priority: '1',
+            //   feeId: '1'
+            // }
           ]
         }
       }).catch((error) => {
