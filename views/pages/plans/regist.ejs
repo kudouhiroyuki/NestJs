@@ -7,6 +7,10 @@
   <%- include('../../partials/sidebar'); %>
 
   <main id="plansRegist">
+
+    <p>this.calendar.events{{ this.calendar.events }}</p>
+    <p>this.changeRatePlans{{ this.changeRatePlans }}</p>
+
     <h4 class="mb-4 fw-bold">料金プラン登録</h4>
     <div class="row">
       <div class="col-4">
@@ -78,10 +82,6 @@
             <button @click="onPlanModalClear" type="button" class="btn-close"></button>
           </div>
           <div class="modal-body m-3">
-            <!-- id -->
-            <input v-model="planModal.id" type="hidden" class="form-control">
-            <!-- dummyId -->
-            <input v-model="planModal.dummyId" type="hidden" class="form-control">
             <!-- 設定期間 -->
             <div class="mb-4">
               <label class="form-label w-100">設定期間</label>
@@ -183,8 +183,8 @@ new Vue({
     planModal: {
       show: false,            // 表示ステータス
       type: '',               // 表示タイプ
-      id: '',                 // ID (隠しデータ)
-      dummyId: '',            // フロント管理用ID (隠しデータ)
+      id: '',                 // ID（登録済み） 
+      dummyId: '',            // ID（フロント仮登録） 
       start: null,            // 設定期間 (From)
       end: null,              // 設定期間 (To)
       priority: '',           // 優先順位
@@ -243,17 +243,17 @@ new Vue({
 
       console.log(csvObjs)
 
-      // let csv = '\ufeff' + 'id,feeId,優先順位,料金区分,設定期間 From,設定期間 To\n';
-      // csvObjs.forEach(el => {
-      //   if(el.queryAction !== 'DELETE') {
-      //     let line = `${el['id']},${el['feeId']},${el['priority']},${el['title']},${el['start']},${el['end']}`;
-      //     csv += (line + '\n');
-      //   }
-      // })
-      // let link = document.createElement('a');
-      // link.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-      // link.download = 'お知らせ一覧.csv';
-      // link.click();
+      let csv = '\ufeff' + 'id,feeId,優先順位,料金区分,設定期間 From,設定期間 To\n';
+      csvObjs.forEach(el => {
+        if(el.queryAction !== 'DELETE') {
+          let line = `${el['id']},${el['feeId']},${el['priority']},${el['title']},${el['start']},${el['end']}`;
+          csv += (line + '\n');
+        }
+      })
+      let link = document.createElement('a');
+      link.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      link.download = 'お知らせ一覧.csv';
+      link.click();
     },
     // ファイル取込み
     onImport () {
@@ -308,13 +308,55 @@ new Vue({
      * 料金設定モーダル（編集）
      */
     onPlanEdit() {
-      alert('編集')
+      this.calendar.events.forEach((item, index) => {
+        // イベント開始・終了日の調整
+        let startDate = moment(new Date(this.planModal.start)).format("YYYY-MM-DD");
+        let endDate = moment(new Date(this.planModal.end)).format("YYYY-MM-DD");
+        if(startDate !== endDate) {
+          this.calendar.events[index].start = `${startDate}T00:00`;
+          this.calendar.events[index].end = `${endDate}T24:00`;
+        } else {
+          this.calendar.events[index].start = startDate;
+          this.calendar.events[index].end = endDate;
+        }
+        // イベントタイトル作成
+        this.feeCategorys.filter((value) => {
+          if(item.feeId === value.feeId) this.calendar.events[index].title = value.feeName;
+        });
+        this.calendar.events[index].priority = this.planModal.priority;
+        this.calendar.events[index].feeId = this.planModal.feeId;
+      });
+      this.changeRatePlans.forEach((item, index) => {
+        // イベント開始・終了日の調整
+        let startDate = moment(new Date(this.planModal.start)).format("YYYY-MM-DD");
+        let endDate = moment(new Date(this.planModal.end)).format("YYYY-MM-DD");
+        if(startDate !== endDate) {
+          this.calendar.events[index].start = `${startDate}T00:00`;
+          this.calendar.events[index].end = `${endDate}T24:00`;
+        } else {
+          this.calendar.events[index].start = startDate;
+          this.calendar.events[index].end = endDate;
+        }
+        // イベントタイトル作成
+        this.feeCategorys.filter((value) => {
+          if(item.feeId === value.feeId) this.calendar.events[index].title = value.feeName;
+        });
+        this.calendar.events[index].priority = this.planModal.priority;
+        this.calendar.events[index].feeId = this.planModal.feeId;
+      });
+      // カレンダー再描画
+      let baseDate = new Date(this.calendar.initialDate);
+      baseDate.setMonth(baseDate.getMonth() - 1);
+      this.calendar.initialDate = baseDate;
+      this.renderCalendar(this.calendar, baseDate);
+      // モーダル初期化
+      this.onPlanModalClear();
     },
 
     /**
      * 料金設定モーダル（削除）
      */
-    onPlanDelete(e) {
+    onPlanDelete() {
       if(this.planModal.id) {
         let event = {
           queryAction: 'DELETE',
