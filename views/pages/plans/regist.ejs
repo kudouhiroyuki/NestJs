@@ -236,17 +236,21 @@ new Vue({
      * ダウンロード
      */
     onDownload() {
-      console.log(this.ratePlans)
-      console.log(this.changeRatePlans)
-
       let csvObjs = this.ratePlans.concat(this.changeRatePlans);
-
-      console.log(csvObjs)
-
-      let csv = '\ufeff' + 'id,feeId,優先順位,料金区分,設定期間 From,設定期間 To\n';
+      
+      let csv = '\ufeff' + 'id,action,優先順位,料金区分,設定期間 From,設定期間 To\n';
       csvObjs.forEach(el => {
         if(el.queryAction !== 'DELETE') {
-          let line = `${el['id']},${el['feeId']},${el['priority']},${el['title']},${el['start']},${el['end']}`;
+          // 開始日
+          let startDate = new Date(el.start);
+          startDate = moment(startDate).format("YYYY-MM-DD");
+          // 終了日
+          let endDate = new Date(el.end);
+          if(moment(startDate).format("YYYY-MM-DD") !== moment(endDate).format("YYYY-MM-DD")) {
+            endDate.setDate(endDate.getDate() - 1);
+          }
+          endDate = moment(endDate).format("YYYY-MM-DD");
+          let line = `${el.id},${el.queryAction},${el.priority},${el.title},${startDate},${endDate}`;
           csv += (line + '\n');
         }
       })
@@ -308,42 +312,8 @@ new Vue({
      * 料金設定モーダル（編集）
      */
     onPlanEdit() {
-      this.calendar.events.forEach((item, index) => {
-        // イベント開始・終了日の調整
-        let startDate = moment(new Date(this.planModal.start)).format("YYYY-MM-DD");
-        let endDate = moment(new Date(this.planModal.end)).format("YYYY-MM-DD");
-        if(startDate !== endDate) {
-          this.calendar.events[index].start = `${startDate}T00:00`;
-          this.calendar.events[index].end = `${endDate}T24:00`;
-        } else {
-          this.calendar.events[index].start = startDate;
-          this.calendar.events[index].end = endDate;
-        }
-        // イベントタイトル作成
-        this.feeCategorys.filter((value) => {
-          if(item.feeId === value.feeId) this.calendar.events[index].title = value.feeName;
-        });
-        this.calendar.events[index].priority = this.planModal.priority;
-        this.calendar.events[index].feeId = this.planModal.feeId;
-      });
-      this.changeRatePlans.forEach((item, index) => {
-        // イベント開始・終了日の調整
-        let startDate = moment(new Date(this.planModal.start)).format("YYYY-MM-DD");
-        let endDate = moment(new Date(this.planModal.end)).format("YYYY-MM-DD");
-        if(startDate !== endDate) {
-          this.calendar.events[index].start = `${startDate}T00:00`;
-          this.calendar.events[index].end = `${endDate}T24:00`;
-        } else {
-          this.calendar.events[index].start = startDate;
-          this.calendar.events[index].end = endDate;
-        }
-        // イベントタイトル作成
-        this.feeCategorys.filter((value) => {
-          if(item.feeId === value.feeId) this.calendar.events[index].title = value.feeName;
-        });
-        this.calendar.events[index].priority = this.planModal.priority;
-        this.calendar.events[index].feeId = this.planModal.feeId;
-      });
+      this.createEditEvent();
+      this.createEditRate();
       // カレンダー再描画
       let baseDate = new Date(this.calendar.initialDate);
       baseDate.setMonth(baseDate.getMonth() - 1);
@@ -351,6 +321,71 @@ new Vue({
       this.renderCalendar(this.calendar, baseDate);
       // モーダル初期化
       this.onPlanModalClear();
+    },
+    /**
+     * 料金設定モーダル（編集 イベント作成）
+     */
+     createEditEvent() {
+      this.calendar.events.forEach((item, index) => {
+        if((item.id === this.planModal.id) || (item.dummyId !== undefined && item.dummyId === this.planModal.dummyId)) {
+          // イベント開始・終了日の調整
+          let startDate = moment(new Date(this.planModal.start)).format("YYYY-MM-DD");
+          let endDate = moment(new Date(this.planModal.end)).format("YYYY-MM-DD");
+          if(startDate !== endDate) {
+            this.calendar.events[index].start = `${startDate}T00:00`;
+            this.calendar.events[index].end = `${endDate}T24:00`;
+          } else {
+            this.calendar.events[index].start = startDate;
+            this.calendar.events[index].end = endDate;
+          }
+          // イベントタイトル作成
+          this.feeCategorys.filter((value) => {
+            if(this.planModal.feeId === value.feeId) this.calendar.events[index].title = value.feeName;
+          });
+          this.calendar.events[index].priority = this.planModal.priority;
+          this.calendar.events[index].feeId = this.planModal.feeId;
+        }
+      });
+    },
+    /**
+     * 料金設定モーダル（編集 履歴作成）
+     */
+     createEditRate() {
+      if(this.planModal.id) {
+        let event = {
+          queryAction: 'UPDATE',
+          id: this.planModal.id,
+          start: this.planModal.start,
+          end: this.planModal.end,
+          priority: this.planModal.priority,
+          feeId: this.planModal.feeId,
+        };
+        let matchObj = this.changeRatePlans.filter((value) => this.planModal.id === value.id);
+        if(matchObj.length) {
+          this.changeRatePlans.forEach((item, index) => {
+            if((item.id === this.planModal.id)) {
+              // イベント開始・終了日の調整
+              let startDate = moment(new Date(this.planModal.start)).format("YYYY-MM-DD");
+              let endDate = moment(new Date(this.planModal.end)).format("YYYY-MM-DD");
+              if(startDate !== endDate) {
+                this.changeRatePlans[index].start = `${startDate}T00:00`;
+                this.changeRatePlans[index].end = `${endDate}T24:00`;
+              } else {
+                this.changeRatePlans[index].start = startDate;
+                this.changeRatePlans[index].end = endDate;
+              }
+              // イベントタイトル作成
+              this.feeCategorys.filter((value) => {
+                if(this.planModal.feeId === item.feeId) this.changeRatePlans[index].title = value.feeName;
+              });
+              this.changeRatePlans[index].priority = this.planModal.priority;
+              this.changeRatePlans[index].feeId = this.planModal.feeId;
+            }
+          });
+        } else {
+          this.changeRatePlans.push(event);
+        }
+      }
     },
 
     /**
