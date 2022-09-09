@@ -18,42 +18,21 @@
       </ul>
     </div>
 
-    <form @submit.prevent="onSerch" class="mb-5">
-      <!-- 条件フォーム -->
-      <div class="baseShadow p-3 mb-5">
-        <h5 class="mb-4 fw-bold">条件</h5>
-        <div class="row">
-          <div class="col-4">
-            <label class="form-label">キーワード</label>
-            <input
-              @change="onFormChange"
-              :value="keyword"
-              name="keyword"
-              type="text"
-              class="form-control"
-              placeholder="キーワード"
-            >
-          </div>
-          <div class="col-4 text-end">
-            <button type="submit" class="btn w-50 mt-4 baseBtnGrey">
-              <img src="/images/icon/serch.svg">
-              検索
-            </button>
-          </div>
-        </div>
-      </div>
+    <form class="mb-5">
       <!-- 一覧テーブル -->
       <table class="table align-middle mb-5">
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">料金区分</th>
+            <th scope="col">料金区分ID</th>
+            <th scope="col">料金区分名</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in divisions" :key="index">
             <th>{{ index + 1 }}</th>
-            <td>{{ item.priceCategory }}</td>
+            <td>{{ item.divisionId }}</td>
+            <td>{{ item.divisionName }}</td>
           </tr>
         </tbody>
       </table>
@@ -93,6 +72,7 @@
 </div>
 
 <script type="text/javascript">
+const productId= `<%- productId %>`;
 const divisions= `<%- divisions %>`;
 const totalPageCount= `<%- totalPageCount %>`;
 
@@ -102,14 +82,13 @@ new Vue({
   el: "#divisionsReference",
   data: {
     // APIデータ
+    productId: JSON.parse(productId),
     divisions: JSON.parse(divisions),
     totalPageCount: JSON.parse(totalPageCount),
     // 検索データ
-    keyword: queryParam.get('keyword') ?? "",
     pageNumber: queryParam.get('pageNumber') ?? 1,
   },
   created() {
-    queryParam.set("keyword", this.keyword);
     queryParam.set("pageNumber", this.pageNumber);
   },
   methods: {
@@ -124,13 +103,11 @@ new Vue({
     },
     // 再レンダリング
     onSerch() {
-      window.location.href = "/plans/reference?" + queryParam;
+      window.location.href = `/divisions/${ this.productId }/reference?${ queryParam }`;
     },
     // リダイレクト
     onRedirect(item) {
-      let url = "detail";
-      if(item.type == "setProduct") url = "detail-set";
-      window.location.href = `/products/${ url }/${ item.id }`;
+      window.location.href = `/divisions/${ this.productId }/detail/${ item.divisionId }`;
     },
   }
 })

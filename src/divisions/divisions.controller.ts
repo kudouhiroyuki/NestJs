@@ -14,12 +14,12 @@ export class DivisionsController {
     // 検索結果データ（料金区分一覧）
     const divisions = [
       {
-        planId: '1',
-        planName: '料金プラン名'
+        divisionId: '1',
+        divisionName: '料金区分A'
       },
       {
-        planId: '2',
-        planName: '料金プラン名'
+        divisionId: '2',
+        divisionName: '料金区分B'
       }
     ]
     return {
