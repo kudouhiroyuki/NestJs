@@ -6,7 +6,7 @@ CREATE TABLE `users` (
     `address` VARCHAR(191) NOT NULL,
     `age` VARCHAR(191) NOT NULL,
     `department_id` VARCHAR(191) NOT NULL,
-    `point` INTEGER NOT NULL,
+    `point` INTEGER NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

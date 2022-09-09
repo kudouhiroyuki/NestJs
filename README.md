@@ -125,7 +125,8 @@ INSERT INTO nest.users (user_name, password, address, age, department_id, point)
 ('name1', 'password', 'address', 30, 'A0001', 100),<br>
 ('name2', 'password', 'address', 20, 'A0001', 500),<br>
 ('name3', 'password', 'address', 17, 'B0001', 500),<br>
-('name4', 'password', 'address', 58, '', 400);<br>
+('name4', 'password', 'address', 58, '', 400)
+('name5', 'password', 'address', 32, '', NULL);<br>
 
 INSERT INTO nest.departments (department_id, department_name) VALUES<br>
 ('A0001', 'アプリケーション'),<br>
@@ -237,10 +238,19 @@ ON u1.id = u2.id;<br>
 ※指定カラムの平均値を取得する<br>
 ※DISTINCTを指定すると、重複値を除外して集計<br>
 ※GROUP BYを指定すると、グループ化して集計<br>
-SELECT AVG(point) from nest.users;<br>
-SELECT AVG(DISTINCT point) from nest.users;<br>
-SELECT department_id, AVG(point) FROM nest.users GROUP BY department_id;<br>
+※COALESCEを指定すると、nullを置換して集計<br>
+SELECT AVG(COALESCE(point, 0)) from nest.users;<br>
+SELECT AVG(DISTINCT COALESCE(point, 0)) from nest.users;<br>
+SELECT department_id, AVG(COALESCE(point, 0)) FROM nest.users GROUP BY department_id;<br>
 SELECT AVG(point) FROM nest.users WHERE department_id = 'A0001';<br>
+
+■COUNT 関数<br>
+※指定カラムの行数を取得する<br>
+SELECT COUNT(DISTINCT department_id) from nest.users;<br>
+
+■SUM 関数<br>
+※指定カラムの合計値を取得する<br>
+SELECT department_id, SUM(point) FROM nest.users GROUP BY department_id;<br>
 
 #### 用語<br>
 - ステートメント（構築された文全体）<br>

@@ -14,7 +14,7 @@ model users {
   address String
   age String
   department_id  String
-  point  Int
+  point  Int?
 }
 model departments {
   department_id String @unique
