@@ -6,7 +6,7 @@
 
   <%- include('../../partials/sidebar'); %>
 
-  <main id="priceCategoryReference">    
+  <main id="divisionsReference">    
     <h4 class="mb-4 fw-bold">料金区分一覧</h4>
 
     <div class="d-flex flex-row-reverse mb-4">
@@ -51,7 +51,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in categorys" :key="index">
+          <tr v-for="(item, index) in divisions" :key="index">
             <th>{{ index + 1 }}</th>
             <td>{{ item.priceCategory }}</td>
           </tr>
@@ -93,16 +93,16 @@
 </div>
 
 <script type="text/javascript">
-const categorys= `<%- categorys %>`;
+const divisions= `<%- divisions %>`;
 const totalPageCount= `<%- totalPageCount %>`;
 
 const queryParam = new URLSearchParams(location.search);
   
 new Vue({
-  el: "#priceCategoryReference",
+  el: "#divisionsReference",
   data: {
     // APIデータ
-    categorys: JSON.parse(categorys),
+    divisions: JSON.parse(divisions),
     totalPageCount: JSON.parse(totalPageCount),
     // 検索データ
     keyword: queryParam.get('keyword') ?? "",

@@ -35,6 +35,24 @@ export class PlansController {
   @Get('/:productId/regist')
   @Render('plans/regist')
   async getRegist(@Param('productId') productId: string) {
+    // マスターデータ（料金区分）
+    const feeCategorys = [
+      { feeId: '1', feeName: '料金区分A' },
+      { feeId: '2', feeName: '料金区分B' },
+      { feeId: '3', feeName: '売り止め' }
+    ]
+    return {
+      productId: JSON.stringify(productId),
+      feeCategorys: JSON.stringify(feeCategorys)
+    }
+  }
+
+  /**
+   * GET 料金プラン詳細画面
+   */
+  @Get('/:productId/detail/:id')
+  @Render('plans/detail')
+  async getDetail(@Param('productId') productId: string) {
     // 料金プランデータ
     const ratePlans = [
       {

@@ -6,7 +6,7 @@
 
   <%- include('../../partials/sidebar'); %>
 
-  <main id="plansRegist">
+  <main id="plansDetail">
     <h4 class="mb-4 fw-bold">料金プラン登録</h4>
     <div class="row">
       <div class="col-4">
@@ -166,13 +166,14 @@
 </div>
 
 <script type="text/javascript">  
+const ratePlans= `<%- ratePlans %>`;
 const feeCategorys= `<%- feeCategorys %>`;
 
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 new Vue({
-  el: "#plansRegist",
+  el: "#plansDetail",
   data: {
     // 料金設定（モーダル）
     planModal: {
@@ -214,7 +215,7 @@ new Vue({
       },
     },
     // APIデータ
-    ratePlans: [],
+    ratePlans: JSON.parse(ratePlans),
     feeCategorys: JSON.parse(feeCategorys),
     // 登録データ
     planName: "",        // 料金プラン名
