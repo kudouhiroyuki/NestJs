@@ -237,29 +237,29 @@ new Vue({
      */
     onDownload() {
       let csvObjs = this.ratePlans.concat(this.changeRatePlans);
-      
       let csv = '\ufeff' + 'id,action,優先順位,料金区分,設定期間 From,設定期間 To\n';
       csvObjs.forEach(el => {
-        if(el.queryAction !== 'DELETE') {
-          // 開始日
-          let startDate = new Date(el.start);
-          startDate = moment(startDate).format("YYYY-MM-DD");
-          // 終了日
-          let endDate = new Date(el.end);
-          if(moment(startDate).format("YYYY-MM-DD") !== moment(endDate).format("YYYY-MM-DD")) {
-            endDate.setDate(endDate.getDate() - 1);
-          }
-          endDate = moment(endDate).format("YYYY-MM-DD");
-          let line = `${el.id},${el.queryAction},${el.priority},${el.title},${startDate},${endDate}`;
-          csv += (line + '\n');
+        // 開始日
+        let startDate = new Date(el.start);
+        startDate = moment(startDate).format("YYYY-MM-DD");
+        // 終了日
+        let endDate = new Date(el.end);
+        if(moment(startDate).format("YYYY-MM-DD") !== moment(endDate).format("YYYY-MM-DD") && el.end.indexOf('T24:00') !== -1) {
+          endDate.setDate(endDate.getDate() - 1);
         }
+        endDate = moment(endDate).format("YYYY-MM-DD");
+        let line = `${el.id},${el.queryAction},${el.priority},${el.title},${startDate},${endDate}`;
+        csv += (line + '\n');
       })
       let link = document.createElement('a');
       link.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
       link.download = 'お知らせ一覧.csv';
       link.click();
     },
-    // ファイル取込み
+
+    /**
+     * ファイル取込み
+     */
     onImport () {
       alert("ファイル取込み")
     },
@@ -278,7 +278,9 @@ new Vue({
       this.planModal.feeId = '';
     },
 
-    // 料金設定モーダル（表示）
+    /**
+     * 料金設定モーダル（表示）
+     */
     onPlanModalShow(type) {
       this.planModal.show = true;
       this.planModal.type = type;
@@ -355,8 +357,8 @@ new Vue({
         let event = {
           queryAction: 'UPDATE',
           id: this.planModal.id,
-          start: this.planModal.start,
-          end: this.planModal.end,
+          start: moment(new Date(this.planModal.start)).format("YYYY-MM-DD"),
+          end: moment(new Date(this.planModal.end)).format("YYYY-MM-DD"),
           priority: this.planModal.priority,
           feeId: this.planModal.feeId,
         };
@@ -365,19 +367,13 @@ new Vue({
           this.changeRatePlans.forEach((item, index) => {
             if((item.id === this.planModal.id)) {
               // イベント開始・終了日の調整
-              let startDate = moment(new Date(this.planModal.start)).format("YYYY-MM-DD");
-              let endDate = moment(new Date(this.planModal.end)).format("YYYY-MM-DD");
-              if(startDate !== endDate) {
-                this.changeRatePlans[index].start = `${startDate}T00:00`;
-                this.changeRatePlans[index].end = `${endDate}T24:00`;
+              if(event.start !== event.end && event.start.indexOf('T00:00') === -1) {
+                this.changeRatePlans[index].start = `${event.start}T00:00`;
+                this.changeRatePlans[index].end = `${event.end}T24:00`;
               } else {
-                this.changeRatePlans[index].start = startDate;
-                this.changeRatePlans[index].end = endDate;
+                this.changeRatePlans[index].start = event.start;
+                this.changeRatePlans[index].end = event.end;
               }
-              // イベントタイトル作成
-              this.feeCategorys.filter((value) => {
-                if(this.planModal.feeId === item.feeId) this.changeRatePlans[index].title = value.feeName;
-              });
               this.changeRatePlans[index].priority = this.planModal.priority;
               this.changeRatePlans[index].feeId = this.planModal.feeId;
             }
@@ -398,6 +394,7 @@ new Vue({
           id: this.planModal.id,
         };
         this.calendar.events = this.calendar.events.filter((value) => this.planModal.id !== value.id);
+        this.changeRatePlans = this.changeRatePlans.filter((value) => this.planModal.id !== value.id && value.queryAction !== 'UPDATE');
         this.changeRatePlans.push(event);
       } else {     
         this.calendar.events = this.calendar.events.filter((value) => this.planModal.dummyId !== value.dummyId);
