@@ -50,22 +50,21 @@ export class PlansController {
         end: '2022-09-05',
         priority: '1',
         feeId: '2'
+      },
+      {
+        id: '3',
+        start: '2022-09-05',
+        end: '2022-09-10',
+        priority: '1',
+        feeId: '2'
+      },
+      {
+        id: '4',
+        start: '2022-10-23',
+        end: '2022-10-26',
+        priority: '1',
+        feeId: '3'
       }
-      // {
-      //   id: '3',
-      //   feeId: '2',
-      //   priority: '1',
-      //   title: '料金区分B',
-      //   start: '2022-09-05',
-      //   end: '2022-09-10'
-      // }
-      // {
-      //   id: '4',
-      //   feeId: '3',
-      //   title: '売り止め',
-      //   start: '2022-10-23',
-      //   end: '2022-10-26'
-      // }
     ]
     // マスターデータ（料金区分）
     const feeCategorys = [

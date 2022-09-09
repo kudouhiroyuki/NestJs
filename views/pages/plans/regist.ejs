@@ -7,10 +7,6 @@
   <%- include('../../partials/sidebar'); %>
 
   <main id="plansRegist">
-
-    <p>this.calendar.events{{ this.calendar.events }}</p>
-    <p>this.changeRatePlans{{ this.changeRatePlans }}</p>
-
     <h4 class="mb-4 fw-bold">料金プラン登録</h4>
     <div class="row">
       <div class="col-4">
@@ -237,7 +233,7 @@ new Vue({
      */
     onDownload() {
       let csvObjs = this.ratePlans.concat(this.changeRatePlans);
-      let csv = '\ufeff' + 'id,action,優先順位,料金区分,設定期間 From,設定期間 To\n';
+      let csvBottom = 'id,action,優先順位,料金区分,設定期間 From,設定期間 To\n';
       csvObjs.forEach(el => {
         // 開始日
         let startDate = new Date(el.start);
@@ -248,11 +244,16 @@ new Vue({
           endDate.setDate(endDate.getDate() - 1);
         }
         endDate = moment(endDate).format("YYYY-MM-DD");
-        let line = `${el.id},${el.queryAction},${el.priority},${el.title},${startDate},${endDate}`;
-        csv += (line + '\n');
+        // イベントタイトル作成
+        let title = '';
+        this.feeCategorys.filter((value) => {
+          if(el.feeId === value.feeId) title = value.feeName;
+        });
+        let line = `${el.id},${el.queryAction},${el.priority},${title},${startDate},${endDate}`;
+        csvBottom += (line + '\n');
       })
       let link = document.createElement('a');
-      link.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      link.href = window.URL.createObjectURL(new Blob([csvBottom], { type: 'text/csv' }));
       link.download = 'お知らせ一覧.csv';
       link.click();
     },
@@ -296,7 +297,7 @@ new Vue({
         start: moment(new Date(this.planModal.start)).format("YYYY-MM-DD"),
         end: moment(new Date(this.planModal.end)).format("YYYY-MM-DD"),
         priority: this.planModal.priority,
-        feeId: this.planModal.feeId
+        feeId: this.planModal.feeId,
       };
       // カレンダー再描画
       let baseDate = new Date(this.calendar.initialDate);
@@ -304,7 +305,7 @@ new Vue({
       this.calendar.initialDate = baseDate;
       this.createEventData([event]);
       this.renderCalendar(this.calendar, baseDate);
-      // 登録データ追加
+      // 履歴作成
       this.changeRatePlans.push(event);
       // モーダル初期化
       this.onPlanModalClear();
@@ -501,20 +502,20 @@ new Vue({
       await axios.get('https://beauty.tsuku2.jp/api/menus?category_id=1').then((res) => {
         if (typeof res !== 'undefined') {
           return this.ratePlans = [
-            // {
-            //   id: '4',
-            //   start: '2022-10-23',
-            //   end: '2022-10-26',
-            //   priority: '1',
-            //   feeId: '3'
-            // },
-            // {
-            //   id: '5',
-            //   start: '2022-11-07',
-            //   end: '2022-11-07',
-            //   priority: '1',
-            //   feeId: '1'
-            // }
+            {
+              id: '4',
+              start: '2022-10-23',
+              end: '2022-10-26',
+              priority: '1',
+              feeId: '3'
+            },
+            {
+              id: '5',
+              start: '2022-11-07',
+              end: '2022-11-07',
+              priority: '1',
+              feeId: '1'
+            }
           ]
         }
       }).catch((error) => {
