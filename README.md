@@ -125,7 +125,7 @@ INSERT INTO nest.users (user_name, password, address, age, department_id, point)
 ('name1', 'password', 'address', 30, 'A0001', 100),<br>
 ('name2', 'password', 'address', 20, 'A0001', 500),<br>
 ('name3', 'password', 'address', 17, 'B0001', 500),<br>
-('name4', 'password', 'address', 58, '', 400)
+('name4', 'password', 'address', 58, '', 400)<br>
 ('name5', 'password', 'address', 32, '', NULL);<br>
 
 INSERT INTO nest.departments (department_id, department_name) VALUES<br>
