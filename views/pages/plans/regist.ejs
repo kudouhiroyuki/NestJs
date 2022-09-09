@@ -232,7 +232,7 @@ new Vue({
      * ダウンロード
      */
     onDownload() {
-      let csvObjs = this.ratePlans.concat(this.changeRatePlans);
+      let csvObjs = this.calendar.events.concat(this.changeRatePlans);
       let csvBottom = 'id,action,優先順位,料金区分,設定期間 From,設定期間 To\n';
       csvObjs.forEach(el => {
         // 開始日
