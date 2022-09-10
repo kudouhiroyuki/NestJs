@@ -239,14 +239,16 @@ ON u1.id = u2.id;<br>
 ※DISTINCTを指定すると、重複値を除外して集計<br>
 ※GROUP BYを指定すると、グループ化して集計<br>
 ※COALESCEを指定すると、nullを置換して集計<br>
-SELECT AVG(COALESCE(point, 0)) from nest.users;<br>
-SELECT AVG(DISTINCT COALESCE(point, 0)) from nest.users;<br>
+SELECT AVG(COALESCE(point, 0)) FROM nest.users;<br>
+SELECT AVG(IFNULL(point, 0)) FROM nest.users;<br>
+SELECT AVG(CASE WHEN point IS NULL THEN 0 ELSE point END) FROM nest.users;<br>
+SELECT AVG(DISTINCT COALESCE(point, 0)) FROM nest.users;<br>
 SELECT department_id, AVG(COALESCE(point, 0)) FROM nest.users GROUP BY department_id;<br>
 SELECT AVG(point) FROM nest.users WHERE department_id = 'A0001';<br>
 
 ■COUNT 関数<br>
 ※指定カラムの行数を取得する<br>
-SELECT COUNT(DISTINCT department_id) from nest.users;<br>
+SELECT COUNT(DISTINCT department_id) FROM nest.users;<br>
 
 ■SUM 関数<br>
 ※指定カラムの合計値を取得する<br>
