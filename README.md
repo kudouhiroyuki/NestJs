@@ -139,6 +139,12 @@ UPDATE nest.users SET user_name='user_name', password='password' WHERE id='1';<b
 UPDATE nest.users SET user_name='user_name', password='password' WHERE id IN ('1', '2');<br>
 UPDATE nest.users SET user_name='user_name', password='password' ORDER BY id DESC LIMIT 2;
 
+UPDATE nest.users AS u
+INNER JOIN nest.departments AS d
+ON u.department_id = d.department_id
+SET u.user_name = 'name1'
+WHERE u.id = 1;
+
 - DELETE 文<br>
 ※データを削除する<br>
 ※AUTO_INCREMENTリセットされない<br>
