@@ -137,13 +137,13 @@ INSERT INTO nest.departments (department_id, department_name) VALUES<br>
 UPDATE nest.users SET user_name='user_name' WHERE id='1';<br>
 UPDATE nest.users SET user_name='user_name', password='password' WHERE id='1';<br>
 UPDATE nest.users SET user_name='user_name', password='password' WHERE id IN ('1', '2');<br>
-UPDATE nest.users SET user_name='user_name', password='password' ORDER BY id DESC LIMIT 2;
+UPDATE nest.users SET user_name='user_name', password='password' ORDER BY id DESC LIMIT 2;<br>
 
-UPDATE nest.users AS u
-INNER JOIN nest.departments AS d
-ON u.department_id = d.department_id
-SET u.user_name = 'name1'
-WHERE u.id = 1;
+UPDATE nest.users AS u<br>
+INNER JOIN nest.departments AS d<br>
+ON u.department_id = d.department_id<br>
+SET u.user_name = 'name1'<br>
+WHERE u.id = 1;<br>
 
 - DELETE 文<br>
 ※データを削除する<br>
