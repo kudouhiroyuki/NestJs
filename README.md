@@ -142,7 +142,7 @@ UPDATE nest.users SET user_name='user_name', password='password' ORDER BY id DES
 UPDATE nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
 ON u.department_id = d.department_id<br>
-SET u.user_name = 'name1'<br>
+SET u.user_name = 'user_name'<br>
 WHERE u.id = 1;<br>
 
 - DELETE 文<br>
