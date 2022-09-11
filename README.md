@@ -141,16 +141,16 @@ UPDATE nest.users SET user_name='user_name', password='password' ORDER BY id DES
 
 UPDATE nest.users<br>
 SET user_name='更新',<br>
-&emsp;password='更新',<br>
-&emsp;address='更新',<br>
-&emsp;age=99,<br>
-&emsp;department_id='B0001',<br>
-&emsp;point=999<br>
+password='更新',<br>
+address='更新',<br>
+age=99,<br>
+department_id='B0001',<br>
+point=999<br>
 WHERE id='1';<br>
 
 UPDATE nest.users u, nest.departments d<br>
 SET u.user_name = '更新',<br>
-&emsp;d.department_name = '更新'<br>
+d.department_name = '更新'<br>
 WHERE u.department_id = 'A0001'<br>
 AND d.department_id = 'A0001';<br>
 
