@@ -1,4 +1,9 @@
 ## Admin画面
+- 料金区分（画面）<br>
+http://localhost:3000/products/detail/1001
+http://localhost:3000/divisions/1001/regist
+http://localhost:3000/divisions/1001/detail/1
+
 #### 施設管理<br>
 - 施設情報管理（画面）<br>
 http://localhost:3000/tenant/details<br>
