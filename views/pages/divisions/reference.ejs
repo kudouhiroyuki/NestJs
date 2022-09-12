@@ -8,14 +8,11 @@
 
   <main id="divisionsReference">    
     <h4 class="mb-4 fw-bold">料金区分一覧</h4>
-
-    <div class="d-flex flex-row-reverse mb-4">
-      <button class="dropdown border-0 bg-white" type="button" data-bs-toggle="dropdown">
-        <img src="/images/icon/plus.svg">
-      </button>
-      <ul class="dropdown-menu">
-        <a href="/products/plan/regist/3"><li class="dropdown-item small">プランを新しく登録する</li></a>
-      </ul>
+    
+    <div class="d-flex flex-row-reverse mb-5">
+      <a :href=`/divisions/${productId}/regist`>
+        <input type="button" value="新規料金区分登録" class="btn baseBtnBlue">
+      </a>
     </div>
 
     <form class="mb-5">
@@ -26,6 +23,7 @@
             <th scope="col">#</th>
             <th scope="col">料金区分ID</th>
             <th scope="col">料金区分名</th>
+            <th v-for="(item, index) in ages" :key="index" scope="col">{{ item.name }}</th>
           </tr>
         </thead>
         <tbody>
@@ -33,6 +31,11 @@
             <th>{{ index + 1 }}</th>
             <td>{{ item.divisionId }}</td>
             <td>{{ item.divisionName }}</td>
+            <td>¥{{ Number(item.adult).toLocaleString() }}</td>
+            <td>¥{{ Number(item.matchmaker).toLocaleString() }}</td>
+            <td>¥{{ Number(item.child).toLocaleString() }}</td>
+            <td>¥{{ Number(item.infant).toLocaleString() }}</td>
+            <td>¥{{ Number(item.senior).toLocaleString() }}</td>
           </tr>
         </tbody>
       </table>
@@ -74,6 +77,7 @@
 <script type="text/javascript">
 const productId= `<%- productId %>`;
 const divisions= `<%- divisions %>`;
+const ages= `<%- ages %>`;
 const totalPageCount= `<%- totalPageCount %>`;
 
 const queryParam = new URLSearchParams(location.search);
@@ -84,6 +88,7 @@ new Vue({
     // APIデータ
     productId: JSON.parse(productId),
     divisions: JSON.parse(divisions),
+    ages: JSON.parse(ages),
     totalPageCount: JSON.parse(totalPageCount),
     // 検索データ
     pageNumber: queryParam.get('pageNumber') ?? 1,

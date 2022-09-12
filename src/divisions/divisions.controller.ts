@@ -15,16 +15,30 @@ export class DivisionsController {
     const divisions = [
       {
         divisionId: '1',
-        divisionName: '料金区分A'
+        divisionName: '料金区分A',
+        adult: '1000',
+        matchmaker: '1000',
+        child: '1000',
+        infant: '1000',
+        senior: '1000'
       },
       {
         divisionId: '2',
-        divisionName: '料金区分B'
+        divisionName: '料金区分B',
+        adult: '1000',
+        matchmaker: '1000',
+        child: '1000',
+        infant: '1000',
+        senior: '1000'
       }
     ]
+    // マスターデータ（年齢区分）
+    const ages = [{ name: '大人' }, { name: '中人' }, { name: '小人' }, { name: '幼児' }, { name: 'シニア' }]
+
     return {
       productId: JSON.stringify(productId),
       divisions: JSON.stringify(divisions),
+      ages: JSON.stringify(ages),
       totalPageCount: 3
     }
   }
