@@ -157,8 +157,15 @@ AND d.department_id = 'A0001';<br>
 UPDATE nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
 ON u.department_id = d.department_id<br>
-SET u.user_name = 'user_name'<br>
+SET u.user_name = d.department_name<br>
 WHERE u.id = 1;<br>
+
+UPDATE nest.users AS u<br>
+SET u.user_name = (<br>
+&emsp;SELECT department_id<br>
+&emsp;FROM nest.departments<br>
+&emsp;LIMIT 1<br>
+);<br>
 
 - DELETE 文<br>
 ※データを削除する<br>
