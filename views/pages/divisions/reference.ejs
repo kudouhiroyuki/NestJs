@@ -29,7 +29,11 @@
         <tbody>
           <tr v-for="(item, index) in divisions" :key="index">
             <th>{{ index + 1 }}</th>
-            <td>{{ item.divisionId }}</td>
+            <td>
+              <a :href=`/divisions/${productId}/detail/${item.divisionId}` style="cursor: pointer; color: #1867C0">
+                {{ item.divisionId }}
+              </a>
+            </td>
             <td>{{ item.divisionName }}</td>
             <td>¥{{ Number(item.adult).toLocaleString() }}</td>
             <td>¥{{ Number(item.matchmaker).toLocaleString() }}</td>

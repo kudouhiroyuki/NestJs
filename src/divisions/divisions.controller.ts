@@ -44,7 +44,7 @@ export class DivisionsController {
   }
 
   /**
-   * GET 料金プラン登録画面
+   * GET 料金区分登録画面
    */
   @Get('/:productId/regist')
   @Render('divisions/regist')
@@ -58,6 +58,52 @@ export class DivisionsController {
     return {
       productId: JSON.stringify(productId),
       feeCategorys: JSON.stringify(feeCategorys)
+    }
+  }
+
+  /**
+   * GET 料金区分詳細画面
+   */
+  @Get('/:productId/detail/:id')
+  @Render('divisions/regist')
+  async getDetail(@Param('productId') productId: string) {
+    // マスターデータ（年齢区分）
+    const ages = [
+      {
+        age_id: '1',
+        ageName: '大人'
+      },
+      {
+        age_id: '2',
+        ageName: '中人'
+      },
+      {
+        age_id: '3',
+        ageName: '小人'
+      },
+      {
+        age_id: '4',
+        ageName: '幼児'
+      },
+      {
+        age_id: '5',
+        ageName: 'シニア'
+      }
+    ]
+
+    // 料金プランデータ
+    const divisions = [
+      {
+        age_id: '1',
+        ageName: '大人',
+        price: '1350',
+        originalPrice: '1500'
+      }
+    ]
+    return {
+      productId: JSON.stringify(productId),
+      ages: JSON.stringify(ages),
+      divisions: JSON.stringify(divisions)
     }
   }
 }

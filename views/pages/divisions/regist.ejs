@@ -1,1 +1,102 @@
-区分登録
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="divisionsRegist">
+    <h4 class="mb-4 fw-bold">料金区分登録</h4>
+    <div class="row mb-5">
+      <div class="col-4">
+        <label class="form-label">料金区分名</label>
+        <input
+          v-model="divisionName"
+          name="divisionName"
+          type="text"
+          class="form-control"
+          placeholder="料金区分名"
+        >
+      </div>
+    </div>
+
+    <table class="table align-middle mb-5">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">年齢区分</th>
+          <th scope="col">価格</th>
+          <th scope="col">元値表記</th>
+          <th scope="col">割引率表記</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in divisions" :key="index">
+          <th>{{ index + 1 }}</th>
+          <td>{{ item.ageName }}</td>
+          <td>
+            <input
+              v-model="item.price"
+              name="price"
+              type="text"
+              class="form-control"
+              placeholder="価格"
+            >
+          </td>
+          <td>
+            <input
+              v-model="item.originalPrice"
+              name="originalPrice"
+              type="text"
+              class="form-control"
+              placeholder="価格"
+            >
+          </td>
+          <td>
+            <input
+              :value="calcDiscountRate(item)"
+              name="discountRate"
+              type="text"
+              class="form-control"
+              placeholder="価格"
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+
+<script type="text/javascript">  
+const ages= `<%- ages %>`;
+const divisions= `<%- divisions %>`;
+
+const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
+Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
+
+new Vue({
+  el: "#divisionsRegist",
+  data: {
+    // APIデータ
+    divisions: JSON.parse(divisions),
+    ages: JSON.parse(ages),
+    // 登録データ
+    divisionName: "",        // 料金区分名
+  },
+  created() {
+  },
+  mounted() {
+  },
+  methods: {
+    /**
+     * 割引率表記（計算）
+     */
+     calcDiscountRate(item) {
+      return Math.round(100 - (item.price / item.originalPrice * 100)) + '%OFF';
+    },
+  }
+})
+</script>
+</body>
+</html>
