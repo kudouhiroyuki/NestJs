@@ -42,13 +42,22 @@ import { AppService } from './app.service'
 import { ProductsModule } from './products/products.module'
 import { PlansModule } from './plans/plans.module'
 import { DivisionsModule } from './divisions/divisions.module'
+import { InventorysModule } from './inventorys/inventorys.module'
 
 import { UsersModule } from './users/users.module'
 import { TenantModule } from './tenant/tenant.module'
 import { NotificationModule } from './notification/notification.module'
 
 @Module({
-  imports: [ProductsModule, PlansModule, DivisionsModule, UsersModule, TenantModule, NotificationModule],
+  imports: [
+    ProductsModule,
+    PlansModule,
+    DivisionsModule,
+    InventorysModule,
+    UsersModule,
+    TenantModule,
+    NotificationModule
+  ],
   controllers: [AppController],
   providers: [AppService]
 })

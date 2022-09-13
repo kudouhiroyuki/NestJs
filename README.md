@@ -1,6 +1,9 @@
 ## Admin画面
+- 料金プラン（画面）<br>
+http://localhost:3000/plans/reference?productId=1001<br>
+
 - 料金区分（画面）<br>
-http://localhost:3000/divisions/1001/reference<br>
+http://localhost:3000/divisions/reference?productId=1001<br>
 http://localhost:3000/divisions/1001/regist<br>
 http://localhost:3000/divisions/1001/detail/1<br>
 

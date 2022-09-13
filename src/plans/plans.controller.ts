@@ -5,12 +5,11 @@ export class PlansController {
   /**
    * GET 料金プラン一覧画面
    */
-  @Get('/:productId/reference')
+  @Get('/reference')
   @Render('plans/reference')
-  async getReference(@Param('productId') productId: string, @Query() query: any) {
+  async getReference(@Query() query: any) {
     console.log('料金プラン一覧画面:query')
     console.log(query)
-    console.log('商品ID:' + productId)
     // 検索結果データ（料金プラン一覧）
     const plans = [
       {
@@ -23,7 +22,7 @@ export class PlansController {
       }
     ]
     return {
-      productId: JSON.stringify(productId),
+      productId: JSON.stringify(query.productId),
       plans: JSON.stringify(plans),
       totalPageCount: 3
     }

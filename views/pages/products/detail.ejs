@@ -645,12 +645,8 @@
           </table>
         </div>
         <div style="text-align: right;">
-          <a :href=`/plans/${productId}/reference` style="margin-right: 10px;">
-            <input type="button" value="料金プラン" class="btn baseBtnGrey"/>
-          </a>
-          <a :href=`/divisions/${productId}/reference`>
-            <input type="button" value="料金区分" class="btn baseBtnGrey"/>
-          </a>
+          <input @click="onPlanPage" type="button" value="料金プラン" class="btn baseBtnGrey"/>
+          <input @click="onDivisionPage" type="button" value="料金区分" class="btn baseBtnGrey"/>
         </div>
       </div>
 
@@ -871,6 +867,14 @@ new Vue({
         this.images.push({ path: reader.result })
         this.modalShow = false;
       };
+    },
+    // 画面遷移（料金プラン一覧）
+    onPlanPage() {
+      window.location.href = `/plans/reference?productId=${this.productId}`;
+    },
+    // 画面遷移（料金区分一覧）
+    onDivisionPage() {
+      window.location.href = `/divisions/reference?productId=${this.productId}`;
     },
     onSubmit() {
       document.productsForm.method="post";

@@ -1,15 +1,16 @@
 import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect, Res } from '@nestjs/common'
 
-@Controller('divisions')
-export class DivisionsController {
+@Controller('inventorys')
+export class InventorysController {
   /**
    * GET 料金区分（一覧画面）
    */
   @Get('/reference')
-  @Render('divisions/reference')
-  async getReference(@Query() query: any) {
+  @Render('inventorys/reference')
+  async getReference(@Param('productId') productId: string, @Query() query: any) {
     console.log('料金区分（一覧画面）')
     console.log(query)
+    console.log('商品ID:' + productId)
     // 一覧データ
     const divisions = [
       {
@@ -34,7 +35,7 @@ export class DivisionsController {
     // マスターデータ（年齢区分）
     const ages = [{ name: '大人' }, { name: '中人' }, { name: '小人' }, { name: '幼児' }, { name: 'シニア' }]
     return {
-      productId: JSON.stringify(query.productId),
+      productId: JSON.stringify(productId),
       divisions: JSON.stringify(divisions),
       ages: JSON.stringify(ages),
       totalPageCount: 3
