@@ -172,19 +172,19 @@ SET u.user_name = (<br>
 &emsp;LIMIT 1<br>
 );<br>
 
-- DELETE 文<br>
+■DELETE 文<br>
 ※データを削除する<br>
 ※AUTO_INCREMENTリセットされない<br>
 DELETE FROM nest.users WHERE id = '1';<br>
 DELETE FROM nest.users WHERE id IN ('1', '2');<br>
 DELETE FROM nest.users ORDER BY id DESC LIMIT 2;
 
-- TRUNCATE TABLE 文<br>
+■TRUNCATE TABLE 文<br>
 ※AUTO_INCREMENTリセットされる<br>
 ※全てのデータを削除する<br>
 TRUNCATE TABLE nest.users;
 
-- トランザクション<br>
+■トランザクション<br>
 ※BEGIN(開始)<br>
 ※COMMIT(終了 + 変更保存)<br>
 ※ROLLBACK）(終了 + 変更取消し)<br>
@@ -196,7 +196,7 @@ BEGIN;<br>
 UPDATE nest.users SET user_name='user_name' WHERE id='1';<br>
 COMMIT;<br>
 
-- ストアドプロシージャ<br>
+■ストアドプロシージャ<br>
 SHOW PROCEDURE STATUS;<br>
 SHOW CREATE PROCEDURE sample1;<br>
 DROP PROCEDURE sample1;
