@@ -14,7 +14,7 @@
         <img src="/images/icon/plus.svg">
       </button>
       <ul class="dropdown-menu">
-        <a href="/plans/1001/regist"><li class="dropdown-item small">プランを新しく登録する</li></a>
+        <a :href=`/plans/${productId}/regist`><li class="dropdown-item small">プランを新しく登録する</li></a>
       </ul>
     </div>
 
@@ -97,7 +97,6 @@
 </div>
 
 <script type="text/javascript">
-const productId= `<%- productId %>`;
 const plans= `<%- plans %>`;
 const totalPageCount= `<%- totalPageCount %>`;
 
@@ -107,14 +106,15 @@ new Vue({
   el: "#plansReference",
   data: {
     // APIデータ
-    productId: JSON.parse(productId),
     plans: JSON.parse(plans),
     totalPageCount: JSON.parse(totalPageCount),
     // 検索データ
+    productId: queryParam.get('productId') ?? null,
     keyword: queryParam.get('keyword') ?? "",
     pageNumber: queryParam.get('pageNumber') ?? 1,
   },
   created() {
+    queryParam.set("productId", this.productId);
     queryParam.set("keyword", this.keyword);
     queryParam.set("pageNumber", this.pageNumber);
   },
@@ -130,7 +130,7 @@ new Vue({
     },
     // 再レンダリング
     onSerch() {
-      window.location.href = `/plans/${ this.productId }/reference?${ queryParam }`;
+      window.location.href = `/plans/reference?${ queryParam }`;
     },
     // リダイレクト
     onRedirect(item) {

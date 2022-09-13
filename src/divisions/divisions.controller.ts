@@ -34,7 +34,6 @@ export class DivisionsController {
     // マスターデータ（年齢区分）
     const ages = [{ name: '大人' }, { name: '中人' }, { name: '小人' }, { name: '幼児' }, { name: 'シニア' }]
     return {
-      productId: JSON.stringify(query.productId),
       divisions: JSON.stringify(divisions),
       ages: JSON.stringify(ages),
       totalPageCount: 3

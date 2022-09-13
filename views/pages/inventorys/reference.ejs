@@ -6,40 +6,61 @@
 
   <%- include('../../partials/sidebar'); %>
 
-  <main id="divisionsReference">    
+  <main id="inventorysReference">    
     <h4 class="mb-4 fw-bold">在庫一覧</h4>
     
     <div class="d-flex flex-row-reverse mb-5">
-      <a :href=`/divisions/${productId}/regist`>
+      <a :href=`/inventorys/${productId}/regist`>
         <input type="button" value="新規在庫登録" class="btn baseBtnBlue">
       </a>
     </div>
 
-    <form class="mb-5">
+    <form @submit.prevent="onSerch">
+      <!-- 条件フォーム -->
+      <div class="baseShadow p-3 mb-5">
+      <h5 class="mb-4 fw-bold">条件</h5>
+      <div class="row">
+        <div class="col-4">
+          <label class="form-label">キーワード</label>
+          <input
+            @change="onFormChange"
+            :value="keyword"
+            name="keyword"
+            type="text"
+            class="form-control"
+            placeholder="キーワード"
+          >
+        </div>
+        <div class="col-4 text-end">
+          <button type="submit" class="btn w-50 mt-4 baseBtnGrey">
+            <img src="/images/icon/serch.svg">
+            検索
+          </button>
+        </div>
+      </div>
+    </div>
       <!-- 一覧テーブル -->
       <table class="table align-middle mb-5">
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">料金区分ID</th>
-            <th scope="col">料金区分名</th>
-            <th v-for="(item, index) in ages" :key="index" scope="col">{{ item.name }}</th>
+            <th scope="col">在庫ID</th>
+            <th scope="col">在庫名</th>
+            <th scope="col">在庫管理種別</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in divisions" :key="index">
+          <tr v-for="(item, index) in inventorys" :key="index">
             <th>{{ index + 1 }}</th>
+            <td>{{ item.inventoryId }}</td>
+            <td>{{ item.inventoryName }}</td>
+            <td>{{ item.inventoryKind }}</td>
             <td>
-              <a :href=`/divisions/${productId}/detail/${item.divisionId}` style="cursor: pointer; color: #1867C0">
-                {{ item.divisionId }}
+              <a :href=`/inventorys/${item.productId}/detail/${item.inventoryId}` style="cursor: pointer; color: #1867C0">
+                <button type="button" class="btn baseBtnGrey">在庫確認</button>
               </a>
             </td>
-            <td>{{ item.divisionName }}</td>
-            <td>¥{{ Number(item.adult).toLocaleString() }}</td>
-            <td>¥{{ Number(item.matchmaker).toLocaleString() }}</td>
-            <td>¥{{ Number(item.child).toLocaleString() }}</td>
-            <td>¥{{ Number(item.infant).toLocaleString() }}</td>
-            <td>¥{{ Number(item.senior).toLocaleString() }}</td>
           </tr>
         </tbody>
       </table>
@@ -79,25 +100,25 @@
 </div>
 
 <script type="text/javascript">
-const productId= `<%- productId %>`;
-const divisions= `<%- divisions %>`;
-const ages= `<%- ages %>`;
+const inventorys= `<%- inventorys %>`;
 const totalPageCount= `<%- totalPageCount %>`;
 
 const queryParam = new URLSearchParams(location.search);
-  
+
 new Vue({
-  el: "#divisionsReference",
+  el: "#inventorysReference",
   data: {
     // APIデータ
-    productId: JSON.parse(productId),
-    divisions: JSON.parse(divisions),
-    ages: JSON.parse(ages),
+    inventorys: JSON.parse(inventorys),
     totalPageCount: JSON.parse(totalPageCount),
     // 検索データ
+    productId: queryParam.get('productId') ?? null,
+    keyword: queryParam.get('keyword') ?? "",
     pageNumber: queryParam.get('pageNumber') ?? 1,
   },
   created() {
+    queryParam.set("productId", this.productId);
+    queryParam.set("keyword", this.keyword);
     queryParam.set("pageNumber", this.pageNumber);
   },
   methods: {
@@ -110,13 +131,13 @@ new Vue({
       queryParam.set("pageNumber", page);
       this.onSerch();
     },
-    // 再レンダリング
+    // 画面リロード    
     onSerch() {
-      window.location.href = `/divisions/${ this.productId }/reference?${ queryParam }`;
+      window.location.href = `/inventorys/reference?${ queryParam }`;
     },
     // リダイレクト
     onRedirect(item) {
-      window.location.href = `/divisions/${ this.productId }/detail/${ item.divisionId }`;
+      window.location.href = `/inventorys/${ this.productId }/detail/${ item.divisionId }`;
     },
   }
 })

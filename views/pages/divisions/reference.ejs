@@ -79,7 +79,6 @@
 </div>
 
 <script type="text/javascript">
-const productId= `<%- productId %>`;
 const divisions= `<%- divisions %>`;
 const ages= `<%- ages %>`;
 const totalPageCount= `<%- totalPageCount %>`;
@@ -90,14 +89,15 @@ new Vue({
   el: "#divisionsReference",
   data: {
     // APIデータ
-    productId: JSON.parse(productId),
     divisions: JSON.parse(divisions),
     ages: JSON.parse(ages),
     totalPageCount: JSON.parse(totalPageCount),
     // 検索データ
+    productId: queryParam.get('productId') ?? null,
     pageNumber: queryParam.get('pageNumber') ?? 1,
   },
   created() {
+    queryParam.set("productId", this.productId);
     queryParam.set("pageNumber", this.pageNumber);
   },
   methods: {
@@ -112,7 +112,7 @@ new Vue({
     },
     // 再レンダリング
     onSerch() {
-      window.location.href = `/divisions/${ this.productId }/reference?${ queryParam }`;
+      window.location.href = `/divisions/reference?${ queryParam }`;
     },
     // リダイレクト
     onRedirect(item) {

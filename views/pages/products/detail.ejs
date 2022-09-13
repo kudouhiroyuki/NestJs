@@ -647,6 +647,7 @@
         <div style="text-align: right;">
           <input @click="onPlanPage" type="button" value="料金プラン" class="btn baseBtnGrey"/>
           <input @click="onDivisionPage" type="button" value="料金区分" class="btn baseBtnGrey"/>
+          <input @click="onInventoryPage" type="button" value="在庫" class="btn baseBtnGrey"/>
         </div>
       </div>
 
@@ -875,6 +876,10 @@ new Vue({
     // 画面遷移（料金区分一覧）
     onDivisionPage() {
       window.location.href = `/divisions/reference?productId=${this.productId}`;
+    },
+    // 画面遷移（在庫一覧）
+    onInventoryPage() {
+      window.location.href = `/inventorys/reference?productId=${this.productId}`;
     },
     onSubmit() {
       document.productsForm.method="post";

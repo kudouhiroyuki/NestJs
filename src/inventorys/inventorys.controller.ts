@@ -3,41 +3,30 @@ import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect, Res }
 @Controller('inventorys')
 export class InventorysController {
   /**
-   * GET 料金区分（一覧画面）
+   * GET 在庫（一覧画面）
    */
   @Get('/reference')
   @Render('inventorys/reference')
-  async getReference(@Param('productId') productId: string, @Query() query: any) {
-    console.log('料金区分（一覧画面）')
+  async getReference(@Query() query: any) {
+    console.log('在庫（一覧画面）')
     console.log(query)
-    console.log('商品ID:' + productId)
     // 一覧データ
-    const divisions = [
+    const inventorys = [
       {
-        divisionId: '1',
-        divisionName: '料金区分A',
-        adult: '1000',
-        matchmaker: '1000',
-        child: '1000',
-        infant: '1000',
-        senior: '1000'
+        productId: '1001',
+        inventoryId: '1',
+        inventoryName: '在庫A',
+        inventoryKind: '在庫管理種別'
       },
       {
-        divisionId: '2',
-        divisionName: '料金区分B',
-        adult: '1000',
-        matchmaker: '1000',
-        child: '1000',
-        infant: '1000',
-        senior: '1000'
+        productId: '1002',
+        inventoryId: '2',
+        inventoryName: '在庫B',
+        inventoryKind: '在庫管理種別'
       }
     ]
-    // マスターデータ（年齢区分）
-    const ages = [{ name: '大人' }, { name: '中人' }, { name: '小人' }, { name: '幼児' }, { name: 'シニア' }]
     return {
-      productId: JSON.stringify(productId),
-      divisions: JSON.stringify(divisions),
-      ages: JSON.stringify(ages),
+      inventorys: JSON.stringify(inventorys),
       totalPageCount: 3
     }
   }

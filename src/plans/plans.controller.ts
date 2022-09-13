@@ -22,7 +22,6 @@ export class PlansController {
       }
     ]
     return {
-      productId: JSON.stringify(query.productId),
       plans: JSON.stringify(plans),
       totalPageCount: 3
     }
