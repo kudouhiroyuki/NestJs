@@ -184,6 +184,44 @@ DELETE FROM nest.users ORDER BY id DESC LIMIT 2;
 ※全てのデータを削除する<br>
 TRUNCATE TABLE nest.users;
 
+- トランザクション<br>
+※BEGIN(開始)<br>
+※COMMIT(終了 + 変更保存)<br>
+※ROLLBACK）(終了 + 変更取消し)<br>
+BEGIN;<br>
+UPDATE nest.users SET user_name='user_name' WHERE id='1';<br>
+ROLLBACK;<br>
+
+BEGIN;<br>
+UPDATE nest.users SET user_name='user_name' WHERE id='1';<br>
+COMMIT;<br>
+
+- ストアドプロシージャ<br>
+SHOW PROCEDURE STATUS;<br>
+SHOW CREATE PROCEDURE sample1;<br>
+DROP PROCEDURE sample1;
+
+CREATE PROCEDURE sample1()<br>
+SELECT * FROM nest.departments;<br>
+call sample1();<br>
+
+CREATE PROCEDURE sample2(IN x INT)<br>
+SELECT * FROM nest.users WHERE id = x;<br>
+call sample2(1);<br>
+
+CREATE PROCEDURE sample3(IN x INT, OUT y INT)<br>
+SELECT point INTO y FROM nest.users WHERE id = x;<br>
+call sample3(1, @y);<br>
+SELECT @y;<br>
+
+DELIMITER //<br>
+CREATE PROCEDURE sample4()<br>
+BEGIN<br>
+&emsp;SELECT * FROM nest.users;<br>
+END//<br>
+DELIMITER ;<br>
+call sample4();<br>
+
 #### データの取得<br>
 - SELECT 文<br>
 ※データを取得する<br>
