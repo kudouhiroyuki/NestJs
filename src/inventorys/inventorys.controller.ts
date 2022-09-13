@@ -32,49 +32,25 @@ export class InventorysController {
   }
 
   /**
-   * GET 料金区分（登録画面）
+   * GET 在庫（登録画面）
    */
   @Get('/:productId/regist')
-  @Render('divisions/regist')
+  @Render('inventorys/regist')
   async getRegist(@Param('productId') productId: string) {
-    // 料金区分データ（新規）
-    const divisions = [
+    // 在庫データ
+    const inventorys = [
       {
         age_id: '1',
         ageName: '大人',
         price: '',
         originalPrice: '',
         discountRate: ''
-      },
-      {
-        age_id: '2',
-        ageName: '中人',
-        price: '',
-        originalPrice: ''
-      },
-      {
-        age_id: '3',
-        ageName: '小人',
-        price: '',
-        originalPrice: ''
-      },
-      {
-        age_id: '4',
-        ageName: '幼児',
-        price: '',
-        originalPrice: ''
-      },
-      {
-        age_id: '5',
-        ageName: 'シニア',
-        price: '',
-        originalPrice: ''
       }
     ]
     return {
       productId: JSON.stringify(productId),
-      divisionId: null,
-      divisions: JSON.stringify(divisions)
+      inventoryId: null,
+      inventorys: JSON.stringify(inventorys)
     }
   }
   /**

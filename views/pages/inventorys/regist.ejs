@@ -1,0 +1,133 @@
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="inventorysRegist">
+    <h4 class="mb-4 fw-bold">在庫登録</h4>
+
+    <form @submit.prevent="onSubmit" name="divisionsForm">
+      <!-- 在庫ID -->
+      <div v-if="inventoryId" class="row mb-5">
+        <div class="col-4">
+          <label class="form-label">在庫ID</label>
+          <p>{{ inventoryId }}</p>
+        </div>
+      </div>
+      <!-- 在庫名 -->
+      <div class="row mb-5">
+        <div class="col-4">
+          <label class="form-label">在庫名</label>
+          <input
+            v-model="inventoryName"
+            name="inventoryName"
+            type="text"
+            class="form-control"
+            placeholder="在庫名"
+          >
+        </div>
+      </div>
+      <!-- 在庫管理種別 -->
+      <div class="mb-4">
+        <label class="form-label">在庫管理種別</label>
+        <div class="form-check mb-2 w-50">
+          <input
+            v-model="inventoryKindType"
+            name="inventoryKindType"
+            class="form-check-input"
+            type="radio"
+            id="sales_1"
+            value="1"
+          >
+          <label class="form-check-label" for="sales_1">一般</label>
+        </div>
+        <div class="form-check mb-2 w-50">
+          <input
+            v-model="inventoryKindType"
+            name="inventoryKindType"
+            class="form-check-input"
+            type="radio"
+            id="sales_2"
+            value="2"
+          >
+          <label class="form-check-label" for="sales_2">日付指定</label>
+        </div>
+        <div class="form-check mb-2 w-50">
+          <input
+            v-model="inventoryKindType"
+            name="inventoryKindType"
+            class="form-check-input"
+            type="radio"
+            id="sales_3"
+            value="3"
+          >
+          <label class="form-check-label" for="sales_3">時間指定</label>
+        </div>
+      </div>
+      <!-- 一般 -->
+      <div class="row mb-5">
+        <div class="col-4">
+          <label class="form-label">在庫数</label>
+          <input
+            v-model="general"
+            name="general"
+            type="text"
+            class="form-control"
+            placeholder="在庫数"
+          >
+        </div>
+      </div>
+      <!-- 在庫確認・保存ボタン -->
+      <div class="mb-5" style="text-align: right;">
+        <input type="submit" value="在庫確認" class="btn baseBtnGrey" style="width: 156px; margin-right: 20px;">
+        <input type="submit" value="保存" class="btn baseBtnBlue" style="width: 156px;">
+      </div>
+    </form>
+  </main>
+</div>
+
+<script type="text/javascript">
+const productId= `<%- productId %>`;
+const inventoryId= `<%- inventoryId %>`;
+const inventorys= `<%- inventorys %>`;
+
+const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
+Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
+
+new Vue({
+  el: "#inventorysRegist",
+  data: {
+    displayCheck: false,
+    // APIデータ
+    productId: productId ? JSON.parse(productId) : null,
+    inventoryId: inventoryId ? JSON.parse(inventoryId) : null,
+    inventorys: JSON.parse(inventorys),
+    // 登録データ
+    inventoryName: "",        // 在庫名
+    inventoryKindType: "1",   // 在庫管理種別
+  },
+  created() {
+  },
+  mounted() {
+  },
+  methods: {
+   /**
+     * 保存
+     */
+    onSubmit() {
+      let action = `/divisions/${this.productId}/regist`;
+      if(this.productId && this.divisionId) {
+        action = `/divisions/${this.productId}/detail/${this.divisionId}`
+      }
+      document.divisionsForm.method="post";
+      document.divisionsForm.action = action;
+      document.divisionsForm.submit();
+    }
+  }
+})
+</script>
+</body>
+</html>
