@@ -221,12 +221,16 @@ call sample3(1, @y);<br>
 SELECT @y;<br>
 
 DELIMITER //<br>
-CREATE PROCEDURE sample4()<br>
+CREATE PROCEDURE sample4(IN u_id INT, IN d_id VARCHAR(191), OUT u_count INT, OUT d_count INT)<br>
 BEGIN<br>
-&emsp;SELECT * FROM nest.users;<br>
+&emsp;DECLARE u_name VARCHAR(191);<br>
+&emsp;SET u_name='name1';<br>
+&emsp;SELECT COUNT(*) FROM nest.users where id = u_id AND user_name = u_name into u_count;<br>
+&emsp;SELECT COUNT(*) FROM nest.departments where department_id = d_id into d_count;<br>
 END//<br>
 DELIMITER ;<br>
-call sample4();<br>
+call sample4(1, 'A0001', @u_count, @d_count);<br>
+SELECT @u_count, @d_count;<br>
 
 #### データの取得<br>
 - SELECT 文<br>
