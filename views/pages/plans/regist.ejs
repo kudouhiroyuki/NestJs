@@ -412,7 +412,7 @@ new Vue({
     /**
      * イベントデータ作成（表示用）
      */
-    createEventData(events) {
+     createEventData(events) {
       events.forEach(item => {
         let retultDate = this.createBaseDate(item.end);
         // イベントタイトル作成
@@ -427,17 +427,39 @@ new Vue({
         this.calendar.events.push(item);
       });
     },
-
-    // 基準日の作成
-    createBaseDate(date) {
+    /**
+     * 基準日の作成
+     */ 
+     createBaseDate(date) {
       let year = moment(date).format("YYYY");
       let month = moment(date).format("M");
       let day = moment(date).format("D");
       let retultDate = new Date(year, (month - 1), day);
       return retultDate;
     },
-
-    // 料金カレンダー（イベントセット）
+    /**
+     * 料金カレンダー（表示切り替え 1ヶ月前）
+     */
+     onCalendarPrev() {
+      let baseDate = this.createBaseDate(this.calendar.initialDate);
+      baseDate.setMonth(baseDate.getMonth() - 2);
+      baseDate.setDate(1);
+      this.calendar.initialDate = baseDate;
+      this.updateCalendarView(baseDate);
+    },
+    /**
+     * 料金カレンダー（表示切り替え 1ヶ月後）
+     */
+    onCalendarNext() {
+      let baseDate = this.createBaseDate(this.calendar.initialDate);
+      baseDate.setMonth(baseDate.getMonth());
+      baseDate.setDate(1);
+      this.calendar.initialDate = baseDate;
+      this.updateCalendarView(baseDate);
+    },
+    /**
+     * 料金カレンダー（イベントセット）
+     */
     onCalendarEventSet(event) {
       const target = event.target.closest('.fc-daygrid-event-harness');
       if(target) {
@@ -452,24 +474,9 @@ new Vue({
         this.onPlanModalShow('edit');
       }
     },
-
-    // 料金カレンダー（表示切り替え 1ヶ月前）
-    onCalendarPrev() {
-      let baseDate = this.createBaseDate(this.calendar.initialDate);
-      baseDate.setMonth(baseDate.getMonth() - 2);
-      baseDate.setDate(1);
-      this.calendar.initialDate = baseDate;
-      this.updateCalendarView(baseDate);
-    },
-    // 料金カレンダー（表示切り替え 1ヶ月後）
-    onCalendarNext() {
-      let baseDate = this.createBaseDate(this.calendar.initialDate);
-      baseDate.setMonth(baseDate.getMonth());
-      baseDate.setDate(1);
-      this.calendar.initialDate = baseDate;
-      this.updateCalendarView(baseDate);
-    },
-    // 料金カレンダー（描画）
+    /**
+     * 料金カレンダー（描画）
+     */
     renderCalendar(calendarObj, baseDate) {
       const calendars = document.querySelectorAll('.renderCalendar');
       calendars.forEach(function(calendarEl) {
@@ -481,7 +488,6 @@ new Vue({
         calendar.render();
       });
     },
-
     /**
      * 料金カレンダー（API再取得）
      */
@@ -493,7 +499,6 @@ new Vue({
         this.renderCalendar(this.calendar, baseDate);
       })
     },
-
     /**
      * 料金カレンダーAPI
      */

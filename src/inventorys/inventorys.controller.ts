@@ -40,11 +40,28 @@ export class InventorysController {
     // 在庫データ
     const inventorys = [
       {
-        age_id: '1',
-        ageName: '大人',
-        price: '',
-        originalPrice: '',
-        discountRate: ''
+        id: '1',
+        start: '2022-09-05',
+        end: '2022-09-05',
+        priority: '1',
+        feeId: '1',
+        sum: '20'
+      },
+      {
+        id: '2',
+        start: '2022-09-08',
+        end: '2022-09-08',
+        priority: '1',
+        feeId: '1',
+        sum: '50'
+      },
+      {
+        id: '3',
+        start: '2022-10-23',
+        end: '2022-10-23',
+        priority: '1',
+        feeId: '3',
+        sum: '30'
       }
     ]
     return {
@@ -54,12 +71,12 @@ export class InventorysController {
     }
   }
   /**
-   * POST 料金区分（登録処理）
+   * POST 在庫（登録処理）
    */
   @Post('/:productId/regist')
   @Redirect()
   async postRegist(@Param('productId') productId: string, @Body() body: any) {
-    console.log('料金区分（登録処理）')
+    console.log('在庫（登録処理）')
     console.log(body)
     return { url: `http://localhost:3000/divisions/${productId}/reference` }
   }
