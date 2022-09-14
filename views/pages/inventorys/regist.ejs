@@ -122,42 +122,36 @@
             <button @click="onInventoryModalClear" type="button" class="btn-close"></button>
           </div>
           <div class="modal-body m-3">
-            <!-- 設定期間 -->
+            <!-- 時間間隔 -->
             <div class="mb-4">
-              <label class="form-label w-100">設定期間</label>
-              <div class="d-inline-block col-5">
-                <vue-ctk-date-time-picker
-                  v-model="inventoryModal.start"
-                  format="YYYY/MM/DD"
-                  formatted="YYYY/MM/DD"
-                  only-date
-                  :label="'From'"
-                  position="bottom"
-                /></vue-ctk-date-time-picker>
-              </div>
-              <div class="d-inline-block col-1" style="text-align: center;">〜</div>
-              <div class="d-inline-block col-5">
-                <vue-ctk-date-time-picker
-                  v-model="inventoryModal.end"
-                  format="YYYY/MM/DD"
-                  formatted="YYYY/MM/DD"
-                  only-date
-                  :label="'To'"
-                  position="bottom"
-                /></vue-ctk-date-time-picker>
-              </div>
+              <label class="form-label w-100">時間間隔</label>
+              <select v-model="inventoryModal.timeInterval" name="timeInterval" class="form-select">
+                <option hidden value="">時間間隔</option>
+                <option value="15">15分</option>
+                <option value="30">30分</option>
+                <option value="60">60分</option>
+              </select>
             </div>
+            <!-- 時間テーブル -->
+            <table class="table align-middle mb-5">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">時間帯</th>
+                  <th scope="col">在庫数</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in inventorys" :key="index">
+                  <th>{{ index + 1 }}</th>
+                  <td>{{ item.inventoryId }}</td>
+                  <td>{{ item.inventoryName }}</td>
+                  <td>{{ item.inventoryKind }}</td>
+                </tr>
+              </tbody>
+            </table>
+
             <div class="d-flex flex-row-reverse">
-              <!-- 登録 -->
-              <template v-if="inventoryModal.type === 'new'">
-                <input
-                  @click="onPlanAdd"
-                  type="button"
-                  value="登録"
-                  class="btn mt-5 baseBtnGrey"
-                  style="width: 156px;"
-                />
-              </template>
               <!-- 編集・削除 -->
               <template v-if="inventoryModal.type === 'edit'">
                 <!-- <input
@@ -193,9 +187,6 @@ const productId= `<%- productId %>`;
 const inventoryId= `<%- inventoryId %>`;
 const inventorys= `<%- inventorys %>`;
 
-const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
-Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
-
 new Vue({
   el: "#inventorysRegist",
   data: {
@@ -208,6 +199,7 @@ new Vue({
       dummyId: '',            // ID（フロント仮登録） 
       start: null,            // 設定期間 (From)
       end: null,              // 設定期間 (To)
+      timeInterval: '',
     },
     // APIデータ
     productId: productId ? JSON.parse(productId) : null,
