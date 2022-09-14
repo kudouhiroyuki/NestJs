@@ -37,33 +37,55 @@ export class InventorysController {
   @Get('/:productId/regist')
   @Render('inventorys/regist')
   async getRegist(@Param('productId') productId: string) {
+    // マスターデータ（時間間隔）
+    const timeIntervals = [
+      { intervalId: '1', intervalName: '15分' },
+      { intervalId: '2', intervalName: '30分' },
+      { intervalId: '3', intervalName: '60分' }
+    ]
+    // マスターデータ（時間帯）
+    const timeZones = [
+      { intervalId: '1', zoneId: '1', zoneName: '0:00 - 0:15' },
+      { intervalId: '1', zoneId: '2', zoneName: '0:15 - 0:30' },
+      { intervalId: '1', zoneId: '3', zoneName: '0:30 - 0:45' },
+      { intervalId: '1', zoneId: '4', zoneName: '0:45 - 1:00' },
+      { intervalId: '3', zoneId: '1', zoneName: '0:00 - 1:00' },
+      { intervalId: '3', zoneId: '2', zoneName: '1:00 - 2:00' },
+      { intervalId: '3', zoneId: '3', zoneName: '2:00 - 3:00' },
+      { intervalId: '3', zoneId: '4', zoneName: '3:00 - 4:00' }
+    ]
     // 在庫データ
     const inventorys = [
       {
         id: '1',
         start: '2022-09-05',
         end: '2022-09-05',
-        priority: '1',
-        sum: '20'
+        intervalId: '3',
+        timeInventory: [
+          { zoneId: '1', inventory: '10' },
+          { zoneId: '4', inventory: '10' }
+        ]
       },
       {
         id: '2',
         start: '2022-09-08',
         end: '2022-09-08',
-        priority: '1',
-        sum: '50'
-      },
-      {
-        id: '3',
-        start: '2022-10-23',
-        end: '2022-10-23',
-        priority: '1',
-        sum: '30'
+        intervalId: '1',
+        timeInventory: [{ zoneId: '3', inventory: '40' }]
       }
+      // {
+      //   id: '3',
+      //   start: '2022-10-23',
+      //   end: '2022-10-23',
+      //   priority: '1',
+      //   sum: '30'
+      // }
     ]
     return {
       productId: JSON.stringify(productId),
       inventoryId: null,
+      timeIntervals: JSON.stringify(timeIntervals),
+      timeZones: JSON.stringify(timeZones),
       inventorys: JSON.stringify(inventorys)
     }
   }

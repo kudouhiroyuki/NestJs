@@ -125,14 +125,16 @@
             <!-- 時間間隔 -->
             <div class="mb-4">
               <label class="form-label w-100">時間間隔</label>
-              <select v-model="inventoryModal.timeInterval" name="timeInterval" class="form-select">
+              <select v-model="inventoryModal.intervalId" class="form-select">
                 <option hidden value="">時間間隔</option>
-                <option value="15">15分</option>
-                <option value="30">30分</option>
-                <option value="60">60分</option>
+                <option
+                  v-for="item in timeIntervals"
+                  :key="item.intervalId"
+                  :value="item.intervalId"
+                >{{ item.intervalName }}</option>
               </select>
             </div>
-            <!-- 時間テーブル -->
+            <!-- 時間帯/在庫数 -->
             <table class="table align-middle mb-5">
               <thead>
                 <tr>
@@ -142,11 +144,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in inventorys" :key="index">
+                <tr v-for="(item, index) in inventoryModal.timeInventory" :key="index">
+
                   <th>{{ index + 1 }}</th>
-                  <td>{{ item.inventoryId }}</td>
-                  <td>{{ item.inventoryName }}</td>
-                  <td>{{ item.inventoryKind }}</td>
+                  <td>{{ item.zoneName }}</td>
+                  <td>{{ item.inventory }}</td>
+                  
                 </tr>
               </tbody>
             </table>
@@ -185,6 +188,8 @@
 <script type="text/javascript">
 const productId= `<%- productId %>`;
 const inventoryId= `<%- inventoryId %>`;
+const timeIntervals= `<%- timeIntervals %>`;
+const timeZones= `<%- timeZones %>`;
 const inventorys= `<%- inventorys %>`;
 
 new Vue({
@@ -199,11 +204,15 @@ new Vue({
       dummyId: '',            // ID（フロント仮登録） 
       start: null,            // 設定期間 (From)
       end: null,              // 設定期間 (To)
-      timeInterval: '',
+
+      intervalId: '',         // 時間間隔
+      timeInventory: []       // 時間帯/在庫数
     },
     // APIデータ
     productId: productId ? JSON.parse(productId) : null,
     inventoryId: inventoryId ? JSON.parse(inventoryId) : null,
+    timeIntervals: JSON.parse(timeIntervals),
+    timeZones: JSON.parse(timeZones),
     inventorys: JSON.parse(inventorys),
     // カレンダー（イベント表示用）
     calendar: {
@@ -226,6 +235,8 @@ new Vue({
           dummyId: info.event._def.extendedProps.dummyId,
           start: info.event._instance.range.start,
           end: info.event._instance.range.end,
+          intervalId: info.event._def.extendedProps.intervalId,
+          timeInventory: info.event._def.extendedProps.timeInventory,
         }
         let target = info.el.closest('.fc-daygrid-event-harness');
         target.dataset.event = JSON.stringify(event);
@@ -296,9 +307,9 @@ new Vue({
       events.forEach(item => {
         let retultDate = this.createBaseDate(item.end);
         // イベントタイトル作成
-        this.inventorys.filter((value) => {
-          if(item.feeId === value.feeId) item.title = value.sum;
-        });
+        item.title = item.timeInventory.reduce((sum, item) => {
+          return sum + Number(item.inventory);
+        }, 0);
         // イベント開始・終了日の調整
         if((item.start !== item.end) && item.start.indexOf('T00:00') === -1) {
           item.start = `${item.start}T00:00`;
@@ -336,6 +347,27 @@ new Vue({
       this.inventoryModal.show = true;
       this.inventoryModal.type = type;
     },
+    /**
+     * 在庫数入力モーダル（データ作成 時間帯/在庫数）
+     */
+     createTimeInventory(intervalId) {
+      this.inventoryModal.timeInventory = this.timeZones.filter((item) => {
+        return item.intervalId === intervalId;
+      });
+      this.inventoryModal.timeInventory.forEach((modalItem, index) => {
+        this.inventorys.forEach((inventoryItem, index) => {
+          if(intervalId === inventoryItem.intervalId) {
+            inventoryItem.timeInventory.forEach((i, index) => {
+              if(modalItem.zoneId === i.zoneId) modalItem.inventory = i.inventory;
+            });
+          }
+        });
+      });
+    },
+
+
+
+
     /**
      * 料金設定モーダル（削除）
      */
@@ -393,6 +425,10 @@ new Vue({
         this.inventoryModal.dummyId = JSON.parse(target.dataset.event).dummyId;
         this.inventoryModal.start = JSON.parse(target.dataset.event).start;
         this.inventoryModal.end = moment(new Date(endDate)).format("YYYY-MM-DD");
+
+
+        this.inventoryModal.intervalId = JSON.parse(target.dataset.event).intervalId;
+        this.createTimeInventory(JSON.parse(target.dataset.event).intervalId);
         this.onInventoryModalShow('edit');
       }
     },

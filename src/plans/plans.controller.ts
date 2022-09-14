@@ -51,6 +51,12 @@ export class PlansController {
   @Get('/:productId/detail/:id')
   @Render('plans/detail')
   async getDetail(@Param('productId') productId: string) {
+    // マスターデータ（料金区分）
+    const feeCategorys = [
+      { feeId: '1', feeName: '料金区分A' },
+      { feeId: '2', feeName: '料金区分B' },
+      { feeId: '3', feeName: '売り止め' }
+    ]
     // 料金プランデータ
     const ratePlans = [
       {
@@ -81,12 +87,6 @@ export class PlansController {
         priority: '1',
         feeId: '3'
       }
-    ]
-    // マスターデータ（料金区分）
-    const feeCategorys = [
-      { feeId: '1', feeName: '料金区分A' },
-      { feeId: '2', feeName: '料金区分B' },
-      { feeId: '3', feeName: '売り止め' }
     ]
     return {
       productId: JSON.stringify(productId),
