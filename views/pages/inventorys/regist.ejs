@@ -80,10 +80,12 @@
           >
         </div>
       </div>
-
       
-
-      
+      <!-- ダウンロード・ファイル読込ボタン -->
+      <div class="mb-5" style="text-align: right;">
+        <input @click="onDownload" type="button" class="btn baseBtnGrey" value="ダウンロード" />
+        <input @click="onImport" type="button" class="btn baseBtnGrey" value="ファイル取込み" />
+      </div>
   
       <div class="row">
         <div style="position: relative;" class="col-6">
@@ -110,6 +112,79 @@
         <input type="submit" value="保存" class="btn baseBtnBlue" style="width: 156px;">
       </div>
     </form>
+
+    <!-- 在庫数入力（モーダル） -->
+    <div :style="inventoryModal.show ? 'display: block' : 'display: none'" class="modalMain">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">在庫数入力</h5>
+            <button @click="onInventoryModalClear" type="button" class="btn-close"></button>
+          </div>
+          <div class="modal-body m-3">
+            <!-- 設定期間 -->
+            <div class="mb-4">
+              <label class="form-label w-100">設定期間</label>
+              <div class="d-inline-block col-5">
+                <vue-ctk-date-time-picker
+                  v-model="inventoryModal.start"
+                  format="YYYY/MM/DD"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :label="'From'"
+                  position="bottom"
+                /></vue-ctk-date-time-picker>
+              </div>
+              <div class="d-inline-block col-1" style="text-align: center;">〜</div>
+              <div class="d-inline-block col-5">
+                <vue-ctk-date-time-picker
+                  v-model="inventoryModal.end"
+                  format="YYYY/MM/DD"
+                  formatted="YYYY/MM/DD"
+                  only-date
+                  :label="'To'"
+                  position="bottom"
+                /></vue-ctk-date-time-picker>
+              </div>
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <!-- 登録 -->
+              <template v-if="inventoryModal.type === 'new'">
+                <input
+                  @click="onPlanAdd"
+                  type="button"
+                  value="登録"
+                  class="btn mt-5 baseBtnGrey"
+                  style="width: 156px;"
+                />
+              </template>
+              <!-- 編集・削除 -->
+              <template v-if="inventoryModal.type === 'edit'">
+                <!-- <input
+                  @click="onPlanEdit"
+                  type="button"
+                  value="編集"
+                  class="btn mt-5 baseBtnGrey"
+                  style="width: 156px;"
+                /> -->
+                <input
+                  @click="onInventoryDelete"
+                  type="button"
+                  value="削除"
+                  class="btn mt-5 baseBtnGrey"
+                  style="width: 156px; margin-right: 10px;"
+                />
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      :style="inventoryModal.show ? 'display: block' : 'display: none'"
+      class="modalBg"
+      @click="onInventoryModalClear">
+    </div>
   </main>
 </div>
 
@@ -125,6 +200,15 @@ new Vue({
   el: "#inventorysRegist",
   data: {
     displayCheck: false,
+    // 在庫数入力（モーダル）
+    inventoryModal: {
+      show: false,            // 表示ステータス
+      type: '',               // 表示タイプ
+      id: '',                 // ID（登録済み） 
+      dummyId: '',            // ID（フロント仮登録） 
+      start: null,            // 設定期間 (From)
+      end: null,              // 設定期間 (To)
+    },
     // APIデータ
     productId: productId ? JSON.parse(productId) : null,
     inventoryId: inventoryId ? JSON.parse(inventoryId) : null,
@@ -139,7 +223,7 @@ new Vue({
         center: 'title',
         right: ''
       },
-      eventOrder: 'priority, id',
+      eventOrder: 'id',
       events: [],
       dayCellContent(e) {
         e.dayNumberText = e.dayNumberText.replace('日', '');
@@ -150,8 +234,6 @@ new Vue({
           dummyId: info.event._def.extendedProps.dummyId,
           start: info.event._instance.range.start,
           end: info.event._instance.range.end,
-          priority: info.event._def.extendedProps.priority,
-          feeId: info.event._def.extendedProps.feeId
         }
         let target = info.el.closest('.fc-daygrid-event-harness');
         target.dataset.event = JSON.stringify(event);
@@ -160,7 +242,7 @@ new Vue({
     // 登録データ
     inventoryName: "",        // 在庫名
     inventoryKindType: "2",   // 在庫管理種別
-    changeInventorys: []      // カレンダー（登録・更新・削除データ）
+    changeInventorys: []      // カレンダー（更新・削除データ）
   },
   created() {
     this.createEventData(this.inventorys);
@@ -169,6 +251,39 @@ new Vue({
     this.renderCalendar(this.calendar, this.createBaseDate(this.calendar.initialDate));
   },
   methods: {
+    /**
+     * ダウンロード
+     */
+     onDownload() {
+      let csvObjs = this.calendar.events.concat(this.changeInventorys);
+      let csvBottom = 'id,action,優先順位,料金区分,設定期間 From,設定期間 To\n';
+      csvObjs.forEach(el => {
+        // 開始日
+        let startDate = new Date(el.start);
+        startDate = moment(startDate).format("YYYY-MM-DD");
+        // 終了日
+        let endDate = new Date(el.end);
+        if(moment(startDate).format("YYYY-MM-DD") !== moment(endDate).format("YYYY-MM-DD") && el.end.indexOf('T24:00') !== -1) {
+          endDate.setDate(endDate.getDate() - 1);
+        }
+        endDate = moment(endDate).format("YYYY-MM-DD");
+   
+        let line = `${el.id},${el.queryAction},${startDate},${endDate}`;
+        csvBottom += (line + '\n');
+      })
+      let link = document.createElement('a');
+      link.href = window.URL.createObjectURL(new Blob([csvBottom], { type: 'text/csv' }));
+      link.download = '在庫一覧.csv';
+      link.click();
+    },
+
+    /**
+     * ファイル取込み
+     */
+     onImport () {
+      alert("ファイル取込み")
+    },
+
     /**
      * 保存
      */
@@ -183,7 +298,7 @@ new Vue({
     },
 
     /**
-     * イベントデータ作成（表示用）
+     * イベントデータ作成（共通 在庫数入力モーダル 在庫カレンダー）
      */
      createEventData(events) {
       events.forEach(item => {
@@ -201,7 +316,7 @@ new Vue({
       });
     },
     /**
-     * 基準日の作成
+     * 基準日の作成（共通 在庫数入力モーダル 在庫カレンダー）
      */ 
      createBaseDate(date) {
       let year = moment(date).format("YYYY");
@@ -210,8 +325,52 @@ new Vue({
       let retultDate = new Date(year, (month - 1), day);
       return retultDate;
     },
+
     /**
-     * 料金カレンダー（表示切り替え 1ヶ月前）
+     * 在庫数入力モーダル（初期化）
+     */
+     onInventoryModalClear() {
+      this.inventoryModal.show = false;
+      this.inventoryModal.type = '';
+      this.inventoryModal.id = '';
+      this.inventoryModal.dummyId = '';
+      this.inventoryModal.start = null;
+      this.inventoryModal.end = null;
+    },
+    /**
+     * 在庫数入力モーダル（表示）
+     */
+     onInventoryModalShow(type) {
+      this.inventoryModal.show = true;
+      this.inventoryModal.type = type;
+    },
+    /**
+     * 料金設定モーダル（削除）
+     */
+     onInventoryDelete() {
+      if(this.inventoryModal.id) {
+        let event = {
+          queryAction: 'DELETE',
+          id: this.inventoryModal.id,
+        };
+        this.calendar.events = this.calendar.events.filter((value) => this.inventoryModal.id !== value.id);
+        this.changeInventorys = this.changeInventorys.filter((value) => this.inventoryModal.id !== value.id && value.queryAction !== 'UPDATE');
+        this.changeInventorys.push(event);
+      } else {     
+        this.calendar.events = this.calendar.events.filter((value) => this.inventoryModal.dummyId !== value.dummyId);
+        this.changeInventorys = this.changeInventorys.filter((value) => this.inventoryModal.dummyId !== value.dummyId);
+      }
+      // カレンダー再描画
+      let baseDate = new Date(this.calendar.initialDate);
+      baseDate.setMonth(baseDate.getMonth() - 1);
+      this.calendar.initialDate = baseDate;
+      this.renderCalendar(this.calendar, baseDate);
+      // モーダル初期化
+      this.onInventoryModalClear();
+    },
+
+    /**
+     * 在庫カレンダー（表示切り替え 1ヶ月前）
      */
      onCalendarPrev() {
       let baseDate = this.createBaseDate(this.calendar.initialDate);
@@ -221,7 +380,7 @@ new Vue({
       this.updateCalendarView(baseDate);
     },
     /**
-     * 料金カレンダー（表示切り替え 1ヶ月後）
+     * 在庫カレンダー（表示切り替え 1ヶ月後）
      */
     onCalendarNext() {
       let baseDate = this.createBaseDate(this.calendar.initialDate);
@@ -231,24 +390,22 @@ new Vue({
       this.updateCalendarView(baseDate);
     },
     /**
-     * 料金カレンダー（イベントセット）
+     * 在庫カレンダー（イベントセット）
      */
     onCalendarEventSet(event) {
       const target = event.target.closest('.fc-daygrid-event-harness');
       if(target) {
-        // let endDate = this.createBaseDate(JSON.parse(target.dataset.event).end);
-        // endDate.setDate(endDate.getDate() - 1);
-        // this.planModal.id = JSON.parse(target.dataset.event).id;
-        // this.planModal.dummyId = JSON.parse(target.dataset.event).dummyId;
-        // this.planModal.start = JSON.parse(target.dataset.event).start;
-        // this.planModal.end = moment(new Date(endDate)).format("YYYY-MM-DD");
-        // this.planModal.priority = JSON.parse(target.dataset.event).priority;
-        // this.planModal.feeId = JSON.parse(target.dataset.event).feeId;
-        // this.onPlanModalShow('edit');
+        let endDate = this.createBaseDate(JSON.parse(target.dataset.event).end);
+        endDate.setDate(endDate.getDate() - 1);
+        this.inventoryModal.id = JSON.parse(target.dataset.event).id;
+        this.inventoryModal.dummyId = JSON.parse(target.dataset.event).dummyId;
+        this.inventoryModal.start = JSON.parse(target.dataset.event).start;
+        this.inventoryModal.end = moment(new Date(endDate)).format("YYYY-MM-DD");
+        this.onInventoryModalShow('edit');
       }
     },
     /**
-     * 料金カレンダー（描画）
+     * 在庫カレンダー（描画）
      */
     renderCalendar(calendarObj, baseDate) {
       const calendars = document.querySelectorAll('.renderCalendar');
@@ -262,7 +419,7 @@ new Vue({
       });
     },
     /**
-     * 料金カレンダー（API再取得）
+     * 在庫カレンダー（API再取得）
      */
     updateCalendarView(baseDate) {
       this.inventorys = [];
@@ -273,7 +430,7 @@ new Vue({
       })
     },
     /**
-     * 料金カレンダーAPI
+     * 在庫カレンダーAPI
      */
     async getCalendarApi(args) {
       await axios.get('https://beauty.tsuku2.jp/api/menus?category_id=1').then((res) => {
@@ -283,16 +440,12 @@ new Vue({
               id: '3',
               start: '2022-10-23',
               end: '2022-10-23',
-              priority: '1',
-              feeId: '3',
               sum: '30'
             },
             {
               id: '4',
               start: '2022-11-07',
               end: '2022-11-07',
-              priority: '1',
-              feeId: '1',
               sum: '60'
             }
           ]

@@ -44,7 +44,6 @@ export class InventorysController {
         start: '2022-09-05',
         end: '2022-09-05',
         priority: '1',
-        feeId: '1',
         sum: '20'
       },
       {
@@ -52,7 +51,6 @@ export class InventorysController {
         start: '2022-09-08',
         end: '2022-09-08',
         priority: '1',
-        feeId: '1',
         sum: '50'
       },
       {
@@ -60,7 +58,6 @@ export class InventorysController {
         start: '2022-10-23',
         end: '2022-10-23',
         priority: '1',
-        feeId: '3',
         sum: '30'
       }
     ]

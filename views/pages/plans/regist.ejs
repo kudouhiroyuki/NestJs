@@ -218,7 +218,7 @@ new Vue({
     feeCategorys: JSON.parse(feeCategorys),
     // 登録データ
     planName: "",        // 料金プラン名
-    changeRatePlans: []  // カレンダー（登録・更新・削除データ）
+    changeRatePlans: []  // カレンダー（登録・編集・削除データ）
   },
   created() {
     this.createEventData(this.ratePlans);
@@ -277,7 +277,6 @@ new Vue({
       this.planModal.priority = '';
       this.planModal.feeId = '';
     },
-
     /**
      * 料金設定モーダル（表示）
      */
