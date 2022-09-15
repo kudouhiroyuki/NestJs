@@ -138,12 +138,25 @@ INSERT INTO nest.users (user_name, password, address, age, department_id, point)
 ('name1', 'password', 'address', 30, 'A0001', 100),<br>
 ('name2', 'password', 'address', 20, 'A0001', 500),<br>
 ('name3', 'password', 'address', 17, 'B0001', 500),<br>
-('name4', 'password', 'address', 58, '', 400)<br>
+('name4', 'password', 'address', 58, '', 400),<br>
 ('name5', 'password', 'address', 32, '', NULL);<br>
 
 INSERT INTO nest.departments (department_id, department_name) VALUES<br>
 ('A0001', 'アプリケーション'),<br>
 ('B0001', 'デザイン');<br>
+
+■REPLACE<br>
+※一致するレコードがあればDELETE、なければINSERT<br>
+REPLACE INTO nest.departments (department_id, department_name) VALUES
+('B0001', 'グラフィックデザイン');
+
+■ON DUPLICATE KEY UPDATE<br>
+※一致するレコードがなければINSERT、あればUPDATE<br>
+INSERT INTO nest.departments (department_id, department_name) VALUES<br>
+('B0001', 'デザイン')<br>
+ON DUPLICATE KEY UPDATE<br>
+department_id = 'C0001',<br>
+department_name = '管理';<br>
 
 ■UPDATE 文<br>
 ※データを更新する<br>
@@ -172,6 +185,11 @@ INNER JOIN nest.departments AS d<br>
 ON u.department_id = d.department_id<br>
 SET u.user_name = d.department_name<br>
 WHERE u.id = 1;<br>
+
+UPDATE nest.users AS u<br>
+INNER JOIN nest.departments AS d<br>
+ON u.department_id = d.department_id<br>
+SET u.user_name = IF(d.department_id = 'A0001', 'true', 'false');<br>
 
 UPDATE nest.users AS u<br>
 SET u.user_name = (<br>
