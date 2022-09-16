@@ -56,29 +56,20 @@ export class InventorysController {
     ]
     // 在庫データ
     const inventorys = [
-      {
-        id: '1',
-        start: '2022-09-05',
-        end: '2022-09-05',
-        intervalId: '3',
-        timeInventory: [
-          { zoneId: '1', inventory: '10' },
-          { zoneId: '4', inventory: '10' }
-        ]
-      },
-      {
-        id: '2',
-        start: '2022-09-08',
-        end: '2022-09-08',
-        intervalId: '1',
-        timeInventory: [{ zoneId: '3', inventory: '40' }]
-      }
       // {
-      //   id: '3',
-      //   start: '2022-10-23',
-      //   end: '2022-10-23',
-      //   priority: '1',
-      //   sum: '30'
+      //   id: '1',
+      //   date: '2022-09-05',
+      //   intervalId: '3',
+      //   timeInventory: [
+      //     { zoneId: '1', inventory: '10' },
+      //     { zoneId: '4', inventory: '10' }
+      //   ]
+      // },
+      // {
+      //   id: '2',
+      //   date: '2022-09-08',
+      //   intervalId: '1',
+      //   timeInventory: [{ zoneId: '3', inventory: '40' }]
       // }
     ]
     return {
