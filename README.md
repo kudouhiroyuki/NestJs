@@ -145,6 +145,13 @@ INSERT INTO nest.departments (department_id, department_name) VALUES<br>
 ('A0001', 'アプリケーション'),<br>
 ('B0001', 'デザイン');<br>
 
+INSERT INTO nest.users (user_name, password, address, age, department_id, point)<br>
+SELECT d.department_name, 'password', 'address', 30, d.department_id, 100<br>
+FROM nest.departments d;<br>
+
+INSERT INTO nest.users (user_name, password, address, age, department_id, point)<br>
+(SELECT d.department_name, 'password', 'address', 30, d.department_id, 100 FROM nest.departments d);<br>
+
 ■REPLACE<br>
 ※一致するレコードがあればDELETE、なければINSERT<br>
 REPLACE INTO nest.departments (department_id, department_name) VALUES
@@ -215,11 +222,13 @@ TRUNCATE TABLE nest.users;
 ※COMMIT(終了 + 変更保存)<br>
 ※ROLLBACK）(終了 + 変更取消し)<br>
 BEGIN;<br>
-UPDATE nest.users SET user_name='user_name' WHERE id='1';<br>
+UPDATE nest.users SET user_name='user1' WHERE id='1';<br>
+UPDATE nest.users SET user_name='user2' WHERE id='2';<br>
 ROLLBACK;<br>
 
 BEGIN;<br>
-UPDATE nest.users SET user_name='user_name' WHERE id='1';<br>
+UPDATE nest.users SET user_name='user1' WHERE id='1';<br>
+UPDATE nest.users SET user_name='user2' WHERE id='2';<br>
 COMMIT;<br>
 
 ■ストアドプロシージャ<br>
@@ -355,8 +364,18 @@ SELECT COUNT(DISTINCT department_id) FROM nest.users;<br>
 ※指定カラムの合計値を取得する<br>
 SELECT department_id, SUM(point) FROM nest.users GROUP BY department_id;<br>
 
+SELECT SUM(u.id), COUNT(d.department_id) FROM nest.users AS u<br>
+INNER JOIN nest.departments AS d<br>
+ON u.department_id = d.department_id;<br>
+
+SELECT SUM(u.id) + COUNT(d.department_id) FROM nest.users AS u<br>
+INNER JOIN nest.departments AS d<br>
+ON u.department_id = d.department_id;<br>
+
 #### 用語<br>
 - ステートメント（構築された文全体）<br>
+- sqlインジェクション
+Webアプリケーションに対し不正なSQL文を注入して不正に操作する攻撃手法
 
 ## CRUD<br>
 |  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
