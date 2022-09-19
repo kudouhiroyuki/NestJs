@@ -56,21 +56,28 @@ export class InventorysController {
     ]
     // 在庫データ
     const inventorys = [
-      // {
-      //   id: '1',
-      //   date: '2022-09-05',
-      //   intervalId: '3',
-      //   timeInventory: [
-      //     { zoneId: '1', inventory: '10' },
-      //     { zoneId: '4', inventory: '10' }
-      //   ]
-      // },
-      // {
-      //   id: '2',
-      //   date: '2022-09-08',
-      //   intervalId: '1',
-      //   timeInventory: [{ zoneId: '3', inventory: '40' }]
-      // }
+      {
+        id: '1',
+        date: '2022-09-05',
+        intervalId: '3',
+        timeInventory: [
+          { zoneId: '1', inventory: '1' },
+          { zoneId: '2', inventory: '2' },
+          { zoneId: '3', inventory: '3' },
+          { zoneId: '4', inventory: '4' }
+        ]
+      },
+      {
+        id: '2',
+        date: '2022-09-08',
+        intervalId: '1',
+        timeInventory: [
+          { zoneId: '1', inventory: '5' },
+          { zoneId: '2', inventory: '6' },
+          { zoneId: '3', inventory: '7' },
+          { zoneId: '4', inventory: '8' }
+        ]
+      }
     ]
     return {
       productId: JSON.stringify(productId),

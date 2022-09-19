@@ -9,8 +9,6 @@
   <main id="inventorysRegist">
     <h4 class="mb-4 fw-bold">在庫登録</h4>
 
-    {{ calendar.events }}
-    <!-- {{ inventoryModal.timeInventory }} -->
 
     <form @submit.prevent="onSubmit" name="divisionsForm">
       <!-- 在庫ID -->
@@ -213,7 +211,8 @@ new Vue({
     inventoryModal: {
       show: false,            // 表示ステータス
       type: '',               // 表示タイプ
-      id: '',                 // ID（登録済み） 
+      id: '',                 // ID（登録済み）
+      date: null,             // 日付
       intervalId: '',         // 時間間隔
       timeInventory: []       // 時間帯/在庫数
     },
@@ -241,6 +240,7 @@ new Vue({
       eventDidMount(info) {
         let event = {
           id: info.event.id,
+          date: info.event._instance.range.start,
           intervalId: info.event._def.extendedProps.intervalId,
           timeInventory: info.event._def.extendedProps.timeInventory,
         }
@@ -273,8 +273,7 @@ new Vue({
         if(this.timeZones.length === index + 1) indent = '';
         timeZones += item.zoneName + indent;
       });
-      let csv = `id,dummyId,action,日付,時間間隔,${timeZones}\n`;
-
+      let csv = `id,dummyId,action,date,intervalId,${timeZones}\n`;
       csvObjs.forEach(el => {
         // 日付
         let date = new Date(el.date);
@@ -309,26 +308,31 @@ new Vue({
       let reader = new FileReader();
       reader.readAsText(e.target.files[0]);
       reader.onload = (event) => {
-        let csvs = event.target.result.split('\n');
+        let csvs = this.conversionObj(event.target.result.split('\n'));    
         let events = [];
-        for(let i=1; i<csvs.length; ++i) {
-          if(csvs[i].split(',')[0] || csvs[i].split(',')[1]) {
-            this.changeInventorys.push({
-              id: csvs[i].split(',')[0],
-              dummyId: csvs[i].split(',')[1],              
-              queryAction: 'UPDATE',
-              date: csvs[i].split(',')[3],
-              intervalId: csvs[i].split(',')[4],
-              timeInventory: [{ zoneId: '3', inventory: '40' }]
-            });
-            events.push({
-              id: csvs[i].split(',')[0],
-              date: csvs[i].split(',')[3],
-              intervalId: csvs[i].split(',')[4],
-              timeInventory: [{ zoneId: '3', inventory: '40' }]
-            });
+        csvs.forEach((item, index) => {
+          let timeInventory = [];
+          for (const [key, value] of Object.entries(item)) {
+            if(key.match(/^[0-9\-]+$/) && (value !== '0' && value !== undefined)) {
+              timeInventory.push({ zoneId: key.substr(2, 1), inventory: value })
+            }
           }
-        }
+          this.changeInventorys.push({
+            id: item.id,
+            dummyId: item.dummyId,              
+            queryAction: 'UPDATE',
+            date: item.date,
+            intervalId: item.intervalId,
+            timeInventory: timeInventory
+          });
+          events.push({
+            id: item.id,
+            date: item.date,
+            intervalId: item.intervalId,
+            timeInventory: timeInventory
+          });
+        });
+        this.inventorys = this.inventorys.concat(events);
         this.createEventData(events);
         // カレンダー再描画
         let baseDate = new Date(this.calendar.initialDate);
@@ -336,6 +340,27 @@ new Vue({
         this.calendar.initialDate = baseDate;
         this.renderCalendar(this.calendar, baseDate);
       }
+    },
+    /**
+     * オブジェクト変換（CSV）
+     */
+     conversionObj (items) {
+      let result = [];
+      for(let i = 1; i <items.length; ++i) {
+        let baseKey = items[0].split(',');
+        let value = items[i].split(',');
+        let obj = new Object();
+        for (let j = 0; j < baseKey.length; j++) {
+          let resultKey = baseKey[j];
+          let timeZone = this.timeZones.filter((item) => {
+            return item.zoneName === baseKey[j];
+          });
+          if(timeZone[0]) resultKey = timeZone[0].intervalId + '-' + timeZone[0].zoneId;
+          obj[resultKey] = value[j];
+        }
+        if(obj.id || obj.dummyId) result.push(obj);
+      }
+      return result;
     },
 
     /**
@@ -382,9 +407,9 @@ new Vue({
       this.inventoryModal.show = false;
       this.inventoryModal.type = '';
       this.inventoryModal.id = '';
-      this.inventoryModal.dummyId = '';
-      this.inventoryModal.start = null;
-      this.inventoryModal.end = null;
+      this.inventoryModal.date = null;
+      this.inventoryModal.intervalId = '';
+      this.inventoryModal.timeInventory = []
     },
 
     /**
@@ -398,15 +423,17 @@ new Vue({
     /**
      * 在庫数入力モーダル（データ作成 時間帯/在庫数）
      */
-     createTimeInventory(intervalId) {
+     createTimeInventory(id, intervalId) {
       this.inventoryModal.timeInventory = this.timeZones.filter((item) => {
         return item.intervalId === intervalId;
       });
       this.inventoryModal.timeInventory.forEach((modalItem, index) => {
-        this.inventorys.forEach((inventoryItem, index) => {
-          if(intervalId === inventoryItem.intervalId) {
+        this.calendar.events.forEach((inventoryItem, index) => {
+          if((id === inventoryItem.id) && (intervalId === inventoryItem.intervalId)) {
+            let resultInven = 0;
             inventoryItem.timeInventory.forEach((i, index) => {
-              if(modalItem.zoneId === i.zoneId) modalItem.inventory = i.inventory;
+              if(modalItem.zoneId === i.zoneId) resultInven = i.inventory;
+              modalItem.inventory = resultInven;
             });
           }
         });
@@ -416,7 +443,7 @@ new Vue({
     /**
      * 料金設定モーダル（編集）
      */
-     onPlanEdit() {
+     onPlanEdit(e) {
       this.createEditEvent();
       this.createEditRate();
       // カレンダー再描画
@@ -437,6 +464,7 @@ new Vue({
           this.calendar.events[index].title = this.inventoryModal.timeInventory.reduce((sum, i) => {
             return sum + Number(i.inventory ?? 0);
           }, 0);
+          this.calendar.events[index].date = item.date;
           this.calendar.events[index].intervalId = this.inventoryModal.intervalId;
           this.calendar.events[index].timeInventory = this.inventoryModal.timeInventory;
         }
@@ -450,17 +478,16 @@ new Vue({
         let event = {
           queryAction: 'UPDATE',
           id: this.inventoryModal.id,
+          date: this.inventoryModal.date,
           intervalId: this.inventoryModal.intervalId,
           timeInventory: this.inventoryModal.timeInventory,
         };
         let matchObj = this.changeInventorys.filter((value) => this.inventoryModal.id === value.id);
         if(matchObj.length) {
           this.changeInventorys.forEach((item, index) => {
-            if((item.id === this.inventoryModal.id)) {
-              this.changeInventorys[index].priority = this.inventoryModal.priority;
-              this.changeInventorys[index].feeId = this.inventoryModal.feeId;
-            }
+            if(this.inventoryModal.id === item.id) this.changeInventorys[index] = event
           });
+
         } else {
           this.changeInventorys.push(event);
         }
@@ -519,11 +546,12 @@ new Vue({
      */
     onCalendarEventSet(event) {
       const target = event.target.closest('.fc-daygrid-event-harness');
-      if(target) {
+      if(target) {        
         this.inventoryModal.id = JSON.parse(target.dataset.event).id;
         this.inventoryModal.dummyId = JSON.parse(target.dataset.event).dummyId;
+        this.inventoryModal.date = JSON.parse(target.dataset.event).date;
         this.inventoryModal.intervalId = JSON.parse(target.dataset.event).intervalId;
-        this.createTimeInventory(JSON.parse(target.dataset.event).intervalId);
+        this.createTimeInventory(JSON.parse(target.dataset.event).id, JSON.parse(target.dataset.event).intervalId);
         this.onInventoryModalShow('edit');
       }
     },
@@ -578,4 +606,4 @@ new Vue({
 })
 </script>
 </body>
-</html>
+</html
