@@ -9,7 +9,6 @@
   <main id="inventorysRegist">
     <h4 class="mb-4 fw-bold">在庫登録</h4>
 
-
     <form @submit.prevent="onSubmit" name="divisionsForm">
       <!-- 在庫ID -->
       <div v-if="inventoryId" class="row mb-5">
@@ -38,8 +37,8 @@
         <label class="form-label">在庫管理種別</label>
         <div class="form-check mb-2 w-50">
           <input
-            v-model="inventoryKindType"
-            name="inventoryKindType"
+            v-model="inventoryType"
+            name="inventoryType"
             class="form-check-input"
             type="radio"
             id="sales_1"
@@ -49,8 +48,8 @@
         </div>
         <div class="form-check mb-2 w-50">
           <input
-            v-model="inventoryKindType"
-            name="inventoryKindType"
+            v-model="inventoryType"
+            name="inventoryType"
             class="form-check-input"
             type="radio"
             id="sales_2"
@@ -60,8 +59,8 @@
         </div>
         <div class="form-check mb-2 w-50">
           <input
-            v-model="inventoryKindType"
-            name="inventoryKindType"
+            v-model="inventoryType"
+            name="inventoryType"
             class="form-check-input"
             type="radio"
             id="sales_3"
@@ -72,8 +71,8 @@
       </div>
 
       <!-- 一般 -->
-      <input v-if="inventoryKindType === '1'" v-model="JSON.stringify(inventory)" type="hidden" name="inventory">
-      <div v-show="inventoryKindType === '1'" class="row mb-5">
+      <input v-if="inventoryType === '1'" v-model="JSON.stringify(inventory)" type="hidden" name="inventory">
+      <div :style="inventoryType === '1' ? 'visibility: visible' : 'visibility: hidden'" class="row mb-5">
         <div class="col-4">
           <label class="form-label">在庫数</label>
           <input
@@ -86,11 +85,15 @@
       </div>
 
       <!-- 日付指定・時間指定 -->
-      <input v-if="inventoryKindType === '1'" v-model="JSON.stringify(inventory)" type="hidden" name="inventory">
-      <div v-show="inventoryKindType === '2' || inventoryKindType === '3'" class="row mb-5">
+      <input v-if="inventoryType === '1'" v-model="JSON.stringify(inventory)" type="hidden" name="inventory">
+      <div :style="inventoryType === '2' || inventoryType === '3' ? 'visibility: visible' : 'visibility: hidden'"  class="row mb-5">
+
         <div class="mb-5" style="text-align: right;">
-          <input @click="onDownload" type="button" class="btn baseBtnGrey" value="ダウンロード" />
-          <input @change="onImport" type="file" type="button" class="btn baseBtnGrey" value="ファイル取込み" />
+          <input @click="onDownload" type="button" class="btn baseBtnBlue" value="ダウンロード" />
+          <label for="fileImport" class="btn baseBtnBlue" style="width:130px; height: 40px;">
+            ファイル読込
+            <input @change="onImport" id="fileImport" style="opacity: 0;" type="file" type="button" value="ファイル取込み" />
+          </label>
         </div>
         <div class="row">
           <div style="position: relative;" class="col-6">
@@ -221,7 +224,7 @@ new Vue({
     inventoryId: inventoryId ? JSON.parse(inventoryId) : null,
     timeIntervals: JSON.parse(timeIntervals),
     timeZones: JSON.parse(timeZones),
-    inventorys: JSON.parse(inventorys),
+    inventorys: inventorys ? JSON.parse(inventorys) : [],
     // カレンダー（イベント表示用）
     calendar: {
       initialView: 'dayGridMonth',
@@ -250,7 +253,7 @@ new Vue({
     },
     // 登録データ
     inventoryName: "",        // 在庫名
-    inventoryKindType: "2",   // 在庫管理種別
+    inventoryType: "1",       // 在庫管理種別
     inventory: "",            // 在庫数
     changeInventorys: []      // カレンダー（更新・削除データ）
   },
@@ -313,7 +316,7 @@ new Vue({
         csvs.forEach((item, index) => {
           let timeInventory = [];
           for (const [key, value] of Object.entries(item)) {
-            if(key.match(/^[0-9\-]+$/) && (value !== '0' && value !== undefined)) {
+            if(key.match(/^[0-9\-]+$/) && (value !== undefined)) {
               timeInventory.push({ zoneId: key.substr(2, 1), inventory: value })
             }
           }
@@ -424,19 +427,23 @@ new Vue({
      * 在庫数入力モーダル（データ作成 時間帯/在庫数）
      */
      createTimeInventory(id, intervalId) {
-      this.inventoryModal.timeInventory = this.timeZones.filter((item) => {
-        return item.intervalId === intervalId;
+      // データテンプレート作成
+      let timeZoneBase = [];
+      JSON.parse(timeZones).forEach((item, index) => {  
+        if(item.intervalId === intervalId) {
+          timeZoneBase.push(item)
+        }
       });
-      this.inventoryModal.timeInventory.forEach((modalItem, index) => {
-        this.calendar.events.forEach((inventoryItem, index) => {
-          if((id === inventoryItem.id) && (intervalId === inventoryItem.intervalId)) {
-            let resultInven = 0;
-            inventoryItem.timeInventory.forEach((i, index) => {
-              if(modalItem.zoneId === i.zoneId) resultInven = i.inventory;
-              modalItem.inventory = resultInven;
-            });
-          }
-        });
+      this.inventoryModal.timeInventory = timeZoneBase;
+      // データセット
+      this.calendar.events.forEach((item, index) => {
+        if(id === item.id) {
+          item.timeInventory.forEach((v, i) => {
+            if(this.inventoryModal.timeInventory[i] !== undefined) {
+              this.inventoryModal.timeInventory[i].inventory = v.inventory;
+            }
+          });
+        }
       });
     },
 
@@ -459,14 +466,14 @@ new Vue({
      */
      createEditEvent() {
       this.calendar.events.forEach((item, index) => {
-        if((item.id === this.inventoryModal.id) || (item.dummyId !== undefined && item.dummyId === this.inventoryModal.dummyId)) {
+        if(item.id === this.inventoryModal.id) {          
           // イベントタイトル作成
-          this.calendar.events[index].title = this.inventoryModal.timeInventory.reduce((sum, i) => {
+          item.title = this.inventoryModal.timeInventory.reduce((sum, i) => {
             return sum + Number(i.inventory ?? 0);
           }, 0);
-          this.calendar.events[index].date = item.date;
-          this.calendar.events[index].intervalId = this.inventoryModal.intervalId;
-          this.calendar.events[index].timeInventory = this.inventoryModal.timeInventory;
+          item.date = item.date;
+          item.intervalId = this.inventoryModal.intervalId;
+          item.timeInventory = this.inventoryModal.timeInventory;
         }
       });
     },
@@ -487,7 +494,6 @@ new Vue({
           this.changeInventorys.forEach((item, index) => {
             if(this.inventoryModal.id === item.id) this.changeInventorys[index] = event
           });
-
         } else {
           this.changeInventorys.push(event);
         }

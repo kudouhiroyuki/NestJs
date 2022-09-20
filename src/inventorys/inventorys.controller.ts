@@ -54,37 +54,12 @@ export class InventorysController {
       { intervalId: '3', zoneId: '3', zoneName: '2:00 - 3:00' },
       { intervalId: '3', zoneId: '4', zoneName: '3:00 - 4:00' }
     ]
-    // 在庫データ
-    const inventorys = [
-      {
-        id: '1',
-        date: '2022-09-05',
-        intervalId: '3',
-        timeInventory: [
-          { zoneId: '1', inventory: '1' },
-          { zoneId: '2', inventory: '2' },
-          { zoneId: '3', inventory: '3' },
-          { zoneId: '4', inventory: '4' }
-        ]
-      },
-      {
-        id: '2',
-        date: '2022-09-08',
-        intervalId: '1',
-        timeInventory: [
-          { zoneId: '1', inventory: '5' },
-          { zoneId: '2', inventory: '6' },
-          { zoneId: '3', inventory: '7' },
-          { zoneId: '4', inventory: '8' }
-        ]
-      }
-    ]
     return {
       productId: JSON.stringify(productId),
       inventoryId: null,
       timeIntervals: JSON.stringify(timeIntervals),
       timeZones: JSON.stringify(timeZones),
-      inventorys: JSON.stringify(inventorys)
+      inventorys: []
     }
   }
   /**
@@ -99,53 +74,59 @@ export class InventorysController {
   }
 
   /**
-   * GET 料金区分（詳細画面）
+   * GET 在庫（詳細画面）
    */
   @Get('/:productId/detail/:divisionId')
-  @Render('divisions/regist')
+  @Render('inventorys/regist')
   async getDetail(@Param('productId') productId: string, @Param('divisionId') divisionId: string) {
-    // 料金区分データ（詳細）
-    const divisions = [
+    // マスターデータ（時間間隔）
+    const timeIntervals = [
+      { intervalId: '1', intervalName: '15分' },
+      { intervalId: '2', intervalName: '30分' },
+      { intervalId: '3', intervalName: '60分' }
+    ]
+    // マスターデータ（時間帯）
+    const timeZones = [
+      { intervalId: '1', zoneId: '1', zoneName: '0:00 - 0:15' },
+      { intervalId: '1', zoneId: '2', zoneName: '0:15 - 0:30' },
+      { intervalId: '1', zoneId: '3', zoneName: '0:30 - 0:45' },
+      { intervalId: '1', zoneId: '4', zoneName: '0:45 - 1:00' },
+      { intervalId: '3', zoneId: '1', zoneName: '0:00 - 1:00' },
+      { intervalId: '3', zoneId: '2', zoneName: '1:00 - 2:00' },
+      { intervalId: '3', zoneId: '3', zoneName: '2:00 - 3:00' },
+      { intervalId: '3', zoneId: '4', zoneName: '3:00 - 4:00' }
+    ]
+    // 在庫データ
+    const inventorys = [
       {
-        age_id: '1',
-        ageName: '大人',
-        price: '1350',
-        originalPrice: '1500',
-        discountRate: '10%OFF'
+        id: '1',
+        date: '2022-09-05',
+        intervalId: '1',
+        timeInventory: [
+          { zoneId: '1', inventory: '1' },
+          { zoneId: '2', inventory: '2' },
+          { zoneId: '3', inventory: '3' },
+          { zoneId: '4', inventory: '4' }
+        ]
       },
       {
-        age_id: '2',
-        ageName: '中人',
-        price: '',
-        originalPrice: '',
-        discountRate: ''
-      },
-      {
-        age_id: '3',
-        ageName: '小人',
-        price: '',
-        originalPrice: '',
-        discountRate: ''
-      },
-      {
-        age_id: '4',
-        ageName: '幼児',
-        price: '',
-        originalPrice: '',
-        discountRate: ''
-      },
-      {
-        age_id: '5',
-        ageName: 'シニア',
-        price: '',
-        originalPrice: '',
-        discountRate: ''
+        id: '2',
+        date: '2022-09-08',
+        intervalId: '3',
+        timeInventory: [
+          { zoneId: '1', inventory: '5' },
+          { zoneId: '2', inventory: '6' },
+          { zoneId: '3', inventory: '7' },
+          { zoneId: '4', inventory: '8' }
+        ]
       }
     ]
     return {
       productId: JSON.stringify(productId),
-      divisionId: JSON.stringify(divisionId),
-      divisions: JSON.stringify(divisions)
+      inventoryId: null,
+      timeIntervals: JSON.stringify(timeIntervals),
+      timeZones: JSON.stringify(timeZones),
+      inventorys: JSON.stringify(inventorys)
     }
   }
   /**

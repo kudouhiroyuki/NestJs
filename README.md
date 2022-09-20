@@ -7,10 +7,12 @@ http://localhost:3000/divisions/reference?productId=1001<br>
 http://localhost:3000/divisions/1001/regist<br>
 http://localhost:3000/divisions/1001/detail/1<br>
 
-- 在庫（画面）<br>
-http://localhost:3000/inventorys/reference?productId=1001
-http://localhost:3000/inventorys/null/regist
-http://localhost:3000/inventorys/1001/regist
+- 在庫管理<br>
+http://localhost:3000/inventorys/reference
+http://localhost:3000/inventorys/reference?productId=1001<br>
+http://localhost:3000/inventorys/null/regist<br>
+http://localhost:3000/inventorys/1001/regist<br>
+http://localhost:3000/inventorys/1001/detail/1<br>
 
 #### 施設管理<br>
 - 施設情報管理（画面）<br>
