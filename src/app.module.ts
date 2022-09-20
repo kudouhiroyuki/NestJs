@@ -43,6 +43,7 @@ import { ProductsModule } from './products/products.module'
 import { PlansModule } from './plans/plans.module'
 import { DivisionsModule } from './divisions/divisions.module'
 import { InventorysModule } from './inventorys/inventorys.module'
+import { MaintenanceModule } from './maintenance/maintenance.module'
 
 import { UsersModule } from './users/users.module'
 import { TenantModule } from './tenant/tenant.module'
@@ -54,6 +55,7 @@ import { NotificationModule } from './notification/notification.module'
     PlansModule,
     DivisionsModule,
     InventorysModule,
+    MaintenanceModule,
     UsersModule,
     TenantModule,
     NotificationModule
