@@ -362,7 +362,20 @@ SELECT COUNT(DISTINCT department_id) FROM nest.users;<br>
 
 ■SUM 関数<br>
 ※指定カラムの合計値を取得する<br>
-SELECT department_id, SUM(point) FROM nest.users GROUP BY department_id;<br>
+SELECT department_id, SUM(point) <br>
+FROM nest.users<br>
+GROUP BY department_id;<br>
+
+SELECT department_id, SUM(point)<br>
+FROM nest.users<br>
+GROUP BY department_id<br>
+HAVING SUM(point) > 500;<br>
+
+SELECT (SUM(id) + SUM(point)) AS total FROM nest.users;<br>
+
+SELECT SUM(CASE WHEN point = 100 THEN 1 ELSE 0 END) FROM nest.users;<br>
+
+SELECT SUM(IF(point = 100, 1, 0) + IF(department_id = 'A0001', 1, 0)) FROM nest.users;<br>
 
 SELECT SUM(u.id), COUNT(d.department_id) FROM nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
