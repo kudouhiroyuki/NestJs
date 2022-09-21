@@ -23,5 +23,5 @@ model departments {
 model log {
   id    Int     @default(autoincrement()) @id
   log String
-  dt  DateTime
+  dt  DateTime @db.DateTime(0)
 }

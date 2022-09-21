@@ -14,36 +14,95 @@
 
     <form @submit.prevent="onSerch">
       <!-- 登録フォーム -->
-      <div class="baseShadow p-3 mb-5">
-    
+      <div class="baseShadow mb-5" style="padding: 2rem 3rem;">
+        <!-- メンテナンス対象 -->
+        <div class="mb-4">
+          <label class="form-label fw-bold">メンテナンス対象</label>
+          <div class="form-check mb-3">
+            <input
+              v-model="subject"
+              name="subject"
+              class="form-check-input"
+              type="radio"
+              id="subject_1"
+              value="1"
+            >
+            <label class="form-check-label" for="subject_1">システムメンテナンス</label>
+          </div>
+          <div class="row mb-3">
+            <div class="col-4">
+              <input
+                v-model="subject"
+                name="subject"
+                class="form-check-input"
+                type="radio"
+                id="subject_2"
+                value="2"
+              >
+              <label class="form-check-label" for="subject_2">テナントメンテナンス</label>
+            </div>
+            <div class="col-3">
+              <select v-model="tenantName" :disabled="subject!=='2'" class="form-select">
+                <option hidden value="">選択してください</option>
+                <option
+                  v-for="item in tenants"
+                  :key="item.tenantId"
+                  :value="item"
+                >{{ item.tenantName }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-4">
+              <input
+                v-model="subject"
+                name="subject"
+                class="form-check-input"
+                type="radio"
+                id="subject_3"
+                value="3"
+              >
+              <label class="form-check-label" for="subject_3">機能メンテナンス</label>
+            </div>
+            <div class="col-3">
+              <select v-model="vigorName" :disabled="subject!=='3'" class="form-select">
+                <option hidden value="">選択してください</option>
+                <option
+                  v-for="item in vigors"
+                  :key="item.id"
+                  :value="item"
+                >{{ item.name }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
         <!-- 開始・終了日時 -->
-        <div class="col-12 mb-4">
-          <div class="d-inline-block">
-            <label class="form-label fw-bold">開始日時</label>
-            <vue-ctk-date-time-picker
-              name="startDate"
-              v-model="startDate"
-              formatted="YYYY/MM/DD"
-              only-date
-              :min-date="minDate"
-              :label="'From'"
-              position="top"
-            /></vue-ctk-date-time-picker>
+        <div class="row mb-4">
+          <div class="col-8">
+            <div class="d-inline-block">
+              <label class="form-label fw-bold">開始日時</label>
+              <vue-ctk-date-time-picker
+                name="startDate"
+                v-model="startDate"
+                formatted="YYYY/MM/DD hh:mm"
+                :label="'From'"
+                position="top"
+              /></vue-ctk-date-time-picker>
+            </div>
+            <div class="d-inline-block">〜</div>
+            <div class="d-inline-block">
+              <label class="form-label fw-bold">終了日時</label>
+              <vue-ctk-date-time-picker
+                name="endDate"
+                v-model="endDate"
+                formatted="YYYY/MM/DD hh:mm"
+                :label="'To'"
+                position="top"
+              /></vue-ctk-date-time-picker>
+            </div>
           </div>
-          <div class="d-inline-block">〜</div>
-          <div class="d-inline-block">
-            <label class="form-label fw-bold">終了日時</label>
-            <vue-ctk-date-time-picker
-              name="endDate"
-              v-model="endDate"
-              formatted="YYYY/MM/DD"
-              only-date
-              :min-date="minDate"
-              :label="'To'"
-              position="top"
-            /></vue-ctk-date-time-picker>
-          </div>
-          <div class="d-inline-block">
+          <div class="col-4">
             <input type="submit" value="登録" class="btn baseBtnBlue" style="width: 156px;">
           </div>
         </div>
@@ -61,16 +120,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in tenants" :key="index">
-            <th>{{ index + 1 }}</th>
+          <tr v-for="(item, index) in maintenances" :key="index">
             <td>{{ item.id }}</td>
-            <td>{{ item.name }}</td>
             <td>
-              <input
-                @change="onTenantChange($event, item)"
-                class="form-check-input"
-                type="checkbox">
+              <template v-if="item.tenantName">{{ item.tenantName }}</template>
+              <template v-else>-</template>
             </td>
+            <td>
+              <template v-if="item.vigorName">{{ item.vigorName }}</template>
+              <template v-else>-</template>
+            </td>
+            <td>{{ item.startDate }}</td>
+            <td>{{ item.endDate }}</td>
           </tr>
         </tbody>
       </table>
@@ -80,13 +141,25 @@
 
 
 <script type="text/javascript">
+const tenants= `<%- tenants %>`;
+const vigors= `<%- vigors %>`;
+const maintenances= `<%- maintenances %>`;
+
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 new Vue({
   el: "#maintenanceIndex",
   data: {
+    minDate: moment(new Date()).format("YYYY-MM-DD"),
+    // APIデータ
+    tenants: JSON.parse(tenants),
+    vigors: JSON.parse(vigors),
+    maintenances: JSON.parse(maintenances),
     // 登録データ
+    subject: '1',                // メンテナンス対象
+    tenantName: '',              // テナント名
+    vigorName: '',               // 機能名
     startDate: null,             // 開始日時 (From)
     endDate: null,               // 終了日時 (To)
   },
