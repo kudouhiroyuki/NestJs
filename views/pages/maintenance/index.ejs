@@ -29,6 +29,7 @@
             >
             <label class="form-check-label" for="subject_1">システムメンテナンス</label>
           </div>
+
           <div class="row mb-3">
             <div class="col-4">
               <input
@@ -42,16 +43,17 @@
               <label class="form-check-label" for="subject_2">テナントメンテナンス</label>
             </div>
             <div class="col-3">
-              <select v-model="tenantName" :disabled="subject!=='2'" class="form-select">
+              <select v-model="tenantId" :disabled="subject!=='2'" class="form-select">
                 <option hidden value="">選択してください</option>
                 <option
                   v-for="item in tenants"
                   :key="item.tenantId"
-                  :value="item"
+                  :value="item.tenantId"
                 >{{ item.tenantName }}</option>
               </select>
             </div>
           </div>
+          
           <div class="row mb-3">
             <div class="col-4">
               <input
@@ -75,8 +77,10 @@
               </select>
             </div>
           </div>
+          <div v-if="$v.checkTenantId.$dirty" class="text-danger fw-bold mt-2">
+            <p v-if="!$v.checkTenantId.required">テナント名が入力されていません。</p>
+          </div>
         </div>
-
         <!-- 開始・終了日時 -->
         <div class="row mb-4">
           <div class="col-8">
@@ -118,10 +122,8 @@
             <input type="submit" value="登録" class="btn baseBtnBlue" style="width: 156px;">
           </div>
         </div>
-
-        {{ '終了日' + endDate }}
-
       </div>
+
       <!-- 一覧テーブル -->
       <h5 class="mb-4 fw-bold">メンテナンス一覧</h5>
       <table class="table align-middle">
@@ -169,6 +171,7 @@ const { required, minValue, maxValueValue, minValueValue } = window.validators;
 new Vue({
   el: "#maintenanceIndex",
   data: {
+    checkTenantId: '',          // テナントID (入力チェック用)
     checkStartDate: '',         // 開始日時 (入力チェック用)
     checkEndDate: '',           // 終了日時 (入力チェック用)
     // APIデータ
@@ -177,12 +180,15 @@ new Vue({
     maintenances: JSON.parse(maintenances),
     // 登録データ
     subject: '1',                // メンテナンス対象
-    tenantName: '',              // テナント名
+    tenantId: '',                // テナントID
     vigorName: '',               // 機能名
     startDate: null,             // 開始日時 (From)
     endDate: null,               // 終了日時 (To)
   },
   validations: {
+    checkTenantId: {
+      required
+    },
     checkStartDate: {
       required,
       minValue: value => value > new Date().getTime(),
@@ -236,16 +242,15 @@ new Vue({
   },
   methods: {
     /**
-     * 基準日の作成
+     * テナントデータセット（バリデーションチェック用）
      */ 
-     createBaseDate(date) {
-      let year = moment(date).format("YYYY");
-      let month = moment(date).format("M");
-      let day = moment(date).format("D");
-      let retultDate = new Date(year, (month - 1), day);
-      return retultDate;
+    setCheckTenantId() {
+      this.checkTenantId = '';
+      if(this.subject === '1' || this.subject === '3') this.checkTenantId = 'dummy';
+      if(this.subject === '2') this.checkTenantId = this.tenantId;
     },
-    onSubmit() {  
+    onSubmit() {
+      this.setCheckTenantId();
       this.$v.$touch();
       if(!this.$v.$invalid) {
         alert(777)
