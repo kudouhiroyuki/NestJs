@@ -12,7 +12,7 @@
       メンテナンス設定
     </h4>
 
-    <form @submit.prevent="onSerch">
+    <form @submit.prevent="onSubmit">
       <!-- 登録フォーム -->
       <div class="baseShadow mb-5" style="padding: 2rem 3rem;">
         <!-- メンテナンス対象 -->
@@ -76,36 +76,51 @@
             </div>
           </div>
         </div>
-  
+
         <!-- 開始・終了日時 -->
         <div class="row mb-4">
           <div class="col-8">
             <div class="d-inline-block">
               <label class="form-label fw-bold">開始日時</label>
               <vue-ctk-date-time-picker
-                name="startDate"
                 v-model="startDate"
-                formatted="YYYY/MM/DD hh:mm"
+                :format="'YYYY/MM/DD hh:mm a'"
+                :formatted="'YYYY-MM-DD HH:mm a'"
                 :label="'From'"
                 position="top"
+                name="startDate"
               /></vue-ctk-date-time-picker>
             </div>
             <div class="d-inline-block">〜</div>
             <div class="d-inline-block">
               <label class="form-label fw-bold">終了日時</label>
               <vue-ctk-date-time-picker
-                name="endDate"
                 v-model="endDate"
-                formatted="YYYY/MM/DD hh:mm"
-                :label="'To'"
+                :format="'YYYY/MM/DD hh:mm a'"
+                :formatted="'YYYY-MM-DD HH:mm a'"
+                :label="'From'"
                 position="top"
+                name="endDate"
               /></vue-ctk-date-time-picker>
+            </div>
+            <div v-if="$v.checkStartDate.$dirty" class="text-danger fw-bold mt-2">
+              <p v-if="!$v.checkStartDate.required">開始日時が入力されていません。</p>
+              <p v-if="!$v.checkStartDate.minValue">開始日時は現在日時以降で入力して下さい。</p>
+              <p v-if="!$v.checkStartDate.maxValueValue">開始日時は終了日時以前で入力して下さい。</p>
+            </div>
+            <div v-if="$v.checkEndDate.$dirty" class="text-danger fw-bold mt-2">
+              <p v-if="!$v.checkEndDate.required">終了日時が入力されていません。</p>
+              <p v-if="!$v.checkEndDate.minValue">終了日時は現在日時以降で入力して下さい。</p>
+              <p v-if="!$v.checkEndDate.minValueValue">終了日時は開始日時以降で入力して下さい。</p>
             </div>
           </div>
           <div class="col-4">
             <input type="submit" value="登録" class="btn baseBtnBlue" style="width: 156px;">
           </div>
         </div>
+
+        {{ '終了日' + endDate }}
+
       </div>
       <!-- 一覧テーブル -->
       <h5 class="mb-4 fw-bold">メンテナンス一覧</h5>
@@ -148,10 +163,14 @@ const maintenances= `<%- maintenances %>`;
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
+Vue.use(window.vuelidate.default);
+const { required, minValue, maxValueValue, minValueValue } = window.validators;
+
 new Vue({
   el: "#maintenanceIndex",
   data: {
-    minDate: moment(new Date()).format("YYYY-MM-DD"),
+    checkStartDate: '',         // 開始日時 (入力チェック用)
+    checkEndDate: '',           // 終了日時 (入力チェック用)
     // APIデータ
     tenants: JSON.parse(tenants),
     vigors: JSON.parse(vigors),
@@ -163,7 +182,78 @@ new Vue({
     startDate: null,             // 開始日時 (From)
     endDate: null,               // 終了日時 (To)
   },
+  validations: {
+    checkStartDate: {
+      required,
+      minValue: value => value > new Date().getTime(),
+      maxValueValue: value => value < window.checkEndDate,
+    },
+    checkEndDate: {
+      required,
+      minValue: value => value > new Date().getTime(),
+      minValueValue: value => value > window.checkStartDate,
+    },
+  },
+  watch: {
+    /**
+     * 開始日時の変更監視（バリデーションチェック用）
+     */
+    startDate: function(newVal, oldVal) {
+      this.startDate = null;
+      this.checkStartDate = '';
+      this.checkEndDate = '';
+      window.checkStartDate = '';
+      window.checkEndDate = '';
+      if(newVal !== null) {
+        let resultDate = moment(new Date(newVal.slice(0, -3)));
+        if (newVal.match(/午後/)) resultDate.add(12, 'h').format();
+        this.startDate = moment(resultDate._d).format("YYYY-MM-DD HH:mm:ss");
+        this.checkStartDate = new Date(resultDate).getTime();
+        window.checkStartDate = new Date(resultDate).getTime();
+      }
+      this.checkEndDate = new Date(this.endDate).getTime();
+      window.checkEndDate = new Date(this.endDate).getTime();
+    },
+    /**
+     * 終了日時の変更監視（バリデーションチェック用）
+     */ 
+    endDate: function(newVal, oldVal) {
+      this.endDate = null;
+      this.checkEndDate = '';
+      this.checkStartDate = '';
+      window.checkEndDate = '';
+      window.checkStartDate = '';
+      if(newVal !== null) {
+        let resultDate = moment(new Date(newVal.slice(0, -3)));
+        if (newVal.match(/午後/)) resultDate.add(12, 'h').format();
+        this.endDate = moment(resultDate._d).format("YYYY-MM-DD HH:mm:ss");
+        this.checkEndDate = new Date(resultDate).getTime();
+        window.checkEndDate = new Date(resultDate).getTime();
+      }
+      this.checkStartDate = new Date(this.startDate).getTime();
+      window.checkStartDate = new Date(this.startDate).getTime();
+    }
+  },
   methods: {
+    /**
+     * 基準日の作成
+     */ 
+     createBaseDate(date) {
+      let year = moment(date).format("YYYY");
+      let month = moment(date).format("M");
+      let day = moment(date).format("D");
+      let retultDate = new Date(year, (month - 1), day);
+      return retultDate;
+    },
+    onSubmit() {  
+      this.$v.$touch();
+      if(!this.$v.$invalid) {
+        alert(777)
+        // document.notice.method="post";
+        // document.notice.action = "/notification/regist";
+        // document.notice.submit();
+      }
+    }
   }
 })
 </script>
