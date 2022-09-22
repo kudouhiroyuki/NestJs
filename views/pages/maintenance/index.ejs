@@ -202,6 +202,13 @@ new Vue({
   },
   watch: {
     /**
+     * テナントIDの変更監視（バリデーションチェック用）
+     */ 
+     tenantId: function(newVal, oldVal) {
+      this.tenantId = newVal;
+      this.checkTenantId = newVal;
+    },
+    /**
      * 開始日時の変更監視（バリデーションチェック用）
      */
     startDate: function(newVal, oldVal) {
@@ -242,7 +249,7 @@ new Vue({
   },
   methods: {
     /**
-     * テナントデータセット（バリデーションチェック用）
+     * テナントIDセット（バリデーションチェック用）
      */ 
     setCheckTenantId() {
       this.checkTenantId = '';
