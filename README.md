@@ -116,25 +116,48 @@ CREATE DATABASE nest;
 ※データベースの一覧を取得する<br>
 SHOW DATABASES;
 
-#### <----- トリガーの作成 -----><br>
+#### <----- トリガー -----><br>
 ■CREATE TRIGGER 文<br>
-CREATE TRIGGER insert_trigger<br>
-AFTER INSERT<br>
-ON nest.users FOR EACH ROW<br>
-INSERT INTO log (log, dt)<br>
-VALUES('Insert', now());<br>
+※トリガーを作成する<br>
+USE nest;<br>
 
-CREATE TRIGGER update_trigger<br>
-AFTER UPDATE<br>
-ON nest.users FOR EACH ROW<br>
+CREATE TRIGGER insert_trigger_a<br>
+AFTER INSERT<br>
+ON users FOR EACH ROW<br>
 INSERT INTO log (log, dt)<br>
-VALUES('Update', now());<br>
+VALUES('InsertA', now());<br>
+
+CREATE TRIGGER insert_trigger_b<br>
+AFTER INSERT<br>
+ON users FOR EACH ROW<br>
+INSERT INTO log (log, dt)<br>
+VALUES('InsertB', now());<br>
+
+CREATE TRIGGER update_trigger_a<br>
+AFTER UPDATE<br>
+ON users FOR EACH ROW<br>
+INSERT INTO log (log, dt)<br>
+VALUES('UpdateA', now());<br>
+
+CREATE TRIGGER update_trigger_b<br>
+AFTER UPDATE<br>
+ON users FOR EACH ROW<br>
+PRECEDES update_trigger_a<br>
+INSERT INTO log (log, dt)<br>
+VALUES('UpdateB', now());<br>
 
 CREATE TRIGGER delete_trigger<br>
 AFTER DELETE<br>
-ON nest.users FOR EACH ROW<br>
+ON users FOR EACH ROW<br>
 INSERT INTO log (log, dt)<br>
 VALUES('Delete', now());<br>
+
+■SHOW TRIGGERS 文<br>
+SHOW TRIGGERS;
+
+■DROP TRIGGER 文
+※トリガーを削除する<br>
+DROP TRIGGER insert_trigger;
 
 #### <----- データの追加と削除 -----><br>
 ■INSERT 文<br>
