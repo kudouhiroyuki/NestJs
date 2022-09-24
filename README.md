@@ -153,9 +153,10 @@ INSERT INTO log (log, dt)<br>
 VALUES('Delete', now());<br>
 
 ■SHOW TRIGGERS 文<br>
+※トリガーを一覧表示する<br>
 SHOW TRIGGERS;
 
-■DROP TRIGGER 文
+■DROP TRIGGER 文<br>
 ※トリガーを削除する<br>
 DROP TRIGGER insert_trigger;
 
