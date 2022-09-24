@@ -116,7 +116,7 @@ CREATE DATABASE nest;
 ※データベースの一覧を取得する<br>
 SHOW DATABASES;
 
-#### <----- トリガー -----><br>
+#### <----- トリガーの作成 -----><br>
 ■CREATE TRIGGER 文<br>
 ※トリガーを作成する<br>
 USE nest;<br>
@@ -152,6 +152,25 @@ ON users FOR EACH ROW<br>
 INSERT INTO log (log, dt)<br>
 VALUES('Delete', now());<br>
 
+■1つのトリガーで複数のSQL文を実行する<br>
+DELIMITER //<br>
+CREATE TRIGGER insert_trigger_c AFTER INSERT ON users FOR EACH ROW<br>
+BEGIN<br>
+&emsp;INSERT INTO log (log, dt) VALUES('InsertC1', now());<br>
+&emsp;INSERT INTO log (log, dt) VALUES('InsertC2', now());<br>
+END;//<br>
+DELIMITER ;<br>
+
+■トリガーの中で追加更新するデータの値を参照する(OLD.col_name, NEW.col_name)<br>
+DELIMITER //<br>
+CREATE TRIGGER insert_trigger_d AFTER INSERT ON salesLists FOR EACH ROW<br>
+BEGIN<br>
+&emsp;SELECT stockCount INTO @stock FROM stocks WHERE name=new.name;<br>
+&emsp;SET @stock = @stock - 1;<br>
+&emsp;UPDATE stocks SET stockCount=@stock WHERE name=new.name;<br>
+END;//<br>
+DELIMITER ;<br>
+
 ■SHOW TRIGGERS 文<br>
 ※トリガーを一覧表示する<br>
 SHOW TRIGGERS;
@@ -173,6 +192,10 @@ INSERT INTO nest.users (user_name, password, address, age, department_id, point)
 INSERT INTO nest.departments (department_id, department_name) VALUES<br>
 ('A0001', 'アプリケーション'),<br>
 ('B0001', 'デザイン');<br>
+
+INSERT INTO nest.stocks (name, stockCount) VALUES<br>
+('Mouse', 10),<br>
+('Keyboard', 8);<br>
 
 INSERT INTO nest.users (user_name, password, address, age, department_id, point)<br>
 SELECT d.department_name, 'password', 'address', 30, d.department_id, 100<br>

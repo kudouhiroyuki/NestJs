@@ -25,3 +25,11 @@ model log {
   log String
   dt  DateTime @db.DateTime(0)
 }
+model salesLists {
+  name String @unique
+  sales Int
+}
+model stocks {
+  name String @unique
+  stockCount Int
+}
