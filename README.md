@@ -412,6 +412,17 @@ SELECT AVG(point) FROM nest.users WHERE department_id = 'A0001';<br>
 ※指定カラムの行数を取得する<br>
 SELECT COUNT(DISTINCT department_id) FROM nest.users;<br>
 
+SELECT COUNT(*), COUNT(DISTINCT department_id) FROM nest.users;<br>
+
+SELECT department_id, COUNT(*)<br>
+FROM nest.users<br>
+GROUP BY department_id;<br>
+
+SELECT age, COUNT(*)<br>
+FROM nest.users<br>
+WHERE age = 10 OR age = 20 OR age = 30 OR age = 40 OR age = 50<br>
+GROUP BY age;<br>
+
 ■SUM 関数<br>
 ※指定カラムの合計値を取得する<br>
 SELECT department_id, SUM(point) <br>
