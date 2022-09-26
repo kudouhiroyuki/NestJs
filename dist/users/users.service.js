@@ -33,7 +33,8 @@ let UsersService = class UsersService {
                 address: true,
                 age: true,
                 department_id: true,
-                point: true
+                point: true,
+                createdAt: true
             },
             where: whereConditions,
             orderBy: orderConditions,

@@ -62,6 +62,7 @@ export class UsersController {
       age: string
       department_id: string
       point: number
+      createdAt: string
     }
   ): Promise<Users> {
     return await this.service.createUser(user)

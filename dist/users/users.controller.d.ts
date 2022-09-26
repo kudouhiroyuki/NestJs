@@ -15,6 +15,7 @@ export declare class UsersController {
         age: string;
         department_id: string;
         point: number;
+        createdAt: string;
     }): Promise<Users>;
     updateUser(id: string, user: Users): Promise<Users>;
     deleteUser(id: string): Promise<Users>;

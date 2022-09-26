@@ -182,12 +182,12 @@ DROP TRIGGER insert_trigger;
 #### <----- データの追加と削除 -----><br>
 ■INSERT 文<br>
 ※データを追加する<br>
-INSERT INTO nest.users (user_name, password, address, age, department_id, point) VALUES<br>
-('name1', 'password', 'address', 30, 'A0001', 100),<br>
-('name2', 'password', 'address', 20, 'A0001', 500),<br>
-('name3', 'password', 'address', 17, 'B0001', 500),<br>
-('name4', 'password', 'address', 58, '', 400),<br>
-('name5', 'password', 'address', 32, '', NULL);<br>
+INSERT INTO nest.users (user_name, password, address, age, department_id, point, createdAt) VALUES<br>
+('name1', 'password', 'address', 30, 'A0001', 100, '2010-10-01 00:00:00'),<br>
+('name2', 'password', 'address', 20, 'A0001', 500, '2010-11-01 08:00:00'),<br>
+('name3', 'password', 'address', 17, 'B0001', 500, '2010-11-01 20:00:00'),<br>
+('name4', 'password', 'address', 58, '', 400, '2010-12-01 00:00:00'),<br>
+('name5', 'password', 'address', 32, '', NULL, '2011-12-01 00:00:00');<br>
 
 INSERT INTO nest.departments (department_id, department_name) VALUES<br>
 ('A0001', 'アプリケーション'),<br>
@@ -394,6 +394,32 @@ SELECT u1.id, u1.user_name, u1.password, u1.department_id<br>
 FROM nest.users AS u1<br>
 INNER JOIN nest.users AS u2<br>
 ON u1.id = u2.id;<br>
+
+#### <----- 日付と時刻に関する関数 -----><br>
+■年ごと
+SELECT DATE_FORMAT(createdAt, '%Y'), SUM(point), COUNT(*)
+FROM nest.users
+GROUP BY DATE_FORMAT(createdAt, '%Y');
+
+■月ごと
+SELECT DATE_FORMAT(createdAt, '%Y-%m'), SUM(point), COUNT(*)
+FROM nest.users
+GROUP BY DATE_FORMAT(createdAt, '%Y-%m');
+
+■日ごと
+SELECT DATE_FORMAT(createdAt, '%Y-%m-%d'), SUM(point), COUNT(*)
+FROM nest.users
+GROUP BY DATE_FORMAT(createdAt, '%Y-%m-%d');
+
+■時間ごと
+SELECT DATE_FORMAT(createdAt, '%H'), SUM(point), COUNT(*)
+FROM nest.users
+GROUP BY DATE_FORMAT(createdAt, '%H');
+
+■曜日ごと（0=Sunday..6=Saturday）
+SELECT DATE_FORMAT(createdAt, '%w'), SUM(point), COUNT(*)
+FROM nest.users
+GROUP BY DATE_FORMAT(createdAt, '%w');
 
 #### <----- 集計に関する関数 -----><br>
 ■AVG 関数<br>

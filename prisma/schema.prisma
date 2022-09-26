@@ -15,6 +15,7 @@ model users {
   age String
   department_id  String
   point  Int?
+  createdAt  DateTime @db.DateTime(0)
 }
 model departments {
   department_id String @unique

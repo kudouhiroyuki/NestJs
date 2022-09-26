@@ -146,7 +146,8 @@ export class UsersService {
         address: true,
         age: true,
         department_id: true,
-        point: true
+        point: true,
+        createdAt: true
       },
       where: whereConditions,
       orderBy: orderConditions,
@@ -161,6 +162,7 @@ export class UsersService {
     age: string
     department_id: string
     point: number
+    createdAt: string
   }): Promise<Users> {
     return await this.prisma.users.create({ data })
   }

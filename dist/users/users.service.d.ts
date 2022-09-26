@@ -15,6 +15,7 @@ export declare class UsersService {
         age: string;
         department_id: string;
         point: number;
+        createdAt: string;
     }): Promise<Users>;
     updateUser(params: {
         where: Prisma.usersWhereUniqueInput;
