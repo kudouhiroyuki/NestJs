@@ -6,14 +6,14 @@
 
   <%- include('../../partials/sidebar'); %>
 
-  <main id="maintenanceIndex">    
+  <main id="maintenancesIndex">    
     <h4 class="mb-4 fw-bold" style="color:#0069D9;">
       <img src="/images/icon/maintenance.svg" style="width: 24px;">
       メンテナンス設定
     </h4>
 
     <!-- 登録フォーム -->
-    <form @submit.prevent="onRegist" name="maintenanceRegist">
+    <form @submit.prevent="onRegist" name="maintenancesRegist">
       <div class="baseShadow mb-5" style="padding: 2rem 3rem;">
         <!-- メンテナンス対象 -->
         <div class="mb-4">
@@ -121,7 +121,7 @@
               <p v-if="!$v.checkEndDate.minValueValue">終了日時は開始日時以降で入力して下さい。</p>
             </div>
           </div>
-          <div class="col-4">
+          <div class="col-4 text-end">
             <input type="submit" value="登録" class="btn baseBtnBlue" style="width: 156px;">
           </div>
         </div>
@@ -129,7 +129,7 @@
     </form>
 
     <!-- 一覧テーブル -->
-    <form name="maintenanceDelete">
+    <form name="maintenancesDelete">
       <h5 class="mb-4 fw-bold">メンテナンス一覧</h5>
       <table class="table align-middle">
         <thead>
@@ -182,7 +182,7 @@ Vue.use(window.vuelidate.default);
 const { required, minValue, maxValueValue, minValueValue } = window.validators;
 
 new Vue({
-  el: "#maintenanceIndex",
+  el: "#maintenancesIndex",
   data: {
     checkTenantId: '',          // テナントID (入力チェック用)
     checkVigorId: '',           // 機能ID (入力チェック用)
@@ -296,18 +296,18 @@ new Vue({
       this.setCheckVigorId();
       this.$v.$touch();
       if(!this.$v.$invalid) {
-        document.maintenanceRegist.method="post";
-        document.maintenanceRegist.action = "/maintenance/regist";
-        document.maintenanceRegist.submit();
+        document.maintenancesRegist.method="post";
+        document.maintenancesRegist.action = "/maintenances/regist";
+        document.maintenancesRegist.submit();
       }
     },
     /**
      * 削除処理
      */ 
      onDelete(id) {
-      document.maintenanceDelete.method="post";
-      document.maintenanceDelete.action = `/maintenance/delete/${id}`;
-      document.maintenanceDelete.submit();
+      document.maintenancesDelete.method="post";
+      document.maintenancesDelete.action = `/maintenances/delete/${id}`;
+      document.maintenancesDelete.submit();
     }
   }
 })

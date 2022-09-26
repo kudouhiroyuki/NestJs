@@ -1,12 +1,12 @@
 import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect, Res } from '@nestjs/common'
 
-@Controller('maintenance')
-export class MaintenanceController {
+@Controller('maintenances')
+export class MaintenancesController {
   /**
-   * GET メンテナンス設定（TOP画面）
+   * GET メンテナンス設定画面
    */
   @Get('/')
-  @Render('maintenance/index')
+  @Render('maintenances/index')
   async getIndex() {
     const tenants = [
       { tenantId: '1', tenantName: 'ふじやま温泉1' },
@@ -64,7 +64,7 @@ export class MaintenanceController {
   async postRegist(@Body() body: any) {
     console.log('メンテナンス設定（登録処理）')
     console.log(body)
-    return { url: `http://localhost:3000/maintenance` }
+    return { url: `http://localhost:3000/maintenances` }
   }
   /**
    * POST メンテナンス設定（削除処理）
@@ -74,6 +74,6 @@ export class MaintenanceController {
   async postDelete(@Param('id') id: string) {
     console.log('メンテナンス設定（削除処理）')
     console.log(id)
-    return { url: `http://localhost:3000/maintenance` }
+    return { url: `http://localhost:3000/maintenances` }
   }
 }
