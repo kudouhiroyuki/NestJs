@@ -26,8 +26,8 @@ export class MaintenanceController {
         tenantName: '',
         vigorId: '',
         vigorName: '',
-        startDate: '2022/00/00  00:00',
-        endDate: '2022/00/00  00:00'
+        startDate: '2022/03/01  00:00',
+        endDate: '2022/04/01  00:00'
       },
       {
         id: '2',
@@ -36,8 +36,8 @@ export class MaintenanceController {
         tenantName: 'ふじやま温泉1',
         vigorId: '',
         vigorName: '',
-        startDate: '2022/00/00  00:00',
-        endDate: '2022/00/00  00:00'
+        startDate: '2022/03/01  00:00',
+        endDate: '2022/04/01  00:00'
       },
       {
         id: '3',
@@ -46,8 +46,8 @@ export class MaintenanceController {
         tenantName: '',
         vigorId: '3',
         vigorName: '決済サービス3',
-        startDate: '2022/00/00  00:00',
-        endDate: '2022/00/00  00:00'
+        startDate: '2023/10/01  00:00',
+        endDate: '2023/11/01  00:00'
       }
     ]
     return {
@@ -57,13 +57,23 @@ export class MaintenanceController {
     }
   }
   /**
-   * POST 料金区分（登録処理）
+   * POST メンテナンス設定（登録処理）
    */
-  @Post('/:productId/regist')
+  @Post('/regist')
   @Redirect()
-  async postRegist(@Param('productId') productId: string, @Body() body: any) {
-    console.log('料金区分（登録処理）')
+  async postRegist(@Body() body: any) {
+    console.log('メンテナンス設定（登録処理）')
     console.log(body)
-    return { url: `http://localhost:3000/divisions/${productId}/reference` }
+    return { url: `http://localhost:3000/maintenance` }
+  }
+  /**
+   * POST メンテナンス設定（削除処理）
+   */
+  @Post('/delete/:id')
+  @Redirect()
+  async postDelete(@Param('id') id: string) {
+    console.log('メンテナンス設定（削除処理）')
+    console.log(id)
+    return { url: `http://localhost:3000/maintenance` }
   }
 }

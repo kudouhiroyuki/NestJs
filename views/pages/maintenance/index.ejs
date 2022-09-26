@@ -12,8 +12,8 @@
       メンテナンス設定
     </h4>
 
-    <form @submit.prevent="onSubmit">
-      <!-- 登録フォーム -->
+    <!-- 登録フォーム -->
+    <form @submit.prevent="onRegist" name="maintenanceRegist">
       <div class="baseShadow mb-5" style="padding: 2rem 3rem;">
         <!-- メンテナンス対象 -->
         <div class="mb-4">
@@ -29,8 +29,8 @@
             >
             <label class="form-check-label" for="subject_1">システムメンテナンス</label>
           </div>
-
           <div class="row mb-3">
+            <input v-model="tenantId" type="hidden" name="tenantId">
             <div class="col-4">
               <input
                 v-model="subject"
@@ -53,8 +53,8 @@
               </select>
             </div>
           </div>
-          
           <div class="row mb-3">
+            <input v-model="vigorId" type="hidden" name="vigorId">
             <div class="col-4">
               <input
                 v-model="subject"
@@ -67,7 +67,7 @@
               <label class="form-check-label" for="subject_3">機能メンテナンス</label>
             </div>
             <div class="col-3">
-              <select v-model="vigorName" :disabled="subject!=='3'" class="form-select">
+              <select v-model="vigorId" :disabled="subject!=='3'" class="form-select">
                 <option hidden value="">選択してください</option>
                 <option
                   v-for="item in vigors"
@@ -80,9 +80,14 @@
           <div v-if="$v.checkTenantId.$dirty" class="text-danger fw-bold mt-2">
             <p v-if="!$v.checkTenantId.required">テナント名が入力されていません。</p>
           </div>
+          <div v-if="$v.checkVigorId.$dirty" class="text-danger fw-bold mt-2">
+            <p v-if="!$v.checkVigorId.required">機能名が入力されていません。</p>
+          </div>
         </div>
         <!-- 開始・終了日時 -->
-        <div class="row mb-4">
+        <div class="row mb-4" style="align-items: flex-end;">
+          <input v-model="startDate" type="hidden" name="startDate">
+          <input v-model="endDate" type="hidden" name="endDate">
           <div class="col-8">
             <div class="d-inline-block">
               <label class="form-label fw-bold">開始日時</label>
@@ -92,10 +97,9 @@
                 :formatted="'YYYY-MM-DD HH:mm a'"
                 :label="'From'"
                 position="top"
-                name="startDate"
               /></vue-ctk-date-time-picker>
             </div>
-            <div class="d-inline-block">〜</div>
+            <div class="d-inline-block" style="margin: 0 20px;">〜</div>
             <div class="d-inline-block">
               <label class="form-label fw-bold">終了日時</label>
               <vue-ctk-date-time-picker
@@ -104,7 +108,6 @@
                 :formatted="'YYYY-MM-DD HH:mm a'"
                 :label="'From'"
                 position="top"
-                name="endDate"
               /></vue-ctk-date-time-picker>
             </div>
             <div v-if="$v.checkStartDate.$dirty" class="text-danger fw-bold mt-2">
@@ -123,8 +126,10 @@
           </div>
         </div>
       </div>
+    </form>
 
-      <!-- 一覧テーブル -->
+    <!-- 一覧テーブル -->
+    <form name="maintenanceDelete">
       <h5 class="mb-4 fw-bold">メンテナンス一覧</h5>
       <table class="table align-middle">
         <thead>
@@ -138,7 +143,7 @@
         </thead>
         <tbody>
           <tr v-for="(item, index) in maintenances" :key="index">
-            <td>{{ item.id }}</td>
+            <td>{{ item.subject }}</td>
             <td>
               <template v-if="item.tenantName">{{ item.tenantName }}</template>
               <template v-else>-</template>
@@ -148,14 +153,22 @@
               <template v-else>-</template>
             </td>
             <td>{{ item.startDate }}</td>
-            <td>{{ item.endDate }}</td>
+            <td>
+              {{ item.endDate }}
+              <button
+                @click="onDelete(item.id)"
+                v-if="new Date().getTime() < new Date(item.startDate).getTime()"
+                type="submit"
+                style="padding: 2px 0px;font-size: 14px;width: 60px;background-color: rgb(170, 170, 170);font-weight: bold;border-radius: 30px;border: 0px;margin-left: 20px;">
+                取消
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
     </form>
   </main>
 </div>
-
 
 <script type="text/javascript">
 const tenants= `<%- tenants %>`;
@@ -172,6 +185,7 @@ new Vue({
   el: "#maintenanceIndex",
   data: {
     checkTenantId: '',          // テナントID (入力チェック用)
+    checkVigorId: '',           // 機能ID (入力チェック用)
     checkStartDate: '',         // 開始日時 (入力チェック用)
     checkEndDate: '',           // 終了日時 (入力チェック用)
     // APIデータ
@@ -181,12 +195,15 @@ new Vue({
     // 登録データ
     subject: '1',                // メンテナンス対象
     tenantId: '',                // テナントID
-    vigorName: '',               // 機能名
+    vigorId: '',                 // 機能ID
     startDate: null,             // 開始日時 (From)
     endDate: null,               // 終了日時 (To)
   },
   validations: {
     checkTenantId: {
+      required
+    },
+    checkVigorId: {
       required
     },
     checkStartDate: {
@@ -207,6 +224,13 @@ new Vue({
      tenantId: function(newVal, oldVal) {
       this.tenantId = newVal;
       this.checkTenantId = newVal;
+    },
+    /**
+     * 機能IDの変更監視（バリデーションチェック用）
+     */ 
+     vigorId: function(newVal, oldVal) {
+      this.vigorId = newVal;
+      this.checkVigorId = newVal;
     },
     /**
      * 開始日時の変更監視（バリデーションチェック用）
@@ -256,15 +280,34 @@ new Vue({
       if(this.subject === '1' || this.subject === '3') this.checkTenantId = 'dummy';
       if(this.subject === '2') this.checkTenantId = this.tenantId;
     },
-    onSubmit() {
+    /**
+     * 機能IDセット（バリデーションチェック用）
+     */ 
+     setCheckVigorId() {
+      this.checkVigorId = '';
+      if(this.subject === '1' || this.subject === '2') this.checkVigorId = 'dummy';
+      if(this.subject === '3') this.checkVigorId = this.vigorId;
+    },
+    /**
+     * 登録処理
+     */ 
+    onRegist() {
       this.setCheckTenantId();
+      this.setCheckVigorId();
       this.$v.$touch();
       if(!this.$v.$invalid) {
-        alert(777)
-        // document.notice.method="post";
-        // document.notice.action = "/notification/regist";
-        // document.notice.submit();
+        document.maintenanceRegist.method="post";
+        document.maintenanceRegist.action = "/maintenance/regist";
+        document.maintenanceRegist.submit();
       }
+    },
+    /**
+     * 削除処理
+     */ 
+     onDelete(id) {
+      document.maintenanceDelete.method="post";
+      document.maintenanceDelete.action = `/maintenance/delete/${id}`;
+      document.maintenanceDelete.submit();
     }
   }
 })
