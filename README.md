@@ -396,30 +396,30 @@ INNER JOIN nest.users AS u2<br>
 ON u1.id = u2.id;<br>
 
 #### <----- 日付と時刻に関する関数 -----><br>
-■年ごと
-SELECT DATE_FORMAT(createdAt, '%Y'), SUM(point), COUNT(*)
-FROM nest.users
-GROUP BY DATE_FORMAT(createdAt, '%Y');
+■年ごと<br>
+SELECT DATE_FORMAT(createdAt, '%Y'), SUM(point), COUNT(*)<br>
+FROM nest.users<br>
+GROUP BY DATE_FORMAT(createdAt, '%Y');<br>
 
 ■月ごと
-SELECT DATE_FORMAT(createdAt, '%Y-%m'), SUM(point), COUNT(*)
-FROM nest.users
-GROUP BY DATE_FORMAT(createdAt, '%Y-%m');
+SELECT DATE_FORMAT(createdAt, '%Y-%m'), SUM(point), COUNT(*)<br>
+FROM nest.users<br>
+GROUP BY DATE_FORMAT(createdAt, '%Y-%m');<br>
 
-■日ごと
-SELECT DATE_FORMAT(createdAt, '%Y-%m-%d'), SUM(point), COUNT(*)
-FROM nest.users
-GROUP BY DATE_FORMAT(createdAt, '%Y-%m-%d');
+■日ごと<br>
+SELECT DATE_FORMAT(createdAt, '%Y-%m-%d'), SUM(point), COUNT(*)<br>
+FROM nest.users<br>
+GROUP BY DATE_FORMAT(createdAt, '%Y-%m-%d');<br>
 
-■時間ごと
-SELECT DATE_FORMAT(createdAt, '%H'), SUM(point), COUNT(*)
-FROM nest.users
-GROUP BY DATE_FORMAT(createdAt, '%H');
+■時間ごと<br>
+SELECT DATE_FORMAT(createdAt, '%H'), SUM(point), COUNT(*)<br>
+FROM nest.users<br>
+GROUP BY DATE_FORMAT(createdAt, '%H');<br>
 
-■曜日ごと（0=Sunday..6=Saturday）
-SELECT DATE_FORMAT(createdAt, '%w'), SUM(point), COUNT(*)
-FROM nest.users
-GROUP BY DATE_FORMAT(createdAt, '%w');
+■曜日ごと（0=Sunday..6=Saturday）<br>
+SELECT DATE_FORMAT(createdAt, '%w'), SUM(point), COUNT(*)<br>
+FROM nest.users<br>
+GROUP BY DATE_FORMAT(createdAt, '%w');<br>
 
 #### <----- 集計に関する関数 -----><br>
 ■AVG 関数<br>
