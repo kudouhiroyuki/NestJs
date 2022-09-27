@@ -82,12 +82,12 @@
         <tr v-for="(item, index) in members" :key="index">
           <td>{{ item.memberId }}</td>
           <td>{{ item.joinDate }}</td>
-          <td>{{ item.fullName }}</td>
+          <td>{{ item.seiKanji }} {{ item.meiKanji }}</td>
           <td>{{ item.mail }}</td>
           <td>{{ item.tell }}</td>
           <td>{{ item.sex }}</td>
           <td>
-            <button type="submit" class="btn baseBtnBlue" style="width: 60px;">
+            <button @click="onDetailPage(item.memberId)" class="btn baseBtnBlue" style="width: 60px;">
               詳細
             </button>
           </td>
@@ -136,7 +136,7 @@ const totalPageCount= `<%- totalPageCount %>`;
 const queryParam = new URLSearchParams(location.search);
 
 Vue.use(window.vuelidate.default);
-const { required, minValue, maxValueValue, minValueValue } = window.validators;
+const { required } = window.validators;
 
 new Vue({
   el: "#membersIndex",
@@ -184,7 +184,9 @@ new Vue({
       this[e.target.name] = e.target.value;
       queryParam.set(e.target.name, e.target.value);
     },
-    // ページ番号（更新）
+    /**
+     * ページ番号（更新）
+     */
     onPageChange(page) {
       queryParam.set("pageNumber", page);
       this.onSerch();
@@ -197,6 +199,12 @@ new Vue({
       if(!this.$v.fullName.$invalid || !this.$v.mail.$invalid || !this.$v.tell.$invalid) {
         window.location.href = "/members?" + queryParam;
       }
+    },
+    /**
+     * 画面遷移（詳細）
+     */
+    onDetailPage(memberId) {
+      window.location.href = `/members/detail/${memberId}`;
     },
   }
 })

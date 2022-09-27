@@ -16,6 +16,8 @@ http://localhost:3000/inventorys/1001/detail/1<br>
 
 - 会員画面<br>
 http://localhost:3000/members
+http://localhost:3000/members?fullName=name&mail=mail&tell=tell&pageNumber=1
+http://localhost:3000/members/detail/I001
 
 - メンテナンス管理<br>
 http://localhost:3000/maintenances

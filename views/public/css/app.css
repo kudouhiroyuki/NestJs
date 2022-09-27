@@ -138,6 +138,14 @@ input[type=file] {
   padding-top: initial;
 }
 
+.redDC3545 {
+  color: #DC3545;
+}
+
+.pe-pointer {
+  cursor: pointer;
+}
+
 .layout {
   background-color: #f5f5fa;
 }
