@@ -480,7 +480,19 @@ ON u.department_id = d.department_id;<br>
 #### 用語<br>
 - ステートメント（構築された文全体）<br>
 - sqlインジェクション
-Webアプリケーションに対し不正なSQL文を注入して不正に操作する攻撃手法
+Webアプリケーションに対し不正なSQL文を注入して不正に操作する攻撃手法<br>
+
+#### 練習問題<br>
+■ポイントランキング順位<br>
+SELECT id, user_name, point, FIND_IN_SET(<br>
+&emsp;point, (<br>
+&emsp;&emsp;SELECT GROUP_CONCAT(<br>
+&emsp;&emsp;&emsp;point ORDER BY point DESC<br>
+&emsp;&emsp;)<br>
+&emsp;&emsp;FROM nest.users<br>
+&emsp;)<br>
+) AS ranking<br>
+FROM nest.users;<br>
 
 ## CRUD<br>
 |  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
