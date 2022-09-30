@@ -15,12 +15,12 @@ http://localhost:3000/inventorys/1001/regist<br>
 http://localhost:3000/inventorys/1001/detail/1<br>
 
 - 会員画面<br>
-http://localhost:3000/members
-http://localhost:3000/members?fullName=name&mail=mail&tell=tell&pageNumber=1
-http://localhost:3000/members/detail/I001
+http://localhost:3000/members<br>
+http://localhost:3000/members?fullName=name&mail=mail&tell=tell&pageNumber=1<br>
+http://localhost:3000/members/detail/I001<br>
 
 - メンテナンス管理<br>
-http://localhost:3000/maintenances
+http://localhost:3000/maintenances<br>
 
 #### 施設管理<br>
 - 施設情報管理（画面）<br>

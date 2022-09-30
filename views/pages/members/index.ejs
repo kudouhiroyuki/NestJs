@@ -66,34 +66,36 @@
     </form>
 
     <!-- 一覧テーブル -->
-    <table class="table align-middle mb-5">
-      <thead>
-        <tr>
-          <th scope="col">会員ID</th>
-          <th scope="col">入会日</th>
-          <th scope="col">氏名</th>
-          <th scope="col">メールアドレス</th>
-          <th scope="col">電話番号</th>
-          <th scope="col">性別</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in members" :key="index">
-          <td>{{ item.memberId }}</td>
-          <td>{{ item.joinDate }}</td>
-          <td>{{ item.seiKanji }} {{ item.meiKanji }}</td>
-          <td>{{ item.mail }}</td>
-          <td>{{ item.tell }}</td>
-          <td>{{ item.sex }}</td>
-          <td>
-            <button @click="onDetailPage(item.memberId)" class="btn baseBtnBlue" style="width: 60px;">
-              詳細
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div style="overflow: auto; width: 100%; height: 250px;">
+      <table class="table align-middle mb-5">
+        <thead>
+          <tr>
+            <th style="position: sticky; top: 0; left: 0; background: white;">会員ID</th>
+            <th style="position: sticky; top: 0; left: 0; background: white;">入会日</th>
+            <th style="position: sticky; top: 0; left: 0; background: white;">氏名</th>
+            <th style="position: sticky; top: 0; left: 0; background: white;">メールアドレス</th>
+            <th style="position: sticky; top: 0; left: 0; background: white;">電話番号</th>
+            <th style="position: sticky; top: 0; left: 0; background: white;">性別</th>
+            <th style="position: sticky; top: 0; left: 0; background: white;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in members" :key="index">
+            <td>{{ item.memberId }}</td>
+            <td>{{ item.joinDate }}</td>
+            <td>{{ item.seiKanji }} {{ item.meiKanji }}</td>
+            <td>{{ item.mail }}</td>
+            <td>{{ item.tell }}</td>
+            <td>{{ item.sex }}</td>
+            <td>
+              <button @click="onDetailPage(item.memberId)" class="btn baseBtnBlue" style="width: 60px;">
+                詳細
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- ページネーション -->
     <nav class="d-flex justify-content-center" aria-label="Page navigation">

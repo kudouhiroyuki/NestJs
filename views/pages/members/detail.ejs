@@ -8,7 +8,7 @@
 
   <main id="membersDetail">
     <h4 class="mb-4 fw-bold">会員詳細</h4>
-    <form @submit.prevent="onRegist">
+    <form @submit.prevent="onRegist" name="membersRegist">
       <!-- 会員ID -->
       <div class="mb-4">
         <label class="form-label" style="color: #757575">会員ID</label>
@@ -43,6 +43,7 @@
             type="text"
             class="form-control"
             placeholder=""
+            maxlength="25"
           >
           <div v-if="$v.seiKanji.$dirty" class="text-danger fw-bold mt-3">
             <p v-if="!$v.seiKanji.required">姓が入力されていません。</p>
@@ -56,6 +57,7 @@
             type="text"
             class="form-control"
             placeholder=""
+            maxlength="25"
           >
           <div v-if="$v.meiKanji.$dirty" class="text-danger fw-bold mt-3">
             <p v-if="!$v.meiKanji.required">名が入力されていません。</p>
@@ -74,6 +76,7 @@
             type="text"
             class="form-control"
             placeholder=""
+            maxlength="25"
           >
           <div v-if="$v.seiKana.$dirty" class="text-danger fw-bold mt-3">
             <p v-if="!$v.seiKana.required">セイが入力されていません。</p>
@@ -87,6 +90,7 @@
             type="text"
             class="form-control"
             placeholder=""
+            maxlength="25"
           >
           <div v-if="$v.meiKana.$dirty" class="text-danger fw-bold mt-3">
             <p v-if="!$v.meiKana.required">メイが入力されていません。</p>
@@ -105,10 +109,11 @@
             type="text"
             class="form-control"
             placeholder=""
+            maxlength="254"
           >
         </div>
         <div v-if="$v.mail.$dirty" class="text-danger fw-bold mt-3">
-          <p v-if="!$v.mail.email">メールアドレス形式で入力して下さい。</p>
+          <p v-if="!$v.mail.email">メールアドレスの形式で入力して下さい。</p>
           <p v-if="!$v.mail.valid">入力不可能な文字があります。正しい値で入力して下さい。</p>
         </div>
       </div>
@@ -123,9 +128,14 @@
             type="text"
             class="form-control"
             placeholder=""
+            maxlength="15"
           >
         </div>
+        <div v-if="$v.tell.$dirty" class="text-danger fw-bold mt-3">
+          <p v-if="!$v.tell.alphaNum">入力不可能な文字があります。正しい値で入力して下さい。</p>
+        </div>
       </div>
+
       <!-- 性別 -->
       <div class="row mb-5">
         <label class="form-label">性別 <span class="redDC3545">*必須</span></label>
@@ -154,6 +164,7 @@
           </div>
         </div>
       </div>
+
       <!-- 生年月日 -->
       <div class="row mb-5">
         <label class="form-label">生年月日 <span class="redDC3545">*必須</span></label>
@@ -167,7 +178,11 @@
             label=""
           /></vue-ctk-date-time-picker>
         </div>
+        <div v-if="$v.dateBirth.$dirty" class="text-danger fw-bold mt-3">
+          <p v-if="!$v.dateBirth.required">生年月日が入力されていません。</p>
+        </div>
       </div>
+
       <!-- 郵便番号 -->
       <div class="row mb-5">
         <label class="form-label">郵便番号</label>
@@ -178,9 +193,14 @@
             type="text"
             class="form-control"
             placeholder=""
+            maxlength="8"
           >
         </div>
+        <div v-if="$v.postCode.$dirty" class="text-danger fw-bold mt-3">
+          <p v-if="!$v.postCode.alphaNum">入力不可能な文字があります。正しい値で入力して下さい。</p>
+        </div>
       </div>
+
       <!-- 都道府県 -->
       <div class="row mb-5">
         <label class="form-label">都道府県 <span class="redDC3545">*必須</span></label>
@@ -191,9 +211,15 @@
             type="text"
             class="form-control"
             placeholder=""
+            maxlength="4"
           >
         </div>
+        <div v-if="$v.prefectures.$dirty" class="text-danger fw-bold mt-3">
+          <p v-if="!$v.prefectures.required">都道府県が入力されていません。</p>
+          <p v-if="!$v.prefectures.valid">入力不可能な文字があります。正しい値で入力して下さい。</p>
+        </div>
       </div>
+
       <!-- 住所 -->
       <div class="row mb-5">
         <label class="form-label">住所</label>
@@ -207,8 +233,35 @@
           >
         </div>
       </div>
+
+      <!-- 購入履歴 -->
+      <h5 class="mb-4 fw-bold">購入履歴</h5>
+      <div style="overflow: auto; width: 100%; height: 320px;">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th style="position: sticky; top: 0; left: 0; background: white;">取引日時</th>
+              <th style="position: sticky; top: 0; left: 0; background: white;">取引ID</th>
+              <th style="position: sticky; top: 0; left: 0; background: white;">購入テナント</th>
+              <th style="position: sticky; top: 0; left: 0; background: white;">商品点数</th>
+              <th style="position: sticky; top: 0; left: 0; background: white;">支払方法</th>
+              <th style="position: sticky; top: 0; left: 0; background: white;">合計金額</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in forms.purchaseHistory" :key="index">
+              <td>{{ item.transactionDate }}</td>
+              <td>{{ item.transactionId }}</td>
+              <td>{{ item.purchaseTenant }}</td>
+              <td>{{ item.productNumber }}</td>
+              <td>{{ item.paymentMethod }}</td>
+              <td>{{ Number(item.totalAmount).toLocaleString() }}円</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="col-12 p-0 text-end">
-        <button type="submit" class="btn mt-4 baseBtnBlue" style="width: 156px;">
+        <button :disabled="!authority" type="submit" class="btn mt-4 baseBtnBlue" style="width: 156px;">
           保存
         </button>
       </div>
@@ -231,11 +284,14 @@ let regexpKanji = /^([\u{3005}\u{3007}\u{303b}\u{3400}-\u{9FFF}\u{F900}-\u{FAFF}
 let regexpKatakana = /^[\u{3000}-\u{301C}\u{30A1}-\u{30F6}\u{30FB}-\u{30FE}]+$/mu;
 // 全角があるか
 let regexpZenkaku = /[^\x01-\x7E\uFF61-\uFF9F]/;
+// 郵便番号であるか
+let regexpPostCode = /^[0-9]{3}-[0-9]{3}$/;
 
 new Vue({
   el: "#membersDetail",
   data: {
-    passwordDisplay: true,       // パスワード（表示切り替え）
+    passwordDisplay: false,      // パスワード（表示切り替え）
+    authority: false,            // 権限
     // APIデータ
     forms: JSON.parse(forms),
     // 登録データ
@@ -295,6 +351,23 @@ new Vue({
         return result;
       }
     },
+    tell: {
+      alphaNum
+    },
+    dateBirth: {
+      required
+    },
+    postCode: {
+      alphaNum
+    },
+    prefectures: {
+      required,
+      valid: function(value) {
+        let result = false;
+        if (new RegExp(regexpKanji).test(value)) result = true;
+        return result;
+      }
+    },
   },
   created() {
     this.setInitData();
@@ -304,6 +377,7 @@ new Vue({
      * 登録情報セット
      */ 
     setInitData() {
+      this.authority = this.forms.authority;
       this.membersId = this.forms.membersId;
       this.password = this.forms.password;
       this.joinDate = this.forms.joinDate;
@@ -331,10 +405,9 @@ new Vue({
      onRegist() {
       this.$v.$touch();
       if(!this.$v.$invalid) {
-        alert(1)
-        // document.maintenancesRegist.method="post";
-        // document.maintenancesRegist.action = "/maintenances/regist";
-        // document.maintenancesRegist.submit();
+        document.membersRegist.method="post";
+        document.membersRegist.action = `/members/detail/${location.pathname.split('/')[3]}`;
+        document.membersRegist.submit();
       }
     },
   }
