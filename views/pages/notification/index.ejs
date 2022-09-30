@@ -42,7 +42,7 @@
                   name="keyword"
                   type="text"
                   class="form-control mb-3"
-                  placeholder="氏名"
+                  placeholder="キーワード"
                 >
               </div>
             </div>
@@ -90,8 +90,8 @@
     </form>
    
     <!-- 一覧テーブル -->
-    <div style="overflow: auto; width: 100%; height: 250px;">
-      <table class="table align-middle mb-5">
+    <div style="overflow: auto; width: 100%; height: 200px;" class="mb-5">
+      <table class="table align-middle">
         <thead>
           <tr>
             <th style="position: sticky; top: 0; left: 0; background: white;">お知らせID</th>
@@ -238,21 +238,21 @@ new Vue({
       this[e.target.name] = e.target.value;
       queryParam.set(e.target.name, e.target.value);
     },
-    onSerch() {
-      document.noticeSerch.method="get";
-      document.noticeSerch.action = "/notification/reference";
-      document.noticeSerch.submit();
+    /**
+     * ページ番号（更新）
+     */
+     onPageChange(page) {
+      queryParam.set("pageNumber", page);
+      this.onSerch();
     },
-    onCsvDownload() {
-      let csv = '\ufeff' + 'お知らせID,公開範囲,お知らせタイトル,タグ,投稿日時\n';
-      this.tableItems.forEach(el => {
-        let line = `${el['notice_id']},${el['open_range']},${el['notice_title']},${el['tag']},${el['date_time']}`;
-        csv += (line + '\n');
-      })
-      let link = document.createElement('a');
-      link.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-      link.download = 'お知らせ一覧.csv';
-      link.click();
+    /**
+     * 検索処理
+     */ 
+    onSerch() {
+      this.$v.$touch();
+      if(!this.$v.fullName.$invalid || !this.$v.mail.$invalid || !this.$v.tell.$invalid) {
+        window.location.href = "/notifications?" + queryParam;
+      }
     },
   }
 })

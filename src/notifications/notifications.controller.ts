@@ -7,8 +7,32 @@ export class NotificationsController {
    */
   @Get('/')
   @Render('notification/index')
-  async getIndex(@Query() query: any) { 
+  async getIndex(@Query() query: any) {
     const notifications = [
+      {
+        noticeId: '1001',
+        noticeTitle: '2022年4月1日以降の料金体制について',
+        dateTime: '2022/7/1 10:00',
+        public: '1'
+      },
+      {
+        noticeId: '1001',
+        noticeTitle: '2022年4月1日以降の料金体制について',
+        dateTime: '2022/7/1 10:00',
+        public: '0'
+      },
+      {
+        noticeId: '1001',
+        noticeTitle: '2022年4月1日以降の料金体制について',
+        dateTime: '2022/7/1 10:00',
+        public: '0'
+      },
+      {
+        noticeId: '1001',
+        noticeTitle: '2022年4月1日以降の料金体制について',
+        dateTime: '2022/7/1 10:00',
+        public: '0'
+      },
       {
         noticeId: '1001',
         noticeTitle: '2022年4月1日以降の料金体制について',
