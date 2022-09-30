@@ -456,11 +456,11 @@ FROM nest.users;<br>
 
 SELECT department_id, SUM(point)<br>
 FROM nest.users<br>
-WHERE user_name != "name2"<br>
 GROUP BY department_id;<br>
 
 SELECT department_id, SUM(point)<br>
 FROM nest.users<br>
+WHERE user_name != "name2"<br>
 GROUP BY department_id;<br>
 
 SELECT department_id, SUM(point)<br>
