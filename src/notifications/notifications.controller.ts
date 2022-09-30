@@ -7,21 +7,18 @@ export class NotificationsController {
    */
   @Get('/')
   @Render('notification/index')
-  async getIndex(@Query() query: any) {
-    let notices = []
-    if (Object.keys(query).length) {
-      notices = [
-        { notice_id: "1001", open_range: "コンシューマ", notice_title: "タイトル", tag: "チケット", date_time: "2022/08/22 10:00" },
-      ]
-    } else {
-      notices = [
-        { notice_id: "1001", open_range: "コンシューマ", notice_title: "タイトル", tag: "チケット", date_time: "2022/08/22 10:00" },
-        { notice_id: "1002", open_range: "コンシューマ", notice_title: "タイトル", tag: "お知らせ", date_time: "2022/08/22 10:00" },
-        { notice_id: "1003", open_range: "コンシューマ", notice_title: "タイトル", tag: "アトラクション", date_time: "2022/08/22 10:00" },
-      ]
-    }
+  async getIndex(@Query() query: any) { 
+    const notifications = [
+      {
+        noticeId: '1001',
+        noticeTitle: '2022年4月1日以降の料金体制について',
+        dateTime: '2022/7/1 10:00',
+        public: '0'
+      }
+    ]
     return {
-      notices: JSON.stringify(notices)
+      notifications: JSON.stringify(notifications),
+      totalPageCount: 3
     }
   }
 
