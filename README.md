@@ -444,8 +444,22 @@ WHERE age = 10 OR age = 20 OR age = 30 OR age = 40 OR age = 50<br>
 GROUP BY age;<br>
 
 ■SUM 関数<br>
-※指定カラムの合計値を取得する<br>
-SELECT department_id, SUM(point) <br>
+※指定カラムの合計値を取得する（NULL以外）<br>
+※WHERE：GROUP BYの前に条件適応
+※HAVING：GROUP BYの後に条件適応
+
+SELECT SUM(point)<br>
+FROM nest.users;<br>
+
+SELECT SUM(DISTINCT point)<br>
+FROM nest.users;<br>
+
+SELECT department_id, SUM(point)<br>
+FROM nest.users<br>
+WHERE user_name != "name2"<br>
+GROUP BY department_id;<br>
+
+SELECT department_id, SUM(point)<br>
 FROM nest.users<br>
 GROUP BY department_id;<br>
 
@@ -472,18 +486,6 @@ ON u.department_id = d.department_id;<br>
 - ステートメント（構築された文全体）<br>
 - sqlインジェクション
 Webアプリケーションに対し不正なSQL文を注入して不正に操作する攻撃手法<br>
-
-#### 練習問題<br>
-■ポイントランキング順位<br>
-SELECT id, user_name, point, FIND_IN_SET(<br>
-&emsp;point, (<br>
-&emsp;&emsp;SELECT GROUP_CONCAT(<br>
-&emsp;&emsp;&emsp;point ORDER BY point DESC<br>
-&emsp;&emsp;)<br>
-&emsp;&emsp;FROM nest.users<br>
-&emsp;)<br>
-) AS ranking<br>
-FROM nest.users;<br>
 
 ## CRUD<br>
 |  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
