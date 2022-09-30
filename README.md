@@ -445,8 +445,8 @@ GROUP BY age;<br>
 
 ■SUM 関数<br>
 ※指定カラムの合計値を取得する（NULL以外）<br>
-※WHERE：GROUP BYの前に条件適応
-※HAVING：GROUP BYの後に条件適応
+※WHERE：GROUP BYの前に条件適応<br>
+※HAVING：GROUP BYの後に条件適応<br>
 
 SELECT SUM(point)<br>
 FROM nest.users;<br>
