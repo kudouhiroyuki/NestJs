@@ -1,15 +1,15 @@
 import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect } from '@nestjs/common';
 
-@Controller('notification')
-export class NotificationController {
+@Controller('notifications')
+export class NotificationsController {
   /**
-  * GET	お知らせ照会画面（検索処理）
-  */
-  @Get('reference')
-  @Render('notification/reference')
-  async index(@Query() query: any) {
-    let notices = [];
-    if(Object.keys(query).length) {
+   * GET	お知らせ照会画面
+   */
+  @Get('/')
+  @Render('notification/index')
+  async getIndex(@Query() query: any) {
+    let notices = []
+    if (Object.keys(query).length) {
       notices = [
         { notice_id: "1001", open_range: "コンシューマ", notice_title: "タイトル", tag: "チケット", date_time: "2022/08/22 10:00" },
       ]
@@ -22,12 +22,12 @@ export class NotificationController {
     }
     return {
       notices: JSON.stringify(notices)
-    };
+    }
   }
 
   /**
-  * GET	お知らせ登録画面
-  */
+   * GET	お知らせ登録画面
+   */
   @Get('regist')
   @Render('notification/regist')
   async create() {

@@ -43,12 +43,13 @@ import { ProductsModule } from './products/products.module'
 import { PlansModule } from './plans/plans.module'
 import { DivisionsModule } from './divisions/divisions.module'
 import { InventorysModule } from './inventorys/inventorys.module'
-import { MaintenancesModule } from './maintenances/maintenances.module'
+
+import { NotificationsModule } from './notifications/notifications.module'
 import { MembersModule } from './members/members.module'
+import { MaintenancesModule } from './maintenances/maintenances.module'
 
 import { UsersModule } from './users/users.module'
 import { TenantModule } from './tenant/tenant.module'
-import { NotificationModule } from './notification/notification.module'
 
 @Module({
   imports: [
@@ -56,11 +57,11 @@ import { NotificationModule } from './notification/notification.module'
     PlansModule,
     DivisionsModule,
     InventorysModule,
-    MaintenancesModule,
+    NotificationsModule,
     MembersModule,
+    MaintenancesModule,
     UsersModule,
-    TenantModule,
-    NotificationModule
+    TenantModule
   ],
   controllers: [AppController],
   providers: [AppService]

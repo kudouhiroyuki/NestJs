@@ -129,43 +129,76 @@
     </form>
 
     <!-- 一覧テーブル -->
+    <h5 class="mb-4 fw-bold">メンテナンス一覧</h5>
     <form name="maintenancesDelete">
-      <h5 class="mb-4 fw-bold">メンテナンス一覧</h5>
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th scope="col">メンテナンス対象</th>
-            <th scope="col">テナント名</th>
-            <th scope="col">機能名</th>
-            <th scope="col">開始日時</th>
-            <th scope="col">終了日時</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in maintenances" :key="index">
-            <td>{{ item.subject }}</td>
-            <td>
-              <template v-if="item.tenantName">{{ item.tenantName }}</template>
-              <template v-else>-</template>
-            </td>
-            <td>
-              <template v-if="item.vigorName">{{ item.vigorName }}</template>
-              <template v-else>-</template>
-            </td>
-            <td>{{ item.startDate }}</td>
-            <td>
-              {{ item.endDate }}
-              <button
-                @click="onDelete(item.id)"
-                v-if="new Date().getTime() < new Date(item.startDate).getTime()"
-                type="submit"
-                style="padding: 2px 0px;font-size: 14px;width: 60px;background-color: rgb(170, 170, 170);font-weight: bold;border-radius: 30px;border: 0px;margin-left: 20px;">
-                取消
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div style="overflow: auto; width: 100%; height: 200px;" class="mb-5">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th style="position: sticky; top: 0; left: 0; background: white;">メンテナンス対象</th>
+              <th style="position: sticky; top: 0; left: 0; background: white;">テナント名</th>
+              <th style="position: sticky; top: 0; left: 0; background: white;">機能名</th>
+              <th style="position: sticky; top: 0; left: 0; background: white;">開始日時</th>
+              <th style="position: sticky; top: 0; left: 0; background: white;">終了日時</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in maintenances" :key="index">
+              <td>{{ item.subject }}</td>
+              <td>
+                <template v-if="item.tenantName">{{ item.tenantName }}</template>
+                <template v-else>-</template>
+              </td>
+              <td>
+                <template v-if="item.vigorName">{{ item.vigorName }}</template>
+                <template v-else>-</template>
+              </td>
+              <td>{{ item.startDate }}</td>
+              <td>
+                {{ item.endDate }}
+                <button
+                  @click="onDelete(item.id)"
+                  v-if="new Date().getTime() < new Date(item.startDate).getTime()"
+                  type="submit"
+                  style="padding: 2px 0px;font-size: 14px;width: 60px;background-color: rgb(170, 170, 170);font-weight: bold;border-radius: 30px;border: 0px;margin-left: 20px;">
+                  取消
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- ページネーション -->
+      <nav class="d-flex justify-content-center" aria-label="Page navigation">
+        <ul class="pagination mb-0">
+          <li :class="{'disabled': Number(pageNumber) === 1}" class="page-item">
+            <button
+              @click="onPageChange(Number(pageNumber) - 1)"
+              type="button"
+              class="page-link">Previous
+            </button>
+          </li>
+          <li
+            v-for="value of totalPageCount"
+            :key="value"
+            :class="{'active': value === Number(pageNumber)}"
+            class="page-item"
+          >
+            <button
+              @click="onPageChange(value)"
+              type="button"
+              class="page-link">{{value}}
+            </button>
+          </li>
+          <li :class="{'disabled': Number(pageNumber) === Number(totalPageCount)}" class="page-item">
+            <button
+              @click="onPageChange(Number(pageNumber) + 1)"
+              type="button"
+              class="page-link">Next
+            </button>
+          </li>
+        </ul>
+      </nav>
     </form>
   </main>
 </div>
@@ -174,6 +207,9 @@
 const tenants= `<%- tenants %>`;
 const vigors= `<%- vigors %>`;
 const maintenances= `<%- maintenances %>`;
+const totalPageCount= `<%- totalPageCount %>`;
+
+const queryParam = new URLSearchParams(location.search);
 
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
@@ -192,6 +228,9 @@ new Vue({
     tenants: JSON.parse(tenants),
     vigors: JSON.parse(vigors),
     maintenances: JSON.parse(maintenances),
+    totalPageCount: JSON.parse(totalPageCount),
+    // 検索データ
+    pageNumber: queryParam.get('pageNumber') ?? 1,
     // 登録データ
     subject: '1',                // メンテナンス対象
     tenantId: '',                // テナントID
@@ -271,6 +310,9 @@ new Vue({
       window.checkStartDate = new Date(this.startDate).getTime();
     }
   },
+  created() {
+    queryParam.set("pageNumber", this.pageNumber);
+  },
   methods: {
     /**
      * テナントIDセット（バリデーションチェック用）
@@ -308,7 +350,20 @@ new Vue({
       document.maintenancesDelete.method="post";
       document.maintenancesDelete.action = `/maintenances/delete/${id}`;
       document.maintenancesDelete.submit();
-    }
+    },
+    /**
+     * ページ番号（更新）
+     */
+     onPageChange(page) {
+      queryParam.set("pageNumber", page);
+      this.onSerch();
+    },
+    /**
+     * 検索処理
+     */ 
+    onSerch() {
+      window.location.href = "/maintenances?" + queryParam;
+    },
   }
 })
 </script>

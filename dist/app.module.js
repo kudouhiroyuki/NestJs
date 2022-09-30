@@ -14,11 +14,11 @@ const products_module_1 = require("./products/products.module");
 const plans_module_1 = require("./plans/plans.module");
 const divisions_module_1 = require("./divisions/divisions.module");
 const inventorys_module_1 = require("./inventorys/inventorys.module");
-const maintenances_module_1 = require("./maintenances/maintenances.module");
+const notifications_module_1 = require("./notifications/notifications.module");
 const members_module_1 = require("./members/members.module");
+const maintenances_module_1 = require("./maintenances/maintenances.module");
 const users_module_1 = require("./users/users.module");
 const tenant_module_1 = require("./tenant/tenant.module");
-const notification_module_1 = require("./notification/notification.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -28,11 +28,11 @@ AppModule = __decorate([
             plans_module_1.PlansModule,
             divisions_module_1.DivisionsModule,
             inventorys_module_1.InventorysModule,
-            maintenances_module_1.MaintenancesModule,
+            notifications_module_1.NotificationsModule,
             members_module_1.MembersModule,
+            maintenances_module_1.MaintenancesModule,
             users_module_1.UsersModule,
-            tenant_module_1.TenantModule,
-            notification_module_1.NotificationModule
+            tenant_module_1.TenantModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService]

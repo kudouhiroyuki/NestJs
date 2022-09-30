@@ -14,34 +14,22 @@ http://localhost:3000/inventorys/null/regist<br>
 http://localhost:3000/inventorys/1001/regist<br>
 http://localhost:3000/inventorys/1001/detail/1<br>
 
-- 会員画面<br>
+- お知らせ管理<br>
+
+- 会員管理<br>
 http://localhost:3000/members<br>
 http://localhost:3000/members?fullName=name&mail=mail&tell=tell&pageNumber=1<br>
 http://localhost:3000/members/detail/I001<br>
 
 - メンテナンス管理<br>
 http://localhost:3000/maintenances<br>
+http://localhost:3000/maintenances?pageNumber=1<br>
 
 #### 施設管理<br>
 - 施設情報管理（画面）<br>
 http://localhost:3000/tenant/details<br>
 src/tenant/tenant.controller.ts（show）<br>
 views/pages/tenant/details.ejs
-
-- お知らせ登録（画面）<br>
-http://localhost:3000/notification/regist<br>
-src/notification/notification.controller.ts（create）<br>
-views/pages/notification/regist.ejs
-
-- お知らせ照会（画面）<br>
-http://localhost:3000/notification/reference<br>
-src/notification/notification.controller.ts（index）<br>
-views/pages/notification/reference.ejs
-
-- お知らせ詳細（画面）<br>
-http://localhost:3000/notification/details/{id}<br>
-src/notification/notification.controller.ts（show）<br>
-views/pages/notification/details.ejs
 
 - 動作確認用（users）<br>
 OK curl -X GET "http://localhost:3000/users"<br>

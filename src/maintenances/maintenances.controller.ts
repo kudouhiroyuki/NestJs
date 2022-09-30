@@ -48,12 +48,33 @@ export class MaintenancesController {
         vigorName: '決済サービス3',
         startDate: '2023/10/01  00:00',
         endDate: '2023/11/01  00:00'
+      },
+      {
+        id: '4',
+        subject: '機能メンテナンス',
+        tenantId: '',
+        tenantName: '',
+        vigorId: '4',
+        vigorName: '決済サービス3',
+        startDate: '2023/10/01  00:00',
+        endDate: '2023/11/01  00:00'
+      },
+      {
+        id: '5',
+        subject: '機能メンテナンス',
+        tenantId: '',
+        tenantName: '',
+        vigorId: '5',
+        vigorName: '決済サービス3',
+        startDate: '2023/10/01  00:00',
+        endDate: '2023/11/01  00:00'
       }
     ]
     return {
       tenants: JSON.stringify(tenants),
       vigors: JSON.stringify(vigors),
-      maintenances: JSON.stringify(maintenances)
+      maintenances: JSON.stringify(maintenances),
+      totalPageCount: 3
     }
   }
   /**
