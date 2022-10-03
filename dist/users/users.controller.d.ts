@@ -5,17 +5,18 @@ export declare class UsersController {
     constructor(service: UsersService);
     getUsers(query: {
         id: number;
-        user_name: string;
+        userName: string;
         sort: 'asc' | 'desc';
     }): Promise<Users[]>;
     createUser(user: {
-        user_name: string;
+        userName: string;
         password: string;
         address: string;
         age: string;
-        department_id: string;
+        departmentId: string;
         point: number;
         createdAt: string;
+        updateAt: string;
     }): Promise<Users>;
     updateUser(id: string, user: Users): Promise<Users>;
     deleteUser(id: string): Promise<Users>;

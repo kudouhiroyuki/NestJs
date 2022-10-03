@@ -1,4 +1,4 @@
 export class requestUser {
-  id: number;
-  password: string;
+  id: number
+  password: string
 }

@@ -11,7 +11,7 @@
 //   constructor(private readonly service: UsersService) {}
 
 //   @Get()
-//   async getUsers(@Query() query: {id: number, user_name: string, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number}> {
+//   async getUsers(@Query() query: {id: number, userName: string, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number}> {
 //     return await this.service.getUsers(query);
 //   }
 
@@ -48,7 +48,7 @@ export class UsersController {
   constructor(private readonly service: UsersService) {}
 
   @Get()
-  async getUsers(@Query() query: { id: number; user_name: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
+  async getUsers(@Query() query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
     return await this.service.getUsers(query)
   }
 
@@ -56,13 +56,14 @@ export class UsersController {
   async createUser(
     @Body()
     user: {
-      user_name: string
+      userName: string
       password: string
       address: string
       age: string
-      department_id: string
+      departmentId: string
       point: number
       createdAt: string
+      updateAt: string
     }
   ): Promise<Users> {
     return await this.service.createUser(user)

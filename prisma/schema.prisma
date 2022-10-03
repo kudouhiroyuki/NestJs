@@ -9,17 +9,18 @@ datasource db {
 
 model users {
   id    Int     @default(autoincrement()) @id
-  user_name String
+  userName String
   password  String
   address String
   age String
-  department_id  String
+  departmentId  String
   point  Int?
   createdAt  DateTime @db.DateTime(0)
+  updateAt  DateTime @db.DateTime(0)
 }
 model departments {
-  department_id String @unique
-  department_name  String
+  departmentId String @unique
+  departmentName  String
 }
 model log {
   id    Int     @default(autoincrement()) @id

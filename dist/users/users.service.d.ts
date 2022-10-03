@@ -5,17 +5,18 @@ export declare class UsersService {
     constructor(prisma: PrismaService);
     getUsers(query: {
         id: number;
-        user_name: string;
+        userName: string;
         sort: 'asc' | 'desc';
     }): Promise<Users[]>;
     createUser(data: {
-        user_name: string;
+        userName: string;
         password: string;
         address: string;
         age: string;
-        department_id: string;
+        departmentId: string;
         point: number;
         createdAt: string;
+        updateAt: string;
     }): Promise<Users>;
     updateUser(params: {
         where: Prisma.usersWhereUniqueInput;

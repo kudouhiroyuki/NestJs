@@ -34,20 +34,20 @@ views/pages/tenant/details.ejs
 
 - 動作確認用（users）<br>
 OK curl -X GET "http://localhost:3000/users"<br>
-OK curl -X GET "http://localhost:3000/users?id=&user_name=&sort="<br>
-OK curl -X GET "http://localhost:3000/users?id=1&user_name=kudou"<br>
-OK curl -X GET "http://localhost:3000/users?id=2&user_name=tanaka"<br>
+OK curl -X GET "http://localhost:3000/users?id=&userName=&sort="<br>
+OK curl -X GET "http://localhost:3000/users?id=1&userName=kudou"<br>
+OK curl -X GET "http://localhost:3000/users?id=2&userName=tanaka"<br>
 OK curl -X GET "http://localhost:3000/users?sort=asc"<br>
 OK curl -X GET "http://localhost:3000/users?sort=desc"<br>
 
 
 curl -X GET "http://localhost:3000/users?sort=ASC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users?sort=DESC&limit=5&page_number=1"<br>
-curl -X GET "http://localhost:3000/users?id=&user_name=&sort=ASC&limit=5&page_number=1"<br>
-curl -X GET "http://localhost:3000/users?id=1&user_name=kudou&sort=ASC&limit=5&page_number=1"<br>
+curl -X GET "http://localhost:3000/users?id=&userName=&sort=ASC&limit=5&page_number=1"<br>
+curl -X GET "http://localhost:3000/users?id=1&userName=kudou&sort=ASC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users/1"<br>
-curl -X POST http://localhost:3000/users -d "user_name=name&password=password"<br>
-curl -X PUT http://localhost:3000/users/1 -d "user_name=updateName&password=updatePassword"<br>
+curl -X POST http://localhost:3000/users -d "userName=name&password=password"<br>
+curl -X PUT http://localhost:3000/users/1 -d "userName=updateName&password=updatePassword"<br>
 curl -X DELETE http://localhost:3000/users/1<br>
 -v<br>
 
@@ -176,14 +176,14 @@ DROP TRIGGER insert_trigger;
 #### <----- データの追加と削除 -----><br>
 ■INSERT 文<br>
 ※データを追加する<br>
-INSERT INTO nest.users (user_name, password, address, age, department_id, point, createdAt) VALUES<br>
-('name1', 'password', 'address', 30, 'A0001', 100, '2010-10-01 00:00:00'),<br>
-('name2', 'password', 'address', 20, 'A0001', 500, '2010-11-01 08:00:00'),<br>
-('name3', 'password', 'address', 17, 'B0001', 500, '2010-11-01 20:00:00'),<br>
-('name4', 'password', 'address', 58, '', 400, '2010-12-01 00:00:00'),<br>
-('name5', 'password', 'address', 32, '', NULL, '2011-12-01 00:00:00');<br>
+INSERT INTO nest.users (userName, password, address, age, departmentId, point, createdAt, updateAt) VALUES<br>
+('name1', 'password', 'address', 30, 'A0001', 100, '2010-10-01 00:00:00', '2010-10-01 00:00:00'),<br>
+('name2', 'password', 'address', 20, 'A0001', 500, '2010-11-01 08:00:00', '2010-11-01 08:00:00'),<br>
+('name3', 'password', 'address', 17, 'B0001', 500, '2010-11-01 20:00:00', '2010-11-01 20:00:00'),<br>
+('name4', 'password', 'address', 58, '', 400, '2010-12-01 00:00:00', '2010-12-01 00:00:00'),<br>
+('name5', 'password', 'address', 32, '', NULL, '2011-12-01 00:00:00', '2011-12-01 00:00:00');<br>
 
-INSERT INTO nest.departments (department_id, department_name) VALUES<br>
+INSERT INTO nest.departments (departmentId, departmentName) VALUES<br>
 ('A0001', 'アプリケーション'),<br>
 ('B0001', 'デザイン');<br>
 
@@ -191,62 +191,62 @@ INSERT INTO nest.stocks (name, stockCount) VALUES<br>
 ('Mouse', 10),<br>
 ('Keyboard', 8);<br>
 
-INSERT INTO nest.users (user_name, password, address, age, department_id, point)<br>
-SELECT d.department_name, 'password', 'address', 30, d.department_id, 100<br>
+INSERT INTO nest.users (userName, password, address, age, departmentId, point)<br>
+SELECT d.departmentName, 'password', 'address', 30, d.departmentId, 100<br>
 FROM nest.departments d;<br>
 
-INSERT INTO nest.users (user_name, password, address, age, department_id, point)<br>
-(SELECT d.department_name, 'password', 'address', 30, d.department_id, 100 FROM nest.departments d);<br>
+INSERT INTO nest.users (userName, password, address, age, departmentId, point)<br>
+(SELECT d.departmentName, 'password', 'address', 30, d.departmentId, 100 FROM nest.departments d);<br>
 
 ■REPLACE<br>
 ※一致するレコードがあればDELETE、なければINSERT<br>
-REPLACE INTO nest.departments (department_id, department_name) VALUES
+REPLACE INTO nest.departments (departmentId, departmentName) VALUES
 ('B0001', 'グラフィックデザイン');
 
 ■ON DUPLICATE KEY UPDATE<br>
 ※一致するレコードがなければINSERT、あればUPDATE<br>
-INSERT INTO nest.departments (department_id, department_name) VALUES<br>
+INSERT INTO nest.departments (departmentId, departmentName) VALUES<br>
 ('B0001', 'デザイン')<br>
 ON DUPLICATE KEY UPDATE<br>
-department_id = 'C0001',<br>
-department_name = '管理';<br>
+departmentId = 'C0001',<br>
+departmentName = '管理';<br>
 
 ■UPDATE 文<br>
 ※データを更新する<br>
-UPDATE nest.users SET user_name='user_name' WHERE id='1';<br>
-UPDATE nest.users SET user_name='user_name', password='password' WHERE id='1';<br>
-UPDATE nest.users SET user_name='user_name', password='password' WHERE id IN ('1', '2');<br>
-UPDATE nest.users SET user_name='user_name', password='password' ORDER BY id DESC LIMIT 2;<br>
+UPDATE nest.users SET userName='userName' WHERE id='1';<br>
+UPDATE nest.users SET userName='userName', password='password' WHERE id='1';<br>
+UPDATE nest.users SET userName='userName', password='password' WHERE id IN ('1', '2');<br>
+UPDATE nest.users SET userName='userName', password='password' ORDER BY id DESC LIMIT 2;<br>
 
 UPDATE nest.users<br>
-SET user_name='更新',<br>
+SET userName='更新',<br>
 password='更新',<br>
 address='更新',<br>
 age=99,<br>
-department_id='B0001',<br>
+departmentId='B0001',<br>
 point=999<br>
 WHERE id='1';<br>
 
 UPDATE nest.users u, nest.departments d<br>
-SET u.user_name = '更新',<br>
-d.department_name = '更新'<br>
-WHERE u.department_id = 'A0001'<br>
-AND d.department_id = 'A0001';<br>
+SET u.userName = '更新',<br>
+d.departmentName = '更新'<br>
+WHERE u.departmentId = 'A0001'<br>
+AND d.departmentId = 'A0001';<br>
 
 UPDATE nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
-ON u.department_id = d.department_id<br>
-SET u.user_name = d.department_name<br>
+ON u.departmentId = d.departmentId<br>
+SET u.userName = d.departmentName<br>
 WHERE u.id = 1;<br>
 
 UPDATE nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
-ON u.department_id = d.department_id<br>
-SET u.user_name = IF(d.department_id = 'A0001', 'true', 'false');<br>
+ON u.departmentId = d.departmentId<br>
+SET u.userName = IF(d.departmentId = 'A0001', 'true', 'false');<br>
 
 UPDATE nest.users AS u<br>
-SET u.user_name = (<br>
-&emsp;SELECT department_id<br>
+SET u.userName = (<br>
+&emsp;SELECT departmentId<br>
 &emsp;FROM nest.departments<br>
 &emsp;LIMIT 1<br>
 );<br>
@@ -268,13 +268,13 @@ TRUNCATE TABLE nest.users;
 ※COMMIT(終了 + 変更保存)<br>
 ※ROLLBACK）(終了 + 変更取消し)<br>
 BEGIN;<br>
-UPDATE nest.users SET user_name='user1' WHERE id='1';<br>
-UPDATE nest.users SET user_name='user2' WHERE id='2';<br>
+UPDATE nest.users SET userName='user1' WHERE id='1';<br>
+UPDATE nest.users SET userName='user2' WHERE id='2';<br>
 ROLLBACK;<br>
 
 BEGIN;<br>
-UPDATE nest.users SET user_name='user1' WHERE id='1';<br>
-UPDATE nest.users SET user_name='user2' WHERE id='2';<br>
+UPDATE nest.users SET userName='user1' WHERE id='1';<br>
+UPDATE nest.users SET userName='user2' WHERE id='2';<br>
 COMMIT;<br>
 
 ■ストアドプロシージャ<br>
@@ -300,8 +300,8 @@ CREATE PROCEDURE sample4(IN u_id INT, IN d_id VARCHAR(191), OUT u_count INT, OUT
 BEGIN<br>
 &emsp;DECLARE u_name VARCHAR(191);<br>
 &emsp;SET u_name='name1';<br>
-&emsp;SELECT COUNT(*) FROM nest.users where id = u_id AND user_name = u_name into u_count;<br>
-&emsp;SELECT COUNT(*) FROM nest.departments where department_id = d_id into d_count;<br>
+&emsp;SELECT COUNT(*) FROM nest.users where id = u_id AND userName = u_name into u_count;<br>
+&emsp;SELECT COUNT(*) FROM nest.departments where departmentId = d_id into d_count;<br>
 END//<br>
 DELIMITER ;<br>
 call sample4(1, 'A0001', @u_count, @d_count);<br>
@@ -311,8 +311,8 @@ SELECT @u_count, @d_count;<br>
 - SELECT 文<br>
 ※データを取得する<br>
 SELECT * FROM nest.users;<br>
-SELECT id, user_name, password FROM nest.users;<br>
-SELECT id*1.08, user_name, password FROM nest.users;<br>
+SELECT id, userName, password FROM nest.users;<br>
+SELECT id*1.08, userName, password FROM nest.users;<br>
 
 - GROUP BY 句<br>
 ※データをグループ化する<br>
@@ -321,8 +321,8 @@ SELECT id*1.08, user_name, password FROM nest.users;<br>
 ※カラムに別名を付ける<br>
 SELECT * FROM nest.users AS u;<br>
 SELECT * FROM nest.users u;<br>
-SELECT id, user_name, password, department_id AS dept from nest.users;<br>
-SELECT id, user_name, password, department_id dept from nest.users;<br>
+SELECT id, userName, password, departmentId AS dept from nest.users;<br>
+SELECT id, userName, password, departmentId dept from nest.users;<br>
 
 ■WHERE 句<br>
 ※データを取得する条件を設定する<br>
@@ -335,8 +335,8 @@ OR id = 2;<br>
 ※サブクエリを使った検索条件の設定<br>
 SELECT *<br>
 FROM nest.users<br>
-WHERE department_id = (<br>
-&emsp;SELECT department_id<br>
+WHERE departmentId = (<br>
+&emsp;SELECT departmentId<br>
 &emsp;FROM nest.departments<br>
 &emsp;LIMIT 1<br>
 );<br>
@@ -345,46 +345,46 @@ FROM nest.users u<br>
 WHERE EXISTS (<br>
 &emsp;SELECT *<br>
 &emsp;FROM nest.departments d<br>
-&emsp;WHERE u.department_id = d.department_id<br>
+&emsp;WHERE u.departmentId = d.departmentId<br>
 );<br>
 SELECT *<br>
 FROM nest.users u<br>
 WHERE NOT EXISTS (<br>
 &emsp;SELECT *<br>
 &emsp;FROM nest.departments d<br>
-&emsp;WHERE u.department_id = d.department_id<br>
+&emsp;WHERE u.departmentId = d.departmentId<br>
 );
 
 #### MySQL関数の使い方<br>
 - CONCAT 関数<br>
 ※複数の文字列を連結した文字列を取得する<br>
 SELECT CONCAT('first_name','last_name');<br>
-SELECT CONCAT(id, user_name, password) FROM nest.users;<br>
-SELECT CONCAT(id, user_name, password), id, user_name, password FROM nest.users;
+SELECT CONCAT(id, userName, password) FROM nest.users;<br>
+SELECT CONCAT(id, userName, password), id, userName, password FROM nest.users;
 
 #### テーブルとデータの結合<br>
 - INNER JOIN 句（内部結合）<br>
 ※一致しないデータは取得しない<br>
-SELECT * FROM nest.users INNER JOIN nest.departments USING(department_id);<br><br>
-SELECT u.id, u.user_name, u.password, u.department_id<br>
+SELECT * FROM nest.users INNER JOIN nest.departments USING(departmentId);<br><br>
+SELECT u.id, u.userName, u.password, u.departmentId<br>
 FROM nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
-ON u.department_id = d.department_id<br>
+ON u.departmentId = d.departmentId<br>
 WHERE u.id = 1;<br>
 
 - LEFT JOIN 句（外部結合 左外部結合）<br>
 ※左側のテーブルにしかないデータも取得<br>
 ※正式名(LEFT OUTER JOIN)<br>
-SELECT * FROM nest.users LEFT JOIN nest.departments ON users.department_id = departments.department_id;<br>
+SELECT * FROM nest.users LEFT JOIN nest.departments ON users.departmentId = departments.departmentId;<br>
 
 - RIGHT JOIN 句（外部結合 右外部結合）<br>
 ※右側のテーブルにしかないデータも取得<br>
 ※正式名(RIGHT OUTER JOIN)<br>
-SELECT * FROM nest.users RIGHT JOIN nest.departments ON users.department_id = departments.department_id;<br>
+SELECT * FROM nest.users RIGHT JOIN nest.departments ON users.departmentId = departments.departmentId;<br>
 
 - 自己結合<br>
 ※同じテーブルを結合する<br>
-SELECT u1.id, u1.user_name, u1.password, u1.department_id<br>
+SELECT u1.id, u1.userName, u1.password, u1.departmentId<br>
 FROM nest.users AS u1<br>
 INNER JOIN nest.users AS u2<br>
 ON u1.id = u2.id;<br>
@@ -425,18 +425,18 @@ SELECT AVG(COALESCE(point, 0)) FROM nest.users;<br>
 SELECT AVG(IFNULL(point, 0)) FROM nest.users;<br>
 SELECT AVG(CASE WHEN point IS NULL THEN 0 ELSE point END) FROM nest.users;<br>
 SELECT AVG(DISTINCT COALESCE(point, 0)) FROM nest.users;<br>
-SELECT department_id, AVG(COALESCE(point, 0)) FROM nest.users GROUP BY department_id;<br>
-SELECT AVG(point) FROM nest.users WHERE department_id = 'A0001';<br>
+SELECT departmentId, AVG(COALESCE(point, 0)) FROM nest.users GROUP BY departmentId;<br>
+SELECT AVG(point) FROM nest.users WHERE departmentId = 'A0001';<br>
 
 ■COUNT 関数<br>
 ※指定カラムの行数を取得する<br>
-SELECT COUNT(DISTINCT department_id) FROM nest.users;<br>
+SELECT COUNT(DISTINCT departmentId) FROM nest.users;<br>
 
-SELECT COUNT(*), COUNT(DISTINCT department_id) FROM nest.users;<br>
+SELECT COUNT(*), COUNT(DISTINCT departmentId) FROM nest.users;<br>
 
-SELECT department_id, COUNT(*)<br>
+SELECT departmentId, COUNT(*)<br>
 FROM nest.users<br>
-GROUP BY department_id;<br>
+GROUP BY departmentId;<br>
 
 SELECT age, COUNT(*)<br>
 FROM nest.users<br>
@@ -454,38 +454,43 @@ FROM nest.users;<br>
 SELECT SUM(DISTINCT point)<br>
 FROM nest.users;<br>
 
-SELECT department_id, SUM(point)<br>
+SELECT departmentId, SUM(point)<br>
 FROM nest.users<br>
-GROUP BY department_id;<br>
+GROUP BY departmentId;<br>
 
-SELECT department_id, SUM(point)<br>
+SELECT departmentId, SUM(point)<br>
 FROM nest.users<br>
-WHERE user_name != "name2"<br>
-GROUP BY department_id;<br>
+WHERE userName != "name2"<br>
+GROUP BY departmentId;<br>
 
-SELECT department_id, SUM(point)<br>
+SELECT departmentId, SUM(point)<br>
 FROM nest.users<br>
-GROUP BY department_id<br>
+GROUP BY departmentId<br>
 HAVING SUM(point) > 500;<br>
 
 SELECT (SUM(id) + SUM(point)) AS total FROM nest.users;<br>
 
 SELECT SUM(CASE WHEN point = 100 THEN 1 ELSE 0 END) FROM nest.users;<br>
 
-SELECT SUM(IF(point = 100, 1, 0) + IF(department_id = 'A0001', 1, 0)) FROM nest.users;<br>
+SELECT SUM(IF(point = 100, 1, 0) + IF(departmentId = 'A0001', 1, 0)) FROM nest.users;<br>
 
-SELECT SUM(u.id), COUNT(d.department_id) FROM nest.users AS u<br>
+SELECT SUM(u.id), COUNT(d.departmentId) FROM nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
-ON u.department_id = d.department_id;<br>
+ON u.departmentId = d.departmentId;<br>
 
-SELECT SUM(u.id) + COUNT(d.department_id) FROM nest.users AS u<br>
+SELECT SUM(u.id) + COUNT(d.departmentId) FROM nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
-ON u.department_id = d.department_id;<br>
+ON u.departmentId = d.departmentId;<br>
 
 #### 用語<br>
 - ステートメント（構築された文全体）<br>
-- sqlインジェクション
+- sqlインジェクション<br>
 Webアプリケーションに対し不正なSQL文を注入して不正に操作する攻撃手法<br>
+- 物理削除<br>
+SQLでDELETE文を発行してレコードを削除すること<br>
+原則として容易にデータの復活はできません（バックアップから復元することはできます）<br>
+- 論理削除<br>
+テーブルに削除フラグを用意し、TRUE/FALSEで削除をされたか管理する方法
 
 ## CRUD<br>
 |  Method  |  URL  |  アクション  |  画面の有無  |  内容  |

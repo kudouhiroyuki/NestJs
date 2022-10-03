@@ -22,7 +22,7 @@
 //     private readonly usersRepository: Repository<Users>,
 //   ) {}
 
-//   async getUsers(query: {id: number, user_name: string, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number, total_page_count: number}> {
+//   async getUsers(query: {id: number, userName: string, sort: "ASC" | 1 | "DESC" | -1, limit: number, page_number: number}): Promise<{users: Users[], total_record_count: number, total_page_count: number}> {
 //     let limit = 5;
 //     let offset = 1;
 //     const conditions = {};
@@ -30,10 +30,10 @@
 //     if(query.limit) limit = query.limit;
 //     if(query.page_number) offset = query.page_number;
 //     if(query.id) conditions["id"] = query.id;
-//     if(query.user_name) conditions["user_name"] = Like(`%${query.user_name}`);
+//     if(query.userName) conditions["userName"] = Like(`%${query.userName}`);
 
 //     const [users, total_record_count] = await this.usersRepository.findAndCount({
-//       select: ['id', 'user_name', 'password'],
+//       select: ['id', 'userName', 'password'],
 //       where: conditions,
 //       order: {
 //         id: query.sort
@@ -124,7 +124,7 @@ import { PrismaService } from '../prisma.service'
 // return await this.prisma.$queryRaw(Prisma.sql`SELECT * FROM nest.users`);
 // return await this.prisma.$queryRaw(Prisma.sql`
 //   SELECT * FROM nest.users
-//   WHERE user_name LIKE ${'kudou'}
+//   WHERE userName LIKE ${'kudou'}
 //   LIMIT ${'1'};
 // `)
 
@@ -132,22 +132,23 @@ import { PrismaService } from '../prisma.service'
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getUsers(query: { id: number; user_name: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
+  async getUsers(query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
     const whereConditions = {}
     const orderConditions = {}
     if (query.id) whereConditions['id'] = Number(query.id)
-    if (query.user_name) whereConditions['user_name'] = { contains: query.user_name }
+    if (query.userName) whereConditions['userName'] = { contains: query.userName }
     if (query.sort) orderConditions['id'] = query.sort
     return await this.prisma.users.findMany({
       select: {
         id: true,
-        user_name: true,
+        userName: true,
         password: true,
         address: true,
         age: true,
-        department_id: true,
+        departmentId: true,
         point: true,
-        createdAt: true
+        createdAt: true,
+        updateAt: true
       },
       where: whereConditions,
       orderBy: orderConditions,
@@ -156,13 +157,14 @@ export class UsersService {
   }
 
   async createUser(data: {
-    user_name: string
+    userName: string
     password: string
     address: string
     age: string
-    department_id: string
+    departmentId: string
     point: number
     createdAt: string
+    updateAt: string
   }): Promise<Users> {
     return await this.prisma.users.create({ data })
   }

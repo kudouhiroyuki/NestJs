@@ -21,20 +21,21 @@ let UsersService = class UsersService {
         const orderConditions = {};
         if (query.id)
             whereConditions['id'] = Number(query.id);
-        if (query.user_name)
-            whereConditions['user_name'] = { contains: query.user_name };
+        if (query.userName)
+            whereConditions['userName'] = { contains: query.userName };
         if (query.sort)
             orderConditions['id'] = query.sort;
         return await this.prisma.users.findMany({
             select: {
                 id: true,
-                user_name: true,
+                userName: true,
                 password: true,
                 address: true,
                 age: true,
-                department_id: true,
+                departmentId: true,
                 point: true,
-                createdAt: true
+                createdAt: true,
+                updateAt: true
             },
             where: whereConditions,
             orderBy: orderConditions,
