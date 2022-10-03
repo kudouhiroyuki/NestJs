@@ -1,0 +1,240 @@
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="notificationsRegist">
+    <form @submit.prevent="onSubmit" name="notice">
+      <p v-if="displayType === 'regist'" class="fs-4">お知らせ登録</p>
+      <p v-else class="fs-4">お知らせ詳細</p>
+
+      <div v-if="displayType === 'detail'" class="text-end">
+        <button type="submit" class="btn baseBtnBlue" style="width: 156px;">保存</button>
+      </div>
+
+      <!-- 公開範囲 -->
+      <div class="row mt-5 mb-4">
+        <label class="form-label">公開範囲 <span class="redDC3545">*必須</span></label>
+        <div class="col-12 mb-2">
+          <input
+            :disabled="displayType==='detail' && public==='1'"
+            v-model="openRange"
+            name="openRange"
+            value="consumer"
+            class="form-check-input"
+            type="radio"
+            id="consumer"
+          />
+          <label class="form-check-label" for="consumer">コンシューマ</label>
+        </div>
+        <div class="col-12">
+          <input
+            :disabled="displayType==='detail' && public==='1'"
+            v-model="openRange"
+            name="openRange"
+            value="backOffice" 
+            class="form-check-input mb-2"
+            type="radio"
+            id="backOffice"
+          />
+          <label class="form-check-label" for="backOffice">バックオフィス</label>
+          <div v-if="$v.openRange.$dirty" class="text-danger fw-bold">
+            <span v-if="!$v.openRange.required">必須項目が選択されていません。</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- お知らせタイトル -->
+      <div class="row mb-4">
+        <label class="form-label">お知らせタイトル <span class="redDC3545">*必須</span></label>
+        <div class="col-8">
+          <input
+            :disabled="displayType==='detail' && public==='1'"
+            v-model="noticeTitle"
+            name="noticeTitle"
+            maxlength="50"
+            type="text"
+            class="form-control mb-2"
+          />
+          <div v-if="$v.noticeTitle.$dirty" class="text-danger fw-bold">
+            <span v-if="!$v.noticeTitle.required">必須項目が入力されていません。</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- お知らせ本文 -->
+      <div class="row mb-4">
+        <label class="form-label">お知らせ本文 <span class="redDC3545">*必須</span></label>
+        <div class="col-8">
+          <textarea
+            :disabled="displayType==='detail' && public==='1'"
+            v-model="noticeBody"
+            name="noticeBody"
+            maxlength="2000"
+            rows="3"
+            class="form-control mb-2"
+          ></textarea>
+          <div v-if="$v.noticeBody.$dirty" class="text-danger fw-bold">
+            <span v-if="!$v.noticeBody.required">必須項目が入力されていません。</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 公開ステータス -->
+      <div class="row mb-4">
+        <label class="form-label">公開ステータス <span class="redDC3545">*必須</span></label>
+        <div class="col-12 mb-2">
+          <input
+            :disabled="displayType==='detail' && public==='1'"
+            v-model="public"
+            name="public"
+            value="1"
+            class="form-check-input"
+            type="radio"
+            id="public_1"
+          />
+          <label class="form-check-label" for="public_1">公開</label>
+        </div>
+        <div class="col-12">
+          <input
+            :disabled="displayType==='detail' && public==='1'"
+            v-model="public"
+            name="public"
+            value="0" 
+            class="form-check-input mb-2"
+            type="radio"
+            id="public_0"
+          />
+          <label class="form-check-label" for="public_0">非公開</label>
+          <div v-if="$v.openRange.$dirty" class="text-danger fw-bold">
+            <span v-if="!$v.openRange.required">必須項目が選択されていません。</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 公開日時 -->
+      <div class="row mb-5">
+        <label class="form-label">公開日時 <span class="redDC3545">*必須</span></label>
+        <div class="col-12">
+          <input
+            :disabled="displayType==='detail' && public==='1'"
+            v-model="pickeDate"
+            value="type1"
+            id="type1"
+            class="form-check-input"
+            type="radio"
+          >
+          <label class="form-check-label" for="type1">即時を指定</label>
+        </div>
+        <div class="col-12">
+          <input
+            :disabled="displayType==='detail' && public==='1'"
+            v-model="pickeDate"
+            value="type2"
+            id="type2"
+            class="form-check-input"
+            type="radio"
+          >
+          <label class="form-check-label" for="type2">日時を指定</label>
+          <vue-ctk-date-time-picker
+            name="dateTime"
+            v-model="dateTime"
+            formatted="YYYY/MM/DD hh:mm"
+            position="top"
+            label=""
+            :disabled="pickeDate==='type1'"
+            class="mt-2"
+          /></vue-ctk-date-time-picker>
+        </div>
+        <div v-if="$v.dateTime.$dirty" class="text-danger fw-bold mt-2">
+          <span v-if="!$v.dateTime.required">必須項目が入力されていません。</span>
+        </div>
+      </div>
+
+      <div v-if="displayType === 'regist'" class="text-end">
+        <button type="submit" class="btn baseBtnBlue" style="width: 156px;">登録</button>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script type="text/javascript">
+const forms = `<%- forms %>`;
+
+const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
+Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
+
+Vue.use(window.vuelidate.default);
+const { required } = window.validators;
+
+new Vue({
+  el: "#notificationsRegist",
+  data: {
+    displayType: "",
+    pickeDate: "type1",
+    minDate: moment(new Date()).format("YYYY-MM-DD"),
+
+    // APIデータ
+    forms: JSON.parse(forms),
+    // 登録データ
+    openRange: "",       // 公開範囲
+    noticeTitle: "",     // お知らせタイトル
+    noticeBody: "",      // お知らせ本文
+    public: "",          // 公開ステータス
+    dateTime: null,      // 公開日時
+  },
+  validations: {
+    openRange: {
+      required,
+    },
+    noticeTitle: {
+      required,
+    },
+    noticeBody: {
+      required,
+    },
+    public: {
+      required,
+    },
+    dateTime: {
+      required,
+    },
+  },
+  created() {
+    this.setInitData();
+  },
+  methods: {
+   /**
+     * 登録情報セット
+     */ 
+     setInitData() {
+      this.openRange = this.forms.openRange;
+      this.noticeTitle = this.forms.noticeTitle;
+      this.noticeBody = this.forms.noticeBody;
+      this.public = this.forms.public;
+      location.href.match(/regist/) ? this.displayType = 'regist' : this.displayType = 'detail'
+    },
+
+    setDateNow() {
+      this.dateTime = moment(new Date()).format('YYYY/MM/DD hh:mm');
+    },
+    onPreview() {
+      alert("プレビュー");
+    },
+    onSubmit() {
+      if(this.pickeDate === 'type2') this.setDateNow();
+      this.$v.$touch();
+      if(!this.$v.$invalid) {
+        document.notice.method="post";
+        document.notice.action = "/notification/regist";
+        document.notice.submit();
+      }
+    }
+  }
+})
+</script>
+</body>
+</html>

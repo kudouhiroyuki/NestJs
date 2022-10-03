@@ -13,7 +13,7 @@
     </h4>
 
     <div class="d-flex flex-row-reverse mb-5">
-      <a href="/divisions/1001/regist">
+      <a href="/notifications/regist">
         <input type="button" value="新規登録" class="btn baseBtnBlue" style="width: 156px">
       </a>
     </div>
@@ -94,18 +94,33 @@
       <table class="table align-middle">
         <thead>
           <tr>
-            <th style="position: sticky; top: 0; left: 0; background: white;">お知らせID</th>
-            <th style="position: sticky; top: 0; left: 0; background: white;">お知らせタイトル</th>
-            <th style="position: sticky; top: 0; left: 0; background: white;">公開日時</th>
-            <th style="position: sticky; top: 0; left: 0; background: white;">公開状態</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">お知らせID</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">お知らせタイトル</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">公開日時</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">公開状態</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in notifications" :key="index">
+          <tr
+            v-for="(item, index) in notifications"
+            :key="index"
+            @click="onActionList(item)"
+            style="position: relative;"
+          >
             <td>{{ item.noticeId }}</td>
             <td>{{ item.noticeTitle }}</td>
             <td>{{ item.dateTime }}</td>
             <td>{{ item.public }}</td>
+            <td style="width: 0;">
+              <ul
+                :ref="item.noticeId"
+                class="dropdown-menu"
+                style="left: 50%; transform: translate(-50%, -50%);"
+              >
+                <a :href=`/notifications/detail/${item.noticeId}`><li class="dropdown-item small">詳細</li></a>
+                <a :href=createCopyUrl(item.noticeId)><li class="dropdown-item small">コピー</li></a>
+              </ul>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -160,7 +175,7 @@ const { required, minValue, maxValueValue, minValueValue } = window.validators;
 new Vue({
   el: "#notificationsIndex",
   data: {
-    serchTabStatus: true,          // 検索タブ
+    serchTabStatus: true,                          // 検索タブ
     // APIデータ
     notifications: JSON.parse(notifications),
     totalPageCount: JSON.parse(totalPageCount),
@@ -200,6 +215,19 @@ new Vue({
   created() {
     queryParam.set("pageNumber", this.pageNumber);
   },
+  mounted() {
+    /**
+     * アクションリスト（hide）
+     */ 
+    window.addEventListener('click', (e) => {
+      if(!e.target.closest('.table.align-middle')) {
+        const dropdowns = document.querySelectorAll('.dropdown-menu');
+        dropdowns.forEach(function(el) {
+          el.style.display = 'none';
+        });
+      }
+    })
+  },
   watch: {
     /**
      * 開始日時の変更監視（フォーマット変換）
@@ -226,10 +254,26 @@ new Vue({
   },
   methods: {
     /**
-     * アコーディオン（UI）
+     * アコーディオン
      */ 
      onTabToggle(target) {
       this[target] = !this[target];
+    },
+    /**
+     * アクションリスト（show）
+     */ 
+     onActionList(item) {
+      const dropdowns = document.querySelectorAll('.dropdown-menu');
+      dropdowns.forEach(function(el) {
+        el.style.display = 'none';
+      });
+      this.$refs[item.noticeId][0].style.display = 'block';
+    },
+    /**
+     * コピーURL作成（URL）
+     */ 
+     createCopyUrl(noticeId) {
+      return `/notifications/regist/?noticeId=${noticeId}`;
     },
     /**
      * 検索条件（更新）
