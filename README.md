@@ -15,6 +15,7 @@ http://localhost:3000/inventorys/1001/regist<br>
 http://localhost:3000/inventorys/1001/detail/1<br>
 
 - アカウント管理<br>
+http://localhost:3000/accounts<br>
 
 - お知らせ管理<br>
 http://localhost:3000/notifications<br>
