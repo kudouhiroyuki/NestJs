@@ -82,8 +82,8 @@
               </button>  
             </div>
           </div>
-          <div v-if="$v.fullName.$dirty || $v.mail.$dirty || $v.tell.$dirty" class="text-danger fw-bold mt-3">
-            <p v-if="!$v.fullName.required && !$v.mail.required && !$v.tell.required">氏名、メールアドレス、電話番号のいずれかを入力して下さい。</p>
+          <div v-if="$v.keyword.$dirty || $v.startDate.$dirty || $v.endDate.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.keyword.required && (!$v.startDate.required || !$v.endDate.required)">キーワード、公開日時のいずれかを入力して下さい。</p>
           </div>
         </div>
       </div>
@@ -170,49 +170,36 @@ const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 Vue.use(window.vuelidate.default);
-const { required, minValue, maxValueValue, minValueValue } = window.validators;
+const { required } = window.validators;
 
 new Vue({
   el: "#notificationsIndex",
   data: {
-    serchTabStatus: true,                          // 検索タブ
+    serchTabStatus: true,                            // 検索タブ
     // APIデータ
     notifications: JSON.parse(notifications),
     totalPageCount: JSON.parse(totalPageCount),
     // 検索データ
-    keyword: "",
-    startDate: null,                               // 開始日時 (From)
-    endDate: null,                                 // 終了日時 (To)
-    pageNumber: queryParam.get('pageNumber') ?? 1, // ページ番号
+    keyword: queryParam.get("keyword") ?? "",        // キーワード
+    startDate: queryParam.get("startDate") ?? null,  // 開始日時 (From)
+    endDate: queryParam.get("endDate") ?? null,      // 終了日時 (To)
+    pageNumber: queryParam.get('pageNumber') ?? 1,   // ページ番号
   },
   validations: {
-    fullName: {
+    keyword: {
       required
     },
-    mail: {
+    startDate: {
       required
     },
-    tell: {
+    endDate: {
       required
-    },
-    checkTenantId: {
-      required
-    },
-    checkVigorId: {
-      required
-    },
-    checkStartDate: {
-      required,
-      minValue: value => value > new Date().getTime(),
-      maxValueValue: value => value < window.checkEndDate,
-    },
-    checkEndDate: {
-      required,
-      minValue: value => value > new Date().getTime(),
-      minValueValue: value => value > window.checkStartDate,
     },
   },
   created() {
+    queryParam.set("keyword", this.keyword);
+    queryParam.set("startDate", this.startDate);
+    queryParam.set("endDate", this.endDate);
     queryParam.set("pageNumber", this.pageNumber);
   },
   mounted() {
@@ -237,7 +224,8 @@ new Vue({
       if(newVal !== null) {
         let resultDate = moment(new Date(newVal.slice(0, -3)));
         if (newVal.match(/午後/)) resultDate.add(12, 'h').format();
-        this.startDate = moment(resultDate._d).format("YYYY-MM-DD HH:mm:ss");
+        this.startDate = moment(resultDate._d).format("YYYY/MM/DD HH:mm:ss");
+        queryParam.set('startDate', this.startDate);
       }
     },
     /**
@@ -248,7 +236,8 @@ new Vue({
       if(newVal !== null) {
         let resultDate = moment(new Date(newVal.slice(0, -3)));
         if (newVal.match(/午後/)) resultDate.add(12, 'h').format();
-        this.endDate = moment(resultDate._d).format("YYYY-MM-DD HH:mm:ss");
+        this.endDate = moment(resultDate._d).format("YYYY/MM/DD HH:mm:ss");
+        queryParam.set('endDate', this.endDate);
       }
     }
   },
@@ -294,7 +283,8 @@ new Vue({
      */ 
     onSerch() {
       this.$v.$touch();
-      if(!this.$v.fullName.$invalid || !this.$v.mail.$invalid || !this.$v.tell.$invalid) {
+      if(!this.$v.keyword.$invalid || (!this.$v.startDate.$invalid && !this.$v.endDate.$invalid)) {
+        alert(1)
         window.location.href = "/notifications?" + queryParam;
       }
     },

@@ -7,7 +7,7 @@
   <%- include('../../partials/sidebar'); %>
 
   <main id="notificationsRegist">
-    <form @submit.prevent="onSubmit" name="notice">
+    <form @submit.prevent="onSubmit" name="notifications">
       <p v-if="displayType === 'regist'" class="fs-4">お知らせ登録</p>
       <p v-else class="fs-4">お知らせ詳細</p>
 
@@ -15,6 +15,11 @@
         <button type="submit" class="btn baseBtnBlue" style="width: 156px;">保存</button>
       </div>
 
+      <!-- お知らせID -->
+      <div v-if="noticeId">
+        <input v-model="noticeId" type="hidden" name="noticeId">
+      </div>
+      
       <!-- 公開範囲 -->
       <div class="row mt-5 mb-4">
         <label class="form-label">公開範囲 <span class="redDC3545">*必須</span></label>
@@ -73,7 +78,7 @@
             :disabled="displayType==='detail' && public==='1'"
             v-model="noticeBody"
             name="noticeBody"
-            maxlength="2000"
+            maxlength="400"
             rows="3"
             class="form-control mb-2"
           ></textarea>
@@ -94,9 +99,9 @@
             value="1"
             class="form-check-input"
             type="radio"
-            id="public_1"
+            id="public1"
           />
-          <label class="form-check-label" for="public_1">公開</label>
+          <label class="form-check-label" for="public1">公開</label>
         </div>
         <div class="col-12">
           <input
@@ -106,54 +111,56 @@
             value="0" 
             class="form-check-input mb-2"
             type="radio"
-            id="public_0"
+            id="public0"
           />
-          <label class="form-check-label" for="public_0">非公開</label>
-          <div v-if="$v.openRange.$dirty" class="text-danger fw-bold">
-            <span v-if="!$v.openRange.required">必須項目が選択されていません。</span>
+          <label class="form-check-label" for="public0">非公開</label>
+          <div v-if="$v.public.$dirty" class="text-danger fw-bold">
+            <span v-if="!$v.public.required">必須項目が選択されていません。</span>
           </div>
         </div>
       </div>
 
       <!-- 公開日時 -->
       <div class="row mb-5">
+        <input v-model="dateType" type="hidden" name="dateType">
+        <input v-model="dateTime" type="hidden" name="dateTime">
         <label class="form-label">公開日時 <span class="redDC3545">*必須</span></label>
         <div class="col-12">
           <input
             :disabled="displayType==='detail' && public==='1'"
-            v-model="pickeDate"
-            value="type1"
-            id="type1"
+            v-model="dateType"
+            value="1"
+            id="dateType1"
             class="form-check-input"
             type="radio"
           >
-          <label class="form-check-label" for="type1">即時を指定</label>
+          <label class="form-check-label" for="dateType1">即時を指定</label>
         </div>
         <div class="col-12">
           <input
             :disabled="displayType==='detail' && public==='1'"
-            v-model="pickeDate"
-            value="type2"
-            id="type2"
+            v-model="dateType"
+            value="2"
+            id="dateType2"
             class="form-check-input"
             type="radio"
+            style="vertical-align: baseline;"
           >
-          <label class="form-check-label" for="type2">日時を指定</label>
+          <label class="form-check-label" for="dateType2" style="margin-right: 20px;">日時を指定</label>
           <vue-ctk-date-time-picker
-            name="dateTime"
             v-model="dateTime"
             formatted="YYYY/MM/DD hh:mm"
             position="top"
             label=""
-            :disabled="pickeDate==='type1'"
-            class="mt-2"
+            :disabled="dateType==='1'"
+            class="mt-2 d-inline-block w-auto"
           /></vue-ctk-date-time-picker>
         </div>
-        <div v-if="$v.dateTime.$dirty" class="text-danger fw-bold mt-2">
-          <span v-if="!$v.dateTime.required">必須項目が入力されていません。</span>
+        <div v-if="$v.checkDateTime.$dirty" class="text-danger fw-bold mt-2">
+          <p v-if="!$v.checkDateTime.required">必須項目が入力されていません。</p>
+          <p v-if="!$v.checkDateTime.minValue">公開日時は現在日時以降で入力して下さい。</p>
         </div>
       </div>
-
       <div v-if="displayType === 'regist'" class="text-end">
         <button type="submit" class="btn baseBtnBlue" style="width: 156px;">登録</button>
       </div>
@@ -168,23 +175,23 @@ const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 Vue.use(window.vuelidate.default);
-const { required } = window.validators;
+const { required, minValue } = window.validators;
 
 new Vue({
   el: "#notificationsRegist",
   data: {
     displayType: "",
-    pickeDate: "type1",
-    minDate: moment(new Date()).format("YYYY-MM-DD"),
-
+    checkDateTime: '',   // 公開日時 (入力チェック用)
     // APIデータ
     forms: JSON.parse(forms),
     // 登録データ
+    noticeId: "",        // お知らせID
     openRange: "",       // 公開範囲
     noticeTitle: "",     // お知らせタイトル
     noticeBody: "",      // お知らせ本文
     public: "",          // 公開ステータス
-    dateTime: null,      // 公開日時
+    dateType: "",        // 公開日時（タイプ）
+    dateTime: null,      // 公開日時（日付）
   },
   validations: {
     openRange: {
@@ -199,38 +206,74 @@ new Vue({
     public: {
       required,
     },
-    dateTime: {
+    checkDateTime: {
       required,
+      minValue: value => value > new Date().getTime(),
     },
   },
   created() {
     this.setInitData();
   },
+  watch: {
+    /**
+     * 公開日時の変更監視（フォーマット変換）
+     */
+     dateTime: function(newVal, oldVal) {
+      if(newVal === null) {
+        this.checkDateTime = '';
+      }
+      if(newVal && Number.isNaN(new Date(newVal).getTime())) {
+        let resultDate = moment(new Date(newVal.slice(0, -3)));
+        if (newVal.match(/午後/)) resultDate.add(12, 'h').format();
+        this.dateTime = moment(resultDate._d).format("YYYY/MM/DD HH:mm:ss");
+        this.checkDateTime = new Date(resultDate).getTime();
+      }
+    },
+  },
   methods: {
-   /**
+    /**
      * 登録情報セット
      */ 
-     setInitData() {
+     setInitData() { 
+      if(this.forms.noticeId) this.noticeId = this.forms.noticeId;
       this.openRange = this.forms.openRange;
       this.noticeTitle = this.forms.noticeTitle;
       this.noticeBody = this.forms.noticeBody;
       this.public = this.forms.public;
+      this.dateType = this.forms.dateType;
+      this.dateTime = this.forms.dateTime;
       location.href.match(/regist/) ? this.displayType = 'regist' : this.displayType = 'detail'
     },
-
+    /**
+     * お知らせIDセット
+     */ 
+     setNoticeId() {
+      if(this.displayType === 'detail') {
+        document.notifications.noticeId.value = this.forms.noticeId;
+      }
+    },
+    /**
+     * 公開日時セット（即時）
+     */ 
     setDateNow() {
-      this.dateTime = moment(new Date()).format('YYYY/MM/DD hh:mm');
+      if(this.dateType === '1') {
+        let baseDate = new Date();
+        baseDate.setSeconds(baseDate.getSeconds() + 10);
+        this.checkDateTime = baseDate.getTime();
+        document.notifications.dateTime.value = moment(new Date()).format('YYYY/MM/DD hh:mm');
+      }
     },
-    onPreview() {
-      alert("プレビュー");
-    },
+    /**
+     * 登録処理
+     */ 
     onSubmit() {
-      if(this.pickeDate === 'type2') this.setDateNow();
+      this.setNoticeId();
+      this.setDateNow();
       this.$v.$touch();
       if(!this.$v.$invalid) {
-        document.notice.method="post";
-        document.notice.action = "/notification/regist";
-        document.notice.submit();
+        document.notifications.method="post";
+        document.notifications.action = "/notifications/regist";
+        document.notifications.submit();
       }
     }
   }

@@ -8,6 +8,7 @@ export class NotificationsController {
   @Get('/')
   @Render('notifications/index')
   async getIndex(@Query() query: any) {
+    console.log(query)
     const notifications = [
       {
         noticeId: '1001',
@@ -55,13 +56,12 @@ export class NotificationsController {
     let forms = {}
     if (Object.keys(query).length) {
       forms = {
-        noticeId: '1001',
         openRange: 'consumer',
         noticeTitle: '2022年4月1日以降の料金体制について',
         noticeBody: '本文本文本文本文本文本文本文',
         public: '1',
-        dateType: '1',
-        dateValue: '2022/08/09 03:36'
+        dateType: '2',
+        dateTime: '2022/08/09 03:36'
       }
     }
     return {
@@ -91,8 +91,8 @@ export class NotificationsController {
       noticeTitle: '2022年4月1日以降の料金体制について',
       noticeBody: '本文本文本文本文本文本文本文',
       public: '0',
-      dateType: '1',
-      dateValue: '2022/08/09 03:36'
+      dateType: '2',
+      dateTime: '2022/08/09 03:36'
     }
     return {
       forms: JSON.stringify(forms)
