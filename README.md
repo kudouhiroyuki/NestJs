@@ -15,10 +15,10 @@ http://localhost:3000/inventorys/1001/regist<br>
 http://localhost:3000/inventorys/1001/detail/1<br>
 
 - お知らせ管理<br>
-http://localhost:3000/notifications
-http://localhost:3000/notifications/regist
-http://localhost:3000/notifications/regist?noticeId=1001
-http://localhost:3000/notifications/detail/1001
+http://localhost:3000/notifications<br>
+http://localhost:3000/notifications/regist<br>
+http://localhost:3000/notifications/regist?noticeId=1001<br>
+http://localhost:3000/notifications/detail/1001<br>
 
 - 会員管理<br>
 http://localhost:3000/members<br>
