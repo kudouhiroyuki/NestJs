@@ -3,7 +3,7 @@ import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect } from
 @Controller('accounts')
 export class AccountsController {
   /**
-   * GET お知らせ照会画面
+   * GET アカウントグループ照会画面
    */
   @Get('/')
   @Render('accounts/index')
@@ -11,34 +11,39 @@ export class AccountsController {
     console.log(query)
     const accounts = [
       {
-        noticeId: '1001',
-        noticeTitle: '2022年4月1日以降の料金体制について',
-        dateTime: '2022/7/1 10:00',
-        public: '1'
+        accountId: 'K001',
+        seiKanji: '富士急',
+        meiKanji: '太郎',
+        mail: 'taro@fujiq.jp',
+        privilegeRole: 'admin'
       },
       {
-        noticeId: '1002',
-        noticeTitle: '2022年4月1日以降の料金体制について',
-        dateTime: '2022/7/1 10:00',
-        public: '0'
+        accountId: 'K002',
+        seiKanji: '富士急',
+        meiKanji: '太郎',
+        mail: 'taro@fujiq.jp',
+        privilegeRole: 'user'
       },
       {
-        noticeId: '1003',
-        noticeTitle: '2022年4月1日以降の料金体制について',
-        dateTime: '2022/7/1 10:00',
-        public: '0'
+        accountId: 'K003',
+        seiKanji: '富士急',
+        meiKanji: '太郎',
+        mail: 'taro@fujiq.jp',
+        privilegeRole: 'user'
       },
       {
-        noticeId: '1004',
-        noticeTitle: '2022年4月1日以降の料金体制について',
-        dateTime: '2022/7/1 10:00',
-        public: '0'
+        accountId: 'K004',
+        seiKanji: '富士急',
+        meiKanji: '太郎',
+        mail: 'taro@fujiq.jp',
+        privilegeRole: 'user'
       },
       {
-        noticeId: '1005',
-        noticeTitle: '2022年4月1日以降の料金体制について',
-        dateTime: '2022/7/1 10:00',
-        public: '0'
+        accountId: 'K005',
+        seiKanji: '富士急',
+        meiKanji: '太郎',
+        mail: 'taro@fujiq.jp',
+        privilegeRole: 'user'
       }
     ]
     return {

@@ -32,58 +32,40 @@
           </div>
         </div>
         <div class="row" style="align-items: flex-end; padding: 2rem 3rem;">
-          <!-- キーワード -->
-          <div class="row mb-1">
-            <div class="col-4">
-              <div class="d-inline-block" style="width: 214px;">
-                <input
-                  @input="onFormChange"
-                  :value="keyword"
-                  name="keyword"
-                  type="text"
-                  class="form-control mb-3"
-                  placeholder="キーワード"
-                >
-              </div>
-            </div>
+          <div class="col-4 p-0">
+            <input
+              @input="onFormChange"
+              :value="accountId"
+              name="accountId"
+              type="text"
+              class="form-control mb-3"
+              placeholder="アカウントID"
+            >
+            <input
+              @input="onFormChange"
+              :value="fullName"
+              name="fullName"
+              type="text"
+              class="form-control mb-3"
+              placeholder="氏名"
+            >
+            <input
+              @input="onFormChange"
+              :value="mail"
+              name="mail"
+              type="text"
+              class="form-control mb-3"
+              placeholder="メールアドレス"
+            >
           </div>
-          <!-- 開始・終了日時 -->
-          <div class="row mb-4" style="align-items: flex-end;">
-            <input v-model="startDate" type="hidden" name="startDate">
-            <input v-model="endDate" type="hidden" name="endDate">
-            <div class="col-8">
-              <div class="d-inline-block">
-                <label class="form-label fw-bold">公開日時</label>
-                <vue-ctk-date-time-picker
-                  v-model="startDate"
-                  :format="'YYYY/MM/DD hh:mm a'"
-                  :formatted="'YYYY-MM-DD HH:mm a'"
-                  :label="'From'"
-                  position="top"
-                /></vue-ctk-date-time-picker>
-              </div>
-              <div class="d-inline-block" style="margin: 0 20px;">
-                〜
-              </div>
-              <div class="d-inline-block">
-                <vue-ctk-date-time-picker
-                  v-model="endDate"
-                  :format="'YYYY/MM/DD hh:mm a'"
-                  :formatted="'YYYY-MM-DD HH:mm a'"
-                  :label="'To'"
-                  position="top"
-                /></vue-ctk-date-time-picker>
-              </div>
-            </div>
-            <div class="col-4 text-end">
-              <button type="submit" class="btn mt-4 baseBtnBlue" style="width: 156px;">
-                <img src="/images/icon/serchWhite.svg">
-                検索
-              </button>  
-            </div>
+          <div class="col-8 p-0 text-end">
+            <button type="submit" class="btn mt-4 baseBtnBlue" style="width: 156px;">
+              <img src="/images/icon/serchWhite.svg">
+              検索
+            </button>  
           </div>
-          <div v-if="$v.keyword.$dirty || $v.startDate.$dirty || $v.endDate.$dirty" class="text-danger fw-bold mt-3">
-            <p v-if="!$v.keyword.required && (!$v.startDate.required || !$v.endDate.required)">キーワード、公開日時のいずれかを入力して下さい。</p>
+          <div v-if="$v.accountId.$dirty || $v.fullName.$dirty || $v.mail.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.accountId.required && !$v.fullName.required && !$v.mail.required">アカウントID、氏名、メールアドレスのいずれかを入力して下さい。</p>
           </div>
         </div>
       </div>
@@ -94,10 +76,10 @@
       <table class="table align-middle">
         <thead>
           <tr>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">お知らせID</th>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">お知らせタイトル</th>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">公開日時</th>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">公開状態</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">アカウントID</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">氏名</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">メールアドレス</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">権限ロール</th>
           </tr>
         </thead>
         <tbody>
@@ -107,18 +89,20 @@
             @click="onActionList(item)"
             style="position: relative;"
           >
-            <td>{{ item.noticeId }}</td>
-            <td>{{ item.noticeTitle }}</td>
-            <td>{{ item.dateTime }}</td>
-            <td>{{ item.public }}</td>
+            <td>{{ item.accountId }}</td>
+            <td>{{ item.seiKanji }} {{ item.meiKanji }}</td>
+            <td>{{ item.mail }}</td>
+            <td>
+              <template v-if="item.privilegeRole === 'admin'">管理者権限</template>
+              <template v-else>通常権限</template>
+            </td>
             <td style="width: 0;">
               <ul
-                :ref="item.noticeId"
+                :ref="item.accountId"
                 class="dropdown-menu"
                 style="left: 50%; transform: translate(-50%, -50%);"
               >
-                <a :href=`/accounts/detail/${item.noticeId}`><li class="dropdown-item small">詳細</li></a>
-                <a :href=createCopyUrl(item.noticeId)><li class="dropdown-item small">コピー</li></a>
+                <a :href=`/accounts/detail/${item.accountId}`><li class="dropdown-item small">詳細</li></a>
               </ul>
             </td>
           </tr>
@@ -180,26 +164,26 @@ new Vue({
     accounts: JSON.parse(accounts),
     totalPageCount: JSON.parse(totalPageCount),
     // 検索データ
-    keyword: queryParam.get("keyword") ?? "",        // キーワード
-    startDate: queryParam.get("startDate") ?? null,  // 開始日時 (From)
-    endDate: queryParam.get("endDate") ?? null,      // 終了日時 (To)
-    pageNumber: queryParam.get('pageNumber') ?? 1,   // ページ番号
+    accountId: queryParam.get('accountId') ?? '',
+    fullName: queryParam.get('fullName') ?? '',
+    mail: queryParam.get('mail') ?? '',
+    pageNumber: queryParam.get('pageNumber') ?? 1,
   },
   validations: {
-    keyword: {
+    accountId: {
       required
     },
-    startDate: {
+    fullName: {
       required
     },
-    endDate: {
+    mail: {
       required
     },
   },
   created() {
-    queryParam.set("keyword", this.keyword);
-    queryParam.set("startDate", this.startDate);
-    queryParam.set("endDate", this.endDate);
+    queryParam.set("accountId", this.accountId);
+    queryParam.set("fullName", this.fullName);
+    queryParam.set("mail", this.mail);
     queryParam.set("pageNumber", this.pageNumber);
   },
   mounted() {
@@ -215,32 +199,6 @@ new Vue({
         });
       }
     })
-  },
-  watch: {
-    /**
-     * 開始日時の変更監視（フォーマット変換）
-     */
-     startDate: function(newVal, oldVal) {
-      this.startDate = null;
-      if(newVal !== null) {
-        let resultDate = moment(new Date(newVal.slice(0, -3)));
-        if (newVal.match(/午後/)) resultDate.add(12, 'h').format();
-        this.startDate = moment(resultDate._d).format("YYYY/MM/DD HH:mm:ss");
-        queryParam.set('startDate', this.startDate);
-      }
-    },
-    /**
-     * 終了日時の変更監視（フォーマット変換）
-     */ 
-    endDate: function(newVal, oldVal) {
-      this.endDate = null;;
-      if(newVal !== null) {
-        let resultDate = moment(new Date(newVal.slice(0, -3)));
-        if (newVal.match(/午後/)) resultDate.add(12, 'h').format();
-        this.endDate = moment(resultDate._d).format("YYYY/MM/DD HH:mm:ss");
-        queryParam.set('endDate', this.endDate);
-      }
-    }
   },
   methods: {
     /**
@@ -258,15 +216,9 @@ new Vue({
         el.style.display = 'none';
         el.closest('tr').style.backgroundColor = 'inherit';
       });
-      this.$refs[item.noticeId][0].style.display = 'block';
-      this.$refs[item.noticeId][0].closest('tr').style.backgroundColor = '#E7E7E7';
+      this.$refs[item.accountId][0].style.display = 'block';
+      this.$refs[item.accountId][0].closest('tr').style.backgroundColor = '#E7E7E7';
 
-    },
-    /**
-     * コピーURL作成（URL）
-     */ 
-     createCopyUrl(noticeId) {
-      return `/accounts/regist/?noticeId=${noticeId}`;
     },
     /**
      * 検索条件（更新）
@@ -280,14 +232,14 @@ new Vue({
      */
      onPageChange(page) {
       queryParam.set("pageNumber", page);
-      this.onSerch();
+      window.location.href = "/accounts?" + queryParam;
     },
     /**
      * 検索処理
      */ 
     onSerch() {
       this.$v.$touch();
-      if(!this.$v.keyword.$invalid || (!this.$v.startDate.$invalid && !this.$v.endDate.$invalid)) {
+      if(!this.$v.accountId.$invalid || !this.$v.fullName.$invalid || !this.$v.mail.$invalid) {
         alert(1)
         window.location.href = "/accounts?" + queryParam;
       }

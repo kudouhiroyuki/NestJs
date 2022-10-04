@@ -153,12 +153,6 @@ new Vue({
     tell: queryParam.get('tell') ?? '',
     pageNumber: queryParam.get('pageNumber') ?? 1,
   },
-  created() {
-    queryParam.set("fullName", this.fullName);
-    queryParam.set("mail", this.mail);
-    queryParam.set("tell", this.tell);
-    queryParam.set("pageNumber", this.pageNumber);
-  },
   validations: {
     fullName: {
       required
@@ -170,7 +164,11 @@ new Vue({
       required
     },
   },
-  watch: {
+  created() {
+    queryParam.set("fullName", this.fullName);
+    queryParam.set("mail", this.mail);
+    queryParam.set("tell", this.tell);
+    queryParam.set("pageNumber", this.pageNumber);
   },
   methods: {
     /**
