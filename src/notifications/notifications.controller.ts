@@ -90,7 +90,7 @@ export class NotificationsController {
       openRange: 'consumer',
       noticeTitle: '2022年4月1日以降の料金体制について',
       noticeBody: '本文本文本文本文本文本文本文',
-      public: '0',
+      public: '1',
       dateType: '2',
       dateTime: '2022/08/09 03:36'
     }

@@ -12,7 +12,7 @@
       <p v-else class="fs-4">お知らせ詳細</p>
 
       <div v-if="displayType === 'detail'" class="text-end">
-        <button type="submit" class="btn baseBtnBlue" style="width: 156px;">保存</button>
+        <button :disabled="public === '1'" type="submit" class="btn baseBtnBlue" style="width: 156px;">保存</button>
       </div>
 
       <!-- お知らせID -->
@@ -138,7 +138,7 @@
         </div>
         <div class="col-12">
           <input
-            :disabled="displayType==='detail' && public==='1'"
+            :disabled="displayType === 'detail' && public === '1'"
             v-model="dateType"
             value="2"
             id="dateType2"
@@ -152,7 +152,7 @@
             formatted="YYYY/MM/DD hh:mm"
             position="top"
             label=""
-            :disabled="dateType==='1'"
+            :disabled="(displayType === 'regist' && dateType === '1') || (displayType==='detail' && (dateType === '1' || public === '1'))"
             class="mt-2 d-inline-block w-auto"
           /></vue-ctk-date-time-picker>
         </div>
