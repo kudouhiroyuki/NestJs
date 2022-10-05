@@ -8,206 +8,301 @@
 
   <main id="accountsRegist">
     <form @submit.prevent="onSubmit" name="accounts">
-      <h4 class="mb-4 fw-bold" style="color:#0069D9;">
+      <h4 class="mb-5 fw-bold" style="color:#0069D9;">
         <img src="/images/icon/account.svg" style="width: 24px;">
         <template v-if="displayType === 'regist'" class="fs-4">アカウント登録</template>
         <template v-else class="fs-4">アカウント詳細</template>
       </h4>
 
-      <div v-if="displayType === 'detail'" class="text-end">
-        <button :disabled="public === '1'" type="submit" class="btn baseBtnBlue" style="width: 156px;">保存</button>
-      </div>
-
-      <!-- お知らせID -->
-      <div v-if="noticeId">
-        <input v-model="noticeId" type="hidden" name="noticeId">
-      </div>
-      
-      <!-- 公開範囲 -->
-      <div class="row mt-5 mb-4">
-        <label class="form-label">公開範囲 <span class="redDC3545">*必須</span></label>
-        <div class="col-12 mb-2">
-          <input
-            :disabled="displayType==='detail' && public==='1'"
-            v-model="openRange"
-            name="openRange"
-            value="consumer"
-            class="form-check-input"
-            type="radio"
-            id="consumer"
-          />
-          <label class="form-check-label" for="consumer">コンシューマ</label>
-        </div>
-        <div class="col-12">
-          <input
-            :disabled="displayType==='detail' && public==='1'"
-            v-model="openRange"
-            name="openRange"
-            value="backOffice" 
-            class="form-check-input mb-2"
-            type="radio"
-            id="backOffice"
-          />
-          <label class="form-check-label" for="backOffice">バックオフィス</label>
-          <div v-if="$v.openRange.$dirty" class="text-danger fw-bold">
-            <span v-if="!$v.openRange.required">必須項目が選択されていません。</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- お知らせタイトル -->
-      <div class="row mb-4">
-        <label class="form-label">お知らせタイトル <span class="redDC3545">*必須</span></label>
+      <!-- アカウントID -->
+      <div v-if="displayType === 'regist'" class="row mb-5">
+        <label class="form-label">アカウントID <span class="redDC3545">*必須</span></label>
         <div class="col-8">
           <input
-            :disabled="displayType==='detail' && public==='1'"
-            v-model="noticeTitle"
-            name="noticeTitle"
+            v-model="accountId"
+            name="accountId"
             maxlength="50"
             type="text"
             class="form-control mb-2"
+            placeholder="アカウントIDを入力"
           />
-          <div v-if="$v.noticeTitle.$dirty" class="text-danger fw-bold">
-            <span v-if="!$v.noticeTitle.required">必須項目が入力されていません。</span>
+          <div v-if="$v.accountId.$dirty" class="text-danger fw-bold">
+            <span v-if="!$v.accountId.required">必須項目が入力されていません。</span>
           </div>
         </div>
       </div>
-
-      <!-- お知らせ本文 -->
-      <div class="row mb-4">
-        <label class="form-label">お知らせ本文 <span class="redDC3545">*必須</span></label>
-        <div class="col-8">
-          <textarea
-            :disabled="displayType==='detail' && public==='1'"
-            v-model="noticeBody"
-            name="noticeBody"
-            maxlength="400"
-            rows="3"
-            class="form-control mb-2"
-          ></textarea>
-          <div v-if="$v.noticeBody.$dirty" class="text-danger fw-bold">
-            <span v-if="!$v.noticeBody.required">必須項目が入力されていません。</span>
-          </div>
-        </div>
+      <div v-if="displayType === 'detail'" class="row mb-5">
+        <label class="form-label">アカウントID</label>
+        <div class="col-8">{{ accountId }}</div>
       </div>
 
-      <!-- 公開ステータス -->
-      <div class="row mb-4">
-        <label class="form-label">公開ステータス <span class="redDC3545">*必須</span></label>
-        <div class="col-12 mb-2">
-          <input
-            :disabled="displayType==='detail' && public==='1'"
-            v-model="public"
-            name="public"
-            value="1"
-            class="form-check-input"
-            type="radio"
-            id="public1"
-          />
-          <label class="form-check-label" for="public1">公開</label>
-        </div>
-        <div class="col-12">
-          <input
-            :disabled="displayType==='detail' && public==='1'"
-            v-model="public"
-            name="public"
-            value="0" 
-            class="form-check-input mb-2"
-            type="radio"
-            id="public0"
-          />
-          <label class="form-check-label" for="public0">非公開</label>
-          <div v-if="$v.public.$dirty" class="text-danger fw-bold">
-            <span v-if="!$v.public.required">必須項目が選択されていません。</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 公開日時 -->
+      <!-- 氏名 -->
       <div class="row mb-5">
-        <input v-model="dateType" type="hidden" name="dateType">
-        <input v-model="dateTime" type="hidden" name="dateTime">
-        <label class="form-label">公開日時 <span class="redDC3545">*必須</span></label>
-        <div class="col-12">
+        <label class="form-label">氏名 <span class="redDC3545">*必須</span></label>
+        <div class="col-4">
           <input
-            :disabled="displayType==='detail' && public==='1'"
-            v-model="dateType"
-            value="1"
-            id="dateType1"
-            class="form-check-input"
-            type="radio"
+            v-model="familyName"
+            name="familyName"
+            type="text"
+            class="form-control"
+            maxlength="25"
+            placeholder="姓"
           >
-          <label class="form-check-label" for="dateType1">即時を指定</label>
+          <div v-if="$v.familyName.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.familyName.required">姓が入力されていません。</p>
+            <p v-if="!$v.familyName.valid">姓は漢字のみで入力して下さい。</p>
+          </div>
         </div>
-        <div class="col-12">
+        <div class="col-4">
           <input
-            :disabled="displayType === 'detail' && public === '1'"
-            v-model="dateType"
-            value="2"
-            id="dateType2"
-            class="form-check-input"
-            type="radio"
-            style="vertical-align: baseline;"
+            v-model="firstName"
+            name="firstName"
+            type="text"
+            class="form-control"
+            maxlength="25"
+            placeholder="名"
           >
-          <label class="form-check-label" for="dateType2" style="margin-right: 20px;">日時を指定</label>
-          <vue-ctk-date-time-picker
-            v-model="dateTime"
-            formatted="YYYY/MM/DD hh:mm"
-            position="top"
-            label=""
-            :disabled="(displayType === 'regist' && dateType === '1') || (displayType==='detail' && (dateType === '1' || public === '1'))"
-            class="mt-2 d-inline-block w-auto"
-          /></vue-ctk-date-time-picker>
-        </div>
-        <div v-if="$v.checkDateTime.$dirty" class="text-danger fw-bold mt-2">
-          <p v-if="!$v.checkDateTime.required">必須項目が入力されていません。</p>
-          <p v-if="!$v.checkDateTime.minValue">公開日時は現在日時以降で入力して下さい。</p>
+          <div v-if="$v.firstName.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.firstName.required">名が入力されていません。</p>
+            <p v-if="!$v.firstName.valid">名は漢字のみで入力して下さい。</p>
+          </div>
         </div>
       </div>
-      <div v-if="displayType === 'regist'" class="text-end">
-        <button type="submit" class="btn baseBtnBlue" style="width: 156px;">登録</button>
+
+      <!-- メールアドレス -->
+      <div class="row mb-5">
+        <label class="form-label">メールアドレス</label>
+        <div class="col-8">
+          <input
+            v-model="email"
+            name="email"
+            type="text"
+            class="form-control"
+            maxlength="254"
+            placeholder="メールアドレスを入力"
+          >
+        </div>
+        <div v-if="$v.email.$dirty" class="text-danger fw-bold mt-3">
+          <p v-if="!$v.email.email">メールアドレスの形式で入力して下さい。</p>
+          <p v-if="!$v.email.valid">入力不可能な文字があります。正しい値で入力して下さい。</p>
+        </div>
+      </div>
+
+      <!-- 所属会社 -->
+      <div class="row mb-5">
+        <label class="form-label">所属会社</label>
+        <div class="col-8">
+          <input
+            v-model="affiliationCompany"
+            name="affiliationCompany"
+            type="text"
+            class="form-control mb-2"
+            maxlength="30"
+            placeholder="所属会社を入力"
+          />
+        </div>
+      </div>
+
+      <!-- 部署 -->
+      <div class="row mb-5">
+        <label class="form-label">部署</label>
+        <div class="col-8">
+          <input
+            v-model="department"
+            name="department"
+            type="text"
+            class="form-control mb-2"
+            maxlength="30"
+            placeholder="部署を入力"
+          />
+        </div>
+      </div>
+
+      <!-- 管理者アカウント -->
+      <div v-if="backOfficeAccount.accountStatus === 'dmp'" class="row mb-3">
+        <label class="form-label">管理者アカウント</label>
+        <div class="col-4">
+          <input
+            v-model="isSystemAdmin"
+            @click="isSystemAdmin=$event.target.checked"
+            class="form-check-input"
+            type="checkbox"
+            id="isSystemAdmin"
+          >
+          <label class="form-check-label" for="isSystemAdmin">
+            管理者アカウント
+          </label>
+        </div>
+      </div>
+
+      <!-- アカウントグループ -->
+      <div class="row mb-5">
+        <div class="col-4">
+          <label class="form-label">アカウントグループ</label>
+          <select v-model="accountGroup" class="form-select">
+            <option hidden value="">アカウントグループを選択</option>
+            <option
+              v-for="item in accountGroups"
+              :key="item.id"
+              :value="item.id"
+            >{{ item.accountGroupName }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- アクションボタン -->
+      <div class="text-end">
+        <button
+          v-if="displayType === 'detail'"
+          type="button"
+          class="btn baseBtnBlue"
+          style="width: 136px;font-size: 12px;margin-bottom: 10px;"
+        >戻る</button>
+        <button
+          v-if="displayType === 'detail'"
+          @click="onActionModalOpen(accountStatus)"
+          type="button"
+          class="btn baseBtnBlue"
+          style="width: 136px;font-size: 12px;margin-bottom: 10px;"
+        >停止/復旧</button>
+        <button
+          v-if="displayType === 'detail'"
+          @click="onActionModalOpen('reset')"
+          type="button"
+          class="btn baseBtnBlue"
+          style="width: 136px;font-size: 12px;margin-bottom: 10px;"
+        >パスワードリセット</button>
+        <button
+          :disabled="accountGroup === ''"
+          type="button"
+          class="btn baseBtnBlue"
+          style="width: 136px;font-size: 12px;margin-bottom: 10px;"
+        >ロール選択</button>
+        <button
+          v-if="displayType === 'regist'"
+          type="submit"
+          class="btn baseBtnBlue"
+          style="width: 136px;font-size: 12px;margin-bottom: 10px;"
+        >登録</button>
+      </div>
+      
+      <!-- アクションモーダル -->
+      <div :style="actionModal.show ? 'display: block' : 'display: none'" class="modalMain">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">
+                <template v-if="actionModal.type === 'reset'">パスワードリセット</template>
+                <template v-if="actionModal.type === 'stop'">アカウント停止</template>
+                <template v-if="actionModal.type === 'restoration'">アカウント復旧</template>
+              </h5>
+              <button @click="onActionModalClose" type="button" class="btn-close"></button>
+            </div>
+            <div class="modal-body m-3">
+              <p v-if="actionModal.type === 'reset'">アカウントパスワードをリセットしますか？</p>
+              <p v-if="actionModal.type === 'stop'">対象アカウントを停止しますか？</p>
+              <p v-if="actionModal.type === 'restoration'">対象アカウントを復旧しますか？</p>
+              <div class="text-end">
+                <button
+                  v-if="actionModal.type === 'reset'"
+                  type="button"
+                  class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
+                >リセット実行</button>
+                <button
+                  v-if="actionModal.type === 'stop'"
+                  type="button"
+                  class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
+                >停止実行</button>
+                <button
+                  v-if="actionModal.type === 'restoration'"
+                  type="button"
+                  class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
+                >復旧実行</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        :style="actionModal.show ? 'display: block' : 'display: none'"
+        class="modalBg"
+        @click="onActionModalClose">
       </div>
     </form>
   </main>
 </div>
 
 <script type="text/javascript">
+const accountGroups = `<%- accountGroups %>`;
+const backOfficeAccount = `<%- backOfficeAccount %>`;
 const forms = `<%- forms %>`;
 
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 Vue.use(window.vuelidate.default);
-const { required, minValue } = window.validators;
+const { required, email } = window.validators;
+
+// 漢字のみか
+let regexpKanji = /^([\u{3005}\u{3007}\u{303b}\u{3400}-\u{9FFF}\u{F900}-\u{FAFF}\u{20000}-\u{2FFFF}][\u{E0100}-\u{E01EF}\u{FE00}-\u{FE02}]?)+$/mu;
+// 全角があるか
+let regexpZenkaku = /[^\x01-\x7E\uFF61-\uFF9F]/;
 
 new Vue({
   el: "#accountsRegist",
   data: {
     displayType: "",
     checkDateTime: '',   // 公開日時 (入力チェック用)
+    // アクションモーダル
+    actionModal: {
+      show: false,       // 表示
+      type: '',          // タイプ（reset/stop/restoration）
+      title: '',         // タイトル
+    },
+
     // APIデータ
+    accountGroups: JSON.parse(accountGroups),
+    backOfficeAccount: JSON.parse(backOfficeAccount),
     forms: JSON.parse(forms),
     // 登録データ
-    noticeId: "",        // お知らせID
-    openRange: "",       // 公開範囲
-    noticeTitle: "",     // お知らせタイトル
-    noticeBody: "",      // お知らせ本文
-    public: "",          // 公開ステータス
-    dateType: "",        // 公開日時（タイプ）
-    dateTime: null,      // 公開日時（日付）
+    accountId: "",           // アカウントID
+    familyName: "",          // 姓
+    firstName: "",           // 名
+    email: "",               // メールアドレス
+    affiliationCompany: "",  // 所属会社
+    department: "",          // 部署
+    isSystemAdmin: false,    // 管理者アカウント
+
+    accountGroup: "",        // アカウントグループ
+    accountStatus: '',       // アカウントステータス（stop restoration）
   },
   validations: {
-    openRange: {
+    accountId: {
       required,
     },
-    noticeTitle: {
+    familyName: {
       required,
+      valid: function(value) {
+        let result = false;
+        if (new RegExp(regexpKanji).test(value)) result = true;
+        return result;
+      }
     },
-    noticeBody: {
+    firstName: {
       required,
+      valid: function(value) {
+        let result = false;
+        if (new RegExp(regexpKanji).test(value)) result = true;
+        return result;
+      }
     },
-    public: {
-      required,
+    email: {
+      email,
+      valid: function(value) {
+        let result = false;
+        if (!new RegExp(regexpZenkaku).test(value)) result = true;
+        return result;
+      }
     },
     checkDateTime: {
       required,
@@ -217,61 +312,42 @@ new Vue({
   created() {
     this.setInitData();
   },
-  watch: {
-    /**
-     * 公開日時の変更監視（フォーマット変換）
-     */
-     dateTime: function(newVal, oldVal) {
-      if(newVal === null) {
-        this.checkDateTime = '';
-      }
-      if(newVal && Number.isNaN(new Date(newVal).getTime())) {
-        let resultDate = moment(new Date(newVal.slice(0, -3)));
-        if (newVal.match(/午後/)) resultDate.add(12, 'h').format();
-        this.dateTime = moment(resultDate._d).format("YYYY/MM/DD HH:mm:ss");
-        this.checkDateTime = new Date(resultDate).getTime();
-      }
-    },
-  },
   methods: {
     /**
      * 登録情報セット
      */ 
      setInitData() { 
-      if(this.forms.noticeId) this.noticeId = this.forms.noticeId;
-      this.openRange = this.forms.openRange;
-      this.noticeTitle = this.forms.noticeTitle;
-      this.noticeBody = this.forms.noticeBody;
-      this.public = this.forms.public;
-      this.dateType = this.forms.dateType;
-      this.dateTime = this.forms.dateTime;
+      this.accountId = this.forms.accountId;
+      this.familyName = this.forms.familyName;
+      this.firstName = this.forms.firstName;
+      this.email = this.forms.email;
+      this.affiliationCompany = this.forms.affiliationCompany;
+      this.department = this.forms.department;
+      this.isSystemAdmin = this.forms.isSystemAdmin;
+      this.accountStatus = this.forms.accountStatus;
       location.href.match(/regist/) ? this.displayType = 'regist' : this.displayType = 'detail'
     },
     /**
-     * お知らせIDセット
+     * Openモーダル（停止 復旧 パスワードリセット）
      */ 
-     setNoticeId() {
-      if(this.displayType === 'detail') {
-        document.accounts.noticeId.value = this.forms.noticeId;
-      }
+     onActionModalOpen(type) {
+      let actionType = type;
+      if(type === 'stop') actionType = 'restoration';
+      if(type === '' || type === 'restoration') actionType = 'stop';
+      this.actionModal.show = true;
+      this.actionModal.type = actionType;
     },
     /**
-     * 公開日時セット（即時）
+     * Closeモーダル（停止 復旧 パスワードリセット）
      */ 
-    setDateNow() {
-      if(this.dateType === '1') {
-        let baseDate = new Date();
-        baseDate.setSeconds(baseDate.getSeconds() + 10);
-        this.checkDateTime = baseDate.getTime();
-        document.accounts.dateTime.value = moment(new Date()).format('YYYY/MM/DD hh:mm');
-      }
+     onActionModalClose() {
+      this.actionModal.show = false;
+      this.actionModal.type = '';
     },
     /**
      * 登録処理
      */ 
     onSubmit() {
-      this.setNoticeId();
-      this.setDateNow();
       this.$v.$touch();
       if(!this.$v.$invalid) {
         document.accounts.method="post";

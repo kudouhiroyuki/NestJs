@@ -3,74 +3,88 @@ import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect } from
 @Controller('accounts')
 export class AccountsController {
   /**
-   * GET アカウントグループ照会画面
+   * GET アカウント照会画面
    */
   @Get('/')
   @Render('accounts/index')
   async getIndex(@Query() query: any) {
-    console.log(query)
-    const accounts = [
-      {
-        accountId: 'K001',
-        seiKanji: '富士急',
-        meiKanji: '太郎',
-        mail: 'taro@fujiq.jp',
-        privilegeRole: 'admin'
-      },
-      {
-        accountId: 'K002',
-        seiKanji: '富士急',
-        meiKanji: '太郎',
-        mail: 'taro@fujiq.jp',
-        privilegeRole: 'user'
-      },
-      {
-        accountId: 'K003',
-        seiKanji: '富士急',
-        meiKanji: '太郎',
-        mail: 'taro@fujiq.jp',
-        privilegeRole: 'user'
-      },
-      {
-        accountId: 'K004',
-        seiKanji: '富士急',
-        meiKanji: '太郎',
-        mail: 'taro@fujiq.jp',
-        privilegeRole: 'user'
-      },
-      {
-        accountId: 'K005',
-        seiKanji: '富士急',
-        meiKanji: '太郎',
-        mail: 'taro@fujiq.jp',
-        privilegeRole: 'user'
-      }
-    ]
+    let accounts = []
+    let totalPageCount = 0
+    if (Object.keys(query).length) {
+      accounts = [
+        {
+          accountId: 'K001',
+          seiKanji: '富士急',
+          meiKanji: '太郎',
+          mail: 'taro@fujiq.jp',
+          privilegeRole: 'admin'
+        },
+        {
+          accountId: 'K002',
+          seiKanji: '富士急',
+          meiKanji: '太郎',
+          mail: 'taro@fujiq.jp',
+          privilegeRole: 'user'
+        },
+        {
+          accountId: 'K003',
+          seiKanji: '富士急',
+          meiKanji: '太郎',
+          mail: 'taro@fujiq.jp',
+          privilegeRole: 'user'
+        },
+        {
+          accountId: 'K004',
+          seiKanji: '富士急',
+          meiKanji: '太郎',
+          mail: 'taro@fujiq.jp',
+          privilegeRole: 'user'
+        },
+        {
+          accountId: 'K005',
+          seiKanji: '富士急',
+          meiKanji: '太郎',
+          mail: 'taro@fujiq.jp',
+          privilegeRole: 'user'
+        }
+      ]
+      totalPageCount = 3
+    }
     return {
       accounts: JSON.stringify(accounts),
-      totalPageCount: 3
+      totalPageCount: totalPageCount
     }
   }
 
   /**
-   * GET お知らせ登録画面（通常登録・コピー登録）
+   * GET アカウント登録画面
    */
   @Get('regist')
   @Render('accounts/regist')
-  async getRegist(@Query() query: any) {
-    let forms = {}
-    if (Object.keys(query).length) {
-      forms = {
-        openRange: 'consumer',
-        noticeTitle: '2022年4月1日以降の料金体制について',
-        noticeBody: '本文本文本文本文本文本文本文',
-        public: '1',
-        dateType: '2',
-        dateTime: '2022/08/09 03:36'
+  async getRegist() {
+    // マスターデータ（アカウントグループ）
+    const accountGroups = [
+      {
+        id: '1',
+        accountGroupName: 'アカウントグループA'
+      },
+      {
+        id: '2',
+        accountGroupName: 'アカウントグループB'
+      },
+      {
+        id: '3',
+        accountGroupName: 'アカウントグループC'
       }
+    ]
+    // バックオフィスアカウントデータ（dmp・tenant）
+    const backOfficeAccount = {
+      accountStatus: 'dmp'
     }
     return {
-      forms: JSON.stringify(forms)
+      accountGroups: JSON.stringify(accountGroups),
+      backOfficeAccount: JSON.stringify(backOfficeAccount),
+      forms: JSON.stringify({})
     }
   }
   /**
@@ -84,22 +98,44 @@ export class AccountsController {
   }
 
   /**
-   * GET	お知らせ詳細画面
+   * GET	アカウント詳細画面
    */
   @Get('detail/:id')
   @Render('accounts/regist')
   async getDetail() {
-    // お知らせ詳細データ
+    // マスターデータ（アカウントグループ）
+    const accountGroups = [
+      {
+        id: '1',
+        accountGroupName: 'アカウントグループA'
+      },
+      {
+        id: '2',
+        accountGroupName: 'アカウントグループB'
+      },
+      {
+        id: '3',
+        accountGroupName: 'アカウントグループC'
+      }
+    ]
+    // バックオフィスアカウントデータ
+    const backOfficeAccount = {
+      accountStatus: 'dmp'
+    }
+    // アカウント詳細データ
     const forms = {
-      noticeId: '1001',
-      openRange: 'consumer',
-      noticeTitle: '2022年4月1日以降の料金体制について',
-      noticeBody: '本文本文本文本文本文本文本文',
-      public: '1',
-      dateType: '2',
-      dateTime: '2022/08/09 03:36'
+      accountId: 'K001',
+      familyName: '富士急',
+      firstName: '太郎',
+      email: 'taro@fujiq.jp',
+      affiliationCompany: '所属会社',
+      department: '部署',
+      isSystemAdmin: true,
+      accountStatus: ''
     }
     return {
+      accountGroups: JSON.stringify(accountGroups),
+      backOfficeAccount: JSON.stringify(backOfficeAccount),
       forms: JSON.stringify(forms)
     }
   }
