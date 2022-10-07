@@ -142,17 +142,17 @@ export class AccountsController {
     }
   }
   /**
-   * POST お知らせ登録処理
+   * POST アカウント登録処理
    */
   @Post('regist')
   @Redirect('http://localhost:3000/accounts')
   async postRegist(@Body() body: any) {
-    console.log('お知らせ登録処理')
+    console.log('アカウント登録処理')
     console.log(body)
   }
 
   /**
-   * GET	アカウント詳細画面
+   * GET アカウント詳細画面
    */
   @Get('detail/:id')
   @Render('accounts/regist')
@@ -226,7 +226,7 @@ export class AccountsController {
         ]
       }
     ]
-    // バックオフィスアカウントデータ
+    // バックオフィスアカウントデータ（dmp・tenant）
     const backOfficeAccount = {
       accountStatus: 'dmp'
     }
@@ -238,7 +238,9 @@ export class AccountsController {
       email: 'taro@fujiq.jp',
       affiliationCompany: '所属会社',
       department: '部署',
-      isSystemAdmin: true,
+      isDmpAdmin: true,
+      isTenantAdmin: false,
+      accountGroup: '1',
       accountStatus: '',
       tenantRoll: [
         {

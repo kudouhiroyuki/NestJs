@@ -7,7 +7,7 @@
   <%- include('../../partials/sidebar'); %>
 
   <main id="accountsRegist">
-    <form @submit.prevent="onSubmit" name="accounts">
+    <form @submit.prevent="onRegist" name="accounts">
       <h4 class="mb-5 fw-bold" style="color:#0069D9;">
         <img src="/images/icon/account.svg" style="width: 24px;">
         <template v-if="displayType === 'regist'" class="fs-4">アカウント登録</template>
@@ -27,7 +27,8 @@
             placeholder="アカウントIDを入力"
           />
           <div v-if="$v.accountId.$dirty" class="text-danger fw-bold">
-            <span v-if="!$v.accountId.required">必須項目が入力されていません。</span>
+            <p v-if="!$v.accountId.required">アカウントIDが入力されていません。</p>
+            <p v-if="!$v.accountId.valid">入力不可能な文字があります。正しい値で入力して下さい。</p>
           </div>
         </div>
       </div>
@@ -50,7 +51,6 @@
           >
           <div v-if="$v.familyName.$dirty" class="text-danger fw-bold mt-3">
             <p v-if="!$v.familyName.required">姓が入力されていません。</p>
-            <p v-if="!$v.familyName.valid">姓は漢字のみで入力して下さい。</p>
           </div>
         </div>
         <div class="col-4">
@@ -64,7 +64,6 @@
           >
           <div v-if="$v.firstName.$dirty" class="text-danger fw-bold mt-3">
             <p v-if="!$v.firstName.required">名が入力されていません。</p>
-            <p v-if="!$v.firstName.valid">名は漢字のみで入力して下さい。</p>
           </div>
         </div>
       </div>
@@ -84,7 +83,7 @@
         </div>
         <div v-if="$v.email.$dirty" class="text-danger fw-bold mt-3">
           <p v-if="!$v.email.email">メールアドレスの形式で入力して下さい。</p>
-          <p v-if="!$v.email.valid">入力不可能な文字があります。正しい値で入力して下さい。</p>
+          <p v-if="!$v.email.valid">管理者アカウントでは必須です。</p>
         </div>
       </div>
 
@@ -119,18 +118,32 @@
       </div>
 
       <!-- 管理者アカウント -->
-      <div v-if="backOfficeAccount.accountStatus === 'dmp'" class="row mb-3">
+      <div class="row mb-5">
         <label class="form-label">管理者アカウント</label>
-        <div class="col-4">
+        <div v-if="backOfficeAccount.accountStatus === 'dmp'" class="col-4">
+          <input v-model="JSON.stringify(isDmpAdmin)" type="hidden" name="isDmpAdmin">
           <input
-            v-model="isSystemAdmin"
-            @click="isSystemAdmin=$event.target.checked"
+            v-model="isDmpAdmin"
+            @click="isDmpAdmin=$event.target.checked"
             class="form-check-input"
             type="checkbox"
-            id="isSystemAdmin"
+            id="isDmpAdmin"
           >
-          <label class="form-check-label" for="isSystemAdmin">
+          <label class="form-check-label" for="isDmpAdmin">
             管理者アカウント
+          </label>
+        </div>
+        <div v-else class="col-4">
+          <input v-model="JSON.stringify(isTenantAdmin)" type="hidden" name="isTenantAdmin">
+          <input
+            v-model="isTenantAdmin"
+            @click="isTenantAdmin=$event.target.checked"
+            class="form-check-input"
+            type="checkbox"
+            id="isTenantAdmin"
+          >
+          <label class="form-check-label" for="isTenantAdmin">
+            テナント管理者アカウント
           </label>
         </div>
       </div>
@@ -138,7 +151,8 @@
       <!-- アカウントグループ -->
       <div class="row mb-5">
         <div class="col-4">
-          <label class="form-label">アカウントグループ</label>
+          <input v-model="JSON.stringify(accountGroup)" type="hidden" name="accountGroup">
+          <label class="form-label">アカウントグループ <span class="redDC3545">*必須</span></label>
           <select v-model="accountGroup" class="form-select">
             <option hidden value="">アカウントグループを選択</option>
             <option
@@ -147,6 +161,12 @@
               :value="item.id"
             >{{ item.accountGroupName }}</option>
           </select>
+        </div>
+        <div v-if="$v.accountGroup.$dirty" class="text-danger fw-bold mt-3">
+          <p v-if="!$v.accountGroup.required">アカウントグループが選択されていません。</p>
+        </div>
+        <div v-if="!accountGroupsCheck" class="text-danger fw-bold mt-3">
+          <p>テナント・ロールは選択必須です。</p>
         </div>
       </div>
 
@@ -157,7 +177,9 @@
           type="button"
           class="btn baseBtnBlue"
           style="width: 136px;font-size: 12px;margin-bottom: 10px;"
-        >戻る</button>
+        >
+        <a href="http://localhost:3000/accounts">戻る</a>
+        </button>
         <button
           v-if="displayType === 'detail'"
           @click="onActionModalOpen(accountStatus)"
@@ -180,7 +202,6 @@
           style="width: 136px;font-size: 12px;margin-bottom: 10px;"
         >ロール選択</button>
         <button
-          v-if="displayType === 'regist'"
           type="submit"
           class="btn baseBtnBlue"
           style="width: 136px;font-size: 12px;margin-bottom: 10px;"
@@ -205,16 +226,19 @@
               <p v-if="actionModal.type === 'restoration'">対象アカウントを復旧しますか？</p>
               <div class="text-end">
                 <button
+                  @click="onReset"
                   v-if="actionModal.type === 'reset'"
                   type="button"
                   class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
                 >リセット実行</button>
                 <button
+                  @click="onStop"
                   v-if="actionModal.type === 'stop'"
                   type="button"
                   class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
                 >停止実行</button>
                 <button
+                  @click="onRestoration"
                   v-if="actionModal.type === 'restoration'"
                   type="button"
                   class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
@@ -242,6 +266,7 @@
               <button @click="onRollModalClose" type="button" class="btn-close"></button>
             </div>
             <div class="modal-body m-3">
+              <input v-model="tenantRoll" type="hidden" name="tenantRoll">
               <!-- テナント一覧 -->
               <table v-if="rollModal.page === 'tenant'" class="table align-middle">
                 <thead>
@@ -320,28 +345,26 @@ Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 Vue.use(window.vuelidate.default);
 const { required, email } = window.validators;
 
-// 漢字のみか
-let regexpKanji = /^([\u{3005}\u{3007}\u{303b}\u{3400}-\u{9FFF}\u{F900}-\u{FAFF}\u{20000}-\u{2FFFF}][\u{E0100}-\u{E01EF}\u{FE00}-\u{FE02}]?)+$/mu;
-// 全角があるか
-let regexpZenkaku = /[^\x01-\x7E\uFF61-\uFF9F]/;
+// 半角英数かどうか
+let regexpHankaku = /[^A-Za-z0-9]+/;
 
 new Vue({
   el: "#accountsRegist",
   data: {
     displayType: "",
-    checkDateTime: '',   // 公開日時 (入力チェック用)
+    accountGroupsCheck: true,   // アカウントグループ入力チェック（テナント選択 ロール選択）
     // アクションモーダル
     actionModal: {
-      show: false,       // 表示
-      type: '',          // タイプ（reset/stop/restoration）
-      title: '',         // タイトル
+      show: false,               // 表示
+      type: '',                  // タイプ（reset/stop/restoration）
+      title: '',                 // タイトル
     },
     // ロールモーダル
     rollModal: {
-      show: false,       // 表示
-      page: '',          // カレントページ（tenant/roll）
-      title: '',         // タイトル
-      current: []        // カレントデータ
+      show: false,               // 表示
+      page: '',                  // カレントページ（tenant/roll）
+      title: '',                 // タイトル
+      current: []                // カレントデータ
     },
     // APIデータ
     accountGroups: JSON.parse(accountGroups),
@@ -354,7 +377,8 @@ new Vue({
     email: "",               // メールアドレス
     affiliationCompany: "",  // 所属会社
     department: "",          // 部署
-    isSystemAdmin: false,    // 管理者アカウント
+    isDmpAdmin: false,       // 管理者アカウント（DMP）
+    isTenantAdmin: false,    // 管理者アカウント（テナント）
     accountGroup: "",        // アカウントグループ
     accountStatus: '',       // アカウントステータス（stop restoration）
     tenantRoll: []           // アカウントグループ（テナント/ロール）
@@ -362,34 +386,35 @@ new Vue({
   validations: {
     accountId: {
       required,
+      valid: function(value) {
+        let result = false;
+        if (!new RegExp(regexpHankaku).test(value)) result = true;
+        return result;
+      }
     },
     familyName: {
-      required,
-      valid: function(value) {
-        let result = false;
-        if (new RegExp(regexpKanji).test(value)) result = true;
-        return result;
-      }
+      required
     },
     firstName: {
-      required,
-      valid: function(value) {
-        let result = false;
-        if (new RegExp(regexpKanji).test(value)) result = true;
-        return result;
-      }
+      required
     },
     email: {
       email,
-      valid: function(value) {
+      valid: function(value) {        
         let result = false;
-        if (!new RegExp(regexpZenkaku).test(value)) result = true;
+        if(this.backOfficeAccount.accountStatus === 'dmp') {
+          if (!this.isDmpAdmin) result = true;
+          if (this.isDmpAdmin && value) result = true;
+        }
+        if(this.backOfficeAccount.accountStatus === 'tenant') {
+          if (!this.isTenantAdmin) result = true;
+          if (this.isTenantAdmin && value) result = true;
+        }
         return result;
       }
     },
-    checkDateTime: {
-      required,
-      minValue: value => value > new Date().getTime(),
+    accountGroup: {
+      required
     },
   },
   created() {
@@ -398,11 +423,13 @@ new Vue({
     this.accountGroups.forEach(item => {
       item.tenants.forEach(i => {
         i.tenantCheck = false;
-        this.tenantRoll.forEach(roll => {
-          if(roll.id === item.id && roll.tenantId === i.id) {
-            i.tenantCheck = true;
-          }
-        });
+        if(this.forms.tenantRoll) {
+          this.forms.tenantRoll.forEach(roll => {
+            if(roll.id === item.id && roll.tenantId === i.id) {
+              i.tenantCheck = true;
+            }
+          });
+        }
       });
     });
     // アカウントグループ（ロールデータ チェックフラグ作成）
@@ -410,13 +437,15 @@ new Vue({
       group.tenants.forEach(tenant => {
         tenant.rolls.forEach(roll => {
           roll.rollCheck = false;
-          this.tenantRoll.forEach(item => {
-            item.roleId.forEach(i => {
-              if(group.id === item.id && tenant.id === item.tenantId && roll.id === i.id) {
-                roll.rollCheck = true;
-              }
+          if(this.forms.tenantRoll) {
+            this.forms.tenantRoll.forEach(item => {
+              item.roleId.forEach(i => {
+                if(group.id === item.id && tenant.id === item.tenantId && roll.id === i.id) {
+                  roll.rollCheck = true;
+                }
+              });
             });
-          });
+          }
         });
       });
     });
@@ -433,9 +462,10 @@ new Vue({
       this.email = this.forms.email;
       this.affiliationCompany = this.forms.affiliationCompany;
       this.department = this.forms.department;
-      this.isSystemAdmin = this.forms.isSystemAdmin;
+      this.isDmpAdmin = this.forms.isDmpAdmin;
+      this.isTenantAdmin = this.forms.isTenantAdmin;
+      this.accountGroup = this.forms.accountGroup;
       this.accountStatus = this.forms.accountStatus;
-      this.tenantRoll = this.forms.tenantRoll;
       location.href.match(/regist/) ? this.displayType = 'regist' : this.displayType = 'detail';
     },
     /**
@@ -489,15 +519,58 @@ new Vue({
       target.disabled = !e.target.checked;
     },
     /**
+     * バリデーションチェック（アカウントグループ テナント/ロール）
+     */
+     validationAccountGroups() {
+      let tenantCheck = false;
+      let rollCheck = false;
+      this.accountGroupsCheck = false;
+      this.tenantRoll = [];
+      this.accountGroups.forEach(groups => {
+        if(this.accountGroup === groups.id) {
+          groups.tenants.forEach(tenant => {
+            if(tenant.tenantCheck) tenantCheck = true;
+            tenant.rolls.forEach(roll => {
+              if(roll.rollCheck) rollCheck = true;
+            });
+          });
+        }
+      });
+      if(tenantCheck && rollCheck) {
+        this.accountGroupsCheck = true;
+        this.tenantRoll = this.accountGroups;
+        document.accounts.tenantRoll.value = JSON.stringify(this.accountGroups);
+      }
+    },
+    /**
      * 登録処理
      */ 
-    onSubmit() {
+    onRegist() {
       this.$v.$touch();
-      if(!this.$v.$invalid) {
+      this.validationAccountGroups();
+      if(!this.$v.$invalid && this.accountGroupsCheck) {
         document.accounts.method="post";
         document.accounts.action = "/accounts/regist";
         document.accounts.submit();
       }
+    },
+    /**
+     * 停止処理
+     */ 
+    onStop() {
+      alert('停止処理');
+    },
+    /**
+     * 復旧処理
+     */ 
+     onRestoration() {
+      alert('復旧処理');
+    },
+    /**
+     * パスワードリセット処理
+     */ 
+     onReset() {
+      alert('パスワードリセット処理');
     }
   }
 })
