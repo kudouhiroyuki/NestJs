@@ -66,15 +66,69 @@ export class AccountsController {
     const accountGroups = [
       {
         id: '1',
-        accountGroupName: 'アカウントグループA'
+        accountGroupName: 'アカウントグループA',
+        tenants: [
+          {
+            id: 'TE001',
+            tenantName: 'テナントA',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          },
+          {
+            id: 'TE002',
+            tenantName: 'テナントB',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          }
+        ]
       },
       {
         id: '2',
-        accountGroupName: 'アカウントグループB'
+        accountGroupName: 'アカウントグループB',
+        tenants: [
+          {
+            id: 'TE003',
+            tenantName: 'テナントC',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          },
+          {
+            id: 'TE004',
+            tenantName: 'テナントD',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          }
+        ]
       },
       {
         id: '3',
-        accountGroupName: 'アカウントグループC'
+        accountGroupName: 'アカウントグループC',
+        tenants: [
+          {
+            id: 'TE005',
+            tenantName: 'テナントE',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          },
+          {
+            id: 'TE006',
+            tenantName: 'テナントF',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          }
+        ]
       }
     ]
     // バックオフィスアカウントデータ（dmp・tenant）
@@ -107,15 +161,69 @@ export class AccountsController {
     const accountGroups = [
       {
         id: '1',
-        accountGroupName: 'アカウントグループA'
+        accountGroupName: 'アカウントグループA',
+        tenants: [
+          {
+            id: 'TE001',
+            tenantName: 'テナントA',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          },
+          {
+            id: 'TE002',
+            tenantName: 'テナントB',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          }
+        ]
       },
       {
         id: '2',
-        accountGroupName: 'アカウントグループB'
+        accountGroupName: 'アカウントグループB',
+        tenants: [
+          {
+            id: 'TE003',
+            tenantName: 'テナントC',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          },
+          {
+            id: 'TE004',
+            tenantName: 'テナントD',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          }
+        ]
       },
       {
         id: '3',
-        accountGroupName: 'アカウントグループC'
+        accountGroupName: 'アカウントグループC',
+        tenants: [
+          {
+            id: 'TE005',
+            tenantName: 'テナントE',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          },
+          {
+            id: 'TE006',
+            tenantName: 'テナントF',
+            rolls: [
+              { id: '1', roleName: 'ロール1' },
+              { id: '2', roleName: 'ロール2' }
+            ]
+          }
+        ]
       }
     ]
     // バックオフィスアカウントデータ
@@ -131,7 +239,19 @@ export class AccountsController {
       affiliationCompany: '所属会社',
       department: '部署',
       isSystemAdmin: true,
-      accountStatus: ''
+      accountStatus: '',
+      tenantRoll: [
+        {
+          id: '1',
+          tenantId: 'TE001',
+          roleId: [{ id: '1' }, { id: '2' }]
+        },
+        {
+          id: '1',
+          tenantId: 'TE002',
+          roleId: [{ id: '2' }]
+        }
+      ]
     }
     return {
       accountGroups: JSON.stringify(accountGroups),

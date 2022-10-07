@@ -173,6 +173,7 @@
           style="width: 136px;font-size: 12px;margin-bottom: 10px;"
         >パスワードリセット</button>
         <button
+          @click="onRollModalOpen"
           :disabled="accountGroup === ''"
           type="button"
           class="btn baseBtnBlue"
@@ -228,6 +229,82 @@
         class="modalBg"
         @click="onActionModalClose">
       </div>
+
+      <!-- ロールモーダル -->
+      <div :style="rollModal.show ? 'display: block' : 'display: none'" class="modalMain">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">
+                <template v-if="rollModal.page === 'tenant'">テナント選択</template>
+                <template v-if="rollModal.page === 'roll'">ロール選択</template>
+              </h5>
+              <button @click="onRollModalClose" type="button" class="btn-close"></button>
+            </div>
+            <div class="modal-body m-3">
+              <!-- テナント一覧 -->
+              <table v-if="rollModal.page === 'tenant'" class="table align-middle">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>テナントID</th>
+                    <th>テナント名</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in rollModal.current.tenants" :key="index">
+                    <td>
+                      <input
+                        v-model="item.tenantCheck"
+                        @change="onTenantCheck"
+                        class="form-check-input"
+                        type="checkbox"
+                      >
+                    </td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.tenantName }}</td>
+                    <td class="button">
+                      <button
+                        @click="onRollModalMove('roll', item)"
+                        :disabled="!item.tenantCheck"
+                        type="button"
+                        class="btn baseBtnBlue" style="width: 110px;font-size: 12px;"
+                      >ロール選択</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- ロール一覧 -->
+              <table v-if="rollModal.page === 'roll'" class="table align-middle">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>ロール</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in rollModal.current.rolls" :key="index">
+                    <td>
+                      <input
+                        v-model="item.rollCheck"
+                        class="form-check-input"
+                        type="checkbox"
+                      >
+                    </td>
+                    <td>{{ item.roleName }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        :style="rollModal.show ? 'display: block' : 'display: none'"
+        class="modalBg"
+        @click="onRollModalClose">
+      </div>
     </form>
   </main>
 </div>
@@ -259,7 +336,13 @@ new Vue({
       type: '',          // タイプ（reset/stop/restoration）
       title: '',         // タイトル
     },
-
+    // ロールモーダル
+    rollModal: {
+      show: false,       // 表示
+      page: '',          // カレントページ（tenant/roll）
+      title: '',         // タイトル
+      current: []        // カレントデータ
+    },
     // APIデータ
     accountGroups: JSON.parse(accountGroups),
     backOfficeAccount: JSON.parse(backOfficeAccount),
@@ -272,9 +355,9 @@ new Vue({
     affiliationCompany: "",  // 所属会社
     department: "",          // 部署
     isSystemAdmin: false,    // 管理者アカウント
-
     accountGroup: "",        // アカウントグループ
     accountStatus: '',       // アカウントステータス（stop restoration）
+    tenantRoll: []           // アカウントグループ（テナント/ロール）
   },
   validations: {
     accountId: {
@@ -311,7 +394,34 @@ new Vue({
   },
   created() {
     this.setInitData();
+    // アカウントグループ（テナントデータ チェックフラグ作成）
+    this.accountGroups.forEach(item => {
+      item.tenants.forEach(i => {
+        i.tenantCheck = false;
+        this.tenantRoll.forEach(roll => {
+          if(roll.id === item.id && roll.tenantId === i.id) {
+            i.tenantCheck = true;
+          }
+        });
+      });
+    });
+    // アカウントグループ（ロールデータ チェックフラグ作成）
+    this.accountGroups.forEach(group => {
+      group.tenants.forEach(tenant => {
+        tenant.rolls.forEach(roll => {
+          roll.rollCheck = false;
+          this.tenantRoll.forEach(item => {
+            item.roleId.forEach(i => {
+              if(group.id === item.id && tenant.id === item.tenantId && roll.id === i.id) {
+                roll.rollCheck = true;
+              }
+            });
+          });
+        });
+      });
+    });
   },
+
   methods: {
     /**
      * 登録情報セット
@@ -325,10 +435,11 @@ new Vue({
       this.department = this.forms.department;
       this.isSystemAdmin = this.forms.isSystemAdmin;
       this.accountStatus = this.forms.accountStatus;
-      location.href.match(/regist/) ? this.displayType = 'regist' : this.displayType = 'detail'
+      this.tenantRoll = this.forms.tenantRoll;
+      location.href.match(/regist/) ? this.displayType = 'regist' : this.displayType = 'detail';
     },
     /**
-     * Openモーダル（停止 復旧 パスワードリセット）
+     * アクションモーダル（Open）
      */ 
      onActionModalOpen(type) {
       let actionType = type;
@@ -338,11 +449,44 @@ new Vue({
       this.actionModal.type = actionType;
     },
     /**
-     * Closeモーダル（停止 復旧 パスワードリセット）
+     * アクションモーダル（Close）
      */ 
      onActionModalClose() {
       this.actionModal.show = false;
       this.actionModal.type = '';
+    },
+    /**
+     * ロールモーダル（Open）
+     */ 
+     onRollModalOpen() {
+      let currentData = this.accountGroups.filter((value) => {
+        return this.accountGroup === value.id;
+      });
+      this.rollModal.show = true;
+      this.rollModal.page = 'tenant';
+      this.rollModal.current = currentData[0];
+    },
+    /**
+     * ロールモーダル（Close）
+     */ 
+     onRollModalClose() {
+      this.rollModal.show = false;
+      this.rollModal.page = '';
+      this.rollModal.current = [];
+    },
+    /**
+     * ロールモーダル（ページ移動）
+     */ 
+     onRollModalMove(page, items) {
+      this.rollModal.page = page;
+      this.rollModal.current = items;
+    },
+    /**
+     * ロールモーダル（テナント選択 変更）
+     */
+     onTenantCheck(e) {
+      let target = e.target.closest("tr").querySelector("button");
+      target.disabled = !e.target.checked;
     },
     /**
      * 登録処理
