@@ -125,8 +125,13 @@ help;
 ※データ桁数が変動する可能性のあるもの向け（氏名・書籍名）<br>
 
 ■TEXT型<br>
-PostgreSQL: 1Gバイトまで<br>
-MySQL: 64kバイトまで<br>
+TINYTEXT（約255バイト）<br>
+TEXT（約64Kバイト 65,535文字）<br>
+MEDIUMTEXT（約16Mバイト 16,777,215文字）<br>
+LONGTEXT（約4Gバイト 4,294,967,295文字）<br>
+
+■ENUM型<br>
+※テーブル作成時に要素として定義された以外の値が入らない<br>
 
 ■バイト数<br>
 SELECT LENGTH('あいうえお');<br>
