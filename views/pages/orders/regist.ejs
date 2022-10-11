@@ -1,0 +1,243 @@
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="ordersRegist">
+    <form @submit.prevent="onSubmit" name="orders">
+      <h4 class="mb-4 fw-bold" style="color:#0069D9;">
+        <img src="/images/icon/order.svg" style="width: 24px;">
+        <template class="fs-4">注文詳細</template>
+      </h4>
+
+      <h5 class="mb-4 fw-bold">取引情報</h5>
+      <div class="baseShadow p-3 mb-5">
+        <!-- 取引ID -->
+        <div class="row mb-4">
+          <label class="form-label">取引ID</label>
+          <label class="form-label">{{ transactionId }}</label>
+        </div>
+        <!-- 取引ステータス -->
+        <div class="row mb-4">
+          <label class="form-label">取引ステータス</label>
+          <label class="form-label">{{ transactionStatus }}</label>
+        </div>
+        <!-- 取引日時 -->
+        <div class="row mb-4">
+          <label class="form-label">取引日時</label>
+          <label class="form-label">{{ transactionDatetime }}</label>
+        </div>
+        <!-- 購入テナント -->
+        <div class="row mb-4">
+          <label class="form-label">購入テナント</label>
+          <label class="form-label">{{ purchaseTenant }}</label>
+        </div>
+        <!-- 支払方法 -->
+        <div class="row mb-4">
+          <label class="form-label">支払方法</label>
+          <label class="form-label">{{ paymentWayType }}</label>
+        </div>
+        <h5 class="mb-4 fw-bold">支払情報</h5>
+        <div class="baseShadow p-3 mb-5">
+          <!-- 商品代金 -->
+          <div class="row mb-4">
+            <label class="form-label">商品代金
+              <span style="margin-left: 10px;">
+                ¥{{ Number(totalFee).toLocaleString() }}
+              </span>
+            </label>
+          </div>
+          <!-- テナントクーポン割引額 -->
+          <div class="row mb-4">
+            <label class="form-label">テナントクーポン割引額
+              <template v-if="tenantCouponApplyFee">
+                -¥{{ Number(tenantCouponApplyFee).toLocaleString() }}
+              </template>
+              <template v-else>-</template>
+            </label>
+          </div>
+          <!-- DMPクーポン割引額 -->
+          <div class="row mb-4">
+            <label class="form-label">DMPクーポン割引額
+              <template v-if="dmpCouponApplyFee">
+                -¥{{ Number(dmpCouponApplyFee).toLocaleString() }}
+              </template>
+              <template v-else>-</template>
+            </label>
+          </div>
+          <!-- コンビニ支払手数料 -->
+          <div class="row mb-4">
+            <label class="form-label">コンビニ支払手数料
+              <span style="margin-left: 10px;">
+                <template v-if="storePaymentCommission">
+                  ¥{{ Number(storePaymentCommission).toLocaleString() }}
+                </template>
+                <template v-else>-</template>
+              </span>
+            </label>
+          </div>
+          <!-- 合計金額 -->
+          <div class="row mb-4">
+            <label class="form-label">合計金額
+              <span style="margin-left: 10px;">
+                ¥{{ calcTotalAmount() }}
+              </span>
+            </label>
+          </div>
+          <h5 class="mb-4 fw-bold">注文情報</h5>
+          <div v-for="(item, index) in orderInformations" :key="index" class="baseShadow p-3 mb-5">
+            <!-- 注文ID -->
+            <div class="row mb-4">
+              <label class="form-label">注文ID
+                <span style="margin-left: 10px;">
+                  {{ item.id }}
+                </span>
+              </label>
+            </div>
+            <!-- 利用日時 -->
+            <div class="row mb-4">
+              <label class="form-label">利用日時
+                <span style="margin-left: 10px;">
+                  {{ item.useDate }}
+                </span>
+              </label>
+            </div>
+            <!-- 商品名 -->
+            <div class="row mb-4">
+              <label class="form-label">商品名
+                <span style="margin-left: 10px;">
+                  {{ item.productName }}
+                </span>
+              </label>
+            </div>
+           <!-- 購入内容 -->
+           <div class="row mb-4">
+            <label class="form-label">購入内容
+              <span style="margin-left: 10px;">
+                {{ item.ageElement }}
+              </span>
+              <span style="margin-left: 10px;">
+                x{{ item.purchaseQty }}
+              </span>
+              <span style="margin-left: 10px;">
+                ¥{{ Number(item.saleUnitPrice).toLocaleString() }}
+              </span>
+            </label>
+          </div>
+            
+          <!-- ステータス -->
+          <div class="row mb-4">
+            <label class="form-label">ステータス
+              <select class="form-select w-auto d-inline-block" style="margin-left: 10px;">
+                <option>未処理</option>
+                <option>BOキャンセル依頼中</option>
+                <option>返金中</option>
+                <option>キャンセル済</option>
+                <option>注文変更済</option>
+              </select>
+            </label>
+          </div>
+            
+          
+          </div>
+        </div>
+      </div>
+
+
+      <!-- <div class="text-end">
+        <button v-if="displayType === 'regist'" type="submit" class="btn baseBtnBlue" style="width: 156px;">登録</button>
+        <button v-if="displayType === 'detail'" type="submit" class="btn baseBtnBlue" style="width: 156px;">保存</button>
+      </div> -->
+    </form>
+  </main>
+</div>
+
+<script type="text/javascript">
+const forms = `<%- forms %>`;
+
+const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
+Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
+
+Vue.use(window.vuelidate.default);
+const { required, minValue } = window.validators;
+
+new Vue({
+  el: "#ordersRegist",
+  data: {
+    // APIデータ
+    forms: JSON.parse(forms),
+    // 登録データ
+    transactionId: "",                 // 取引ID
+    transactionStatus: "",             // 取引ステータス
+    transactionDatetime: "",           // 取引日時
+    purchaseTenant: "",                // 購入テナント
+    paymentWayType: "",                // 支払方法
+    totalFee: "",                      // 商品代金
+    tenantCouponApplyFee: "",          // テナントクーポン割引額
+    dmpCouponApplyFee: "",             // DMPクーポン割引額
+    storePaymentCommission: "",        // コンビニ支払手数料
+    orderInformations: []              // 注文情報
+  },
+
+
+  validations: {
+    accountGroupName: {
+      required,
+    },
+  },
+  created() {
+    this.setInitData();
+    // テナント一覧（チェックフラグ作成）
+    this.tenants.forEach(item => {
+      item.tenantCheck = false;
+      if(this.useTenants) {
+        this.useTenants.forEach(tenant => {
+          if(item.id === tenant.id) {
+            item.tenantCheck = true;
+          }
+        });
+      }
+    });
+  },
+  methods: {
+    /**
+     * 登録情報セット
+     */ 
+     setInitData() { 
+      this.transactionId = this.forms.transactionId;
+      this.transactionStatus = this.forms.transactionStatus;
+      this.transactionDatetime = this.forms.transactionDatetime;
+      this.purchaseTenant = this.forms.purchaseTenant;
+      this.paymentWayType = this.forms.paymentWayType;
+      this.totalFee = this.forms.totalFee;
+      this.tenantCouponApplyFee = this.forms.tenantCouponApplyFee;
+      this.dmpCouponApplyFee = this.forms.dmpCouponApplyFee;
+      this.storePaymentCommission = this.forms.storePaymentCommission;
+      this.orderInformations = this.forms.orderInformations;
+    },
+    /**
+     * 合計金額（商品代金 - テナントクーポン割引額 - DMPクーポン割引額 + コンビニ支払手数料）
+     */ 
+    calcTotalAmount() {
+      return Number(this.totalFee) - Number(this.tenantCouponApplyFee) - Number(this.dmpCouponApplyFee) + Number(this.storePaymentCommission);
+    },
+    /**
+     * 登録処理
+     */ 
+    onSubmit() {
+      this.$v.$touch();
+      this.validationUseTenants();
+      if(!this.$v.$invalid && this.useTenantsCheck) {
+        document.orders.method="post";
+        document.orders.action = "/orders/regist";
+        document.orders.submit();
+      }
+    }
+  }
+})
+</script>
+</body>
+</html>

@@ -14,8 +14,20 @@ http://localhost:3000/inventorys/null/regist<br>
 http://localhost:3000/inventorys/1001/regist<br>
 http://localhost:3000/inventorys/1001/detail/1<br>
 
+- 注文管理<br>
+http://localhost:3000/orders<br>
+http://localhost:3000/orders/detail/0001
+http://localhost:3000/orders/partialCancell/0001
+
 - アカウント管理<br>
 http://localhost:3000/accounts<br>
+http://localhost:3000/accounts/regist<br>
+http://localhost:3000/accounts/detail/K001<br>
+
+- アカウントグループ管理<br>
+http://localhost:3000/accountGroups<br>
+http://localhost:3000/accountGroups/regist<br>
+http://localhost:3000/accountGroups/detail/AG001<br>
 
 - お知らせ管理<br>
 http://localhost:3000/notifications<br>
