@@ -22,6 +22,10 @@ model departments {
   departmentId String @unique
   departmentName  String
 }
+model posts {
+  postsId Int @unique
+  body  String
+}
 model log {
   id    Int     @default(autoincrement()) @id
   log String

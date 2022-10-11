@@ -22,6 +22,14 @@ CREATE TABLE `departments` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `posts` (
+    `postsId` INTEGER NOT NULL,
+    `body` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `posts_postsId_key`(`postsId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `log` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `log` VARCHAR(191) NOT NULL,

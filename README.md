@@ -228,6 +228,10 @@ INSERT INTO nest.departments (departmentId, departmentName) VALUES<br>
 ('A0001', 'アプリケーション'),<br>
 ('B0001', 'デザイン');<br>
 
+INSERT INTO nest.posts (postsId, body) VALUES<br>
+(1, 'Hello'),<br>
+(2, 'Hi');<br>
+
 INSERT INTO nest.stocks (name, stockCount) VALUES<br>
 ('Mouse', 10),<br>
 ('Keyboard', 8);<br>
@@ -406,7 +410,20 @@ SELECT CONCAT(id, userName, password), id, userName, password FROM nest.users;
 #### テーブルとデータの結合<br>
 - INNER JOIN 句（内部結合）<br>
 ※一致しないデータは取得しない<br>
-SELECT * FROM nest.users INNER JOIN nest.departments USING(departmentId);<br><br>
+SELECT * FROM nest.users INNER JOIN nest.departments USING(departmentId);<br>
+
+SELECT *<br>
+FROM nest.users AS u<br>
+INNER JOIN nest.departments AS d<br>
+ON u.departmentId = d.departmentId;<br>
+
+SELECT *<br>
+FROM nest.users AS u<br>
+INNER JOIN nest.departments AS d<br>
+ON u.departmentId = d.departmentId<br>
+INNER JOIN nest.posts AS p<br>
+ON u.id = p.postsId;<br>
+
 SELECT u.id, u.userName, u.password, u.departmentId<br>
 FROM nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
