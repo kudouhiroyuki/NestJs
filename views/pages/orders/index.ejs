@@ -13,7 +13,7 @@
     </h4>
 
     <div class="d-flex flex-row-reverse mb-5">
-      <input type="button" value="CSVダウンロード" class="btn baseBtnBlue" style="width: 156px">
+      <input @click="onDownload" type="button" value="CSVダウンロード" class="btn baseBtnBlue" style="width: 156px">
     </div>
 
     <!-- 検索フォーム -->
@@ -30,81 +30,100 @@
           </div>
         </div>
         <div class="row" style="align-items: flex-end; padding: 2rem 3rem;">
-          <!-- 氏名 -->
-          <div class="row mb-1">
-            <div class="col-4">
-              <div class="d-inline-block" style="width: 214px;">
-                <input
-                  @input="onFormChange"
-                  :value="fullName"
-                  name="fullName"
-                  type="text"
-                  class="form-control mb-3"
-                  placeholder="氏名"
-                >
+          <div class="col-4 p-0">
+            <!-- 氏名 -->
+            <div class="row mb-1">
+              <div class="col-4">
+                <div class="d-inline-block" style="width: 214px;">
+                  <input
+                    @input="onFormChange"
+                    :value="fullName"
+                    name="fullName"
+                    type="text"
+                    class="form-control mb-3"
+                    placeholder="氏名"
+                    maxlength="60"
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- 電話番号 -->
+            <div class="row mb-1">
+              <div class="col-4">
+                <div class="d-inline-block" style="width: 214px;">
+                  <input
+                    @input="onFormChange"
+                    :value="telephone"
+                    name="telephone"
+                    type="text"
+                    class="form-control mb-3"
+                    placeholder="電話番号"
+                    maxlength="15"
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- メールアドレス -->
+            <div class="row mb-1">
+              <div class="col-4">
+                <div class="d-inline-block" style="width: 214px;">
+                  <input
+                    @input="onFormChange"
+                    :value="email"
+                    name="email"
+                    type="text"
+                    class="form-control mb-3"
+                    placeholder="メールアドレス"
+                    maxlength="254"
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- 注文番号 -->
+            <div class="row mb-1">
+              <div class="col-4">
+                <div class="d-inline-block" style="width: 214px;">
+                  <input
+                    @input="onFormChange"
+                    :value="orderNumber"
+                    name="orderNumber"
+                    type="text"
+                    class="form-control mb-3"
+                    placeholder="注文番号"
+                    maxlength="10"
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- ステータス -->
+            <div class="row mb-1">
+              <div class="col-4">
+                <div class="d-inline-block" style="width: 214px;">
+                  <select
+                    v-model="orderStatus"
+                    @change="onFormChange"
+                    name="orderStatus"
+                    class="form-select mb-2"
+                  >
+                    <option hidden value="">ステータス</option>
+                    <option
+                      v-for="item in statuss"
+                      :key="item.id"
+                      :value="item.name"
+                    >{{ item.name }}</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
-          <!-- 電話番号 -->
-          <div class="row mb-1">
-          <div class="col-4">
-            <div class="d-inline-block" style="width: 214px;">
-              <input
-                @input="onFormChange"
-                :value="telephone"
-                name="telephone"
-                type="text"
-                class="form-control mb-3"
-                placeholder="電話番号"
-              >
-            </div>
+          <div class="col-8 p-0 text-end">
+            <button @click="onSerch" type="submit" class="btn mt-4 baseBtnBlue" style="width: 156px;">
+              <img src="/images/icon/serchWhite.svg">
+              検索
+            </button>  
           </div>
-          <!-- メールアドレス -->
-          <div class="row mb-1">
-            <div class="col-4">
-              <div class="d-inline-block" style="width: 214px;">
-                <input
-                  @input="onFormChange"
-                  :value="email"
-                  name="email"
-                  type="text"
-                  class="form-control mb-3"
-                  placeholder="メールアドレス"
-                >
-              </div>
-            </div>
-          </div>
-          <!-- 注文番号 -->
-          <div class="row mb-1">
-            <div class="col-4">
-              <div class="d-inline-block" style="width: 214px;">
-                <input
-                  @input="onFormChange"
-                  :value="id"
-                  name="id"
-                  type="text"
-                  class="form-control mb-3"
-                  placeholder="注文番号"
-                >
-              </div>
-            </div>
-          </div>
-          <!-- ステータス -->
-          <div class="row mb-1">
-            <div class="col-4">
-              <div class="d-inline-block" style="width: 214px;">
-                <select class="form-select mb-2">
-                  <option>未処理</option>
-                  <option>BOキャンセル依頼中</option>
-                  <option>返金中</option>
-                  <option>キャンセル済</option>
-                  <option>注文変更済</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div v-if="$v.keyword.$dirty || $v.startDate.$dirty || $v.endDate.$dirty" class="text-danger fw-bold mt-3">
-            <p v-if="!$v.keyword.required && (!$v.startDate.required || !$v.endDate.required)">キーワード、公開日時のいずれかを入力して下さい。</p>
+          <div v-if="$v.fullName.$dirty || $v.telephone.$dirty || $v.email.$dirty || $v.orderNumber.$dirty || $v.orderStatus.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.fullName.required && !$v.telephone.required && !$v.email.required && !$v.orderNumber.required && !$v.orderStatus.required">氏名、電話番号、メールアドレス、注文番号、ステータスのいずれかを入力して下さい。</p>
           </div>
         </div>
       </div>
@@ -116,7 +135,14 @@
         <thead>
           <tr>
             <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">注文ID</th>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">アカウントグループ名</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">ステータス</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">注文番号</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">取引日時</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">氏名</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">電話番号</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">メールアドレス</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">利用日</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">有効期限</th>
           </tr>
         </thead>
         <tbody>
@@ -127,7 +153,14 @@
             style="position: relative;"
           >
             <td>{{ item.id }}</td>
-            <td>{{ item.accountGroupName }}</td>
+            <td>{{ item.orderStatus }}</td>
+            <td>{{ item.orderNumber }}</td>
+            <td>{{ item.transactionDatetime }}</td>
+            <td>{{ item.familyName }} {{ item.firstName }}</td>
+            <td>{{ item.telephone }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.useDate }}</td>
+            <td>{{ item.enableLimitDatetime }}</td>
             <td style="width: 0;">
               <ul
                 :ref="item.id"
@@ -177,13 +210,11 @@
 </div>
 
 <script type="text/javascript">
+const statuss = `<%- statuss %>`;
 const orders = `<%- orders %>`;
 const totalPageCount = `<%- totalPageCount %>`;
 
 const queryParam = new URLSearchParams(location.search);
-
-const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
-Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 Vue.use(window.vuelidate.default);
 const { required } = window.validators;
@@ -191,32 +222,42 @@ const { required } = window.validators;
 new Vue({
   el: "#ordersIndex",
   data: {
-    serchTabStatus: true,                            // 検索タブ
+    serchTabStatus: true,                             // 検索タブ
     // APIデータ
+    statuss: JSON.parse(statuss),
     orders: JSON.parse(orders),
     totalPageCount: JSON.parse(totalPageCount),
     // 検索データ
-    fullName: queryParam.get("fullName") ?? "",        // キーワード
-    telephone: queryParam.get("telephone") ?? "",  // 開始日時 (From)
-    email: queryParam.get("email") ?? "",      // 終了日時 (To)
-    id: queryParam.get("id") ?? "",      // 終了日時 (To)
-    pageNumber: queryParam.get('pageNumber') ?? 1,   // ページ番号
+    fullName: queryParam.get("fullName") ?? "",       // 氏名
+    telephone: queryParam.get("telephone") ?? "",     // 電話番号
+    email: queryParam.get("email") ?? "",             // メールアドレス	
+    orderNumber: queryParam.get("orderNumber") ?? "", // 注文番号
+    orderStatus: queryParam.get("orderStatus") ?? "", // ステータス
+    pageNumber: queryParam.get('pageNumber') ?? 1,    // ページ番号
   },
   validations: {
-    keyword: {
+    fullName: {
       required
     },
-    startDate: {
+    telephone: {
       required
     },
-    endDate: {
+    email: {
+      required
+    },
+    orderNumber: {
+      required
+    },
+    orderStatus: {
       required
     },
   },
   created() {
-    queryParam.set("keyword", this.keyword);
-    queryParam.set("startDate", this.startDate);
-    queryParam.set("endDate", this.endDate);
+    queryParam.set("fullName", this.fullName);
+    queryParam.set("telephone", this.telephone);
+    queryParam.set("email", this.email);
+    queryParam.set("orderNumber", this.orderNumber);
+    queryParam.set("orderStatus", this.orderStatus);
     queryParam.set("pageNumber", this.pageNumber);
   },
   mounted() {
@@ -234,6 +275,20 @@ new Vue({
     })
   },
   methods: {
+    /**
+     * ダウンロード
+     */
+     onDownload() {
+      let title = '注文ID,ステータス,注文番号,取引日時,氏名,電話番号,メールアドレス,利用日,有効期限\n';
+      this.orders.forEach(el => {
+        let line = `${el.id},${el.orderStatus},${el.orderNumber},${el.transactionDatetime},${el.familyName + el.firstName},${el.telephone},${el.email},${el.useDate},${el.enableLimitDatetime}`;
+        title += (line + '\n');
+      })
+      let link = document.createElement('a');
+      link.href = window.URL.createObjectURL(new Blob([title], { type: 'text/csv' }));
+      link.download = '注文一覧.csv';
+      link.click();
+    },
     /**
      * アコーディオン
      */ 
@@ -265,15 +320,14 @@ new Vue({
      */
      onPageChange(page) {
       queryParam.set("pageNumber", page);
-      this.onSerch();
+      window.location.href = "/orders?" + queryParam;
     },
     /**
      * 検索処理
-     */ 
+     */
     onSerch() {
       this.$v.$touch();
-      if(!this.$v.keyword.$invalid || (!this.$v.startDate.$invalid && !this.$v.endDate.$invalid)) {
-        alert(1)
+      if(!this.$v.fullName.$invalid || !this.$v.telephone.$invalid || !this.$v.email.$invalid || !this.$v.orderNumber.$invalid  || !this.$v.orderStatus.$invalid) {
         window.location.href = "/orders?" + queryParam;
       }
     },

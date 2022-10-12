@@ -141,3 +141,22 @@ input[type='file'] { color: transparent; }
     }
   }
 }
+
+// 注文詳細ページ
+#ordersRegist {
+  .tabToggle {
+    height: 55px;
+    overflow: hidden;
+    img {
+      transform: scale(1, -1);
+      margin-left: 10px;
+    }
+  }
+  .tabToggle.active {
+    height: inherit;
+    img {
+      cursor: pointer;
+      transform: inherit;
+    }
+  }
+}

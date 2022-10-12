@@ -88,14 +88,21 @@
             </label>
           </div>
           <h5 class="mb-4 fw-bold">注文情報</h5>
-          <div v-for="(item, index) in orderInformations" :key="index" class="baseShadow p-3 mb-5">
-            <!-- 注文ID -->
-            <div class="row mb-4">
-              <label class="form-label">注文ID
+          <div
+            v-for="(item, index) in orderInformations" :key="index"
+            class="tabToggle active baseShadow p-3 mb-5"
+          >
+            <!-- 商品ID -->
+            <div class="d-flex justify-content-between mb-4">
+              <label class="form-label">商品ID
                 <span style="margin-left: 10px;">
-                  {{ item.id }}
+                  {{ item.productId }}
                 </span>
               </label>
+              <div>
+                <input type="button" value="部分キャンセル" class="btn baseBtnBlue" style="width: 156px">
+                <img @click="onTabToggle" src="/images/icon/arow.svg">
+              </div>
             </div>
             <!-- 利用日時 -->
             <div class="row mb-4">
@@ -113,39 +120,188 @@
                 </span>
               </label>
             </div>
-           <!-- 購入内容 -->
-           <div class="row mb-4">
-            <label class="form-label">購入内容
-              <span style="margin-left: 10px;">
-                {{ item.ageElement }}
-              </span>
-              <span style="margin-left: 10px;">
-                x{{ item.purchaseQty }}
-              </span>
-              <span style="margin-left: 10px;">
-                ¥{{ Number(item.saleUnitPrice).toLocaleString() }}
-              </span>
-            </label>
+            <!-- 購入内容 -->
+            <div class="row mb-4">
+              <label class="form-label">購入内容
+                <span style="margin-left: 10px;">
+                  {{ item.ageElement }}
+                </span>
+                <span style="margin-left: 10px;">
+                  x{{ item.purchaseQty }}
+                </span>
+                <span style="margin-left: 10px;">
+                  ¥{{ Number(item.saleUnitPrice).toLocaleString() }}
+                </span>
+              </label>
+            </div>
+            <!-- ステータス -->
+            <div class="row mb-4">
+              <label class="form-label">ステータス
+                <select class="form-select w-auto d-inline-block" style="margin-left: 10px;">
+                  <option>未処理</option>
+                  <option>BOキャンセル依頼中</option>
+                  <option>返金中</option>
+                  <option>キャンセル済</option>
+                  <option>注文変更済</option>
+                </select>
+              </label>
+            </div>
           </div>
-            
-          <!-- ステータス -->
-          <div class="row mb-4">
-            <label class="form-label">ステータス
-              <select class="form-select w-auto d-inline-block" style="margin-left: 10px;">
-                <option>未処理</option>
-                <option>BOキャンセル依頼中</option>
-                <option>返金中</option>
-                <option>キャンセル済</option>
-                <option>注文変更済</option>
-              </select>
-            </label>
-          </div>
-            
-          
-          </div>
+
+
         </div>
       </div>
 
+      <h5 class="mb-4 fw-bold">クーポン情報</h5>
+      <div class="baseShadow p-3 mb-3">
+        <label class="form-label fw-bold mb-4">テナントクーポン情報</label>
+        <!-- 適用クーポン名 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">適用クーポン名</span>
+            <span style="margin-left: 10px;">{{ tenantCoupon[0].couponName }}</span>
+          </label>
+        </div>
+        <!-- クーポンID -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">クーポンID</span>
+            <span style="margin-left: 10px;">{{ tenantCoupon[0].couponId }}</span>
+          </label>
+        </div>
+        <!-- 適用額 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">適用額</span>
+            <span style="margin-left: 10px;">
+              <template v-if="tenantCoupon[0].applyFee">
+                ¥{{ Number(tenantCoupon[0].applyFee).toLocaleString() }}
+              </template>
+              <template v-else>-</template>
+            </span>
+          </label>
+        </div>
+        <!-- テナント負担額 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">テナント負担額</span>
+            <span style="margin-left: 10px;">
+              <template v-if="tenantCoupon[0].tenantBurdenFee">
+                ¥{{ Number(tenantCoupon[0].tenantBurdenFee).toLocaleString() }}
+              </template>
+              <template v-else>-</template>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="baseShadow p-3 mb-5">
+        <label class="form-label fw-bold mb-4">DMPクーポン情報</label>
+        <!-- 適用クーポン名 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">適用クーポン名</span>
+            <span style="margin-left: 10px;">{{ dmpCoupon[0].couponName }}</span>
+          </label>
+        </div>
+        <!-- クーポンID -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">クーポンID</span>
+            <span style="margin-left: 10px;">{{ dmpCoupon[0].couponId }}</span>
+          </label>
+        </div>
+        <!-- 適用額 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">適用額</span>
+            <span style="margin-left: 10px;">
+              <template v-if="dmpCoupon[0].applyFee">
+                ¥{{ Number(dmpCoupon[0].applyFee).toLocaleString() }}
+              </template>
+              <template v-else>-</template>
+            </span>
+          </label>
+        </div>
+        <!-- DMP負担額 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">DMP負担額</span>
+            <span style="margin-left: 10px;">
+              <template v-if="dmpCoupon[0].dmpBurdenFee">
+                ¥{{ Number(dmpCoupon[0].dmpBurdenFee).toLocaleString() }}
+              </template>
+              <template v-else>-</template>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <h5 class="mb-4 fw-bold">購入者情報</h5>
+      <div class="baseShadow p-3 mb-5">
+        <!-- ユーザーID -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">ユーザーID</span>
+            <span style="margin-left: 10px;">{{ dmpMemberId }}</span>
+          </label>
+        </div>
+        <!-- 氏名 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">氏名</span>
+            <span style="margin-left: 10px;">{{ familyName }} {{ firstName }}</span>
+          </label>
+        </div>
+        <!-- カナ -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">カナ</span>
+            <span style="margin-left: 10px;">{{ familyNameKana }} {{ firstNameKana }}</span>
+          </label>
+        </div>
+        <!-- 電話番号 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">電話番号</span>
+            <span style="margin-left: 10px;">{{ telephone }}</span>
+          </label>
+        </div>
+        <!-- メールアドレス -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">メールアドレス</span>
+            <span style="margin-left: 10px;">{{ email }}</span>
+          </label>
+        </div>
+        <!-- 性別 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">性別</span>
+            <span style="margin-left: 10px;">{{ gender }}</span>
+          </label>
+        </div>
+        <!-- 生年月日 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">生年月日</span>
+            <span style="margin-left: 10px;">{{ birthDate }}</span>
+          </label>
+        </div>
+        <!-- 郵便番号 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">郵便番号</span>
+            <span style="margin-left: 10px;">{{ zipCode }}</span>
+          </label>
+        </div>
+        <!-- 住所 -->
+        <div class="row mb-4">
+          <label class="form-label">
+            <span style="width: 120px; display: inline-block;">住所</span>
+            <span style="margin-left: 10px;">{{ prefecture }}{{ address }}</span>
+          </label>
+        </div>
+      </div>
 
       <!-- <div class="text-end">
         <button v-if="displayType === 'regist'" type="submit" class="btn baseBtnBlue" style="width: 156px;">登録</button>
@@ -179,7 +335,25 @@ new Vue({
     tenantCouponApplyFee: "",          // テナントクーポン割引額
     dmpCouponApplyFee: "",             // DMPクーポン割引額
     storePaymentCommission: "",        // コンビニ支払手数料
-    orderInformations: []              // 注文情報
+    // 注文情報
+    orderInformations: [],
+    // テナントクーポン情報
+    tenantCoupon: [],
+    // DMPクーポン情報
+    dmpCoupon: [],
+    // 購入者情報
+    dmpMemberId: "",                   // ユーザーID
+    familyName: "",                    // 姓
+    firstName: "",                     // 名
+    familyNameKana: "",                // セイ
+    firstNameKana: "",                 // メイ
+    telephone: "",                     // 電話番号
+    email: "",                         // メールアドレス
+    gender: "",                        // 性別
+    birthDate: "",                     // 生年月日
+    zipCode: "",                       // 郵便番号
+    prefecture: "",                    // 都道府県
+    address: "",                       // 市区町村
   },
 
 
@@ -189,18 +363,12 @@ new Vue({
     },
   },
   created() {
-    this.setInitData();
-    // テナント一覧（チェックフラグ作成）
-    this.tenants.forEach(item => {
-      item.tenantCheck = false;
-      if(this.useTenants) {
-        this.useTenants.forEach(tenant => {
-          if(item.id === tenant.id) {
-            item.tenantCheck = true;
-          }
-        });
-      }
+    this.forms.orderInformations.forEach(item => {
+      item.tabStatus = false;
     });
+    this.setInitData();
+
+ 
   },
   methods: {
     /**
@@ -216,7 +384,32 @@ new Vue({
       this.tenantCouponApplyFee = this.forms.tenantCouponApplyFee;
       this.dmpCouponApplyFee = this.forms.dmpCouponApplyFee;
       this.storePaymentCommission = this.forms.storePaymentCommission;
+      // 注文情報
       this.orderInformations = this.forms.orderInformations;
+      // テナントクーポン情報
+      this.tenantCoupon = this.forms.tenantCoupon;
+      // DMPクーポン情報
+      this.dmpCoupon = this.forms.dmpCoupon;
+      // 購入者情報
+      this.dmpMemberId = this.forms.dmpMemberId;
+      this.familyName = this.forms.familyName;
+      this.firstName = this.forms.firstName;
+      this.familyNameKana = this.forms.familyNameKana;
+      this.firstNameKana = this.forms.firstNameKana;
+      this.telephone = this.forms.telephone;
+      this.email = this.forms.email;
+      this.gender = this.forms.gender;
+      this.birthDate = this.forms.birthDate;
+      this.zipCode = this.forms.zipCode;
+      this.prefecture = this.forms.prefecture;
+      this.address = this.forms.address;
+    },
+    /**
+     * アコーディオン
+     */ 
+     onTabToggle(e) {
+      let target = e.target.closest(".tabToggle");
+      target.classList.toggle('active');
     },
     /**
      * 合計金額（商品代金 - テナントクーポン割引額 - DMPクーポン割引額 + コンビニ支払手数料）

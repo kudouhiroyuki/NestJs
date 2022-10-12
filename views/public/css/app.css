@@ -264,4 +264,20 @@ input[type=file] {
 }
 .fc-view-harness .fc-scrollgrid .fc-daygrid-body .fc-daygrid-day-number {
   font-size: 12px;
+}
+
+#ordersRegist .tabToggle {
+  height: 55px;
+  overflow: hidden;
+}
+#ordersRegist .tabToggle img {
+  transform: scale(1, -1);
+  margin-left: 10px;
+}
+#ordersRegist .tabToggle.active {
+  height: inherit;
+}
+#ordersRegist .tabToggle.active img {
+  cursor: pointer;
+  transform: inherit;
 }/*# sourceMappingURL=app.css.map */
