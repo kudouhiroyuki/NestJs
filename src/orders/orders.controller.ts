@@ -114,7 +114,7 @@ export class OrdersController {
           ageElement: '大人',
           purchaseQty: '1',
           saleUnitPrice: '1600',
-          orderStatus: '0',
+          orderStatus: '注文完了',
           orderStatusUpdateDatetime: '0'
         },
         {
@@ -125,7 +125,7 @@ export class OrdersController {
           ageElement: '大人',
           purchaseQty: '1',
           saleUnitPrice: '4500',
-          orderStatus: '0',
+          orderStatus: '注文完了',
           orderStatusUpdateDatetime: '0'
         }
       ],

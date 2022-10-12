@@ -13,6 +13,15 @@
         <template class="fs-4">注文詳細</template>
       </h4>
 
+      <div class="text-end">
+        <button
+          @click="onActionModalOpen"
+          type="button"
+          class="btn baseBtnBlue"
+          style="width: 156px;"
+        >キャンセル</button>
+      </div>
+
       <h5 class="mb-4 fw-bold">取引情報</h5>
       <div class="baseShadow p-3 mb-5">
         <!-- 取引ID -->
@@ -100,7 +109,7 @@
                 </span>
               </label>
               <div>
-                <input type="button" value="部分キャンセル" class="btn baseBtnBlue" style="width: 156px">
+                <input @click="onPartialCancellPage" type="button" value="部分キャンセル" class="btn baseBtnBlue" style="width: 156px">
                 <img @click="onTabToggle" src="/images/icon/arow.svg">
               </div>
             </div>
@@ -137,18 +146,12 @@
             <!-- ステータス -->
             <div class="row mb-4">
               <label class="form-label">ステータス
-                <select class="form-select w-auto d-inline-block" style="margin-left: 10px;">
-                  <option>未処理</option>
-                  <option>BOキャンセル依頼中</option>
-                  <option>返金中</option>
-                  <option>キャンセル済</option>
-                  <option>注文変更済</option>
-                </select>
+                <span style="margin-left: 10px;">
+                  {{ item.orderStatus }}
+                </span>
               </label>
             </div>
           </div>
-
-
         </div>
       </div>
 
@@ -302,27 +305,68 @@
           </label>
         </div>
       </div>
-
-      <!-- <div class="text-end">
-        <button v-if="displayType === 'regist'" type="submit" class="btn baseBtnBlue" style="width: 156px;">登録</button>
-        <button v-if="displayType === 'detail'" type="submit" class="btn baseBtnBlue" style="width: 156px;">保存</button>
-      </div> -->
     </form>
+
+    <!-- アクションモーダル -->
+    <div :style="actionModal.show ? 'display: block' : 'display: none'" class="modalMain">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <template v-if="actionModal.type === 'reset'">キャンセル</template>
+              <template v-if="actionModal.type === 'stop'">キャンセル承認</template>
+              <template v-if="actionModal.type === 'restoration'">キャンセル承認却下</template>
+            </h5>
+            <button @click="onActionModalClose" type="button" class="btn-close"></button>
+          </div>
+          <div class="modal-body m-3">
+            <p v-if="actionModal.type === 'reset'">キャンセルを実行しますか？</p>
+            <p v-if="actionModal.type === 'stop'">キャンセルを承認しますか？</p>
+            <p v-if="actionModal.type === 'restoration'">キャンセルを承認却下しますか？</p>
+            <div class="text-end">
+              <button
+                @click="onReset"
+                v-if="actionModal.type === 'reset'"
+                type="button"
+                class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
+              >リセット実行</button>
+              <button
+                @click="onStop"
+                v-if="actionModal.type === 'stop'"
+                type="button"
+                class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
+              >停止実行</button>
+              <button
+                @click="onRestoration"
+                v-if="actionModal.type === 'restoration'"
+                type="button"
+                class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
+              >復旧実行</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      :style="actionModal.show ? 'display: block' : 'display: none'"
+      class="modalBg"
+      @click="onActionModalClose">
+    </div>
   </main>
 </div>
 
 <script type="text/javascript">
 const forms = `<%- forms %>`;
 
-const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
-Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
-
-Vue.use(window.vuelidate.default);
-const { required, minValue } = window.validators;
-
 new Vue({
   el: "#ordersRegist",
   data: {
+    // アクションモーダル
+    actionModal: {
+      show: false,               // 表示
+      type: '',                  // タイプ（reset/stop/restoration）
+      title: '',                 // タイトル
+    },
     // APIデータ
     forms: JSON.parse(forms),
     // 登録データ
@@ -355,20 +399,11 @@ new Vue({
     prefecture: "",                    // 都道府県
     address: "",                       // 市区町村
   },
-
-
-  validations: {
-    accountGroupName: {
-      required,
-    },
-  },
   created() {
     this.forms.orderInformations.forEach(item => {
       item.tabStatus = false;
     });
-    this.setInitData();
-
- 
+    this.setInitData(); 
   },
   methods: {
     /**
@@ -405,6 +440,12 @@ new Vue({
       this.address = this.forms.address;
     },
     /**
+     * 合計金額（商品代金 - テナントクーポン割引額 - DMPクーポン割引額 + コンビニ支払手数料）
+     */ 
+     calcTotalAmount() {
+      return Number(this.totalFee) - Number(this.tenantCouponApplyFee) - Number(this.dmpCouponApplyFee) + Number(this.storePaymentCommission);
+    },
+    /**
      * アコーディオン
      */ 
      onTabToggle(e) {
@@ -412,10 +453,28 @@ new Vue({
       target.classList.toggle('active');
     },
     /**
-     * 合計金額（商品代金 - テナントクーポン割引額 - DMPクーポン割引額 + コンビニ支払手数料）
+     * アクションモーダル（Open）
      */ 
-    calcTotalAmount() {
-      return Number(this.totalFee) - Number(this.tenantCouponApplyFee) - Number(this.dmpCouponApplyFee) + Number(this.storePaymentCommission);
+     onActionModalOpen(type) {
+      // let actionType = type;
+      // if(type === 'stop') actionType = 'restoration';
+      // if(type === '' || type === 'restoration') actionType = 'stop';
+      this.actionModal.show = true;
+      this.actionModal.type = actionType;
+    },
+    /**
+     * アクションモーダル（Close）
+     */ 
+     onActionModalClose() {
+      this.actionModal.show = false;
+      this.actionModal.type = '';
+    },
+    /**
+     * 画面遷移（部分キャンセル）
+     */
+     onPartialCancellPage() {
+
+      window.location.href = "http://localhost:3000/orders/partialCancell/0001";
     },
     /**
      * 登録処理
