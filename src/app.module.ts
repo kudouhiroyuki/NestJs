@@ -44,6 +44,7 @@ import { PlansModule } from './plans/plans.module'
 import { DivisionsModule } from './divisions/divisions.module'
 import { InventorysModule } from './inventorys/inventorys.module'
 
+import { TenantsModule } from './tenants/tenants.module'
 import { OrdersModule } from './orders/orders.module'
 import { AccountsModule } from './accounts/accounts.module'
 import { AccountGroupsModule } from './accountGroups/accountGroups.module'
@@ -52,7 +53,6 @@ import { MembersModule } from './members/members.module'
 import { MaintenancesModule } from './maintenances/maintenances.module'
 
 import { UsersModule } from './users/users.module'
-import { TenantModule } from './tenant/tenant.module'
 
 @Module({
   imports: [
@@ -60,14 +60,14 @@ import { TenantModule } from './tenant/tenant.module'
     PlansModule,
     DivisionsModule,
     InventorysModule,
+    TenantsModule,
     OrdersModule,
     AccountsModule,
     AccountGroupsModule,
     NotificationsModule,
     MembersModule,
     MaintenancesModule,
-    UsersModule,
-    TenantModule
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService]

@@ -1,4 +1,7 @@
 ## Admin画面
+- 施設管理<br>
+http://localhost:3000/tenants<br>
+
 - 料金プラン（画面）<br>
 http://localhost:3000/plans/reference?productId=1001<br>
 
@@ -44,11 +47,6 @@ http://localhost:3000/members/detail/I001<br>
 http://localhost:3000/maintenances<br>
 http://localhost:3000/maintenances?pageNumber=1<br>
 
-#### 施設管理<br>
-- 施設情報管理（画面）<br>
-http://localhost:3000/tenant/details<br>
-src/tenant/tenant.controller.ts（show）<br>
-views/pages/tenant/details.ejs
 
 - 動作確認用（users）<br>
 OK curl -X GET "http://localhost:3000/users"<br>
@@ -57,8 +55,6 @@ OK curl -X GET "http://localhost:3000/users?id=1&userName=kudou"<br>
 OK curl -X GET "http://localhost:3000/users?id=2&userName=tanaka"<br>
 OK curl -X GET "http://localhost:3000/users?sort=asc"<br>
 OK curl -X GET "http://localhost:3000/users?sort=desc"<br>
-
-
 curl -X GET "http://localhost:3000/users?sort=ASC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users?sort=DESC&limit=5&page_number=1"<br>
 curl -X GET "http://localhost:3000/users?id=&userName=&sort=ASC&limit=5&page_number=1"<br>
