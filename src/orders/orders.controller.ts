@@ -107,26 +107,91 @@ export class OrdersController {
       // 注文情報
       orderInformations: [
         {
-          category: 'setProducts',
+          isProductedSet: false,
           productId: '1234',
           useDate: '2022/09/01',
-          productName: 'Vクーポン（商品ID:111 / 商品コード:1111）',
-          ageElement: '大人',
-          purchaseQty: '1',
-          saleUnitPrice: '1600',
+          productName: '単体商品',
+          purchaseDetail: [
+            {
+              ageElement: '大人',
+              purchaseQty: '1',
+              saleUnitPrice: '4500'
+            }
+          ],
           orderStatus: '注文完了',
-          orderStatusUpdateDatetime: '0'
+          orderStatusUpdateDatetime: '2022/08/01 20:00:00'
         },
         {
-          category: 'products',
+          isProductedSet: true,
           productId: '1235',
           useDate: '2022/09/01',
-          productName: 'さがみ湖プレジャーフォレスト フリーパス（商品ID:222 / 商品コード:2222）',
-          ageElement: '大人',
-          purchaseQty: '1',
-          saleUnitPrice: '4500',
+          productName: 'セット商品',
+          purchaseDetail: [
+            {
+              ageElement: '小人',
+              purchaseQty: '1',
+              saleUnitPrice: '1600'
+            },
+            {
+              ageElement: '大人',
+              purchaseQty: '1',
+              saleUnitPrice: '800'
+            }
+          ],
           orderStatus: '注文完了',
-          orderStatusUpdateDatetime: '0'
+          orderStatusUpdateDatetime: '2022/08/01 20:00:00'
+        },
+        {
+          isProductedSet: true,
+          productId: '1236',
+          productName: 'ホテル',
+          hotel: 'ハイランドリゾート ホテル＆スパ',
+          plan: '富士急ハイランドプラン',
+          roomTypeCode: '遊園地ビュー・ダブル',
+          checkInDate: '2022/09/01',
+          checkInTime: '18:00:00',
+          checkOutDate: '2022/09/01',
+          roomCount: '1',
+          orderStatus: '注文完了',
+          purchaseDetail: [
+            {
+              ageElement: '大人',
+              purchaseQty: '2',
+              saleUnitPrice: '23500'
+            }
+          ],
+          orderStatusUpdateDatetime: '2022/08/01 20:00:00'
+        },
+        {
+          isProductedSet: true,
+          productId: '1237',
+          productName: 'バス',
+          routeOutbound: '新宿～富士五湖線',
+          stoolNumberOutbound: '1401便',
+          carNumberOutbound: '1号車',
+          rideOutboundDate: '2022/08/23',
+          rideBusStopOutbound: 'バスタ新宿（南口）',
+          rideOutboundTime: '06:45',
+          alightingBusStopOutbound: '富士急ハイランド',
+          alightingOutboundTime: '08:25',
+          seatOutbound: '1号車 05C,05D',
+          routeReturn: '新宿～富士五湖線',
+          stoolNumberReturn: '1406便',
+          carNumberReturn: '',
+          rideReturnDate: '2022/08/23',
+          rideBusStopReturn: '富士急ハイランド',
+          rideReturnTime: '12:58',
+          alightingBusStopReturn: 'バスタ新宿（南口）',
+          alightingReturnTime: '14:35',
+          seatReturn: '1号車 05C,05D',
+          purchaseDetail: [
+            {
+              ageElement: '大人',
+              purchaseQty: '2',
+              saleUnitPrice: '6000'
+            }
+          ],
+          orderStatusUpdateDatetime: '2022/08/01 20:00:00'
         }
       ],
       // テナントクーポン情報

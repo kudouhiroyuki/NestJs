@@ -92,7 +92,7 @@
           <div class="row mb-4">
             <label class="form-label">合計金額
               <span style="margin-left: 10px;">
-                ¥{{ calcTotalAmount() }}
+                ¥{{ calcPaymentSum().toLocaleString() }}
               </span>
             </label>
           </div>
@@ -103,51 +103,200 @@
           >
             <!-- 商品ID -->
             <div class="d-flex justify-content-between mb-4">
-              <label class="form-label">商品ID
-                <span style="margin-left: 10px;">
-                  {{ item.productId }}
-                </span>
+              <label class="form-label">
+                <span style="width: 120px; display: inline-block;">商品ID</span>
+                <span>{{ item.productId }}</span>
               </label>
               <div>
-                <input @click="onPartialCancellPage" type="button" value="部分キャンセル" class="btn baseBtnBlue" style="width: 156px">
+                <input
+                  v-if="item.isProductedSet"
+                  @click="onPartialCancellPage"
+                  type="button"
+                  value="部分キャンセル"
+                  class="btn baseBtnBlue"
+                  style="width: 156px"
+                >
                 <img @click="onTabToggle" src="/images/icon/arow.svg">
               </div>
             </div>
-            <!-- 利用日時 -->
-            <div class="row mb-4">
-              <label class="form-label">利用日時
-                <span style="margin-left: 10px;">
-                  {{ item.useDate }}
-                </span>
+
+            <!-- 利用日時（単体商品・セット商品） -->
+            <div v-if="item.hotel === undefined" class="row mb-4">
+              <label class="form-label">
+                <span style="width: 120px; display: inline-block;">利用日時</span>
+                <span>{{ item.useDate }}</span>
               </label>
             </div>
+
             <!-- 商品名 -->
             <div class="row mb-4">
-              <label class="form-label">商品名
-                <span style="margin-left: 10px;">
-                  {{ item.productName }}
-                </span>
+              <label class="form-label">
+                <span style="width: 120px; display: inline-block;">商品名</span>
+                <span>{{ item.productName }}</span>
               </label>
             </div>
+
+            <!-- ホテル（ホテル） -->
+            <div v-if="item.hotel !== undefined" class="row mb-3">
+              <label class="form-label">
+                <span style="margin-left: 20px; width: 120px; display: inline-block;">ホテル</span>
+                <span>{{ item.hotel }}</span>
+              </label>
+            </div>
+
+            <!-- 宿泊プラン（ホテル） -->
+            <div v-if="item.hotel !== undefined" class="row mb-3">
+              <label class="form-label">
+                <span style="margin-left: 20px; width: 120px; display: inline-block;">宿泊プラン</span>
+                <span>{{ item.plan }}</span>
+              </label>
+            </div>
+
+            <!-- 部屋タイプ（ホテル） -->
+            <div v-if="item.hotel !== undefined" class="row mb-3">
+              <label class="form-label">
+                <span style="margin-left: 20px; width: 120px; display: inline-block;">部屋タイプ</span>
+                <span>{{ item.roomTypeCode }}</span>
+              </label>
+            </div>
+
+            <!-- チェックイン（ホテル） -->
+            <div v-if="item.hotel !== undefined" class="row mb-3">
+              <label class="form-label">
+                <span style="margin-left: 20px; width: 120px; display: inline-block;">チェックイン</span>
+                <span>{{ item.checkInDate }} {{ item.checkInTime }}</span>
+              </label>
+            </div>
+
+            <!-- チェックアウト（ホテル） -->
+            <div v-if="item.hotel !== undefined" class="row mb-3">
+              <label class="form-label">
+                <span style="margin-left: 20px; width: 120px; display: inline-block;">チェックアウト</span>
+                <span>{{ item.checkOutDate }}</span>
+              </label>
+            </div>
+
+            <!-- 申込部屋数（ホテル） -->
+            <div v-if="item.hotel !== undefined" class="row mb-4">
+              <label class="form-label">
+                <span style="margin-left: 20px; width: 120px; display: inline-block;">申込部屋数</span>
+                <span>{{ item.roomCount }}部屋</span>
+              </label>
+            </div>
+
+            <div v-if="item.routeOutbound !== undefined || item.routeReturn !== undefined" class="row mb-4">
+              <label class="form-label" style="margin-left: 20px;">
+                <!-- バス（往路） -->
+                <div class="mb-3">往路</div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">路線</span>
+                  <span>{{ item.routeOutbound }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">便番号/号車</span>
+                  <span>{{ item.stoolNumberOutbound }}/{{ item.carNumberOutbound }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">乗車日</span>
+                  <span>{{ item.rideOutboundDate }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">乗車バス停</span>
+                  <span>{{ item.rideBusStopOutbound }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">乗車時刻</span>
+                  <span>{{ item.rideOutboundTime }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">降車バス停</span>
+                  <span>{{ item.alightingBusStopOutbound }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">降車時刻</span>
+                  <span>{{ item.alightingOutboundTime }}</span>
+                </div>
+                <div class="mb-4">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">座席</span>
+                  <span>{{ item.seatOutbound }}</span>
+                </div>
+                <!-- バス（復路） -->
+                <div class="mb-3">復路</div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">路線</span>
+                  <span>{{ item.routeReturn }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">便番号/号車</span>
+                  <span>{{ item.stoolNumberReturn }}/{{ item.carNumberReturn }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">乗車日</span>
+                  <span>{{ item.rideReturnDate }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">乗車バス停</span>
+                  <span>{{ item.rideBusStopReturn }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">乗車時刻</span>
+                  <span>{{ item.rideReturnTime }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">降車バス停</span>
+                  <span>{{ item.alightingBusStopReturn }}</span>
+                </div>
+                <div class="mb-3">
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">降車時刻</span>
+                  <span>{{ item.alightingReturnTime }}</span>
+                </div>
+                <div>
+                  <span style="margin-left: 20px; width: 120px; display: inline-block;">座席</span>
+                  <span>{{ item.seatReturn }}</span>
+                </div>
+              </label>
+            </div>
+
             <!-- 購入内容 -->
             <div class="row mb-4">
-              <label class="form-label">購入内容
+              <label class="form-label">
+                <div style="width: 120px; display: inline-block;">購入内容</div>
+                <div style="width: auto; display: inline-block; vertical-align: top;">
+                  <div v-for="(v, i) in item.purchaseDetail" :key="i" style="margin-bottom: 10px;">
+                    {{ v.ageElement }}
+                    <span style="margin-left: 5px;">
+                      x{{ v.purchaseQty }}
+                    </span>
+                    <span style="margin-left: 5px;">
+                      ¥{{ Number(v.saleUnitPrice).toLocaleString() }}
+                    </span>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <!-- ステータス -->
+            <div class="row mb-4">
+              <label class="form-label">
+                <span style="width: 120px; display: inline-block;">ステータス</span>
+                <span>{{item.orderStatus }}</span>
+              </label>
+            </div>
+
+            <!-- ステータス更新日時 -->
+            <div class="row mb-4">
+              <label class="form-label">ステータス更新日時
                 <span style="margin-left: 10px;">
-                  {{ item.ageElement }}
-                </span>
-                <span style="margin-left: 10px;">
-                  x{{ item.purchaseQty }}
-                </span>
-                <span style="margin-left: 10px;">
-                  ¥{{ Number(item.saleUnitPrice).toLocaleString() }}
+                  {{ item.orderStatusUpdateDatetime }}
                 </span>
               </label>
             </div>
-            <!-- ステータス -->
+
+            <!-- 小計 -->
             <div class="row mb-4">
-              <label class="form-label">ステータス
+              <label class="form-label">小計
                 <span style="margin-left: 10px;">
-                  {{ item.orderStatus }}
+                  ¥{{ calcOrderSum(item.purchaseDetail).toLocaleString() }}
                 </span>
               </label>
             </div>
@@ -440,10 +589,20 @@ new Vue({
       this.address = this.forms.address;
     },
     /**
-     * 合計金額（商品代金 - テナントクーポン割引額 - DMPクーポン割引額 + コンビニ支払手数料）
+     * 支払情報 合計金額（商品代金 - テナントクーポン割引額 - DMPクーポン割引額 + コンビニ支払手数料）
      */ 
-     calcTotalAmount() {
+     calcPaymentSum() {
       return Number(this.totalFee) - Number(this.tenantCouponApplyFee) - Number(this.dmpCouponApplyFee) + Number(this.storePaymentCommission);
+    },
+    /**
+     * 注文情報 合計金額（購入内容 * 購入枚数）
+     */ 
+     calcOrderSum(item) {
+      let sum = 0;
+      item.forEach(i => {
+        sum += Number(i.saleUnitPrice) * Number(i.purchaseQty);
+      });
+      return sum;
     },
     /**
      * アコーディオン
