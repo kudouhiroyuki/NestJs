@@ -17,7 +17,7 @@ http://localhost:3000/inventorys/1001/detail/1<br>
 - 注文管理<br>
 http://localhost:3000/orders<br>
 http://localhost:3000/orders/detail/0001<br>
-http://localhost:3000/orders/partialCancell/0001<br>
+http://localhost:3000/orders/partialCancell/101?orderId=1235<br>
 
 - アカウント管理<br>
 http://localhost:3000/accounts<br>
