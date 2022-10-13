@@ -11,17 +11,18 @@ export class OrdersController {
     console.log(query)
     // マスターデータ（ステータス）
     const statuss = [
-      { id: '0', name: '未処理' },
-      { id: '1', name: 'BOキャンセル依頼中' },
-      { id: '2', name: '返金中' },
-      { id: '3', name: 'キャンセル済' },
-      { id: '4', name: '注文変更済' }
+      { id: '0', name: 'カートイン（在庫確保）' },
+      { id: '1', name: '注文内容確定（支払直前）' },
+      { id: '2', name: '支払確認待（コンビニのみ）' },
+      { id: '3', name: '支払確認中（カード、PayPay）' },
+      { id: '4', name: '購入完了' },
+      { id: '5', name: 'キャンセル' },
+      { id: '6', name: '取引中断' },
     ]
     const orders = [
       {
-        id: '0001',
-        orderStatus: '注文完了',
-        orderNumber: '001',
+        transactionId: '101',
+        transactionStatus: '購入完了',
         transactionDatetime: '2022/00/00',
         familyName: '山田',
         firstName: '太郎',
@@ -31,9 +32,8 @@ export class OrdersController {
         enableLimitDatetime: '2022/00/00'
       },
       {
-        id: '0002',
-        orderStatus: '注文完了',
-        orderNumber: '001',
+        transactionId: '102',
+        transactionStatus: '購入完了',
         transactionDatetime: '2022/00/00',
         familyName: '山田',
         firstName: '太郎',
@@ -43,9 +43,8 @@ export class OrdersController {
         enableLimitDatetime: '2022/00/00'
       },
       {
-        id: '0003',
-        orderStatus: '注文完了',
-        orderNumber: '001',
+        transactionId: '103',
+        transactionStatus: '購入完了',
         transactionDatetime: '2022/00/00',
         familyName: '山田',
         firstName: '太郎',
@@ -55,9 +54,8 @@ export class OrdersController {
         enableLimitDatetime: '2022/00/00'
       },
       {
-        id: '0004',
-        orderStatus: '注文完了',
-        orderNumber: '001',
+        transactionId: '104',
+        transactionStatus: '購入完了',
         transactionDatetime: '2022/00/00',
         familyName: '山田',
         firstName: '太郎',
@@ -67,9 +65,8 @@ export class OrdersController {
         enableLimitDatetime: '2022/00/00'
       },
       {
-        id: '0005',
-        orderStatus: '注文完了',
-        orderNumber: '001',
+        transactionId: '105',
+        transactionStatus: '購入完了',
         transactionDatetime: '2022/00/00',
         familyName: '山田',
         firstName: '太郎',
@@ -108,7 +105,7 @@ export class OrdersController {
       orderInformations: [
         {
           isProductedSet: false,
-          productId: '1234',
+          orderId: '1234',
           useDate: '2022/09/01',
           productName: '単体商品',
           purchaseDetail: [
@@ -123,7 +120,7 @@ export class OrdersController {
         },
         {
           isProductedSet: true,
-          productId: '1235',
+          orderId: '1235',
           useDate: '2022/09/01',
           productName: 'セット商品',
           purchaseDetail: [
@@ -138,12 +135,12 @@ export class OrdersController {
               saleUnitPrice: '800'
             }
           ],
-          orderStatus: '注文完了',
+          orderStatus: 'BOキャンセル依頼中',
           orderStatusUpdateDatetime: '2022/08/01 20:00:00'
         },
         {
           isProductedSet: true,
-          productId: '1236',
+          orderId: '1236',
           productName: 'ホテル',
           hotel: 'ハイランドリゾート ホテル＆スパ',
           plan: '富士急ハイランドプラン',
@@ -152,7 +149,6 @@ export class OrdersController {
           checkInTime: '18:00:00',
           checkOutDate: '2022/09/01',
           roomCount: '1',
-          orderStatus: '注文完了',
           purchaseDetail: [
             {
               ageElement: '大人',
@@ -160,11 +156,12 @@ export class OrdersController {
               saleUnitPrice: '23500'
             }
           ],
+          orderStatus: '注文完了',
           orderStatusUpdateDatetime: '2022/08/01 20:00:00'
         },
         {
           isProductedSet: true,
-          productId: '1237',
+          orderId: '1237',
           productName: 'バス',
           routeOutbound: '新宿～富士五湖線',
           stoolNumberOutbound: '1401便',
@@ -191,6 +188,7 @@ export class OrdersController {
               saleUnitPrice: '6000'
             }
           ],
+          orderStatus: '注文完了',
           orderStatusUpdateDatetime: '2022/08/01 20:00:00'
         }
       ],

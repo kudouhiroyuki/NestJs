@@ -7,20 +7,11 @@
   <%- include('../../partials/sidebar'); %>
 
   <main id="ordersRegist">
-    <form @submit.prevent="onSubmit" name="orders">
-      <h4 class="mb-4 fw-bold" style="color:#0069D9;">
+    <form name="orders">
+      <h4 class="mb-5 fw-bold" style="color:#0069D9;">
         <img src="/images/icon/order.svg" style="width: 24px;">
         <template class="fs-4">注文詳細</template>
       </h4>
-
-      <div class="text-end">
-        <button
-          @click="onActionModalOpen"
-          type="button"
-          class="btn baseBtnBlue"
-          style="width: 156px;"
-        >キャンセル</button>
-      </div>
 
       <h5 class="mb-4 fw-bold">取引情報</h5>
       <div class="baseShadow p-3 mb-5">
@@ -101,27 +92,48 @@
             v-for="(item, index) in orderInformations" :key="index"
             class="tabToggle active baseShadow p-3 mb-5"
           >
-            <!-- 商品ID -->
+            <!-- 注文ID -->
             <div class="d-flex justify-content-between mb-4">
               <label class="form-label">
-                <span style="width: 120px; display: inline-block;">商品ID</span>
-                <span>{{ item.productId }}</span>
+                <span style="width: 120px; display: inline-block;">注文ID</span>
+                <span>{{ item.orderId }}</span>
               </label>
               <div>
+                <button
+                  v-if="item.orderStatus !== 'BOキャンセル依頼中'"
+                  @click="onActionModalOpen('cancel')"
+                  type="button"
+                  class="btn baseBtnBlue"
+                  style="width: 156px; margin-right: 10px; font-size: 12px;"
+                >キャンセル</button>
+                <button
+                  v-if="item.orderStatus === 'BOキャンセル依頼中'"
+                  @click="onActionModalOpen('cancelApproval')"
+                  type="button"
+                  class="btn baseBtnBlue"
+                  style="width: 156px; margin-right: 10px; font-size: 12px;"
+                >キャンセル承認</button>
+                <button
+                  v-if="item.orderStatus === 'BOキャンセル依頼中'"
+                  @click="onActionModalOpen('cancelRejected')"
+                  type="button"
+                  class="btn baseBtnGrey"
+                  style="width: 156px; margin-right: 10px; font-size: 12px;"
+                >キャンセル承認却下</button>
                 <input
                   v-if="item.isProductedSet"
-                  @click="onPartialCancellPage"
+                  @click="onPartialCancellPage(item.orderId)"
                   type="button"
                   value="部分キャンセル"
                   class="btn baseBtnBlue"
-                  style="width: 156px"
+                  style="width: 156px; font-size: 12px;"
                 >
                 <img @click="onTabToggle" src="/images/icon/arow.svg">
               </div>
             </div>
 
             <!-- 利用日時（単体商品・セット商品） -->
-            <div v-if="item.hotel === undefined" class="row mb-4">
+            <div v-if="item.hotel === undefined && (item.routeOutbound === undefined || item.routeReturn === undefined)" class="row mb-4">
               <label class="form-label">
                 <span style="width: 120px; display: inline-block;">利用日時</span>
                 <span>{{ item.useDate }}</span>
@@ -462,35 +474,35 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
-              <template v-if="actionModal.type === 'reset'">キャンセル</template>
-              <template v-if="actionModal.type === 'stop'">キャンセル承認</template>
-              <template v-if="actionModal.type === 'restoration'">キャンセル承認却下</template>
+              <template v-if="actionModal.type === 'cancel'">キャンセル</template>
+              <template v-if="actionModal.type === 'cancelApproval'">キャンセル承認</template>
+              <template v-if="actionModal.type === 'cancelRejected'">キャンセル承認却下</template>
             </h5>
             <button @click="onActionModalClose" type="button" class="btn-close"></button>
           </div>
           <div class="modal-body m-3">
-            <p v-if="actionModal.type === 'reset'">キャンセルを実行しますか？</p>
-            <p v-if="actionModal.type === 'stop'">キャンセルを承認しますか？</p>
-            <p v-if="actionModal.type === 'restoration'">キャンセルを承認却下しますか？</p>
+            <p v-if="actionModal.type === 'cancel'">キャンセルを実行しますか？</p>
+            <p v-if="actionModal.type === 'cancelApproval'">キャンセルを承認しますか？</p>
+            <p v-if="actionModal.type === 'cancelRejected'">キャンセルを承認却下しますか？</p>
             <div class="text-end">
               <button
-                @click="onReset"
-                v-if="actionModal.type === 'reset'"
+                @click="onCancel"
+                v-if="actionModal.type === 'cancel'"
                 type="button"
                 class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
-              >リセット実行</button>
+              >キャンセル実行</button>
               <button
-                @click="onStop"
-                v-if="actionModal.type === 'stop'"
+                @click="onCancelApproval"
+                v-if="actionModal.type === 'cancelApproval'"
                 type="button"
                 class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
-              >停止実行</button>
+              >キャンセル承認</button>
               <button
-                @click="onRestoration"
-                v-if="actionModal.type === 'restoration'"
+                @click="onCancelRejected"
+                v-if="actionModal.type === 'cancelRejected'"
                 type="button"
                 class="btn baseBtnBlue" style="width: 136px;font-size: 12px; margin-bottom: 10px;"
-              >復旧実行</button>
+              >キャンセル承認却下</button>
             </div>
           </div>
         </div>
@@ -591,13 +603,13 @@ new Vue({
     /**
      * 支払情報 合計金額（商品代金 - テナントクーポン割引額 - DMPクーポン割引額 + コンビニ支払手数料）
      */ 
-     calcPaymentSum() {
+    calcPaymentSum() {
       return Number(this.totalFee) - Number(this.tenantCouponApplyFee) - Number(this.dmpCouponApplyFee) + Number(this.storePaymentCommission);
     },
     /**
      * 注文情報 合計金額（購入内容 * 購入枚数）
      */ 
-     calcOrderSum(item) {
+    calcOrderSum(item) {
       let sum = 0;
       item.forEach(i => {
         sum += Number(i.saleUnitPrice) * Number(i.purchaseQty);
@@ -607,45 +619,48 @@ new Vue({
     /**
      * アコーディオン
      */ 
-     onTabToggle(e) {
+    onTabToggle(e) {
       let target = e.target.closest(".tabToggle");
       target.classList.toggle('active');
     },
     /**
      * アクションモーダル（Open）
      */ 
-     onActionModalOpen(type) {
-      // let actionType = type;
-      // if(type === 'stop') actionType = 'restoration';
-      // if(type === '' || type === 'restoration') actionType = 'stop';
+    onActionModalOpen(type) {
+      let actionType = type;
       this.actionModal.show = true;
       this.actionModal.type = actionType;
     },
     /**
      * アクションモーダル（Close）
      */ 
-     onActionModalClose() {
+    onActionModalClose() {
       this.actionModal.show = false;
       this.actionModal.type = '';
     },
     /**
      * 画面遷移（部分キャンセル）
      */
-     onPartialCancellPage() {
-
-      window.location.href = "http://localhost:3000/orders/partialCancell/0001";
+    onPartialCancellPage(orderId) {
+      window.location.href = `http://localhost:3000/orders/partialCancell/101?orderId=${orderId}`;
     },
     /**
-     * 登録処理
+     * キャンセル
      */ 
-    onSubmit() {
-      this.$v.$touch();
-      this.validationUseTenants();
-      if(!this.$v.$invalid && this.useTenantsCheck) {
-        document.orders.method="post";
-        document.orders.action = "/orders/regist";
-        document.orders.submit();
-      }
+    onCancel() {
+      alert('キャンセル');
+    },
+    /**
+     * キャンセル承認
+     */ 
+    onCancelApproval() {
+      alert('キャンセル承認');
+    },
+    /**
+     * キャンセル承認却下
+     */ 
+    onCancelRejected() {
+      alert('キャンセル承認却下');
     }
   }
 })

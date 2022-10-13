@@ -34,7 +34,7 @@
             <!-- 氏名 -->
             <div class="row mb-1">
               <div class="col-4">
-                <div class="d-inline-block" style="width: 214px;">
+                <div class="d-inline-block" style="width: 284px;">
                   <input
                     @input="onFormChange"
                     :value="fullName"
@@ -50,7 +50,7 @@
             <!-- 電話番号 -->
             <div class="row mb-1">
               <div class="col-4">
-                <div class="d-inline-block" style="width: 214px;">
+                <div class="d-inline-block" style="width: 284px;">
                   <input
                     @input="onFormChange"
                     :value="telephone"
@@ -66,7 +66,7 @@
             <!-- メールアドレス -->
             <div class="row mb-1">
               <div class="col-4">
-                <div class="d-inline-block" style="width: 214px;">
+                <div class="d-inline-block" style="width: 284px;">
                   <input
                     @input="onFormChange"
                     :value="email"
@@ -79,26 +79,10 @@
                 </div>
               </div>
             </div>
-            <!-- 注文番号 -->
-            <div class="row mb-1">
-              <div class="col-4">
-                <div class="d-inline-block" style="width: 214px;">
-                  <input
-                    @input="onFormChange"
-                    :value="orderNumber"
-                    name="orderNumber"
-                    type="text"
-                    class="form-control mb-3"
-                    placeholder="注文番号"
-                    maxlength="10"
-                  >
-                </div>
-              </div>
-            </div>
             <!-- ステータス -->
             <div class="row mb-1">
               <div class="col-4">
-                <div class="d-inline-block" style="width: 214px;">
+                <div class="d-inline-block" style="width: 284px;">
                   <select
                     v-model="orderStatus"
                     @change="onFormChange"
@@ -122,8 +106,8 @@
               検索
             </button>  
           </div>
-          <div v-if="$v.fullName.$dirty || $v.telephone.$dirty || $v.email.$dirty || $v.orderNumber.$dirty || $v.orderStatus.$dirty" class="text-danger fw-bold mt-3">
-            <p v-if="!$v.fullName.required && !$v.telephone.required && !$v.email.required && !$v.orderNumber.required && !$v.orderStatus.required">氏名、電話番号、メールアドレス、注文番号、ステータスのいずれかを入力して下さい。</p>
+          <div v-if="$v.fullName.$dirty || $v.telephone.$dirty || $v.email.$dirty || $v.orderStatus.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.fullName.required && !$v.telephone.required && !$v.email.required && !$v.orderStatus.required">氏名、電話番号、メールアドレス、ステータスのいずれかを入力して下さい。</p>
           </div>
         </div>
       </div>
@@ -134,9 +118,8 @@
       <table class="table align-middle">
         <thead>
           <tr>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">注文ID</th>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">ステータス</th>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">注文番号</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">取引ID</th>
+            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">取引ステータス</th>
             <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">取引日時</th>
             <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">氏名</th>
             <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">電話番号</th>
@@ -148,13 +131,12 @@
         <tbody>
           <tr
             v-for="(item, index) in orders"
-            :key="index"
+            :key="item.transactionId"
             @click="onActionList(item)"
             style="position: relative;"
           >
-            <td>{{ item.id }}</td>
-            <td>{{ item.orderStatus }}</td>
-            <td>{{ item.orderNumber }}</td>
+            <td>{{ item.transactionId }}</td>
+            <td>{{ item.transactionStatus }}</td>
             <td>{{ item.transactionDatetime }}</td>
             <td>{{ item.familyName }} {{ item.firstName }}</td>
             <td>{{ item.telephone }}</td>
@@ -163,11 +145,11 @@
             <td>{{ item.enableLimitDatetime }}</td>
             <td style="width: 0;">
               <ul
-                :ref="item.id"
+                :ref="item.transactionId"
                 class="dropdown-menu"
                 style="left: 50%; transform: translate(-50%, -50%);"
               >
-                <a :href=`/orders/detail/${item.id}`><li class="dropdown-item small">詳細</li></a>
+                <a :href=`/orders/detail/${item.transactionId}`><li class="dropdown-item small">詳細</li></a>
               </ul>
             </td>
           </tr>
@@ -231,7 +213,6 @@ new Vue({
     fullName: queryParam.get("fullName") ?? "",       // 氏名
     telephone: queryParam.get("telephone") ?? "",     // 電話番号
     email: queryParam.get("email") ?? "",             // メールアドレス	
-    orderNumber: queryParam.get("orderNumber") ?? "", // 注文番号
     orderStatus: queryParam.get("orderStatus") ?? "", // ステータス
     pageNumber: queryParam.get('pageNumber') ?? 1,    // ページ番号
   },
@@ -245,9 +226,6 @@ new Vue({
     email: {
       required
     },
-    orderNumber: {
-      required
-    },
     orderStatus: {
       required
     },
@@ -256,7 +234,6 @@ new Vue({
     queryParam.set("fullName", this.fullName);
     queryParam.set("telephone", this.telephone);
     queryParam.set("email", this.email);
-    queryParam.set("orderNumber", this.orderNumber);
     queryParam.set("orderStatus", this.orderStatus);
     queryParam.set("pageNumber", this.pageNumber);
   },
@@ -279,9 +256,9 @@ new Vue({
      * ダウンロード
      */
      onDownload() {
-      let title = '注文ID,ステータス,注文番号,取引日時,氏名,電話番号,メールアドレス,利用日,有効期限\n';
+      let title = '取引ID,取引ステータス,取引日時,氏名,電話番号,メールアドレス,利用日,有効期限\n';
       this.orders.forEach(el => {
-        let line = `${el.id},${el.orderStatus},${el.orderNumber},${el.transactionDatetime},${el.familyName + el.firstName},${el.telephone},${el.email},${el.useDate},${el.enableLimitDatetime}`;
+        let line = `${el.transactionId},${el.transactionStatus},${el.transactionDatetime},${el.familyName + el.firstName},${el.telephone},${el.email},${el.useDate},${el.enableLimitDatetime}`;
         title += (line + '\n');
       })
       let link = document.createElement('a');
@@ -304,8 +281,8 @@ new Vue({
         el.style.display = 'none';
         el.closest('tr').style.backgroundColor = 'inherit';
       });
-      this.$refs[item.id][0].style.display = 'block';
-      this.$refs[item.id][0].closest('tr').style.backgroundColor = '#E7E7E7';
+      this.$refs[item.transactionId][0].style.display = 'block';
+      this.$refs[item.transactionId][0].closest('tr').style.backgroundColor = '#E7E7E7';
 
     },
     /**
@@ -327,7 +304,7 @@ new Vue({
      */
     onSerch() {
       this.$v.$touch();
-      if(!this.$v.fullName.$invalid || !this.$v.telephone.$invalid || !this.$v.email.$invalid || !this.$v.orderNumber.$invalid  || !this.$v.orderStatus.$invalid) {
+      if(!this.$v.fullName.$invalid || !this.$v.telephone.$invalid || !this.$v.email.$invalid || !this.$v.orderStatus.$invalid) {
         window.location.href = "/orders?" + queryParam;
       }
     },
