@@ -52,19 +52,7 @@ export class TenantsController {
   @Get('regist')
   @Render('tenants/regist')
   async getRegist() {
-    // マスターデータ（テナント）
-    const tenants = [
-      {
-        id: 'TE001',
-        tenantName: 'テナントA'
-      },
-      {
-        id: 'TE002',
-        tenantName: 'テナントB'
-      }
-    ]
     return {
-      tenants: JSON.stringify(tenants),
       forms: JSON.stringify({})
     }
   }
@@ -76,5 +64,36 @@ export class TenantsController {
   async postRegist(@Body() body: any) {
     console.log('テナント登録処理')
     console.log(body)
+  }
+
+  /**
+   * GET テナント詳細画面
+   */
+  @Get('detail/:id')
+  @Render('tenants/regist')
+  async getDetail() {
+    // テナント詳細
+    const forms = {
+      tenantName: 'さがみ湖プレジャーフォレスト',
+      facilityName: '施設名',
+      location: '施設住所',
+      telephone: '電話番号',
+      businessHour: '営業時間',
+      closedDate: '定休日',
+      trafficAccess: '交通アクセス',
+      url: 'URL',
+      explain: '紹介文',
+      webNoticeText: 'お知らせ',
+      tenantLogo: 'http://localhost:3000/images/photo/user.png',
+      carousel1: 'http://localhost:3000/images/photo/user.png',
+      carousel2: 'http://localhost:3000/images/photo/user.png',
+      carousel3: 'http://localhost:3000/images/photo/user.png',
+      carousel4: 'http://localhost:3000/images/photo/user.png',
+      carousel5: 'http://localhost:3000/images/photo/user.png',
+      carousel6: 'http://localhost:3000/images/photo/user.png'
+    }
+    return {
+      forms: JSON.stringify(forms)
+    }
   }
 }

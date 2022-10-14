@@ -6,405 +6,357 @@
 
   <%- include('../../partials/sidebar'); %>
 
-  <main id="tenantDetails">
-    <form @submit.prevent="onSubmit" name="tenant">
-      <div class="d-flex justify-content-between mb-5">
-        <p class="fs-4">施設情報管理</p>
-        <div>
-          <button type="submit" class="btn btn-primary">保存</button>
+  <main id="tenantsRegist">
+    <form @submit.prevent="onSubmit" name="tenants">
+      <h4 class="mb-5 fw-bold" style="color:#0069D9;">
+        <img src="/images/icon/tenant.svg" style="width: 24px;">
+        <template v-if="displayType === 'regist'" class="fs-4">テナント登録</template>
+        <template v-else class="fs-4">テナント詳細</template>
+      </h4>
+
+      <!-- テナント名 -->
+      <div v-if="displayType === 'regist'" class="row mb-5">
+        <label class="form-label">テナント名 <span class="redDC3545">*必須</span></label>
+        <div class="col-8">
+          <input
+            v-model="tenantName"
+            name="tenantName"
+            maxlength="50"
+            type="text"
+            class="form-control mb-2"
+            placeholder="テナント名を入力"
+          />
+          <div v-if="$v.tenantName.$dirty" class="text-danger fw-bold">
+            <p v-if="!$v.tenantName.required">テナント名が入力されていません。</p>
+          </div>
         </div>
       </div>
-      
-      <nav>
-        <div class="nav nav-tabs">
-          <button
-            @click="onTabChange('1')"
-            :class="{'active': tabActive === '1'}"
-            class="nav-link"
-            type="button"
-          >施設情報編集</button>
-          <button
-            @click="onTabChange('2')"
-            :class="{'active': tabActive === '2'}"
-            class="nav-link"
-            type="button"
-          >商品規約</button>
-          <button
-            @click="onTabChange('3')"
-            :class="{'active': tabActive === '3'}"
-            class="nav-link"
-            type="button"
-          >画像</button>
-        </div>
-      </nav>
 
-      <div class="tab-content pt-5">
-        <!-- 施設情報編集 -->
-        <div v-show="tabActive === '1'" class="tab-pane fade show active">
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              施設名
-              <span class="badge bg-danger">必須</span>
-            </label>
-            <div class="col-md-8">
-              <input
-                v-model="$v.facility_name.$model"
-                name="facility_name"
-                maxlength="50"
-                type="text"
-                class="form-control mb-2"
-              />
-              <div v-if="$v.facility_name.$dirty" class="text-danger fw-bold">
-                <span v-if="!$v.facility_name.required">必須項目が入力されていません。</span>
-              </div>
-            </div>
+      <div v-if="displayType === 'detail'" :style="facilityTabStatus ? 'height: inherit' : { height: '65px', overflow: 'hidden' }" class="baseShadow p-4 mb-5">
+        <div class="d-flex">
+          <div class="me-auto"><h5 class="mb-4 fw-bold">施設情報</h5></div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('facilityTabStatus')"
+              :style="facilityTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
           </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              施設住所
-              <span class="badge bg-danger">必須</span>
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="$v.facility_address.$model"
-                name="facility_address"
-                maxlength="161"
-                minlength="9"
-                rows="3"
-                class="form-control mb-2"
-              ></textarea>
-              <div v-if="$v.facility_address.$dirty" class="text-danger fw-bold">
-                <span v-if="!$v.facility_address.required">必須項目が入力されていません。</span>
-                <span v-if="!$v.facility_address.minLength">9文字以上入力をしてください。</span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              電話番号
-              <span class="badge bg-danger">必須</span>
-            </label>
-            <div class="col-md-8">
-              <input
-                v-model="$v.phone_number.$model"
-                name="phone_number"
-                maxlength="21"
-                type="number"
-                class="form-control mb-2"
-              />
-              <div v-if="$v.phone_number.$dirty" class="text-danger fw-bold">
-                <span v-if="!$v.phone_number.required">必須項目が入力されていません。</span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              営業時間
-              <span class="badge bg-danger">必須</span>
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="$v.business_hours.$model"
-                name="business_hours"
-                maxlength="50"
-                rows="3"
-                class="form-control mb-2"
-              ></textarea>
-              <div v-if="$v.business_hours.$dirty" class="text-danger fw-bold">
-                <span v-if="!$v.business_hours.required">必須項目が入力されていません。</span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              定休日
-              <span class="badge bg-danger">必須</span>
-            </label>
-            <div class="col-md-8">
-              <input
-                v-model="$v.holiday.$model"
-                name="holiday"
-                maxlength="50"
-                type="text"
-                class="form-control mb-2"
-              />
-              <div v-if="$v.holiday.$dirty" class="text-danger fw-bold">
-                <span v-if="!$v.holiday.required">必須項目が入力されていません。</span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              交通アクセス
-              <span class="badge bg-danger">必須</span>
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="$v.access.$model"
-                name="access"
-                maxlength="400"
-                rows="3"
-                class="form-control mb-2"
-              ></textarea>
-              <div v-if="$v.access.$dirty" class="text-danger fw-bold">
-                <span v-if="!$v.access.required">必須項目が入力されていません。</span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              マップ
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="map"
-                name="map"
-                rows="3"
-                class="form-control mb-2"
-              ></textarea>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              注意事項
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="notes"
-                name="notes"
-                maxlength="400"
-                rows="3"
-                class="form-control mb-2"
-              ></textarea>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              ホームページURL
-            </label>
-            <div class="col-md-8">
-              <input
-                v-model="url"
-                name="url"
-                maxlength="2000"
-                type="text"
-                class="form-control mb-2"
-              />
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              紹介文
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="introduction"
-                name="introduction"
-                rows="3"
-                maxlength="1200"
-                class="form-control mb-2"
-              ></textarea>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              フリーエリア
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="area"
-                name="area"
-                rows="3"
-                maxlength="1200"
-                class="form-control mb-2"
-              ></textarea>
+        </div>
+        <!-- テナント名 -->
+        <div class="row mb-5">
+          <label class="form-label">テナント名</label>
+          <div class="col-8">{{ tenantName }}</div>
+        </div>
+        <!-- 施設名 -->
+        <div class="row mb-5">
+          <label class="form-label">施設名 <span class="redDC3545">*必須</span></label>
+          <div class="col-8">
+            <input
+              v-model="facilityName"
+              name="facilityName"
+              maxlength="50"
+              type="text"
+              class="form-control mb-2"
+              placeholder="施設名を入力"
+            />
+            <div v-if="$v.facilityName.$dirty" class="text-danger fw-bold">
+              <p v-if="!$v.facilityName.required">施設名が入力されていません。</p>
             </div>
           </div>
         </div>
-        <!-- 商品規約 -->
-        <div v-show="tabActive === '2'" class="tab-pane fade show active">
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              利用規約
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="terms"
-                name="terms"
-                maxlength="1200"
-                rows="3"
-                class="form-control mb-2"
-              ></textarea>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              旅行業法
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="travel_agency"
-                name="travel_agency"
-                maxlength="1200"
-                rows="3"
-                class="form-control mb-2"
-              ></textarea>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              特定商取引法
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="specified_commercial"
-                name="specified_commercial"
-                maxlength="1200"
-                rows="3"
-                class="form-control mb-2"
-              ></textarea>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              プライバシーポリシー
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="privacy_policy"
-                name="privacy_policy"
-                maxlength="1200"
-                rows="3"
-                class="form-control mb-2"
-              ></textarea>
-            </div>
-          </div>
-          <div class="form-group row mb-4">
-            <label class="col-sm-4 col-form-label">
-              キャンセルポリシー
-            </label>
-            <div class="col-md-8">
-              <textarea
-                v-model="cancellation_policy"
-                name="cancellation_policy"
-                maxlength="1200"
-                rows="3"
-                class="form-control mb-2"
-              ></textarea>
+        <!-- 施設住所 -->
+        <div class="row mb-5">
+          <label class="form-label">施設住所 <span class="redDC3545">*必須</span></label>
+          <div class="col-8">
+            <textarea
+              v-model="location"
+              name="location"
+              maxlength="161"
+              rows="3"
+              placeholder="施設住所を入力"
+              class="form-control mb-2"
+            ></textarea>
+            <div v-if="$v.location.$dirty" class="text-danger fw-bold">
+              <p v-if="!$v.location.required">施設住所が入力されていません。</p>
             </div>
           </div>
         </div>
-        <!-- 画像 -->
-        <div v-show="tabActive === '3'" class="tab-pane fade show active">
-          <div class="form-group row mb-5">
-            <label class="col-sm-4 col-form-label">
-              ロゴ
-            </label>
-            <div class="col-md-8">
-              <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
-                <input v-model="logo" type="hidden" name="logo">
-                <img :src="logo_View">
-              </div>
-              <div class="d-flex flex-row-reverse">
-                <button @click="onModalShow('logo')" type="button" class="btn btn-secondary ms-auto">編集</button>
-              </div>
-            </div>
+        <!-- 電話番号 -->
+        <div class="row mb-5">
+          <label class="form-label">電話番号</label>
+          <div class="col-8">
+            <input
+              v-model="telephone"
+              name="telephone"
+              maxlength="21"
+              type="text"
+              class="form-control mb-2"
+              placeholder="電話番号を入力"
+            />
           </div>
-          <div class="form-group row mb-5">
-            <label class="col-sm-4 col-form-label">
-              カルーセル①
-            </label>
-            <div class="col-md-8">
-              <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
-                <input v-model="carousel_1" type="hidden" name="carousel_1">
-                <img :src="carousel_1_View">
-              </div>
-              <div class="d-flex flex-row-reverse">
-                <button @click="onModalShow('carousel_1')" type="button" class="btn btn-secondary ms-auto">編集</button>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row mb-5">
-            <label class="col-sm-4 col-form-label">
-              カルーセル②
-            </label>
-            <div class="col-md-8">
-              <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
-                <input v-model="carousel_2" type="hidden" name="carousel_2">
-                <img :src="carousel_2_View">
-              </div>
-              <div class="d-flex flex-row-reverse">
-                <button @click="onModalShow('carousel_2')" type="button" class="btn btn-secondary ms-auto">編集</button>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row mb-5">
-            <label class="col-sm-4 col-form-label">
-              カルーセル③
-            </label>
-            <div class="col-md-8">
-              <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
-                <input v-model="carousel_3" type="hidden" name="carousel_3">
-                <img :src="carousel_3_View">
-              </div>
-              <div class="d-flex flex-row-reverse">
-                <button @click="onModalShow('carousel_3')" type="button" class="btn btn-secondary ms-auto">編集</button>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row mb-5">
-            <label class="col-sm-4 col-form-label">
-              カルーセル④
-            </label>
-            <div class="col-md-8">
-              <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
-                <input v-model="carousel_4" type="hidden" name="carousel_4">
-                <img :src="carousel_4_View">
-              </div>
-              <div class="d-flex flex-row-reverse">
-                <button @click="onModalShow('carousel_4')" type="button" class="btn btn-secondary ms-auto">編集</button>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row mb-5">
-            <label class="col-sm-4 col-form-label">
-              カルーセル⑤
-            </label>
-            <div class="col-md-8">
-              <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
-                <input v-model="carousel_5" type="hidden" name="carousel_5">
-                <img :src="carousel_5_View" style="height: 200px; overflow-y: scroll;">
-              </div>
-              <div class="d-flex flex-row-reverse">
-                <button @click="onModalShow('carousel_5')" type="button" class="btn btn-secondary ms-auto">編集</button>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row mb-5">
-            <label class="col-sm-4 col-form-label">
-              カルーセル⑥
-            </label>
-            <div class="col-md-8">
-              <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
-                <input v-model="carousel_6" type="hidden" name="carousel_6">
-                <img :src="carousel_6_View">
-              </div>
-              <div class="d-flex flex-row-reverse">
-                <button @click="onModalShow('carousel_6')" type="button" class="btn btn-secondary ms-auto">編集</button>
-              </div>
+        </div>
+        <!-- 営業時間 -->
+        <div class="row mb-5">
+          <label class="form-label">営業時間 <span class="redDC3545">*必須</span></label>
+          <div class="col-8">
+            <textarea
+              v-model="businessHour"
+              name="businessHour"
+              maxlength="200"
+              rows="3"
+              placeholder="営業時間を入力"
+              class="form-control mb-2"
+            ></textarea>
+            <div v-if="$v.businessHour.$dirty" class="text-danger fw-bold">
+              <p v-if="!$v.businessHour.required">営業時間が入力されていません。</p>
             </div>
           </div>
         </div>
+        <!-- 定休日 -->
+        <div class="row mb-5">
+          <label class="form-label">定休日 <span class="redDC3545">*必須</span></label>
+          <div class="col-8">
+            <input
+              v-model="closedDate"
+              name="closedDate"
+              maxlength="50"
+              type="text"
+              class="form-control mb-2"
+              placeholder="定休日を入力"
+            />
+            <div v-if="$v.closedDate.$dirty" class="text-danger fw-bold">
+              <p v-if="!$v.closedDate.required">定休日が入力されていません。</p>
+            </div>
+          </div>
+        </div>
+        <!-- 交通アクセス -->
+        <div class="row mb-5">
+          <label class="form-label">交通アクセス <span class="redDC3545">*必須</span></label>
+          <div class="col-8">
+            <textarea
+              v-model="trafficAccess"
+              name="trafficAccess"
+              maxlength="200"
+              rows="3"
+              placeholder="交通アクセスを入力"
+              class="form-control mb-2"
+            ></textarea>
+            <div v-if="$v.trafficAccess.$dirty" class="text-danger fw-bold">
+              <p v-if="!$v.trafficAccess.required">交通アクセスが入力されていません。</p>
+            </div>
+          </div>
+        </div>
+        <!-- ホームページURL -->
+        <div class="row mb-5">
+          <label class="form-label">ホームページURL</label>
+          <div class="col-8">
+            <input
+              v-model="url"
+              name="url"
+              maxlength="200"
+              type="text"
+              class="form-control mb-2"
+              placeholder="ホームページURLを入力"
+            />
+          </div>
+        </div>
+        <!-- 紹介文 -->
+        <div class="row mb-5">
+          <label class="form-label">紹介文</label>
+          <div class="col-8">
+            <textarea
+              v-model="explain"
+              name="explain"
+              maxlength="120"
+              rows="4"
+              placeholder="交通アクセスを入力"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <!-- お知らせ -->
+        <div class="row mb-5">
+          <label class="form-label">お知らせ</label>
+          <div class="col-8">
+            <textarea
+              v-model="webNoticeText"
+              name="webNoticeText"
+              maxlength="400"
+              rows="4"
+              placeholder="お知らせを入力"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="displayType === 'detail'" :style="productTabStatus ? 'height: inherit' : { height: '65px', overflow: 'hidden' }" class="baseShadow p-4 mb-5">
+        <div class="d-flex">
+          <div class="me-auto"><h5 class="mb-4 fw-bold">画像</h5></div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('productTabStatus')"
+              :style="productTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <!-- ロゴ -->
+        <div class="row mb-4">
+          <label class="form-label">ロゴ</label>
+          <div class="col-8 position-relative">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <input v-model="tenantLogo" type="hidden" name="tenantLogo">
+              <img :src="tenantLogoView" class="d-block m-auto">
+              <button
+                @click="onDeleteImage"
+                type="button"
+                class="btn-close position-absolute"
+                style="right: 35px; top: 15px; font-size: 14px"
+                value="tenantLogo"
+              ></button>
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <input @click="onImageModalOpen('tenantLogo')" type="button" value="アップロード" class="btn" style="width: 156px; background-color:  #1867C0; color: #FFF;">
+            </div>
+          </div>
+        </div>
+        <!-- カルーセル1 -->
+        <div class="row mb-4">
+          <label class="form-label">カルーセル1</label>
+          <div class="col-8 position-relative">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <input v-model="carousel1" type="hidden" name="carousel1">
+              <img :src="carousel1View" class="d-block m-auto">
+              <button
+                @click="onDeleteImage"
+                type="button"
+                class="btn-close position-absolute"
+                style="right: 35px; top: 15px; font-size: 14px"
+                value="carousel1"
+              ></button>
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <input @click="onImageModalOpen('carousel1')" type="button" value="アップロード" class="btn" style="width: 156px; background-color:  #1867C0; color: #FFF;">
+            </div>
+          </div>
+        </div>
+        <!-- カルーセル2 -->
+        <div class="row mb-4">
+          <label class="form-label">カルーセル2</label>
+          <div class="col-8 position-relative">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <input v-model="carousel2" type="hidden" name="carousel1">
+              <img :src="carousel2View" class="d-block m-auto">
+              <button
+                @click="onDeleteImage"
+                type="button"
+                class="btn-close position-absolute"
+                style="right: 35px; top: 15px; font-size: 14px"
+                value="carousel2"
+              ></button>
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <input @click="onImageModalOpen('carousel2')" type="button" value="アップロード" class="btn" style="width: 156px; background-color:  #1867C0; color: #FFF;">
+            </div>
+          </div>
+        </div>
+        <!-- カルーセル3 -->
+        <div class="row mb-4">
+          <label class="form-label">カルーセル3</label>
+          <div class="col-8 position-relative">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <input v-model="carousel3" type="hidden" name="carousel1">
+              <img :src="carousel3View" class="d-block m-auto">
+              <button
+                @click="onDeleteImage"
+                type="button"
+                class="btn-close position-absolute"
+                style="right: 35px; top: 15px; font-size: 14px"
+                value="carousel3"
+              ></button>
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <input @click="onImageModalOpen('carousel3')" type="button" value="アップロード" class="btn" style="width: 156px; background-color:  #1867C0; color: #FFF;">
+            </div>
+          </div>
+        </div>
+        <!-- カルーセル4 -->
+        <div class="row mb-4">
+          <label class="form-label">カルーセル4</label>
+          <div class="col-8 position-relative">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <input v-model="carousel4" type="hidden" name="carousel1">
+              <img :src="carousel4View" class="d-block m-auto">
+              <button
+                @click="onDeleteImage"
+                type="button"
+                class="btn-close position-absolute"
+                style="right: 35px; top: 15px; font-size: 14px"
+                value="carousel4"
+              ></button>
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <input @click="onImageModalOpen('carousel4')" type="button" value="アップロード" class="btn" style="width: 156px; background-color:  #1867C0; color: #FFF;">
+            </div>
+          </div>
+        </div>
+        <!-- カルーセル5 -->
+        <div class="row mb-4">
+          <label class="form-label">カルーセル5</label>
+          <div class="col-8 position-relative">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <input v-model="carousel5" type="hidden" name="carousel1">
+              <img :src="carousel5View" class="d-block m-auto">
+              <button
+                @click="onDeleteImage"
+                type="button"
+                class="btn-close position-absolute"
+                style="right: 35px; top: 15px; font-size: 14px"
+                value="carousel5"
+              ></button>
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <input @click="onImageModalOpen('carousel5')" type="button" value="アップロード" class="btn" style="width: 156px; background-color:  #1867C0; color: #FFF;">
+            </div>
+          </div>
+        </div>
+        <!-- カルーセル6 -->
+        <div class="row mb-4">
+          <label class="form-label">カルーセル6</label>
+          <div class="col-8 position-relative">
+            <div class="border mb-3" style="display: block; height: 200px; overflow-y: scroll;">
+              <input v-model="carousel6" type="hidden" name="carousel1">
+              <img :src="carousel6View" class="d-block m-auto">
+              <button
+                @click="onDeleteImage"
+                type="button"
+                class="btn-close position-absolute"
+                style="right: 35px; top: 15px; font-size: 14px"
+                value="carousel6"
+              ></button>
+            </div>
+            <div class="d-flex flex-row-reverse">
+              <input @click="onImageModalOpen('carousel6')" type="button" value="アップロード" class="btn" style="width: 156px; background-color:  #1867C0; color: #FFF;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 保存ボタン -->
+      <div class="d-flex flex-row-reverse mb-5">
+        <input type="submit" value="保存" class="btn baseBtnBlue" style="width: 156px;">
       </div>
     </form>
 
-    <!-- モーダル -->
-    <div :style="modalCurrent ? 'display: block' : 'display: none'" class="modal">
+     <!-- 画像追加モーダル -->
+     <div :style="imageModal.show ? 'display: block' : 'display: none'" class="modalMain">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">ファイルアップロード</h5>
-            <button @click="onModalClose" type="button" class="btn-close"></button>
+            <h5 class="modal-title">画像追加</h5>
+            <button @click="onImageModalClose" type="button" class="btn-close"></button>
           </div>
           <div
             @dragover.prevent="onFileDrag(true)"
@@ -419,80 +371,147 @@
         </div>
       </div>
     </div>
+    <div
+      :style="imageModal.show ? 'display: block' : 'display: none'"
+      class="modalBg"
+      @click="onImageModalClose">
+    </div>
   </main>
 </div>
 
 <script type="text/javascript">
+const forms = `<%- forms %>`;
+
 Vue.use(window.vuelidate.default);
 const { required, minLength } = window.validators;
 
 new Vue({
-  el: "#tenantDetails",
+  el: "#tenantsRegist",
   data: {
-    modalCurrent: "",
-    tabActive: "1",
-    isFileAreaFocus: false,
-    // 表示データ(画像)
-    logo_View: "",
-    carousel_1_View: "",
-    carousel_2_View: "",
-    carousel_3_View: "",
-    carousel_4_View: "",
-    carousel_5_View: "",
-    carousel_6_View: "",
+    displayType: "",
+    facilityTabStatus: true,  // 施設情報タブ
+    productTabStatus: true,   // 商品規約タブ
+    isFileAreaFocus: false,   // ドラッグ&ドロップ領域判定
+    tenantLogoView: "",       // 表示用データ(ロゴ)
+    carousel1View: "",        // 表示用データ(カルーセル1)
+    carousel2View: "",        // 表示用データ(カルーセル2)
+    carousel3View: "",        // 表示用データ(カルーセル3)
+    carousel4View: "",        // 表示用データ(カルーセル4)
+    carousel5View: "",        // 表示用データ(カルーセル5)
+    carousel6View: "",        // 表示用データ(カルーセル6)
+    // 画像アップロード(モーダル)
+    imageModal: {
+      show: false,
+      current: "",
+    },
+    // APIデータ
+    forms: JSON.parse(forms),
     // 登録データ
-    facility_name: "",
-    facility_address: "",
-    phone_number: "",
-    business_hours: "",
-    holiday: "",
-    access: "",
-    map: "",
-    notes: "",
-    url: "",
-    introduction: "",
-    area: "",
-    terms: "",
-    travel_agency: "",
-    specified_commercial: "",
-    privacy_policy: "",
-    cancellation_policy: "",
-    logo: "",
-    carousel_1: "",
-    carousel_2: "",
-    carousel_3: "",
-    carousel_4: "",
-    carousel_5: "",
-    carousel_6: "",
+    tenantName: "",           // テナント名
+    facilityName: "",         // 施設名
+    location: "",             // 施設住所
+    telephone: "",            // 電話番号
+    businessHour: "",         // 営業時間
+    closedDate: "",           // 定休日
+    trafficAccess: "",        // 交通アクセス
+    url: "",                  // ホームページURL
+    explain: "",              // 紹介文
+    webNoticeText: "",        // お知らせ
+    tenantLogo: "",           // ロゴ
+    carousel1: "",            // カルーセル1
+    carousel2: "",            // カルーセル2
+    carousel3: "",            // カルーセル3
+    carousel4: "",            // カルーセル4
+    carousel5: "",            // カルーセル5
+    carousel6: "",            // カルーセル6
   },
   validations: {
-    facility_name: { required },
-    facility_address: { required, minLength: minLength(9) },
-    phone_number: { required },
-    business_hours: { required },
-    holiday: { required },
-    access: { required },
+    tenantName: {
+      required
+    },
+    facilityName: {
+      required
+    },
+    location: {
+      required
+    },
+    businessHour: {
+      required
+    },
+    closedDate: {
+      required
+    },
+    trafficAccess: {
+      required
+    },
+  },
+  created() {
+    this.setInitData();
   },
   methods: {
-    onTabChange(num) {
-      this.tabActive = num;
+    /**
+     * 登録情報セット
+     */ 
+    setInitData() { 
+      this.tenantName = this.forms.tenantName;
+      this.facilityName = this.forms.facilityName;
+      this.location = this.forms.location;
+      this.telephone = this.forms.telephone;
+      this.businessHour = this.forms.businessHour;
+      this.closedDate = this.forms.closedDate;
+      this.trafficAccess = this.forms.trafficAccess;
+      this.url = this.forms.url;
+      this.explain = this.forms.explain;
+      this.webNoticeText = this.forms.webNoticeText;
+      this.tenantLogoView = this.forms.tenantLogo;
+      this.carousel1View = this.forms.carousel1;
+      this.carousel2View = this.forms.carousel2;
+      this.carousel3View = this.forms.carousel3;
+      this.carousel4View = this.forms.carousel4;
+      this.carousel5View = this.forms.carousel5;
+      this.carousel6View = this.forms.carousel6;
+      location.href.match(/regist/) ? this.displayType = 'regist' : this.displayType = 'detail';
     },
-    onModalShow(name) {
-      this.modalCurrent = name;
+    /**
+     * アコーディオン
+     */ 
+     onTabToggle(target) {
+      this[target] = !this[target];
     },
-    onModalClose() {
-      this.modalCurrent = "";
+    /**
+     * 画像アップロードモーダル（open）
+     */ 
+    onImageModalOpen(name) {
+      this.imageModal.show = true;
+      this.imageModal.current = name;
     },
+    /**
+     * 画像アップロードモーダル（close）
+     */ 
+    onImageModalClose() {
+      this.imageModal.show = false;
+      this.imageModal.current = "";
+    },
+    /**
+     * 画像削除
+     */ 
+     onDeleteImage(event) {
+      this[event.target.value] = "";
+      this[event.target.value + "View"] = "";
+    },
+    /**
+     * 登録処理
+     */ 
     onSubmit() {
       this.$v.$touch();
       if(!this.$v.$invalid) {
-        document.tenant.method="post";
-        document.tenant.action = "/tenant/details/edit";
-        document.tenant.submit();
-      } else {
-        this.tabActive = "1";
+        document.tenants.method="post";
+        document.tenants.action = "/tenants/regist";
+        document.tenants.submit();
       }
     },
+
+
     onFileDrag(flag) {
       this.isFileAreaFocus = flag;
     },
@@ -515,13 +534,13 @@ new Vue({
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onloadend = () => {
-        this[this.modalCurrent] = reader.result;
-        this.modalCurrent = "";
+        this[this.imageModal.current] = reader.result;
+        this.imageModal.current = "";
       };
-      this[this.modalCurrent + "_View"] = URL.createObjectURL(files[0]);
+      this[this.imageModal.current + "View"] = URL.createObjectURL(files[0]);
     },
   }
 })
 </script>
 </body>
-</html>
+</html
