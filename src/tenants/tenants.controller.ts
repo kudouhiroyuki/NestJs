@@ -74,6 +74,7 @@ export class TenantsController {
   async getDetail() {
     // テナント詳細
     const forms = {
+      id: 'TE001',
       tenantName: 'さがみ湖プレジャーフォレスト',
       facilityName: '施設名',
       location: '施設住所',
@@ -84,16 +85,32 @@ export class TenantsController {
       url: 'URL',
       explain: '紹介文',
       webNoticeText: 'お知らせ',
+      userpolicy: '利用規約',
+      travelAgencyAct: '旅行業法',
+      specifiedCommercialTransactionLaw: '特定商取引法',
+      privacyPolicy: 'プライバシーポリシー',
+      cancellationPolicy: 'キャンセルポリシー',
       tenantLogo: 'http://localhost:3000/images/photo/user.png',
       carousel1: 'http://localhost:3000/images/photo/user.png',
       carousel2: 'http://localhost:3000/images/photo/user.png',
       carousel3: 'http://localhost:3000/images/photo/user.png',
       carousel4: 'http://localhost:3000/images/photo/user.png',
       carousel5: 'http://localhost:3000/images/photo/user.png',
-      carousel6: 'http://localhost:3000/images/photo/user.png'
+      carousel6: 'http://localhost:3000/images/photo/user.png',
+      isUsedPaypay: true,
+      isUsedStore: false
     }
     return {
       forms: JSON.stringify(forms)
     }
+  }
+  /**
+   * POST テナント詳細更新処理
+   */
+  @Post('detail/:id')
+  @Redirect('http://localhost:3000/tenants')
+  async postDetailRegist(@Body() body: any) {
+    console.log('テナント詳細更新処理')
+    console.log(body)
   }
 }

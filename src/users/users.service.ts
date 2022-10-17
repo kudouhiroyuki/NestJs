@@ -128,6 +128,8 @@ import { PrismaService } from '../prisma.service'
 //   LIMIT ${'1'};
 // `)
 
+// return await this.prisma.users.groupBy({ by: ['departmentId'] })
+
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}

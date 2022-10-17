@@ -43,6 +43,8 @@
             >
           </div>
         </div>
+        <!-- テナントID -->
+        <input v-model="id" type="hidden" name="id">
         <!-- テナント名 -->
         <div class="row mb-5">
           <label class="form-label">テナント名</label>
@@ -193,11 +195,89 @@
 
       <div v-if="displayType === 'detail'" :style="productTabStatus ? 'height: inherit' : { height: '65px', overflow: 'hidden' }" class="baseShadow p-4 mb-5">
         <div class="d-flex">
-          <div class="me-auto"><h5 class="mb-4 fw-bold">画像</h5></div>
+          <div class="me-auto"><h5 class="mb-4 fw-bold">商品規約</h5></div>
           <div style="cursor: pointer">
             <img
               @click="onTabToggle('productTabStatus')"
               :style="productTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <!-- 利用規約 -->
+        <div class="row mb-5">
+          <label class="form-label">利用規約</label>
+          <div class="col-8">
+            <textarea
+              v-model="userpolicy"
+              name="userpolicy"
+              rows="4"
+              placeholder="利用規約を入力"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <!-- 旅行業法 -->
+        <div class="row mb-5">
+          <label class="form-label">旅行業法</label>
+          <div class="col-8">
+            <textarea
+              v-model="travelAgencyAct"
+              name="travelAgencyAct"
+              rows="4"
+              placeholder="旅行業法を入力"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <!-- 特定商取引法 -->
+        <div class="row mb-5">
+          <label class="form-label">特定商取引法</label>
+          <div class="col-8">
+            <textarea
+              v-model="specifiedCommercialTransactionLaw"
+              name="specifiedCommercialTransactionLaw"
+              rows="4"
+              placeholder="特定商取引法を入力"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <!-- プライバシーポリシー -->
+        <div class="row mb-5">
+          <label class="form-label">プライバシーポリシー</label>
+          <div class="col-8">
+            <textarea
+              v-model="privacyPolicy"
+              name="privacyPolicy"
+              rows="4"
+              placeholder="プライバシーポリシーを入力"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+        <!-- キャンセルポリシー -->
+        <div class="row mb-5">
+          <label class="form-label">キャンセルポリシー</label>
+          <div class="col-8">
+            <textarea
+              v-model="cancellationPolicy"
+              name="cancellationPolicy"
+              rows="4"
+              placeholder="キャンセルポリシーを入力"
+              class="form-control mb-2"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="displayType === 'detail'" :style="imageTabStatus ? 'height: inherit' : { height: '65px', overflow: 'hidden' }" class="baseShadow p-4 mb-5">
+        <div class="d-flex">
+          <div class="me-auto"><h5 class="mb-4 fw-bold">画像</h5></div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('imageTabStatus')"
+              :style="imageTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
               src="/images/icon/arow.svg"
             >
           </div>
@@ -344,6 +424,47 @@
         </div>
       </div>
 
+      <div v-if="displayType === 'detail'" :style="settlementTabStatus ? 'height: inherit' : { height: '65px', overflow: 'hidden' }" class="baseShadow p-4 mb-5">
+        <div class="d-flex">
+          <div class="me-auto"><h5 class="mb-4 fw-bold">決済方法</h5></div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('settlementTabStatus')"
+              :style="settlementTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <!-- PayPay -->
+        <div class="mb-2">
+          <input v-model="JSON.stringify(isUsedPaypay)" type="hidden" name="isUsedPaypay">
+          <input
+            v-model="isUsedPaypay"
+            @click="isUsedPaypay=$event.target.checked"
+            class="form-check-input"
+            type="checkbox"
+            id="paypay"
+          >
+          <label class="form-check-label" for="paypay">
+            PayPay
+          </label>
+        </div>
+        <!-- コンビニ支払 -->
+        <div class="mb-4">
+          <input v-model="JSON.stringify(isUsedStore)" type="hidden" name="isUsedStore">
+          <input
+            v-model="isUsedStore"
+            @click="isUsedStore=$event.target.checked"
+            class="form-check-input"
+            type="checkbox"
+            id="store"
+          >
+          <label class="form-check-label" for="store">
+            コンビニ支払
+          </label>
+        </div>
+      </div>
+
       <!-- 保存ボタン -->
       <div class="d-flex flex-row-reverse mb-5">
         <input type="submit" value="保存" class="btn baseBtnBlue" style="width: 156px;">
@@ -389,16 +510,18 @@ new Vue({
   el: "#tenantsRegist",
   data: {
     displayType: "",
-    facilityTabStatus: true,  // 施設情報タブ
-    productTabStatus: true,   // 商品規約タブ
-    isFileAreaFocus: false,   // ドラッグ&ドロップ領域判定
-    tenantLogoView: "",       // 表示用データ(ロゴ)
-    carousel1View: "",        // 表示用データ(カルーセル1)
-    carousel2View: "",        // 表示用データ(カルーセル2)
-    carousel3View: "",        // 表示用データ(カルーセル3)
-    carousel4View: "",        // 表示用データ(カルーセル4)
-    carousel5View: "",        // 表示用データ(カルーセル5)
-    carousel6View: "",        // 表示用データ(カルーセル6)
+    facilityTabStatus: true,   // 施設情報タブ
+    productTabStatus: true,    // 商品規約タブ
+    imageTabStatus: true,      // 画像タブ
+    settlementTabStatus: true, // 決済方法タブ
+    isFileAreaFocus: false,    // ドラッグ&ドロップ領域判定
+    tenantLogoView: "",        // 表示用データ(ロゴ)
+    carousel1View: "",         // 表示用データ(カルーセル1)
+    carousel2View: "",         // 表示用データ(カルーセル2)
+    carousel3View: "",         // 表示用データ(カルーセル3)
+    carousel4View: "",         // 表示用データ(カルーセル4)
+    carousel5View: "",         // 表示用データ(カルーセル5)
+    carousel6View: "",         // 表示用データ(カルーセル6)
     // 画像アップロード(モーダル)
     imageModal: {
       show: false,
@@ -407,23 +530,31 @@ new Vue({
     // APIデータ
     forms: JSON.parse(forms),
     // 登録データ
-    tenantName: "",           // テナント名
-    facilityName: "",         // 施設名
-    location: "",             // 施設住所
-    telephone: "",            // 電話番号
-    businessHour: "",         // 営業時間
-    closedDate: "",           // 定休日
-    trafficAccess: "",        // 交通アクセス
-    url: "",                  // ホームページURL
-    explain: "",              // 紹介文
-    webNoticeText: "",        // お知らせ
-    tenantLogo: "",           // ロゴ
-    carousel1: "",            // カルーセル1
-    carousel2: "",            // カルーセル2
-    carousel3: "",            // カルーセル3
-    carousel4: "",            // カルーセル4
-    carousel5: "",            // カルーセル5
-    carousel6: "",            // カルーセル6
+    id: "",                                // テナントID
+    tenantName: "",                        // テナント名
+    facilityName: "",                      // 施設名
+    location: "",                          // 施設住所
+    telephone: "",                         // 電話番号
+    businessHour: "",                      // 営業時間
+    closedDate: "",                        // 定休日
+    trafficAccess: "",                     // 交通アクセス
+    url: "",                               // ホームページURL
+    explain: "",                           // 紹介文
+    webNoticeText: "",                     // お知らせ 
+    userpolicy: "",                        // 利用規約
+    travelAgencyAct: "",                   // 旅行業法
+    specifiedCommercialTransactionLaw: "", // 特定商取引法
+    privacyPolicy: "",                     // プライバシーポリシー
+    cancellationPolicy: "",                // キャンセルポリシー
+    tenantLogo: "",                        // ロゴ
+    carousel1: "",                         // カルーセル1
+    carousel2: "",                         // カルーセル2
+    carousel3: "",                         // カルーセル3
+    carousel4: "",                         // カルーセル4
+    carousel5: "",                         // カルーセル5
+    carousel6: "",                         // カルーセル6
+    isUsedPaypay: "",                      // PayPay
+    isUsedStore: "",                       // コンビニ支払
   },
   validations: {
     tenantName: {
@@ -452,7 +583,8 @@ new Vue({
     /**
      * 登録情報セット
      */ 
-    setInitData() { 
+    setInitData() {
+      this.id = this.forms.id;
       this.tenantName = this.forms.tenantName;
       this.facilityName = this.forms.facilityName;
       this.location = this.forms.location;
@@ -463,6 +595,11 @@ new Vue({
       this.url = this.forms.url;
       this.explain = this.forms.explain;
       this.webNoticeText = this.forms.webNoticeText;
+      this.userpolicy = this.forms.userpolicy;
+      this.travelAgencyAct = this.forms.travelAgencyAct;
+      this.specifiedCommercialTransactionLaw = this.forms.specifiedCommercialTransactionLaw;
+      this.privacyPolicy = this.forms.privacyPolicy;
+      this.cancellationPolicy = this.forms.cancellationPolicy;
       this.tenantLogoView = this.forms.tenantLogo;
       this.carousel1View = this.forms.carousel1;
       this.carousel2View = this.forms.carousel2;
@@ -470,6 +607,8 @@ new Vue({
       this.carousel4View = this.forms.carousel4;
       this.carousel5View = this.forms.carousel5;
       this.carousel6View = this.forms.carousel6;
+      this.isUsedPaypay = this.forms.isUsedPaypay;
+      this.isUsedStore = this.forms.isUsedStore;
       location.href.match(/regist/) ? this.displayType = 'regist' : this.displayType = 'detail';
     },
     /**
@@ -499,19 +638,6 @@ new Vue({
       this[event.target.value] = "";
       this[event.target.value + "View"] = "";
     },
-    /**
-     * 登録処理
-     */ 
-    onSubmit() {
-      this.$v.$touch();
-      if(!this.$v.$invalid) {
-        document.tenants.method="post";
-        document.tenants.action = "/tenants/regist";
-        document.tenants.submit();
-      }
-    },
-
-
     onFileDrag(flag) {
       this.isFileAreaFocus = flag;
     },
@@ -538,6 +664,26 @@ new Vue({
         this.imageModal.current = "";
       };
       this[this.imageModal.current + "View"] = URL.createObjectURL(files[0]);
+    },
+    /**
+     * 登録処理
+     */ 
+     onSubmit() {
+      let isSubmit = false;
+      let action = ``;
+      this.$v.$touch();
+      if(this.displayType = 'regist') {
+        if(!this.$v.tenantName.$invalid) isSubmit= true;
+        action = `/tenants/regist`
+      } else {
+        if(!this.$v.$invalid) isSubmit= true;
+        action = `/tenants/detail/${this.id}`
+      }
+      if(isSubmit) {
+        document.tenants.method="post";
+        document.tenants.action = action
+        document.tenants.submit();
+      }
     },
   }
 })
