@@ -44,6 +44,7 @@ import { PlansModule } from './plans/plans.module'
 import { DivisionsModule } from './divisions/divisions.module'
 import { InventorysModule } from './inventorys/inventorys.module'
 
+import { LoginModule } from './login/login.module'
 import { TenantsModule } from './tenants/tenants.module'
 import { OrdersModule } from './orders/orders.module'
 import { AccountsModule } from './accounts/accounts.module'
@@ -60,6 +61,8 @@ import { UsersModule } from './users/users.module'
     PlansModule,
     DivisionsModule,
     InventorysModule,
+
+    LoginModule,
     TenantsModule,
     OrdersModule,
     AccountsModule,
