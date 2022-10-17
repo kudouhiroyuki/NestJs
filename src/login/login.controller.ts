@@ -7,17 +7,15 @@ export class LoginController {
    */
   @Get('/')
   @Render('login')
-  async getIndex() {
-    return {
-      forms: JSON.stringify({})
-    }
+  async getLogin() {
+    return {}
   }
   /**
    * POST ログイン処理
    */
   @Post('/')
   @Redirect('http://localhost:3000/top')
-  async postIndex(@Body() body: any) {
+  async postLogin(@Body() body: any) {
     console.log('ログイン処理')
     console.log(body)
   }

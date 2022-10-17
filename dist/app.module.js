@@ -15,6 +15,7 @@ const plans_module_1 = require("./plans/plans.module");
 const divisions_module_1 = require("./divisions/divisions.module");
 const inventorys_module_1 = require("./inventorys/inventorys.module");
 const login_module_1 = require("./login/login.module");
+const password_reset_module_1 = require("./password-reset/password-reset.module");
 const tenants_module_1 = require("./tenants/tenants.module");
 const orders_module_1 = require("./orders/orders.module");
 const accounts_module_1 = require("./accounts/accounts.module");
@@ -33,6 +34,7 @@ AppModule = __decorate([
             divisions_module_1.DivisionsModule,
             inventorys_module_1.InventorysModule,
             login_module_1.LoginModule,
+            password_reset_module_1.PasswordResetModule,
             tenants_module_1.TenantsModule,
             orders_module_1.OrdersModule,
             accounts_module_1.AccountsModule,

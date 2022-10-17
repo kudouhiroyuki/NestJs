@@ -4,101 +4,94 @@
 <div class="layout">
   <%- include('../../partials/header'); %>
 
-  <%- include('../../partials/sidebar'); %>
+  <main id="passwordResetIndex" style="width: 100%; height:100%; top: 140px; left: 50%; transform: translate(-50%, -50%);">
+      <h4 class="mb-5 fw-bold text-center" style="width: 368px; margin: auto;">
+        パスワード変更
+      </h4>
 
-  <main id="tenantsIndex">
-    <h4 class="mb-4 fw-bold" style="color:#0069D9;">
-      <img src="/images/icon/tenant.svg" style="width: 24px;">
-      テナント照会
-    </h4>
-
-    <div class="d-flex flex-row-reverse mb-5">
-      <a href="/tenants/regist">
-        <input type="button" value="新規登録" class="btn baseBtnBlue" style="width: 156px">
-      </a>
-    </div>
-   
-    <!-- 一覧テーブル -->
-    <div style="overflow: auto; width: 100%; height: 200px;" class="mb-5">
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">テナントID</th>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">テナント名</th>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">運営会社</th>
-            <th style="z-index: 101; position: sticky; top: 0; left: 0; background: white;">所在地</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(item, index) in tenants"
-            :key="index"
-            @click="onActionList(item)"
-            style="position: relative;"
-          >
-            <td>{{ item.id }}</td>
-            <td>{{ item.tenantName }}</td>
-            <td>{{ item.operatingCompany }}</td>
-            <td>{{ item.location }}</td>
-            <td style="width: 0;">
-              <ul
-                :ref="item.id"
-                class="dropdown-menu"
-                style="left: 50%; transform: translate(-50%, -50%);"
-              >
-                <a :href=`/tenants/detail/${item.id}`><li class="dropdown-item small">詳細</li></a>
-              </ul>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <form @submit.prevent="onSubmit" name="login">
+        <div class="mb-5">
+          <!-- 新しいパスワード -->
+          <input
+            v-model="password"
+            name="password"
+            maxlength="99"
+            type="text"
+            class="form-control"
+            placeholder="新しいパスワード"
+            style="width: 368px; margin: auto; border-bottom: 0; border-radius: .25rem .25rem 0 0;"
+          />
+          <!-- 新しいパスワード（確認） -->
+          <input
+            v-model="confirmPassword"
+            name="confirmPassword"
+            maxlength="99"
+            type="text"
+            class="form-control mb-4"
+            placeholder="新しいパスワード（確認）"
+            style="width: 368px; margin: auto; border-radius: 0 0 .25rem .25rem;"
+          />
+          <div class="col-6" style="margin: 0 auto">
+            <div>パスワードの条件：</div>
+            <div style="color: #5F9A5F;">
+              <img src="/images/icon/passwordReset.svg">
+              <span>8文字以上、99文字以下</span>
+            </div>
+            <div style="color: #5F9A5F;">
+              <img src="/images/icon/passwordReset.svg">
+              <span>英大文字、英小文字、数字、特殊文字を含む</span>
+            </div>
+            <div style="color: #5F9A5F;">
+              <img src="/images/icon/passwordReset.svg">
+              <span>特殊文字は^ $ * . [ ] { } ( ) ? “ ! @ # % & / \ , > < ‘ : ; | _ ~ ` = + -と半角スペースが使用できます</span>
+            </div>
+            <div v-if="$v.password.$dirty" class="text-danger fw-bold" style="font-size: 14px;">
+              <p v-if="!$v.password.required">新しいパスワードが入力されていません。</p>
+            </div>
+            <div v-if="$v.confirmPassword.$dirty" class="text-danger fw-bold" style="font-size: 14px;">
+              <p v-if="!$v.confirmPassword.required">新しいパスワード（確認）が入力されていません。</p>
+            </div>
+          </div>
+        </div>
+        <!-- 変更ボタン -->
+        <div class="col-6 text-center" style="margin: 0 auto;">
+          <input type="submit" value="変更" class="btn baseBtnBlue" style="width: 156px;">
+        </div>
+      </form>
     </div>
   </main>
 </div>
 
 <script type="text/javascript">
-const tenants = `<%- tenants %>`;
+Vue.use(window.vuelidate.default);
+const { required, minLength } = window.validators;
 
 new Vue({
-  el: "#tenantsIndex",
-  data: {
-    serchTabStatus: true,                            // 検索タブ
-    // APIデータ
-    tenants: JSON.parse(tenants)
+  el: "#passwordResetIndex",
+  data: {  
+    // 送信データ
+    password: "",          // パスワード
+    confirmPassword: "",   // 確認パスワード
   },
-  mounted() {
-    /**
-     * アクションリスト（hide）
-     */ 
-    window.addEventListener('click', (e) => {
-      if(!e.target.closest('.table.align-middle')) {
-        const dropdowns = document.querySelectorAll('.dropdown-menu');
-        dropdowns.forEach(function(el) {
-          el.style.display = 'none';
-          el.closest('tr').style.backgroundColor = 'inherit';
-        });
-      }
-    })
+  validations: {
+    password: {
+      required
+    },
+    confirmPassword: {
+      required
+    },
   },
   methods: {
     /**
-     * アコーディオン
+     * ログイン処理
      */ 
-     onTabToggle(target) {
-      this[target] = !this[target];
-    },
-    /**
-     * アクションリスト（show）
-     */ 
-     onActionList(item) {
-      const dropdowns = document.querySelectorAll('.dropdown-menu');
-      dropdowns.forEach(function(el) {
-        el.style.display = 'none';
-        el.closest('tr').style.backgroundColor = 'inherit';
-      });
-      this.$refs[item.id][0].style.display = 'block';
-      this.$refs[item.id][0].closest('tr').style.backgroundColor = '#E7E7E7';
-
+    onSubmit() {
+      this.$v.$touch();
+      if(!this.$v.$invalid) {
+        document.login.method="post";
+        document.login.action = "/passwordReset";
+        document.login.submit();
+      }
     },
   }
 })
