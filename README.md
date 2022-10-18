@@ -47,6 +47,8 @@ docker rmi {IMAGE ID}（イメージ削除）
 - マイグレーションファイル（作成・更新）<br>
 ※テーブル内にデータがあれば更新できない<br>
 npx prisma migrate dev --name init
+- フォーマット修正
+npx prisma format
 
 ## Nestコマンド<br>
 - モジュール・コントローラー・サービス作成<br>
@@ -179,8 +181,8 @@ INSERT INTO nest.users (userName, password, address, age, departmentId, point, c
 ('name1', 'password', 'address', 30, 'A0001', 100, '2010-10-01 00:00:00', '2010-10-01 00:00:00'),<br>
 ('name2', 'password', 'address', 20, 'A0001', 500, '2010-11-01 08:00:00', '2010-11-01 08:00:00'),<br>
 ('name3', 'password', 'address', 17, 'B0001', 500, '2010-11-01 20:00:00', '2010-11-01 20:00:00'),<br>
-('name4', 'password', 'address', 58, '', 400, '2010-12-01 00:00:00', '2010-12-01 00:00:00'),<br>
-('name5', 'password', 'address', 32, '', NULL, '2011-12-01 00:00:00', '2011-12-01 00:00:00');<br>
+('name4', 'password', 'address', 58, 'B0001', 400, '2010-12-01 00:00:00', '2010-12-01 00:00:00'),<br>
+('name5', 'password', 'address', 32, 'B0001', NULL, '2011-12-01 00:00:00', '2011-12-01 00:00:00');<br>
 
 INSERT INTO nest.departments (departmentId, departmentName) VALUES<br>
 ('A0001', 'アプリケーション'),<br>

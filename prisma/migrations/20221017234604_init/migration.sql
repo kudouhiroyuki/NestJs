@@ -53,3 +53,6 @@ CREATE TABLE `stocks` (
 
     UNIQUE INDEX `stocks_name_key`(`name`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `users` ADD CONSTRAINT `users_departmentId_fkey` FOREIGN KEY (`departmentId`) REFERENCES `departments`(`departmentId`) ON DELETE RESTRICT ON UPDATE CASCADE;

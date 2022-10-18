@@ -8,34 +8,41 @@ datasource db {
 }
 
 model users {
-  id    Int     @default(autoincrement()) @id
-  userName String
-  password  String
-  address String
-  age String
-  departmentId  String
-  point  Int?
-  createdAt  DateTime @db.DateTime(0)
-  updateAt  DateTime @db.DateTime(0)
+  id             Int         @id @default(autoincrement())
+  userName       String
+  password       String
+  address        String
+  age            String
+  departmentId   String
+  departmentName departments @relation(fields: [departmentId], references: [departmentId])
+  point          Int?
+  createdAt      DateTime    @db.DateTime(0)
+  updateAt       DateTime    @db.DateTime(0)
 }
+
 model departments {
-  departmentId String @unique
-  departmentName  String
+  departmentId   String  @unique
+  departmentName String
+  users          users[]
 }
+
 model posts {
-  postsId Int @unique
-  body  String
+  postsId Int    @unique
+  body    String
 }
+
 model log {
-  id    Int     @default(autoincrement()) @id
+  id  Int      @id @default(autoincrement())
   log String
   dt  DateTime @db.DateTime(0)
 }
+
 model salesLists {
-  name String @unique
+  name  String @unique
   sales Int
 }
+
 model stocks {
-  name String @unique
+  name       String @unique
   stockCount Int
 }

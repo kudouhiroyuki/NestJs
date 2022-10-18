@@ -128,6 +128,12 @@ import { PrismaService } from '../prisma.service'
 //   LIMIT ${'1'};
 // `)
 
+// return await this.prisma.users.findMany({
+//   include: {
+//     departmentName: true
+//   }
+// })
+
 // return await this.prisma.users.groupBy({ by: ['departmentId'] })
 
 @Injectable()
@@ -140,6 +146,7 @@ export class UsersService {
     if (query.id) whereConditions['id'] = Number(query.id)
     if (query.userName) whereConditions['userName'] = { contains: query.userName }
     if (query.sort) orderConditions['id'] = query.sort
+
     return await this.prisma.users.findMany({
       select: {
         id: true,
