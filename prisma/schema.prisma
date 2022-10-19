@@ -8,16 +8,16 @@ datasource db {
 }
 
 model users {
-  id             Int         @id @default(autoincrement())
-  userName       String
-  password       String
-  address        String
-  age            String
-  departmentId   String
-  departmentName departments @relation(fields: [departmentId], references: [departmentId])
-  point          Int?
-  createdAt      DateTime    @db.DateTime(0)
-  updateAt       DateTime    @db.DateTime(0)
+  id           Int         @id @default(autoincrement())
+  userName     String
+  password     String
+  address      String
+  age          String
+  departmentId String
+  department   departments @relation(fields: [departmentId], references: [departmentId])
+  point        Int?
+  createdAt    DateTime    @db.DateTime(0)
+  updateAt     DateTime    @db.DateTime(0)
 }
 
 model departments {

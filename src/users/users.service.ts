@@ -114,6 +114,7 @@ import { users as Users, Prisma } from '@prisma/client'
 import { Injectable, Query } from '@nestjs/common'
 import { PrismaService } from '../prisma.service'
 
+// findUnique 一意の識別子またはIDを指定する必要がある
 // findFirst  条件に一致する最初のレコードを取得
 // findMany   条件に一致する全てのレコードを取得
 // delete     条件に一致するレコードを削除する
@@ -129,18 +130,42 @@ import { PrismaService } from '../prisma.service'
 // `)
 
 // return await this.prisma.users.findMany({
+//   where: {
+//     id: 1
+//   },
 //   include: {
-//     departmentName: true
+//     department: true
 //   }
 // })
 
-// return await this.prisma.users.groupBy({ by: ['departmentId'] })
+// return await this.prisma.users.groupBy({
+//   by: ['departmentId'],
+//   _count: {
+//     _all: true
+//   }
+// })
+
+// return await this.prisma.users.groupBy({
+//   by: ['departmentId'],
+//   _sum: {
+//     point: true
+//   }
+// })
+
+// return await this.prisma.$transaction([
+//   this.prisma.users.count(),
+//   this.prisma.users.findMany({
+//     select: {
+//       id: true
+//     }
+//   })
+// ])
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getUsers(query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
+  async getUsers(query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<any> {
     const whereConditions = {}
     const orderConditions = {}
     if (query.id) whereConditions['id'] = Number(query.id)

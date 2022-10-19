@@ -10,6 +10,7 @@
     <h4 class="mb-4 fw-bold">商品登録</h4>
 
     <form @submit.prevent="onSubmit" name="productsForm">
+
       <!-- 基本情報 -->
       <div :style="basicTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
         <div class="d-flex">
@@ -165,7 +166,7 @@
           </div>
         </div>
         <!-- サービス手数料率 -->
-        <div class="col-4 mb-4">
+        <div v-if="isAdmin" class="col-4 mb-4">
           <label class="form-label">サービス手数料率</label>
           <input
             v-model="serviceCommissionPercentage"
@@ -177,6 +178,7 @@
           >
         </div>
       </div>
+
       <!-- 商品タグ -->
       <div :style="tagTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
         <input v-model="JSON.stringify(productTag)" type="hidden" name="productTag">
@@ -193,9 +195,9 @@
           </div>
         </div>
         <vue-tags-input
-          v-model="tagInput"
+          v-model="productTagInput"
           :tags="productTag"
-          :autocomplete-items="onTagsFilter"
+          :autocomplete-items="onProductTagFilter"
           @tags-changed="onProductTagChange"
           style="max-width: 100%;"
         />
@@ -237,11 +239,233 @@
         </div>        
       </div>
 
+      <!-- おすすめ商品 -->
+      <div :style="recommendTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <input v-model="JSON.stringify(cartRecommendTag)" type="hidden" name="cartRecommendTag">
+        <input v-model="JSON.stringify(orderRecommendTag)" type="hidden" name="orderRecommendTag">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">おすすめ商品</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('recommendTabStatus')"
+              :style="recommendTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label mb-3">カート画面おすすめ商品表示エリア</label>
+          <vue-tags-input
+            v-model="cartRecommendTagInput"
+            :tags="cartRecommendTag"
+            :autocomplete-items="onCartRecommendTagFilter"
+            @tags-changed="onCartRecommendTagChange"
+            style="max-width: 100%;"
+          />
+        </div>
+        <div>
+          <label class="form-label mb-3">注文完了画面おすすめ商品表示エリア</label>
+          <vue-tags-input
+            v-model="orderRecommendTagInput"
+            :tags="orderRecommendTag"
+            :autocomplete-items="onOrderRecommendTagFilter"
+            @tags-changed="onOrderRecommendTagChange"
+            style="max-width: 100%;"
+          />
+        </div>
+      </div>
 
-
-
-
-
+      <!-- 利用方法 -->
+      <div :style="usageTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">利用方法</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('usageTabStatus')"
+              :style="usageTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
+        </div>
+        <!-- 利用期間 -->
+        <div class="form-group mb-4">
+          <label class="form-label w-100">利用期間</label>
+          <div class="col-12 mb-3">
+            <div class="form-check form-check-inline">
+              <input
+                v-model="usagePeriodType"
+                name="usagePeriodType"
+                value="1"
+                class="form-check-input"
+                type="radio"
+                id="usagePeriod_1"
+              >
+              <label class="form-check-label" for="usagePeriod_1">日付指定</label>
+            </div>
+            <div class="d-inline-block">
+              <vue-ctk-date-time-picker
+                name="usagePeriodFrom"
+                v-model="usagePeriodFrom"
+                formatted="YYYY/MM/DD"
+                only-date
+                :label="'From'"
+                position="top"
+              /></vue-ctk-date-time-picker>
+            </div>
+            <div class="d-inline-block">〜</div>
+            <div class="d-inline-block">
+              <vue-ctk-date-time-picker
+                name="usagePeriodTo"
+                v-model="usagePeriodTo"
+                formatted="YYYY/MM/DD"
+                only-date
+                :label="'To'"
+                position="top"
+                :disabled="usagePeriodType === '2'"
+              /></vue-ctk-date-time-picker>
+            </div>
+          </div> 
+          <div class="col-12 mb-3">
+            <div class="form-check form-check-inline">
+              <input
+                v-model="usagePeriodType"
+                name="usagePeriodType"
+                value="2"
+                class="form-check-input"
+                type="radio"
+                id="usagePeriod_2"
+              >
+              <label class="form-check-label" for="usagePeriod_2">期限指定</label>
+            </div>
+            <div class="d-inline-block">
+              <input
+                v-model="usagePeriodDeadline"
+                name="usagePeriodDeadline"
+                type="text"
+                class="form-control mb-2"
+                placeholder="有効期限（0.0h）"
+              />
+            </div>
+          </div>
+          <div class="col-12 mb-3">
+            <div class="form-check form-check-inline">
+              <input
+                v-model="usagePeriodType"
+                name="usagePeriodType"
+                value="2"
+                class="form-check-input"
+                type="radio"
+                id="usagePeriod_2"
+              >
+              <label class="form-check-label" for="usagePeriod_2">時間指定</label>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-check form-check-inline">
+              <input
+                v-model="usagePeriodType"
+                name="usagePeriodType"
+                value="3"
+                class="form-check-input"
+                type="radio"
+                id="usagePeriod_3"
+              >
+              <label class="form-check-label" for="usagePeriod_3">無期限</label>
+            </div>
+          </div>
+        </div>
+        <!-- 利用区分 -->
+        <div class="col-12 mb-4">
+          <input v-model="JSON.stringify(usePeriodElement)" type="hidden" name="usePeriodElement">
+          <label class="form-label w-100">利用区分</label>
+          <div v-if="displayType === 'registSet' || displayType === 'detailSet'" class="form-check mb-2 w-25">
+            <input
+              v-model="usePeriodElement.id"
+              class="form-check-input"
+              type="radio"
+              id="設定引継"
+              value="設定引継"
+            >
+            <label class="form-check-label" for="設定引継">設定を引き継ぐ</label>
+          </div>
+          <div class="form-check mb-2 w-25">
+            <input
+              v-model="usePeriodElement.id"
+              class="form-check-input"
+              type="radio"
+              id="画面提示"
+              value="画面提示"
+            >
+            <label class="form-check-label" for="画面提示">画面提示</label>
+          </div>
+          <div class="form-check mb-2 w-25">
+            <input
+              v-model="usePeriodElement.id"
+              class="form-check-input"
+              type="radio"
+              id="電子もぎり"
+              value="電子もぎり"
+            >
+            <label class="form-check-label" for="電子もぎり">電子もぎり</label>
+          </div>
+          <div v-if="isAdmin" class="col-12 mb-3">
+            <div class="form-check form-check-inline">
+              <input
+                v-model="usePeriodElement.id"
+                class="form-check-input"
+                type="radio"
+                id="顔認証"
+                value="顔認証"
+              >
+              <label class="form-check-label" for="顔認証">顔認証</label>
+            </div>
+            <div class="d-inline-block">
+              <input
+                v-model="usePeriodElement.pathElement"
+                :disabled="usePeriodElement.id !== '顔認証'"
+                type="text"
+                class="form-control"
+                placeholder="フリーパス区分を入力"
+              >
+            </div>
+          </div>
+          <div class="form-check mb-2 w-25">
+            <input
+              v-model="usePeriodElement.id"
+              class="form-check-input"
+              type="radio"
+              id="QR提示"
+              value="QR提示"
+            >
+            <label class="form-check-label" for="QR提示">QR提示</label>
+          </div>
+          <div v-if="isAdmin" class="form-check mb-2 w-25">
+            <input
+              v-model="usePeriodElement.id"
+              class="form-check-input"
+              type="radio"
+              id="QR提示（HL換券）"
+              value="QR提示（HL換券）"
+            >
+            <label class="form-check-label" for="QR提示（HL換券）">QR提示（HL換券）</label>
+          </div>
+        </div>
+        <!-- 利用説明 -->
+        <div class="col-6 mb-4">
+          <label class="form-label">利用説明</label>
+          <textarea
+            v-model="howToUse"
+            name="howToUse"
+            rows="3"
+            class="form-control mb-2"
+            maxlength="400"
+          ></textarea>
+        </div>
+      </div>
 
 
 
@@ -439,233 +663,6 @@
         </div>
       </div>
 
-      <!-- 利用方法 -->
-      <div :style="usageTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
-        <div class="d-flex">
-          <div class="me-auto">
-            <h5 class="mb-4 fw-bold">利用方法</h5>
-          </div>
-          <div style="cursor: pointer">
-            <img
-              @click="onTabToggle('usageTabStatus')"
-              :style="usageTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
-              src="/images/icon/arow.svg"
-            >
-          </div>
-        </div>
-        <!-- 利用方法 -->
-        <div class="col-12 mb-4">
-          <label class="form-label w-100">利用方法</label>
-          <div class="form-check mb-2 w-25">
-            <input
-              v-model="usageMethodType"
-              name="usageMethodType"
-              class="form-check-input"
-              type="radio"
-              id="riyou_1"
-              value="1"
-            >
-            <label class="form-check-label" for="riyou_1">画面提示</label>
-          </div>
-          <div class="form-check mb-2 w-25">
-            <input
-              v-model="usageMethodType"
-              name="usageMethodType"
-              class="form-check-input"
-              type="radio"
-              id="riyou_2"
-              value="2"
-            >
-            <label class="form-check-label" for="riyou_2">電子もぎり</label>
-          </div>
-          <div class="form-check mb-2 w-25">
-            <input
-              v-model="usageMethodType"
-              name="usageMethodType"
-              class="form-check-input"
-              type="radio"
-              id="riyou_3"
-              value="3"
-            >
-            <label class="form-check-label" for="riyou_3">顔認証</label>
-          </div>
-          <div class="form-check mb-2 w-25">
-            <input
-              v-model="usageMethodType"
-              name="usageMethodType"
-              class="form-check-input"
-              type="radio"
-              id="riyou_4"
-              value="4"
-            >
-            <label class="form-check-label" for="riyou_3">QR提示</label>
-          </div>
-          <div>
-            <div class="form-check d-inline-block w-25">
-              <input
-                v-model="usageMethodType"
-                name="usageMethodType"
-                class="form-check-input"
-                type="radio"
-                id="riyou_5"
-                value="5"
-              >
-              <label class="form-check-label" for="riyou_3">QR読込</label>
-            </div>
-            <template v-if="usageMethodType==='5'">
-              <input v-model="JSON.stringify(usageMethodItem)" type="hidden" name="usageMethodItem">
-              <div class="d-inline-block">
-                <input
-                  v-model="qrParam"
-                  type="text"
-                  class="form-control"
-                  placeholder="パラメータ"
-                  style="width: 214px; margin-right: 5px;"
-                >
-              </div>
-              <button @click="onQrParamAdd" class="border-0 bg-white" type="button">
-                <img src="/images/icon/plus.svg">
-              </button>
-              <div class="d-flex mt-2">
-                <div class="w-25"></div>
-                <table class="table align-middle w-50">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">パラメータ</th>
-                      <th scope="col"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(item, index) in usageMethodItem" :key="index">
-                      <th>{{ index + 1 }}</th>
-                      <td>{{ item  }}</td>
-                      <td>
-                        <input
-                          @click="onQrDownload"
-                          type="button"
-                          value="QRコード"
-                          class="btn baseBtnGrey"
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </template>
-          </div>
-        </div>
-        <!-- 利用期間 -->
-        <div class="form-group mb-4">
-          <label class="form-label w-100">利用期間</label>
-          <div class="col-12 mb-3">
-            <div class="form-check form-check-inline">
-              <input
-                v-model="usagePeriodType"
-                name="usagePeriodType"
-                value="1"
-                class="form-check-input"
-                type="radio"
-                id="usagePeriod_1"
-              >
-              <label class="form-check-label" for="usagePeriod_1">日付指定</label>
-            </div>
-            <template v-if="usagePeriodType === '1'">
-              <div class="d-inline-block">
-                <vue-ctk-date-time-picker
-                  name="usagePeriodFrom"
-                  v-model="usagePeriodFrom"
-                  formatted="YYYY/MM/DD"
-                  only-date
-                  :label="'From'"
-                  position="top"
-                /></vue-ctk-date-time-picker>
-              </div>
-              <div class="d-inline-block">〜</div>
-              <div class="d-inline-block">
-                <vue-ctk-date-time-picker
-                  name="usagePeriodTo"
-                  v-model="usagePeriodTo"
-                  formatted="YYYY/MM/DD"
-                  only-date
-                  :label="'To'"
-                  position="top"
-                  :disabled="usagePeriodType === '2'"
-                /></vue-ctk-date-time-picker>
-              </div>
-            </template>
-          </div> 
-          <div class="col-12 mb-3">
-            <div class="form-check form-check-inline">
-              <input
-                v-model="usagePeriodType"
-                name="usagePeriodType"
-                value="2"
-                class="form-check-input"
-                type="radio"
-                id="usagePeriod_2"
-              >
-              <label class="form-check-label" for="usagePeriod_2">期限指定</label>
-            </div>
-            <template v-if="usagePeriodType === '2'">
-              <div class="d-inline-block">
-                <input
-                  v-model="usagePeriodDeadline"
-                  name="usagePeriodDeadline"
-                  type="text"
-                  class="form-control mb-2"
-                  placeholder="有効期限"
-                />
-              </div>
-            </template>
-          </div>
-          <div class="col-12">
-            <div class="form-check form-check-inline">
-              <input
-                v-model="usagePeriodType"
-                name="usagePeriodType"
-                value="3"
-                class="form-check-input"
-                type="radio"
-                id="usagePeriod_3"
-              >
-              <label class="form-check-label" for="usagePeriod_3">無期限</label>
-            </div>
-          </div>
-        </div>
-        <!-- 利用施設 -->
-        <!-- <div class="col-12 mb-4">
-          <label class="form-label w-100">利用施設</label>
-          <input v-model="JSON.stringify(tenantsUsed)" type="hidden" name="tenantsUsed">
-          <div class="col-8">
-            <table class="table align-middle">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">施設ID</th>
-                  <th scope="col">施設名</th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item, index) in tenants" :key="index">
-                  <th>{{ index + 1 }}</th>
-                  <td>{{ item.id }}</td>
-                  <td>{{ item.name }}</td>
-                  <td>
-                    <input
-                      :checked="tenantsUsed.some(i => i.id === item.id)"
-                      @change="onTenantChange($event, item)"
-                      class="form-check-input"
-                      type="checkbox">
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div> -->
-      </div>
-
       <!-- 料金設定 -->
       <div :style="priceTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
         <div class="d-flex">
@@ -750,7 +747,11 @@
 const stockDmps= `<%- stock_dmps %>`;
 const ages= `<%- ages %>`;
 const tenants= `<%- tenants %>`;
-const tags = `<%- tags %>`;
+
+const isAdmin = `<%- isAdmin %>`;
+const productTags = `<%- productTags %>`;
+const cartRecommendTags = `<%- cartRecommendTags %>`;
+const orderRecommendTags = `<%- orderRecommendTags %>`;
 const forms = `<%- forms %>`;
 
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
@@ -762,15 +763,18 @@ Vue.component('tags-input', VoerroTagsInput);
 new Vue({
   el: "#productsRegist",
   data: {
-    basicTabStatus: true,   // 基本情報（タブ）
-    agesTabStatus: true,    // 年齢区分（タブ）
-    usageTabStatus: true,   // 利用方法（タブ）
-    tagTabStatus: true,     // 商品タグ（タブ）
-    imageTabStatus: true,   // 商品画像（タブ）
-    priceTabStatus: true,   // 料金設定（タブ）
-    qrParam: '',            // 利用方法（QR読込）
-    displayType: "",        // フォーマットタイプ
-    tagInput: '',           // 商品タグ（input）
+    basicTabStatus: true,       // 基本情報（タブ）
+    agesTabStatus: true,        // 年齢区分（タブ）
+    usageTabStatus: true,       // 利用方法（タブ）
+    tagTabStatus: true,         // 商品タグ（タブ）
+    imageTabStatus: true,       // 商品画像（タブ）
+    recommendTabStatus: true,   // おすすめ商品（タブ）
+    priceTabStatus: true,       // 料金設定（タブ）
+    qrParam: '',                // 利用方法（QR読込）
+    displayType: "",            // フォーマットタイプ
+    productTagInput: '',        // 商品タグ（input）
+    cartRecommendTagInput: '',  // おすすめカートタグ（input）
+    orderRecommendTagInput: '', // おすすめ注文タグ（input）
     // 商品画像モーダル
     imageModal: {
       isFileAreaFocus: false,
@@ -780,7 +784,11 @@ new Vue({
     stockDmps: JSON.parse(stockDmps),
     ages: JSON.parse(ages),
     tenants: JSON.parse(tenants),
-    tags: JSON.parse(tags),
+
+    isAdmin: JSON.parse(isAdmin),
+    productTags: JSON.parse(productTags),
+    cartRecommendTags: JSON.parse(cartRecommendTags),
+    orderRecommendTags: JSON.parse(orderRecommendTags),
     forms: JSON.parse(forms),
     // 基本情報
     productCode: "",                  // 商品コード
@@ -798,6 +806,12 @@ new Vue({
     serviceCommissionPercentage: "",  // サービス手数料率
     productTag: [],                   // 商品タグ
     productImage: [],                 // 商品画像
+    cartRecommendTag: [],             // おすすめカートタグ
+    orderRecommendTag: [],            // おすすめ注文タグ
+    usePeriodElement: {},             // 利用区分             
+    howToUse: "",                     // 利用説明
+
+
 
 
     salesKindType: "1",          // 販売種別(type)
@@ -817,14 +831,33 @@ new Vue({
     priceSetting: [],            // 料金設定
   },
   computed: {
-    onTagsFilter() {
-      return this.tags.filter(i => {
-        return i.text.toLowerCase().indexOf(this.tagInput.toLowerCase()) !== -1;
+    /**
+     * 商品タグ（フィルタリング）
+     */
+    onProductTagFilter() {
+      return this.productTags.filter(i => {
+        return i.text.toLowerCase().indexOf(this.productTagInput.toLowerCase()) !== -1;
+      });
+    },
+    /**
+     * おすすめカートタグ（フィルタリング）
+     */
+    onCartRecommendTagFilter() {
+      return this.cartRecommendTags.filter(i => {
+        return i.text.toLowerCase().indexOf(this.cartRecommendTagInput.toLowerCase()) !== -1;
+      });
+    },
+    /**
+     * おすすめ注文タグ（フィルタリング）
+     */
+    onOrderRecommendTagFilter() {
+      return this.orderRecommendTags.filter(i => {
+        return i.text.toLowerCase().indexOf(this.orderRecommendTagInput.toLowerCase()) !== -1;
       });
     },
   },
   created() {
-    this.conversionProductTag();
+    this.conversionTag();
     this.setInitData();
   },
   methods: {
@@ -847,6 +880,13 @@ new Vue({
       this.serviceCommissionPercentage = this.forms.serviceCommissionPercentage;
       if(this.forms.productTag) this.productTag = this.forms.productTag;
       if(this.forms.productImage) this.productImage = this.forms.productImage;
+      if(this.forms.cartRecommendTag) this.cartRecommendTag = this.forms.cartRecommendTag;
+      if(this.forms.orderRecommendTag) this.orderRecommendTag = this.forms.orderRecommendTag;
+      if(this.forms.usePeriodElement) this.usePeriodElement = this.forms.usePeriodElement;
+      this.howToUse = this.forms.howToUse;
+
+
+
 
 
 
@@ -871,7 +911,23 @@ new Vue({
       this.usagePeriodFrom = this.forms.usagePeriodFrom;
       this.usagePeriodTo = this.forms.usagePeriodTo;
       this.tenantsUsed = this.forms.tenantsUsed;
-      location.href.match(/regist/) ? this.displayType = 'regist' : this.displayType = 'detail'
+
+
+      switch (location.pathname) {
+        case '/products/regist':
+          this.displayType = 'regist';
+          break;
+        case '/products/detail':
+          this.displayType = 'detail';
+          break;
+        case '/products/registSet':
+          this.displayType = 'registSet';
+          break;
+        case '/products/detailSet':
+          this.displayType = 'detailSet';
+          break;          
+        default:
+      }
     },
     /**
      * アコーディオン
@@ -880,10 +936,10 @@ new Vue({
       this[target] = !this[target];
     },
     /**
-     * 商品タグ（フォーマット変換）
+     * タグ（フォーマット変換）
      */
-    conversionProductTag() {
-      this.tags.forEach(item => {
+    conversionTag() {
+      this.productTags.forEach(item => {
         item.text = item.tagString;
       });
       if(this.forms.productTag) {
@@ -891,20 +947,64 @@ new Vue({
           item.text = item.tagString;
         });
       }
+      this.cartRecommendTags.forEach(item => {
+        item.text = item.tagString;
+      });
+      if(this.forms.cartRecommendTag) {
+        this.forms.cartRecommendTag.forEach(item => {
+          item.text = item.tagString;
+        });
+      }
+      this.orderRecommendTags.forEach(item => {
+        item.text = item.tagString;
+      });
+      if(this.forms.orderRecommendTag) {
+        this.forms.orderRecommendTag.forEach(item => {
+          item.text = item.tagString;
+        });
+      }
     },
     /**
-     * 商品タグ（データ更新）
+     * 商品タグ（登録データ作成）
      */
     onProductTagChange(item) {
       let resultTags = [];
       item.forEach((value) => {
-        this.tags.forEach((i) => {
+        this.productTags.forEach((i) => {
           if(i.text.toLowerCase().indexOf(value.text.toLowerCase()) !== -1) {
             resultTags.push(i)
           } 
         })
       });
       this.productTag = resultTags;
+    },
+    /**
+     * おすすめカートタグ（登録データ作成）
+     */
+    onCartRecommendTagChange(item) {
+      let resultTags = [];
+      item.forEach((value) => {
+        this.cartRecommendTags.forEach((i) => {
+          if(i.text.toLowerCase().indexOf(value.text.toLowerCase()) !== -1) {
+            resultTags.push(i)
+          } 
+        })
+      });
+      this.cartRecommendTag = resultTags;
+    },
+    /**
+     * おすすめ注文タグ（登録データ作成）
+     */
+    onOrderRecommendTagChange(item) {
+      let resultTags = [];
+      item.forEach((value) => {
+        this.orderRecommendTags.forEach((i) => {
+          if(i.text.toLowerCase().indexOf(value.text.toLowerCase()) !== -1) {
+            resultTags.push(i)
+          } 
+        })
+      });
+      this.orderRecommendTag = resultTags;
     },
     /**
      * 商品画像モーダル（Open）
@@ -997,7 +1097,22 @@ new Vue({
     onInventoryPage() {
       window.location.href = `/inventorys/reference?productId=${this.productId}`;
     },
+
+
+
+    /**
+     * 利用区分（フォーマット変換）
+     */
+     conversionUsePeriodElement() {
+      if(this.usePeriodElement.id !== '顔認証') {
+        document.productsForm.usePeriodElement.value = JSON.stringify({
+          id: this.usePeriodElement.id,
+          pathElement: ''
+        })        
+      }
+    },
     onSubmit() {
+      this.conversionUsePeriodElement();
       document.productsForm.method="post";
       document.productsForm.action = "/products/regist";
       document.productsForm.submit();

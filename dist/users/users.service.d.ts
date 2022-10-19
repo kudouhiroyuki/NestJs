@@ -7,7 +7,7 @@ export declare class UsersService {
         id: number;
         userName: string;
         sort: 'asc' | 'desc';
-    }): Promise<Users[]>;
+    }): Promise<any>;
     createUser(data: {
         userName: string;
         password: string;
