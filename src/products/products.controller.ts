@@ -99,10 +99,10 @@ export class ProductsController {
       orderRecommendTags: JSON.stringify(orderRecommendTags),
       forms: JSON.stringify({
         // 基本情報
-        // productCode: '1001',
-        // productName: '単体商品',
-        // explain: '商品説明',
-        // notes: '注意事項',
+        productCode: '1001',
+        productName: '単体商品',
+        explain: '商品説明',
+        notes: '注意事項'
         // displayFromDatetime: '2022/08/31',
         // displayToDatetime: '2022/09/01',
         // isDisplayedStatus: true,

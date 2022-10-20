@@ -277,9 +277,13 @@ new Vue({
     startDate: function(newVal, oldVal) {
       this.startDate = null;
       this.checkStartDate = '';
-      this.checkEndDate = '';
       window.checkStartDate = '';
+
+      this.checkEndDate = '';
+
+
       window.checkEndDate = '';
+
       if(newVal !== null) {
         let resultDate = moment(new Date(newVal.slice(0, -3)));
         if (newVal.match(/午後/)) resultDate.add(12, 'h').format();

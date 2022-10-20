@@ -9,7 +9,7 @@
   <main id="productsRegist">    
     <h4 class="mb-4 fw-bold">商品登録</h4>
 
-    <form @submit.prevent="onSubmit" name="productsForm">
+    <form @submit.prevent="onRegist" name="productsForm">
 
       <!-- 基本情報 -->
       <div :style="basicTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
@@ -41,6 +41,9 @@
             placeholder="商品名"
             maxlength="50"
           >
+          <div v-if="$v.productName.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.productName.required">商品名が入力されていません。</p>
+          </div>
         </div>
         <!-- 商品説明 -->
         <div class="col-6 mb-4">
@@ -52,6 +55,9 @@
             class="form-control mb-2"
             maxlength="400"
           ></textarea>
+          <div v-if="$v.explain.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.explain.required">商品説明が入力されていません。</p>
+          </div>
         </div>
         <!-- 注意事項 -->
         <div class="col-6 mb-4">
@@ -69,9 +75,9 @@
           <label class="form-label w-100">表示期間</label>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              name="displayFromDatetime"
               v-model="displayFromDatetime"
-              formatted="YYYY/MM/DD"
+              :format="'YYYY/MM/DD'"
+              :formatted="'YYYY/MM/DD'"
               only-date
               :label="'From'"
               position="top"
@@ -80,9 +86,9 @@
           <div class="d-inline-block">〜</div>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              name="displayToDatetime"
               v-model="displayToDatetime"
-              formatted="YYYY/MM/DD"
+              :format="'YYYY/MM/DD'"
+              :formatted="'YYYY-MM-DD'"
               only-date
               :label="'To'"
               position="top"
@@ -100,6 +106,16 @@
             <label class="form-check-label" for="isDisplayedStatus">
               表示停止
             </label>
+          </div>
+          <div v-if="$v.checkDisplayFromDatetime.$dirty" class="text-danger fw-bold mt-2">
+            <p v-if="!$v.checkDisplayFromDatetime.required">Fromが入力されていません。</p>
+            <p v-if="!$v.checkDisplayFromDatetime.minValue">Fromは本日以降で入力して下さい。</p>
+            <p v-if="!$v.checkDisplayFromDatetime.maxValueValue">FromはTo以前で入力して下さい。</p>
+          </div>
+          <div v-if="$v.checkDisplayToDatetime.$dirty" class="text-danger fw-bold mt-2">
+            <p v-if="!$v.checkDisplayToDatetime.required">Toが入力されていません。</p>
+            <p v-if="!$v.checkDisplayToDatetime.minValue">Toは本日以降で入力して下さい。</p>
+            <p v-if="!$v.checkDisplayToDatetime.minValueValue">ToはFrom以降で入力して下さい。</p>
           </div>
         </div>
         <!-- 販売期間 -->
@@ -757,24 +773,31 @@ const forms = `<%- forms %>`;
 const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
+Vue.use(window.vuelidate.default);
+const { required, minValue, maxValueValue, minValueValue } = window.validators;
+
 const VoerroTagsInput = window.VoerroTagsInput;
 Vue.component('tags-input', VoerroTagsInput);
 
 new Vue({
   el: "#productsRegist",
   data: {
-    basicTabStatus: true,       // 基本情報（タブ）
-    agesTabStatus: true,        // 年齢区分（タブ）
-    usageTabStatus: true,       // 利用方法（タブ）
-    tagTabStatus: true,         // 商品タグ（タブ）
-    imageTabStatus: true,       // 商品画像（タブ）
-    recommendTabStatus: true,   // おすすめ商品（タブ）
-    priceTabStatus: true,       // 料金設定（タブ）
-    qrParam: '',                // 利用方法（QR読込）
-    displayType: "",            // フォーマットタイプ
-    productTagInput: '',        // 商品タグ（input）
-    cartRecommendTagInput: '',  // おすすめカートタグ（input）
-    orderRecommendTagInput: '', // おすすめ注文タグ（input）
+    basicTabStatus: true,        // 基本情報（タブ）
+    agesTabStatus: true,         // 年齢区分（タブ）
+    usageTabStatus: true,        // 利用方法（タブ）
+    tagTabStatus: true,          // 商品タグ（タブ）
+    imageTabStatus: true,        // 商品画像（タブ）
+    recommendTabStatus: true,    // おすすめ商品（タブ）
+    priceTabStatus: true,        // 料金設定（タブ）
+    qrParam: '',                 // 利用方法（QR読込）
+    displayType: "",             // フォーマットタイプ
+    productTagInput: '',         // 商品タグ（input）
+    cartRecommendTagInput: '',   // おすすめカートタグ（input）
+    orderRecommendTagInput: '',  // おすすめ注文タグ（input）
+
+    checkDisplayFromDatetime: '', // 表示期間From (入力チェック用)
+    checkDisplayToDatetime: '',   // 表示期間To (入力チェック用)
+
     // 商品画像モーダル
     imageModal: {
       isFileAreaFocus: false,
@@ -855,6 +878,66 @@ new Vue({
         return i.text.toLowerCase().indexOf(this.orderRecommendTagInput.toLowerCase()) !== -1;
       });
     },
+  },
+  validations: {
+    productName: {
+      required
+    },
+    explain: {
+      required
+    },
+    checkDisplayFromDatetime: {
+      required,
+      minValue: value => value > new Date(moment(new Date).format("YYYY-MM-DD")).getTime() - 1,
+      maxValueValue: value => value < window.checkDisplayToDatetime,
+    },
+    checkDisplayToDatetime: {
+      required,
+      minValue: value => value > new Date(moment(new Date).format("YYYY-MM-DD")).getTime() - 1,
+      minValueValue: value => value > window.checkDisplayFromDatetime,
+    },
+  },
+  watch: {
+    /**
+     * 表示期間Fromの変更監視（バリデーションチェック用）
+     */
+     displayFromDatetime: function(newVal, oldVal) {
+      this.displayFromDatetime = null;
+      this.checkDisplayFromDatetime = '';
+      window.checkDisplayFromDatetime = '';
+      this.checkDisplayToDatetime = '';
+      window.checkDisplayToDatetime = '';
+      if(newVal) {
+        let resultDate = new Date(moment(newVal).format("YYYY-MM-DD")).getTime();
+        this.displayFromDatetime = newVal;
+        this.checkDisplayFromDatetime = resultDate;
+        window.checkDisplayFromDatetime = resultDate;
+      }
+      if(this.displayToDatetime) {
+        this.checkDisplayToDatetime = new Date(this.displayToDatetime).getTime();
+        window.checkDisplayToDatetime = new Date(this.displayToDatetime).getTime();
+      }
+    },
+    /**
+     * 表示期間Toの変更監視（バリデーションチェック用）
+     */
+     displayToDatetime: function(newVal, oldVal) {
+      this.displayToDatetime = null;
+      this.checkDisplayToDatetime = '';
+      window.checkDisplayToDatetime = '';
+      this.checkDisplayFromDatetime = '';
+      window.checkDisplayFromDatetime = '';
+      if(newVal) {
+        let resultDate = new Date(moment(newVal).format("YYYY-MM-DD")).getTime();
+        this.displayToDatetime = newVal;
+        this.checkDisplayToDatetime = resultDate;
+        window.checkDisplayToDatetime = resultDate;
+      }
+      if(this.displayFromDatetime) {
+        this.checkDisplayFromDatetime = new Date(this.displayFromDatetime).getTime();
+        window.checkDisplayFromDatetime = new Date(this.displayFromDatetime).getTime();
+      }
+    }
   },
   created() {
     this.conversionTag();
@@ -1015,14 +1098,18 @@ new Vue({
     /**
      * 商品画像モーダル（Close）
      */ 
-     onImageModalClose() {
+    onImageModalClose() {
       this.imageModal.show = false;
     },
-    // 商品画像モーダル（画像ドラッグ）
+    /**
+     * 商品画像モーダル（画像ドラッグ）
+     */
     onFileDrag(flag) {
       this.imageModal.isFileAreaFocus = flag;
     },
-    // 商品画像モーダル（画像ドロップ 更新）
+    /**
+     * 商品画像モーダル（画像ドロップ 更新）
+     */
     onFileDrop(event) {
       this.imageModal.isFileAreaFocus = false;
       const files = event.dataTransfer.files;
@@ -1031,7 +1118,9 @@ new Vue({
       }
       this.createFileData(files);
     },
-    // 商品画像モーダル（ファイル選択 更新）
+    /**
+     * 商品画像モーダル（ファイル選択 更新）
+     */
     onFileChange(event) {
       const files = event.target.files;
       if (files.length !== 1 || files[0].type.indexOf("image") !== 0) {
@@ -1039,7 +1128,9 @@ new Vue({
       }
       this.createFileData(files);
     },
-    // 商品画像モーダル（データ作成）
+    /**
+     * 商品画像モーダル（データ作成）
+     */
     createFileData(files) {
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
@@ -1048,10 +1139,27 @@ new Vue({
         this.onImageModalClose();
       };
     },
-    // 商品画像モーダル（画像削除）
+    /**
+     * 商品画像モーダル（画像削除）
+     */
     onDeleteFileData(target) {
       this.productImage.splice(target, 1);
     },
+    /**
+     * 登録処理
+     */ 
+    onRegist() {
+      this.$v.$touch();
+      this.conversionUsePeriodElement();
+      if(!this.$v.$invalid) {
+        document.productsForm.method="post";
+        document.productsForm.action = "/products/regist";
+        document.productsForm.submit();
+      }
+    },
+
+
+
 
 
 
@@ -1097,9 +1205,6 @@ new Vue({
     onInventoryPage() {
       window.location.href = `/inventorys/reference?productId=${this.productId}`;
     },
-
-
-
     /**
      * 利用区分（フォーマット変換）
      */
@@ -1111,12 +1216,6 @@ new Vue({
         })        
       }
     },
-    onSubmit() {
-      this.conversionUsePeriodElement();
-      document.productsForm.method="post";
-      document.productsForm.action = "/products/regist";
-      document.productsForm.submit();
-    }
   }
 })
 </script>
