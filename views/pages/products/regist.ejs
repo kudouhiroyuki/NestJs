@@ -75,23 +75,27 @@
           <label class="form-label w-100">表示期間</label>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
+              @input="validationDisplayFromDatetime"
               v-model="displayFromDatetime"
               :format="'YYYY/MM/DD'"
               :formatted="'YYYY/MM/DD'"
               only-date
               :label="'From'"
               position="top"
+              name="displayFromDatetime"
             /></vue-ctk-date-time-picker>
           </div>
           <div class="d-inline-block">〜</div>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
+              @input="validationDisplayToDatetime"
               v-model="displayToDatetime"
               :format="'YYYY/MM/DD'"
-              :formatted="'YYYY-MM-DD'"
+              :formatted="'YYYY/MM/DD'"
               only-date
               :label="'To'"
               position="top"
+              name="displayToDatetime"
             /></vue-ctk-date-time-picker>
           </div>
           <div class="d-inline-block">
@@ -107,15 +111,15 @@
               表示停止
             </label>
           </div>
-          <div v-if="$v.checkDisplayFromDatetime.$dirty" class="text-danger fw-bold mt-2">
-            <p v-if="!$v.checkDisplayFromDatetime.required">Fromが入力されていません。</p>
-            <p v-if="!$v.checkDisplayFromDatetime.minValue">Fromは本日以降で入力して下さい。</p>
-            <p v-if="!$v.checkDisplayFromDatetime.maxValueValue">FromはTo以前で入力して下さい。</p>
+          <div v-if="checkDisplayFromDatetime.show" class="text-danger fw-bold mt-2">
+            <p v-if="!checkDisplayFromDatetime.required">Fromが入力されていません。</p>
+            <p v-if="!checkDisplayFromDatetime.minValue">Fromは本日以降で入力して下さい。</p>
+            <p v-if="!checkDisplayFromDatetime.maxValueValue">FromはTo以前で入力して下さい。</p>
           </div>
-          <div v-if="$v.checkDisplayToDatetime.$dirty" class="text-danger fw-bold mt-2">
-            <p v-if="!$v.checkDisplayToDatetime.required">Toが入力されていません。</p>
-            <p v-if="!$v.checkDisplayToDatetime.minValue">Toは本日以降で入力して下さい。</p>
-            <p v-if="!$v.checkDisplayToDatetime.minValueValue">ToはFrom以降で入力して下さい。</p>
+          <div v-if="checkDisplayToDatetime.show" class="text-danger fw-bold mt-2">
+            <p v-if="!checkDisplayToDatetime.required">Toが入力されていません。</p>
+            <p v-if="!checkDisplayToDatetime.minValue">Toは本日以降で入力して下さい。</p>
+            <p v-if="!checkDisplayToDatetime.minValueValue">ToはFrom以降で入力して下さい。</p>
           </div>
         </div>
         <!-- 販売期間 -->
@@ -123,23 +127,27 @@
           <label class="form-label w-100">販売期間</label>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              name="saleFromDatetime"
+              @input="validationSaleFromDatetime"
               v-model="saleFromDatetime"
-              formatted="YYYY/MM/DD"
+              :format="'YYYY/MM/DD'"
+              :formatted="'YYYY/MM/DD'"
               only-date
               :label="'From'"
               position="top"
+              name="saleFromDatetime"
             /></vue-ctk-date-time-picker>
           </div>
           <div class="d-inline-block">〜</div>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              name="saleToDatetime"
+              @input="validationSaleToDatetime"
               v-model="saleToDatetime"
-              formatted="YYYY/MM/DD"
+              :format="'YYYY/MM/DD'"
+              :formatted="'YYYY/MM/DD'"
               only-date
               :label="'To'"
               position="top"
+              name="saleToDatetime"
             /></vue-ctk-date-time-picker>
           </div>
           <div class="d-inline-block">
@@ -154,6 +162,16 @@
             <label class="form-check-label" for="isSoldStatus">
               表示停止
             </label>
+          </div>
+          <div v-if="checkSaleFromDatetime.show" class="text-danger fw-bold mt-2">
+            <p v-if="!checkSaleFromDatetime.required">Fromが入力されていません。</p>
+            <p v-if="!checkSaleFromDatetime.minValue">Fromは本日以降で入力して下さい。</p>
+            <p v-if="!checkSaleFromDatetime.maxValueValue">FromはTo以前で入力して下さい。</p>
+          </div>
+          <div v-if="checkSaleToDatetime.show" class="text-danger fw-bold mt-2">
+            <p v-if="!checkSaleToDatetime.required">Toが入力されていません。</p>
+            <p v-if="!checkSaleToDatetime.minValue">Toは本日以降で入力して下さい。</p>
+            <p v-if="!checkSaleToDatetime.minValueValue">ToはFrom以降で入力して下さい。</p>
           </div>
         </div>
         <!-- 手仕舞い -->
@@ -774,7 +792,7 @@ const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
 Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
 
 Vue.use(window.vuelidate.default);
-const { required, minValue, maxValueValue, minValueValue } = window.validators;
+const { required } = window.validators;
 
 const VoerroTagsInput = window.VoerroTagsInput;
 Vue.component('tags-input', VoerroTagsInput);
@@ -794,10 +812,42 @@ new Vue({
     productTagInput: '',         // 商品タグ（input）
     cartRecommendTagInput: '',   // おすすめカートタグ（input）
     orderRecommendTagInput: '',  // おすすめ注文タグ（input）
-
-    checkDisplayFromDatetime: '', // 表示期間From (入力チェック用)
-    checkDisplayToDatetime: '',   // 表示期間To (入力チェック用)
-
+    // 表示期間From (入力チェック用)
+    checkDisplayFromDatetime: {
+      show: false,
+      value: '',
+      required: true,
+      minValue: true,
+      maxValueValue: true,
+      allResult: false
+    },
+    // 表示期間To (入力チェック用)
+    checkDisplayToDatetime: {
+      show: false,
+      value: '',
+      required: true,
+      minValue: true,
+      minValueValue: true,
+      allResult: false,
+    },
+    // 販売期間From (入力チェック用)
+    checkSaleFromDatetime: {
+      show: false,
+      value: '',
+      required: true,
+      minValue: true,
+      maxValueValue: true,
+      allResult: false
+    },
+    // 販売期間To (入力チェック用)
+    checkSaleToDatetime: {
+      show: false,
+      value: '',
+      required: true,
+      minValue: true,
+      minValueValue: true,
+      allResult: false,
+    },
     // 商品画像モーダル
     imageModal: {
       isFileAreaFocus: false,
@@ -886,64 +936,144 @@ new Vue({
     explain: {
       required
     },
-    checkDisplayFromDatetime: {
-      required,
-      minValue: value => value > new Date(moment(new Date).format("YYYY-MM-DD")).getTime() - 1,
-      maxValueValue: value => value < window.checkDisplayToDatetime,
-    },
-    checkDisplayToDatetime: {
-      required,
-      minValue: value => value > new Date(moment(new Date).format("YYYY-MM-DD")).getTime() - 1,
-      minValueValue: value => value > window.checkDisplayFromDatetime,
-    },
-  },
-  watch: {
-    /**
-     * 表示期間Fromの変更監視（バリデーションチェック用）
-     */
-     displayFromDatetime: function(newVal, oldVal) {
-      this.displayFromDatetime = null;
-      this.checkDisplayFromDatetime = '';
-      window.checkDisplayFromDatetime = '';
-      this.checkDisplayToDatetime = '';
-      window.checkDisplayToDatetime = '';
-      if(newVal) {
-        let resultDate = new Date(moment(newVal).format("YYYY-MM-DD")).getTime();
-        this.displayFromDatetime = newVal;
-        this.checkDisplayFromDatetime = resultDate;
-        window.checkDisplayFromDatetime = resultDate;
-      }
-      if(this.displayToDatetime) {
-        this.checkDisplayToDatetime = new Date(this.displayToDatetime).getTime();
-        window.checkDisplayToDatetime = new Date(this.displayToDatetime).getTime();
-      }
-    },
-    /**
-     * 表示期間Toの変更監視（バリデーションチェック用）
-     */
-     displayToDatetime: function(newVal, oldVal) {
-      this.displayToDatetime = null;
-      this.checkDisplayToDatetime = '';
-      window.checkDisplayToDatetime = '';
-      this.checkDisplayFromDatetime = '';
-      window.checkDisplayFromDatetime = '';
-      if(newVal) {
-        let resultDate = new Date(moment(newVal).format("YYYY-MM-DD")).getTime();
-        this.displayToDatetime = newVal;
-        this.checkDisplayToDatetime = resultDate;
-        window.checkDisplayToDatetime = resultDate;
-      }
-      if(this.displayFromDatetime) {
-        this.checkDisplayFromDatetime = new Date(this.displayFromDatetime).getTime();
-        window.checkDisplayFromDatetime = new Date(this.displayFromDatetime).getTime();
-      }
-    }
   },
   created() {
     this.conversionTag();
     this.setInitData();
   },
   methods: {
+    /**
+     * バリデーションチェック（表示期間From）
+     */ 
+    validationDisplayFromDatetime(value) {
+      let todayTime = new Date(moment(new Date()).format("YYYY/MM/DD")).getTime();
+      this.checkDisplayFromDatetime.required = false;
+      this.checkDisplayFromDatetime.minValue = false;
+      this.checkDisplayFromDatetime.maxValueValue = false;
+      this.checkDisplayFromDatetime.minValueValue = false;
+      if(value) {
+        let resultTime = new Date((value)).getTime();
+        this.checkDisplayFromDatetime.value = resultTime;
+        this.checkDisplayFromDatetime.required = true;
+        if(todayTime === resultTime || todayTime < resultTime) {
+          this.checkDisplayFromDatetime.minValue = true;
+        }
+        if((this.checkDisplayToDatetime.value === resultTime) || (this.checkDisplayToDatetime.value > resultTime)) {
+          this.checkDisplayFromDatetime.maxValueValue = true;
+          this.checkDisplayToDatetime.minValueValue = true;
+        }
+        if(this.checkDisplayFromDatetime.required
+          && this.checkDisplayFromDatetime.minValue
+          && this.checkDisplayFromDatetime.maxValueValue
+          && this.checkDisplayToDatetime.required
+          && this.checkDisplayToDatetime.minValue
+          && this.checkDisplayToDatetime.minValueValue
+        ) {
+          this.checkDisplayFromDatetime.allResult = true;
+          this.checkDisplayToDatetime.allResult = true;
+        }
+      }
+    },
+    /**
+     * バリデーションチェック（表示期間To）
+     */ 
+     validationDisplayToDatetime(value) {
+      let todayTime = new Date(moment(new Date()).format("YYYY/MM/DD")).getTime();
+      this.checkDisplayToDatetime.required = false;
+      this.checkDisplayToDatetime.minValue = false;
+      this.checkDisplayToDatetime.minValueValue = false;
+      this.checkDisplayFromDatetime.maxValueValue = false;
+      if(value) {
+        let resultTime = new Date((value)).getTime();
+        this.checkDisplayToDatetime.value = resultTime;
+        this.checkDisplayToDatetime.required = true;
+        if(todayTime === resultTime || todayTime < resultTime) {
+          this.checkDisplayToDatetime.minValue = true;
+        }
+        if((this.checkDisplayFromDatetime.value === resultTime) || (this.checkDisplayFromDatetime.value < resultTime)) {
+          this.checkDisplayToDatetime.minValueValue = true;
+          this.checkDisplayFromDatetime.maxValueValue = true;
+        }
+        if(this.checkDisplayFromDatetime.required
+          && this.checkDisplayFromDatetime.minValue
+          && this.checkDisplayFromDatetime.maxValueValue
+          && this.checkDisplayToDatetime.required
+          && this.checkDisplayToDatetime.minValue
+          && this.checkDisplayToDatetime.minValueValue
+        ) {
+          this.checkDisplayFromDatetime.allResult = true;
+          this.checkDisplayToDatetime.allResult = true;
+        }
+      }
+    },
+
+
+    /**
+     * バリデーションチェック（販売期間From）
+     */ 
+     validationSaleFromDatetime(value) {
+      let todayTime = new Date(moment(new Date()).format("YYYY/MM/DD")).getTime();
+      this.checkSaleFromDatetime.required = false;
+      this.checkSaleFromDatetime.minValue = false;
+      this.checkSaleFromDatetime.maxValueValue = false;
+      this.checkSaleToDatetime.minValueValue = false;
+      if(value) {
+        let resultTime = new Date((value)).getTime();
+        this.checkSaleFromDatetime.value = resultTime;
+        this.checkSaleFromDatetime.required = true;
+        if(todayTime === resultTime || todayTime < resultTime) {
+          this.checkSaleFromDatetime.minValue = true;
+        }
+        if((this.checkSaleToDatetime.value === resultTime) || (this.checkSaleToDatetime.value > resultTime)) {
+          this.checkSaleFromDatetime.maxValueValue = true;
+          this.checkSaleToDatetime.minValueValue = true;
+        }
+        if(this.checkSaleFromDatetime.required
+          && this.checkSaleFromDatetime.minValue
+          && this.checkSaleFromDatetime.maxValueValue
+          && this.checkSaleToDatetime.required
+          && this.checkSaleToDatetime.minValue
+          && this.checkSaleToDatetime.minValueValue
+        ) {
+          this.checkSaleFromDatetime.allResult = true;
+          this.checkSaleToDatetime.allResult = true;
+        }
+      }
+    },
+    /**
+     * バリデーションチェック（販売期間To）
+     */ 
+     validationSaleToDatetime(value) {
+      let todayTime = new Date(moment(new Date()).format("YYYY/MM/DD")).getTime();
+      this.checkSaleToDatetime.required = false;
+      this.checkSaleToDatetime.minValue = false;
+      this.checkSaleToDatetime.minValueValue = false;
+      this.checkSaleFromDatetime.maxValueValue = false;
+      if(value) {
+        let resultTime = new Date((value)).getTime();
+        this.checkSaleToDatetime.value = resultTime;
+        this.checkSaleToDatetime.required = true;
+        if(todayTime === resultTime || todayTime < resultTime) {
+          this.checkSaleToDatetime.minValue = true;
+        }
+        if((this.checkSaleFromDatetime.value === resultTime) || (this.checkSaleFromDatetime.value < resultTime)) {
+          this.checkSaleToDatetime.minValueValue = true;
+          this.checkSaleFromDatetime.maxValueValue = true;
+        }
+        if(this.checkSaleFromDatetime.required
+          && this.checkSaleFromDatetime.minValue
+          && this.checkSaleFromDatetime.maxValueValue
+          && this.checkSaleToDatetime.required
+          && this.checkSaleToDatetime.minValue
+          && this.checkSaleToDatetime.minValueValue
+        ) {
+          this.checkSaleFromDatetime.allResult = true;
+          this.checkSaleToDatetime.allResult = true;
+        }
+      }
+    },
+
+
     /**
      * 登録情報セット
      */ 
@@ -1147,11 +1277,24 @@ new Vue({
     },
     /**
      * 登録処理
-     */ 
-    onRegist() {
+     */
+    onRegist() {      
+      this.checkDisplayFromDatetime.show = true;
+      this.checkDisplayToDatetime.show = true;
+      this.checkSaleFromDatetime.show = true;
+      this.checkSaleToDatetime.show = true;
       this.$v.$touch();
       this.conversionUsePeriodElement();
-      if(!this.$v.$invalid) {
+      this.validationDisplayFromDatetime(this.displayFromDatetime);
+      this.validationDisplayToDatetime(this.displayToDatetime);
+      this.validationSaleFromDatetime(this.saleFromDatetime);
+      this.validationSaleToDatetime(this.saleToDatetime);
+      if(!this.$v.$invalid
+        && this.checkDisplayFromDatetime.allResult
+        && this.checkDisplayToDatetime.allResult
+        && this.checkSaleFromDatetime.allResult
+        && this.checkSaleToDatetime.allResult
+      ) {
         document.productsForm.method="post";
         document.productsForm.action = "/products/regist";
         document.productsForm.submit();
@@ -1164,6 +1307,11 @@ new Vue({
 
 
 
+
+
+
+
+    
     // 年齢区分（データ更新）
     onAgeCategoryChange(event, value) {
       if(event.target.checked) {
