@@ -75,11 +75,9 @@
           <label class="form-label w-100">表示期間</label>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              @input="validationDisplayFromDatetime"
               v-model="displayFromDatetime"
-              :format="'YYYY/MM/DD'"
-              :formatted="'YYYY/MM/DD'"
-              only-date
+              :format="'YYYY/MM/DD hh:mm a'"
+              :formatted="'YYYY-MM-DD HH:mm'"
               :label="'From'"
               position="top"
               name="displayFromDatetime"
@@ -88,11 +86,9 @@
           <div class="d-inline-block">〜</div>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              @input="validationDisplayToDatetime"
               v-model="displayToDatetime"
-              :format="'YYYY/MM/DD'"
-              :formatted="'YYYY/MM/DD'"
-              only-date
+              :format="'YYYY/MM/DD hh:mm a'"
+              :formatted="'YYYY-MM-DD HH:mm'"
               :label="'To'"
               position="top"
               name="displayToDatetime"
@@ -111,15 +107,11 @@
               表示停止
             </label>
           </div>
-          <div v-if="checkDisplayFromDatetime.show" class="text-danger fw-bold mt-2">
-            <p v-if="!checkDisplayFromDatetime.required">Fromが入力されていません。</p>
-            <p v-if="!checkDisplayFromDatetime.minValue">Fromは本日以降で入力して下さい。</p>
-            <p v-if="!checkDisplayFromDatetime.maxValueValue">FromはTo以前で入力して下さい。</p>
+          <div v-if="$v.displayFromDatetime.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.displayFromDatetime.required">Fromが入力されていません。</p>
           </div>
-          <div v-if="checkDisplayToDatetime.show" class="text-danger fw-bold mt-2">
-            <p v-if="!checkDisplayToDatetime.required">Toが入力されていません。</p>
-            <p v-if="!checkDisplayToDatetime.minValue">Toは本日以降で入力して下さい。</p>
-            <p v-if="!checkDisplayToDatetime.minValueValue">ToはFrom以降で入力して下さい。</p>
+          <div v-if="$v.displayToDatetime.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.displayToDatetime.required">Toが入力されていません。</p>
           </div>
         </div>
         <!-- 販売期間 -->
@@ -127,11 +119,9 @@
           <label class="form-label w-100">販売期間</label>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              @input="validationSaleFromDatetime"
               v-model="saleFromDatetime"
-              :format="'YYYY/MM/DD'"
-              :formatted="'YYYY/MM/DD'"
-              only-date
+              :format="'YYYY/MM/DD hh:mm a'"
+              :formatted="'YYYY-MM-DD HH:mm'"
               :label="'From'"
               position="top"
               name="saleFromDatetime"
@@ -140,11 +130,9 @@
           <div class="d-inline-block">〜</div>
           <div class="d-inline-block">
             <vue-ctk-date-time-picker
-              @input="validationSaleToDatetime"
               v-model="saleToDatetime"
-              :format="'YYYY/MM/DD'"
-              :formatted="'YYYY/MM/DD'"
-              only-date
+              :format="'YYYY/MM/DD hh:mm a'"
+              :formatted="'YYYY-MM-DD HH:mm'"
               :label="'To'"
               position="top"
               name="saleToDatetime"
@@ -163,15 +151,11 @@
               表示停止
             </label>
           </div>
-          <div v-if="checkSaleFromDatetime.show" class="text-danger fw-bold mt-2">
-            <p v-if="!checkSaleFromDatetime.required">Fromが入力されていません。</p>
-            <p v-if="!checkSaleFromDatetime.minValue">Fromは本日以降で入力して下さい。</p>
-            <p v-if="!checkSaleFromDatetime.maxValueValue">FromはTo以前で入力して下さい。</p>
+          <div v-if="$v.saleFromDatetime.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.saleFromDatetime.required">Fromが入力されていません。</p>
           </div>
-          <div v-if="checkSaleToDatetime.show" class="text-danger fw-bold mt-2">
-            <p v-if="!checkSaleToDatetime.required">Toが入力されていません。</p>
-            <p v-if="!checkSaleToDatetime.minValue">Toは本日以降で入力して下さい。</p>
-            <p v-if="!checkSaleToDatetime.minValueValue">ToはFrom以降で入力して下さい。</p>
+          <div v-if="$v.saleToDatetime.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.saleToDatetime.required">Toが入力されていません。</p>
           </div>
         </div>
         <!-- 手仕舞い -->
@@ -198,6 +182,12 @@
               maxlength="5"
             >
           </div>
+          <div v-if="$v.liquidateDate.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.liquidateDate.required">手仕舞い日が入力されていません。</p>
+          </div>
+          <div v-if="$v.liquidateTime.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.liquidateTime.required">時間が入力されていません。</p>
+          </div>
         </div>
         <!-- サービス手数料率 -->
         <div v-if="isAdmin" class="col-4 mb-4">
@@ -210,6 +200,9 @@
             placeholder="サービス手数料率"
             maxlength="3"
           >
+          <div v-if="$v.serviceCommissionPercentage.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.serviceCommissionPercentage.required">サービス手数料率が入力されていません。</p>
+          </div>
         </div>
       </div>
 
@@ -312,7 +305,7 @@
       </div>
 
       <!-- 利用方法 -->
-      <div :style="usageTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+      <div :style="usageTabStatus ? 'height: inherit; overflow: inherit' : 'height: 55px; overflow: hidden'" class="baseShadow p-3 mb-5">
         <div class="d-flex">
           <div class="me-auto">
             <h5 class="mb-4 fw-bold">利用方法</h5>
@@ -327,58 +320,59 @@
         </div>
         <!-- 利用期間 -->
         <div class="form-group mb-4">
+          <input v-model="JSON.stringify(usePeriodElement)" type="hidden" name="usePeriodElement">
           <label class="form-label w-100">利用期間</label>
           <div class="col-12 mb-3">
             <div class="form-check form-check-inline">
               <input
-                v-model="usagePeriodType"
-                name="usagePeriodType"
-                value="1"
+                v-model="usePeriodElement"
+                value="日付指定"
                 class="form-check-input"
                 type="radio"
-                id="usagePeriod_1"
+                id="日付指定"
               >
-              <label class="form-check-label" for="usagePeriod_1">日付指定</label>
+              <label class="form-check-label" for="日付指定">日付指定</label>
             </div>
             <div class="d-inline-block">
               <vue-ctk-date-time-picker
-                name="usagePeriodFrom"
-                v-model="usagePeriodFrom"
+                v-model="useFromDatetime"
+                name="useFromDatetime"
                 formatted="YYYY/MM/DD"
                 only-date
                 :label="'From'"
                 position="top"
+                :disabled="usePeriodElement !== '日付指定'"
               /></vue-ctk-date-time-picker>
             </div>
             <div class="d-inline-block">〜</div>
             <div class="d-inline-block">
               <vue-ctk-date-time-picker
-                name="usagePeriodTo"
-                v-model="usagePeriodTo"
+                v-model="useToDatetime"
+                name="useToDatetime"
                 formatted="YYYY/MM/DD"
                 only-date
                 :label="'To'"
                 position="top"
-                :disabled="usagePeriodType === '2'"
+                :disabled="usePeriodElement !== '日付指定'"
               /></vue-ctk-date-time-picker>
             </div>
           </div> 
           <div class="col-12 mb-3">
             <div class="form-check form-check-inline">
               <input
-                v-model="usagePeriodType"
-                name="usagePeriodType"
-                value="2"
+                v-model="usePeriodElement"
+                value="期限指定"
                 class="form-check-input"
                 type="radio"
-                id="usagePeriod_2"
+                id="期限指定"
               >
-              <label class="form-check-label" for="usagePeriod_2">期限指定</label>
+              <label class="form-check-label" for="期限指定">期限指定</label>
             </div>
             <div class="d-inline-block">
               <input
-                v-model="usagePeriodDeadline"
-                name="usagePeriodDeadline"
+                v-model="useLimitHours"
+                :disabled="usePeriodElement !== '期限指定'"
+                name="useLimitHours"
                 type="text"
                 class="form-control mb-2"
                 placeholder="有効期限（0.0h）"
@@ -388,37 +382,51 @@
           <div class="col-12 mb-3">
             <div class="form-check form-check-inline">
               <input
-                v-model="usagePeriodType"
-                name="usagePeriodType"
-                value="2"
+                v-model="usePeriodElement"
+                value="時間指定"
                 class="form-check-input"
                 type="radio"
-                id="usagePeriod_2"
+                id="時間指定"
               >
-              <label class="form-check-label" for="usagePeriod_2">時間指定</label>
+              <label class="form-check-label" for="時間指定">時間指定</label>
             </div>
           </div>
           <div class="col-12">
             <div class="form-check form-check-inline">
               <input
-                v-model="usagePeriodType"
-                name="usagePeriodType"
-                value="3"
+                v-model="usePeriodElement"
+                value="無期限"
                 class="form-check-input"
                 type="radio"
-                id="usagePeriod_3"
+                id="無期限"
               >
-              <label class="form-check-label" for="usagePeriod_3">無期限</label>
+              <label class="form-check-label" for="無期限">無期限</label>
             </div>
+          </div>
+          <div v-if="$v.usePeriodElement.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.usePeriodElement.required">利用期間が選択されていません。</p>
+          </div>
+          <div class="text-danger fw-bold mt-3">
+            <p v-if="!useFromDatetimeCheck">Fromが入力されていません。</p>
+          </div>
+          <div class="text-danger fw-bold mt-3">
+            <p v-if="!useToDatetimeCheck">Toが入力されていません。</p>
+          </div>
+          <div class="text-danger fw-bold mt-3">
+            <p v-if="!useLimitHoursCheck">有効期限が入力されていません。</p>
+          </div>
+          <div class="text-danger fw-bold mt-3">
+            <p v-if="!usePathElementCheck">フリーパス区分が入力されていません。</p>
           </div>
         </div>
         <!-- 利用区分 -->
         <div class="col-12 mb-4">
-          <input v-model="JSON.stringify(usePeriodElement)" type="hidden" name="usePeriodElement">
+          <input v-model="JSON.stringify(useWayElement)" type="hidden" name="useWayElement">
+          <input v-model="JSON.stringify(usePathElement)" type="hidden" name="usePathElement">
           <label class="form-label w-100">利用区分</label>
           <div v-if="displayType === 'registSet' || displayType === 'detailSet'" class="form-check mb-2 w-25">
             <input
-              v-model="usePeriodElement.id"
+              v-model="useWayElement"
               class="form-check-input"
               type="radio"
               id="設定引継"
@@ -428,7 +436,7 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usePeriodElement.id"
+              v-model="useWayElement"
               class="form-check-input"
               type="radio"
               id="画面提示"
@@ -438,7 +446,7 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usePeriodElement.id"
+              v-model="useWayElement"
               class="form-check-input"
               type="radio"
               id="電子もぎり"
@@ -449,7 +457,7 @@
           <div v-if="isAdmin" class="col-12 mb-3">
             <div class="form-check form-check-inline">
               <input
-                v-model="usePeriodElement.id"
+                v-model="useWayElement"
                 class="form-check-input"
                 type="radio"
                 id="顔認証"
@@ -459,8 +467,8 @@
             </div>
             <div class="d-inline-block">
               <input
-                v-model="usePeriodElement.pathElement"
-                :disabled="usePeriodElement.id !== '顔認証'"
+                v-model="usePathElement"
+                :disabled="useWayElement !== '顔認証'"
                 type="text"
                 class="form-control"
                 placeholder="フリーパス区分を入力"
@@ -469,7 +477,7 @@
           </div>
           <div class="form-check mb-2 w-25">
             <input
-              v-model="usePeriodElement.id"
+              v-model="useWayElement"
               class="form-check-input"
               type="radio"
               id="QR提示"
@@ -479,13 +487,19 @@
           </div>
           <div v-if="isAdmin" class="form-check mb-2 w-25">
             <input
-              v-model="usePeriodElement.id"
+              v-model="useWayElement"
               class="form-check-input"
               type="radio"
               id="QR提示（HL換券）"
               value="QR提示（HL換券）"
             >
             <label class="form-check-label" for="QR提示（HL換券）">QR提示（HL換券）</label>
+          </div>
+          <div v-if="$v.useWayElement.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.useWayElement.required">利用区分が選択されていません。</p>
+          </div>
+          <div class="text-danger fw-bold mt-3">
+            <p v-if="!usePathElementCheck">フリーパス区分が入力されていません。</p>
           </div>
         </div>
         <!-- 利用説明 -->
@@ -498,6 +512,9 @@
             class="form-control mb-2"
             maxlength="400"
           ></textarea>
+        </div>
+        <div v-if="$v.howToUse.$dirty" class="text-danger fw-bold mt-3">
+          <p v-if="!$v.howToUse.required">利用説明が入力されていません。</p>
         </div>
       </div>
 
@@ -812,42 +829,12 @@ new Vue({
     productTagInput: '',         // 商品タグ（input）
     cartRecommendTagInput: '',   // おすすめカートタグ（input）
     orderRecommendTagInput: '',  // おすすめ注文タグ（input）
-    // 表示期間From (入力チェック用)
-    checkDisplayFromDatetime: {
-      show: false,
-      value: '',
-      required: true,
-      minValue: true,
-      maxValueValue: true,
-      allResult: false
-    },
-    // 表示期間To (入力チェック用)
-    checkDisplayToDatetime: {
-      show: false,
-      value: '',
-      required: true,
-      minValue: true,
-      minValueValue: true,
-      allResult: false,
-    },
-    // 販売期間From (入力チェック用)
-    checkSaleFromDatetime: {
-      show: false,
-      value: '',
-      required: true,
-      minValue: true,
-      maxValueValue: true,
-      allResult: false
-    },
-    // 販売期間To (入力チェック用)
-    checkSaleToDatetime: {
-      show: false,
-      value: '',
-      required: true,
-      minValue: true,
-      minValueValue: true,
-      allResult: false,
-    },
+
+
+    useFromDatetimeCheck: true,  // 利用期間 from（入力チェック）
+    useToDatetimeCheck: true,    // 利用期間 to（入力チェック）
+    useLimitHoursCheck: true,    // 利用期限（入力チェック）
+    usePathElementCheck: true,   // フリーパス区分（入力チェック）
     // 商品画像モーダル
     imageModal: {
       isFileAreaFocus: false,
@@ -881,27 +868,16 @@ new Vue({
     productImage: [],                 // 商品画像
     cartRecommendTag: [],             // おすすめカートタグ
     orderRecommendTag: [],            // おすすめ注文タグ
-    usePeriodElement: {},             // 利用区分             
+
+
+
+    usePeriodElement: "",             // 利用期間 (From)
+    useFromDatetime: null,            // 利用期間 (From)
+    useToDatetime: null,              // 利用期間 (To)
+    useLimitHours: "",                // 利用期限
+    useWayElement: "",                // 利用区分
+    usePathElement: "",               // フリーパス区分
     howToUse: "",                     // 利用説明
-
-
-
-
-    salesKindType: "1",          // 販売種別(type)
-    salesKindFrom: "",           // 販売種別(取扱時間 From)
-    salesKindTo: "",             // 販売種別(取扱時間 To)
-    salesKindInterval: "",       // 販売種別(時間間隔)
-    stockManagementType: "1",    // 在庫管理(type)
-    stockManagementItem: [],     // 在庫管理(item)
-    ageCategory: [],             // 年齢区分
-    usageMethodType: "1",        // 利用方法(type)
-    usageMethodItem: [],         // 利用方法(item)
-    usagePeriodType: "1",        // 利用期間(type)
-    usagePeriodFrom: null,       // 利用期間(日付指定 From)
-    usagePeriodTo: null,         // 利用期間(日付指定 To)
-    usagePeriodDeadline: "",     // 利用期間(期限指定)
-    tenantsUsed: [],             // 利用施設
-    priceSetting: [],            // 料金設定
   },
   computed: {
     /**
@@ -930,150 +906,24 @@ new Vue({
     },
   },
   validations: {
-    productName: {
-      required
-    },
-    explain: {
-      required
-    },
+    productName: { required },
+    explain: { required },
+    displayFromDatetime: { required },
+    displayToDatetime: { required },
+    saleFromDatetime: { required },
+    saleToDatetime: { required },
+    liquidateDate: { required },
+    liquidateTime: { required },
+    serviceCommissionPercentage: { required },
+    usePeriodElement: { required },
+    useWayElement: { required },
+    howToUse: { required },
   },
   created() {
     this.conversionTag();
     this.setInitData();
   },
   methods: {
-    /**
-     * バリデーションチェック（表示期間From）
-     */ 
-    validationDisplayFromDatetime(value) {
-      let todayTime = new Date(moment(new Date()).format("YYYY/MM/DD")).getTime();
-      this.checkDisplayFromDatetime.required = false;
-      this.checkDisplayFromDatetime.minValue = false;
-      this.checkDisplayFromDatetime.maxValueValue = false;
-      this.checkDisplayFromDatetime.minValueValue = false;
-      if(value) {
-        let resultTime = new Date((value)).getTime();
-        this.checkDisplayFromDatetime.value = resultTime;
-        this.checkDisplayFromDatetime.required = true;
-        if(todayTime === resultTime || todayTime < resultTime) {
-          this.checkDisplayFromDatetime.minValue = true;
-        }
-        if((this.checkDisplayToDatetime.value === resultTime) || (this.checkDisplayToDatetime.value > resultTime)) {
-          this.checkDisplayFromDatetime.maxValueValue = true;
-          this.checkDisplayToDatetime.minValueValue = true;
-        }
-        if(this.checkDisplayFromDatetime.required
-          && this.checkDisplayFromDatetime.minValue
-          && this.checkDisplayFromDatetime.maxValueValue
-          && this.checkDisplayToDatetime.required
-          && this.checkDisplayToDatetime.minValue
-          && this.checkDisplayToDatetime.minValueValue
-        ) {
-          this.checkDisplayFromDatetime.allResult = true;
-          this.checkDisplayToDatetime.allResult = true;
-        }
-      }
-    },
-    /**
-     * バリデーションチェック（表示期間To）
-     */ 
-     validationDisplayToDatetime(value) {
-      let todayTime = new Date(moment(new Date()).format("YYYY/MM/DD")).getTime();
-      this.checkDisplayToDatetime.required = false;
-      this.checkDisplayToDatetime.minValue = false;
-      this.checkDisplayToDatetime.minValueValue = false;
-      this.checkDisplayFromDatetime.maxValueValue = false;
-      if(value) {
-        let resultTime = new Date((value)).getTime();
-        this.checkDisplayToDatetime.value = resultTime;
-        this.checkDisplayToDatetime.required = true;
-        if(todayTime === resultTime || todayTime < resultTime) {
-          this.checkDisplayToDatetime.minValue = true;
-        }
-        if((this.checkDisplayFromDatetime.value === resultTime) || (this.checkDisplayFromDatetime.value < resultTime)) {
-          this.checkDisplayToDatetime.minValueValue = true;
-          this.checkDisplayFromDatetime.maxValueValue = true;
-        }
-        if(this.checkDisplayFromDatetime.required
-          && this.checkDisplayFromDatetime.minValue
-          && this.checkDisplayFromDatetime.maxValueValue
-          && this.checkDisplayToDatetime.required
-          && this.checkDisplayToDatetime.minValue
-          && this.checkDisplayToDatetime.minValueValue
-        ) {
-          this.checkDisplayFromDatetime.allResult = true;
-          this.checkDisplayToDatetime.allResult = true;
-        }
-      }
-    },
-
-
-    /**
-     * バリデーションチェック（販売期間From）
-     */ 
-     validationSaleFromDatetime(value) {
-      let todayTime = new Date(moment(new Date()).format("YYYY/MM/DD")).getTime();
-      this.checkSaleFromDatetime.required = false;
-      this.checkSaleFromDatetime.minValue = false;
-      this.checkSaleFromDatetime.maxValueValue = false;
-      this.checkSaleToDatetime.minValueValue = false;
-      if(value) {
-        let resultTime = new Date((value)).getTime();
-        this.checkSaleFromDatetime.value = resultTime;
-        this.checkSaleFromDatetime.required = true;
-        if(todayTime === resultTime || todayTime < resultTime) {
-          this.checkSaleFromDatetime.minValue = true;
-        }
-        if((this.checkSaleToDatetime.value === resultTime) || (this.checkSaleToDatetime.value > resultTime)) {
-          this.checkSaleFromDatetime.maxValueValue = true;
-          this.checkSaleToDatetime.minValueValue = true;
-        }
-        if(this.checkSaleFromDatetime.required
-          && this.checkSaleFromDatetime.minValue
-          && this.checkSaleFromDatetime.maxValueValue
-          && this.checkSaleToDatetime.required
-          && this.checkSaleToDatetime.minValue
-          && this.checkSaleToDatetime.minValueValue
-        ) {
-          this.checkSaleFromDatetime.allResult = true;
-          this.checkSaleToDatetime.allResult = true;
-        }
-      }
-    },
-    /**
-     * バリデーションチェック（販売期間To）
-     */ 
-     validationSaleToDatetime(value) {
-      let todayTime = new Date(moment(new Date()).format("YYYY/MM/DD")).getTime();
-      this.checkSaleToDatetime.required = false;
-      this.checkSaleToDatetime.minValue = false;
-      this.checkSaleToDatetime.minValueValue = false;
-      this.checkSaleFromDatetime.maxValueValue = false;
-      if(value) {
-        let resultTime = new Date((value)).getTime();
-        this.checkSaleToDatetime.value = resultTime;
-        this.checkSaleToDatetime.required = true;
-        if(todayTime === resultTime || todayTime < resultTime) {
-          this.checkSaleToDatetime.minValue = true;
-        }
-        if((this.checkSaleFromDatetime.value === resultTime) || (this.checkSaleFromDatetime.value < resultTime)) {
-          this.checkSaleToDatetime.minValueValue = true;
-          this.checkSaleFromDatetime.maxValueValue = true;
-        }
-        if(this.checkSaleFromDatetime.required
-          && this.checkSaleFromDatetime.minValue
-          && this.checkSaleFromDatetime.maxValueValue
-          && this.checkSaleToDatetime.required
-          && this.checkSaleToDatetime.minValue
-          && this.checkSaleToDatetime.minValueValue
-        ) {
-          this.checkSaleFromDatetime.allResult = true;
-          this.checkSaleToDatetime.allResult = true;
-        }
-      }
-    },
-
-
     /**
      * 登録情報セット
      */ 
@@ -1095,37 +945,16 @@ new Vue({
       if(this.forms.productImage) this.productImage = this.forms.productImage;
       if(this.forms.cartRecommendTag) this.cartRecommendTag = this.forms.cartRecommendTag;
       if(this.forms.orderRecommendTag) this.orderRecommendTag = this.forms.orderRecommendTag;
-      if(this.forms.usePeriodElement) this.usePeriodElement = this.forms.usePeriodElement;
+      
+      this.usePeriodElement = this.forms.usePeriodElement;
+      this.useFromDatetime = this.forms.useFromDatetime;
+      this.useToDatetime = this.forms.useToDatetime;
+      this.useLimitHours = this.forms.useLimitHours;
+
+      
+      this.useWayElement = this.forms.useWayElement;
+      this.usePathElement = this.forms.usePathElement;
       this.howToUse = this.forms.howToUse;
-
-
-
-
-
-
-
-      this.productExplanation = this.forms.productExplanation;
-      this.salesKindType = this.forms.salesKindType;
-      this.salesKindFrom = this.forms.salesKindFrom;
-      this.salesKindTo = this.forms.salesKindTo;
-      this.salesKindInterval = this.forms.salesKindInterval;
-      this.stockManagementType = this.forms.stockManagementType;
-      this.stockManagementItem = this.forms.stockManagementItem;
-      this.displayPeriodFrom = this.forms.displayPeriodFrom;
-      this.displayPeriodTo = this.forms.displayPeriodTo;
-      this.displayPeriodStop = this.forms.displayPeriodStop;
-      this.displaySalesFrom = this.forms.displaySalesFrom;
-      this.displaySalesTo = this.forms.displaySalesTo;
-      this.displaySalesStop = this.forms.displaySalesStop;
-      this.ageCategory = this.forms.ageCategory;
-      this.usageMethodType = this.forms.usageMethodType;
-      this.usageMethodItem = this.forms.usageMethodItem;
-      this.usagePeriodType = this.forms.usagePeriodType;
-      this.usagePeriodFrom = this.forms.usagePeriodFrom;
-      this.usagePeriodTo = this.forms.usagePeriodTo;
-      this.tenantsUsed = this.forms.tenantsUsed;
-
-
       switch (location.pathname) {
         case '/products/regist':
           this.displayType = 'regist';
@@ -1276,24 +1105,77 @@ new Vue({
       this.productImage.splice(target, 1);
     },
     /**
+     * 商品画像モーダル（画像削除）
+     */
+    onDeleteFileData(target) {
+      this.productImage.splice(target, 1);
+    },
+    
+
+
+
+    /**
+     * 利用期間 From（入力チェック）
+     */
+     validationUseFromDatetime() {
+      this.useFromDatetimeCheck = false;
+      if(this.usePeriodElement === '日付指定') {
+        if(this.useFromDatetime) this.useFromDatetimeCheck = true;
+      } else {
+        this.useFromDatetimeCheck = true;
+      }
+    },
+    /**
+     * 利用期間 To（入力チェック）
+     */
+     validationUseToDatetime() {
+      this.useToDatetimeCheck = false;
+      if(this.usePeriodElement === '日付指定') {
+        if(this.useToDatetime) this.useToDatetimeCheck = true;
+      } else {
+        this.useToDatetimeCheck = true;
+      }
+    },
+    /**
+     * 利用期限（入力チェック）
+     */
+     validationUseLimitHours() {
+      this.useLimitHoursCheck = false;
+      if(this.usePeriodElement === '期限指定') {
+        if(this.useLimitHours) this.useLimitHoursCheck = true;
+      } else {
+        this.useLimitHoursCheck = true;
+      }
+    },
+    /**
+     * フリーパス区分（入力チェック）
+     */
+     validationUsePathElement() {
+      this.usePathElementCheck = false;
+      if(this.useWayElement !== '顔認証') {
+        this.usePathElementCheck = true;
+        this.usePathElement = '';
+        document.productsForm.usePathElement.value = '';
+      } else {
+        if(this.usePathElement) this.usePathElementCheck = true;
+      }
+    },
+    /**
      * 登録処理
      */
     onRegist() {      
-      this.checkDisplayFromDatetime.show = true;
-      this.checkDisplayToDatetime.show = true;
-      this.checkSaleFromDatetime.show = true;
-      this.checkSaleToDatetime.show = true;
       this.$v.$touch();
-      this.conversionUsePeriodElement();
-      this.validationDisplayFromDatetime(this.displayFromDatetime);
-      this.validationDisplayToDatetime(this.displayToDatetime);
-      this.validationSaleFromDatetime(this.saleFromDatetime);
-      this.validationSaleToDatetime(this.saleToDatetime);
+
+
+      this.validationUseFromDatetime();
+      this.validationUseToDatetime();
+      this.validationUseLimitHours();
+      this.validationUsePathElement();
       if(!this.$v.$invalid
-        && this.checkDisplayFromDatetime.allResult
-        && this.checkDisplayToDatetime.allResult
-        && this.checkSaleFromDatetime.allResult
-        && this.checkSaleToDatetime.allResult
+        && this.useFromDatetimeCheck
+        && this.useToDatetimeCheck
+        && this.useLimitHoursCheck
+        && this.usePathElementCheck
       ) {
         document.productsForm.method="post";
         document.productsForm.action = "/products/regist";
@@ -1352,17 +1234,6 @@ new Vue({
     // 画面遷移（在庫一覧）
     onInventoryPage() {
       window.location.href = `/inventorys/reference?productId=${this.productId}`;
-    },
-    /**
-     * 利用区分（フォーマット変換）
-     */
-     conversionUsePeriodElement() {
-      if(this.usePeriodElement.id !== '顔認証') {
-        document.productsForm.usePeriodElement.value = JSON.stringify({
-          id: this.usePeriodElement.id,
-          pathElement: ''
-        })        
-      }
     },
   }
 })
