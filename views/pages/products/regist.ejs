@@ -7,12 +7,35 @@
   <%- include('../../partials/sidebar'); %>
 
   <main id="productsRegist">    
-    <h4 class="mb-4 fw-bold">商品登録</h4>
+    <h4 class="fw-bold">商品登録</h4>
 
     <form @submit.prevent="onRegist" name="productsForm">
+      <input v-model="displayType" type="hidden" name="displayType">
+
+      <!-- 組込商品設定・料金設定・在庫設定 -->
+      <div v-if="displayType === 'detail' || displayType === 'detailSet'" class="d-flex flex-row-reverse mb-5">
+        <input
+          type="submit"
+          value="在庫設定"
+          class="btn mt-4 baseBtnBlue"
+          style="width: 156px;"
+        />
+        <input
+          type="submit"
+          value="料金設定"
+          class="btn mt-4 baseBtnBlue"
+          style="width: 156px; margin-right: 20px;"
+        />
+        <input
+          type="submit"
+          value="組込商品設定"
+          class="btn mt-4 baseBtnBlue"
+          style="width: 156px; margin-right: 20px;"
+        />
+      </div>
 
       <!-- 基本情報 -->
-      <div :style="basicTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
+      <div :style="basicTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mt-4 mb-5 overflow-hidden">
         <div class="d-flex">
           <div class="me-auto">
             <h5 class="mb-4 fw-bold">基本情報</h5>
@@ -26,7 +49,7 @@
           </div>
         </div>
         <!-- 商品コード -->
-        <div v-if="displayType === 'detail'" class="col-4 mb-4">
+        <div v-if="displayType === 'detail' || displayType === 'detailSet'" class="col-4 mb-4">
           <label class="form-label">商品コード</label>
           <p style="font-size: 18px">{{ productCode }}</p>
         </div>
@@ -318,6 +341,138 @@
             >
           </div>
         </div>
+        <!-- 利用種別 -->
+        <div class="form-group mb-4">
+          <label class="form-label w-100">利用種別</label>
+          <input v-model="usageType" type="hidden" name="usageType">
+          <input v-model="usageOpenQuantity" type="hidden" name="usageOpenQuantity">
+          <input v-model="canChangeUseDate" type="hidden" name="canChangeUseDate">
+          <input v-model="useDateChangeFeeType" type="hidden" name="useDateChangeFeeType">
+          <div v-if="displayType === 'registSet' || displayType === 'detailSet'" class="form-check mb-3">
+            <input
+              v-model="usageType"
+              class="form-check-input"
+              type="radio"
+              id="設定引継"
+              value="設定引継"
+            >
+            <label class="form-check-label" for="設定引継">設定を引き継ぐ</label>
+          </div>
+          <div class="form-check mb-4">
+            <input
+              v-model="usageType"
+              class="form-check-input"
+              type="radio"
+              id="オープン"
+              value="オープン"
+            >
+            <label class="form-check-label" for="オープン">オープン</label>
+            <div class="form-check mt-2">
+              <input
+                v-model="usageOpenQuantity"
+                :disabled="usageType !== 'オープン'"
+                class="form-check-input"
+                type="radio"
+                id="1回"
+                value="1回"
+              >
+              <label class="form-check-label" for="1回">1回</label>
+            </div>
+            <div class="form-check">
+              <input
+                v-model="usageOpenQuantity"
+                :disabled="usageType !== 'オープン'"
+                class="form-check-input"
+                type="radio"
+                id="無制限"
+                value="無制限"
+              >
+              <label class="form-check-label" for="1回">無制限</label>
+            </div>
+          </div>
+          <div class="form-check mb-3">
+            <input
+              v-model="usageType"
+              class="form-check-input"
+              type="radio"
+              id="日付指定"
+              value="日付指定"
+            >
+            <label class="form-check-label" for="日付指定">日付指定</label>
+            <div class="form-check mt-2 mb-2">
+              <input
+                v-model="canChangeUseDate"
+                @click="canChangeUseDate=$event.target.checked"
+                :disabled="usageType !== '日付指定'"
+                class="form-check-input"
+                type="checkbox"
+                id="canChangeUseDate"
+              >
+              <label class="form-check-label" for="canChangeUseDate">
+                日付変更可
+              </label>
+            </div>
+            <label class="form-check-label mb-2" for="日付指定">日付変更手数料</label>
+            <div class="form-check">
+              <input
+                v-model="useDateChangeFeeType"
+                :disabled="usageType !== '日付指定'"
+                class="form-check-input"
+                type="radio"
+                id="なし"
+                value="なし"
+              >
+              <label class="form-check-label" for="なし">なし</label>
+            </div>
+            <div class="form-check">
+              <div class="d-inline-block">
+                <input
+                  v-model="useDateChangeFeeType"
+                  :disabled="usageType !== '日付指定'"
+                  class="form-check-input"
+                  type="radio"
+                  id="固定"
+                  value="固定"
+                >
+                <label class="form-check-label" for="固定">固定</label>
+              </div>
+              <div class="d-inline-block" style="margin-left: 15px;">
+                <input
+                  v-model="useDateChangeFee"
+                  :disabled="usageType !== '日付指定' || useDateChangeFeeType !== '固定'"
+                  name="useDateChangeFee"
+                  type="text"
+                  class="form-control"
+                  placeholder="日付変更手数料を入力"
+                  maxlength="9"
+                >
+              </div>
+              <div class="d-inline-block">円</div>
+            </div>
+          </div>
+          <div v-if="isAdmin" class="form-check mb-3 w-25">
+            <input
+              v-model="usageType"
+              class="form-check-input"
+              type="radio"
+              id="時間指定"
+              value="時間指定"
+            >
+            <label class="form-check-label" for="時間指定">時間指定</label>
+          </div>
+          <div v-if="$v.usageType.$dirty" class="text-danger fw-bold mt-3">
+            <p v-if="!$v.usageType.required">利用種別が選択されていません。</p>
+          </div>
+          <div class="text-danger fw-bold mt-3">
+            <p v-if="!usageOpenQuantityCheck">オープン回数が入力されていません。</p>
+          </div>
+          <div class="text-danger fw-bold mt-3">
+            <p v-if="!useDateChangeFeeTypeCheck">日付変更手数料が選択されていません。</p>
+          </div>
+          <div class="text-danger fw-bold mt-3">
+            <p v-if="!useDateChangeFeeCheck">日付変更手数料が入力されていません。</p>
+          </div>
+        </div>
         <!-- 利用期間 -->
         <div class="form-group mb-4">
           <input v-model="JSON.stringify(usePeriodElement)" type="hidden" name="usePeriodElement">
@@ -421,8 +576,8 @@
         </div>
         <!-- 利用区分 -->
         <div class="col-12 mb-4">
-          <input v-model="JSON.stringify(useWayElement)" type="hidden" name="useWayElement">
-          <input v-model="JSON.stringify(usePathElement)" type="hidden" name="usePathElement">
+          <input v-model="useWayElement" type="hidden" name="useWayElement">
+          <input v-model="usePathElement" type="hidden" name="usePathElement">
           <label class="form-label w-100">利用区分</label>
           <div v-if="displayType === 'registSet' || displayType === 'detailSet'" class="form-check mb-2 w-25">
             <input
@@ -518,163 +673,284 @@
         </div>
       </div>
 
-
-
-
-
-
-      <!-- 販売種別 -->
-      <!-- <div class="mb-4">
-        <label class="form-label">販売種別</label>
-        <div class="form-check mb-2 w-50">
-          <input
-            v-model="salesKindType"
-            name="salesKindType"
-            class="form-check-input"
-            type="radio"
-            id="sales_1"
-            value="1"
-          >
-          <label class="form-check-label" for="sales_1">設定を引継ぐ</label>
-        </div>
-        <div class="form-check mb-2 w-50">
-          <input
-            v-model="salesKindType"
-            name="salesKindType"
-            class="form-check-input"
-            type="radio"
-            id="sales_2"
-            value="2"
-          >
-          <label class="form-check-label" for="sales_2">指定なし</label>
-        </div>
-        <div class="form-check mb-2 w-50">
-          <input
-            v-model="salesKindType"
-            name="salesKindType"
-            class="form-check-input"
-            type="radio"
-            id="sales_3"
-            value="3"
-          >
-          <label class="form-check-label" for="sales_3">利用日指定</label>
-        </div>
-        <div class="form-check mb-2 w-50">
-          <input
-            v-model="salesKindType"
-            name="salesKindType"
-            class="form-check-input"
-            type="radio"
-            id="sales_4"
-            value="4"
-          >
-          <label class="form-check-label" for="sales_4">利用日・時間帯指定</label>
-        </div>
-        <div v-if="salesKindType === '3' || salesKindType === '4'" class="d-flex mb-3">
-          <div class="col-1"></div>
-          <div class="col-11">
-            <label class="form-label w-100">取扱時間</label>
-            <div class="d-inline-block">
-              <vue-ctk-date-time-picker
-                name="salesKindFrom"
-                v-model="salesKindFrom"
-                formatted="YYYY/MM/DD"
-                only-date
-                :min-date="minDate"
-                :label="'From'"
-                position="top"
-              /></vue-ctk-date-time-picker>
-            </div>
-            <div class="d-inline-block">〜</div>
-            <div class="d-inline-block">
-              <vue-ctk-date-time-picker
-                name="salesKindTo"
-                v-model="salesKindTo"
-                formatted="YYYY/MM/DD"
-                only-date
-                :min-date="minDate"
-                :label="'To'"
-                position="top"
-              /></vue-ctk-date-time-picker>
-            </div>
+      <!-- 決済方法 -->
+      <div :style="settlementTabStatus ? 'height: inherit; overflow: inherit' : 'height: 55px; overflow: hidden'" class="baseShadow p-3 mb-5">
+        <input v-model="isUsedPaypay" type="hidden" name="isUsedPaypay">
+        <input v-model="isUsedStore" type="hidden" name="isUsedStore">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">決済方法</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('settlementTabStatus')"
+              :style="settlementTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
           </div>
         </div>
-        <div v-if="salesKindType === '4'" class="d-flex">
-          <div class="col-1"></div>
-          <div class="col-11">
-            <label class="form-label w-100">時間間隔</label>
-            <select v-model="salesKindInterval" name="salesKindInterval" class="form-select w-25">
-              <option selected></option>
-              <option value="15">15分</option>
-              <option value="30">30分</option>
-              <option value="60">60分</option>
-            </select>
+        <label class="form-check-label mb-3" for="日付指定">ご利用可能決済方法</label>
+        <div class="form-check mb-3">
+          <input
+            v-model="isUsedPaypay"
+            @click="isUsedPaypay=$event.target.checked"
+            class="form-check-input"
+            type="checkbox"
+            id="PayPay"
+          >
+          <label class="form-check-label" for="PayPay">
+            PayPay
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            v-model="isUsedStore"
+            @click="isUsedStore=$event.target.checked"
+            class="form-check-input"
+            type="checkbox"
+            id="Store"
+          >
+          <label class="form-check-label" for="Store">
+            コンビニ支払
+          </label>
+          <div class="mb-3">
+            <div class="d-inline-block" style="width: 100px;">支払手数料</div>
+            <div class="d-inline-block" style="margin-left: 15px;">
+              <input
+                v-model="storePaymentCommission"
+                :disabled="isUsedStore !== true"
+                name="storePaymentCommission"
+                type="text"
+                class="form-control"
+                placeholder="コンビニ支払手数料を入力"
+                maxlength="9"
+              >
+            </div>
+            <div class="d-inline-block">円</div>
+          </div>
+          <div>
+            <div class="d-inline-block" style="width: 100px;">支払期限</div>
+            <div class="d-inline-block" style="margin-left: 15px;">
+              <input
+                v-model="storePaymentLimitHours"
+                :disabled="isUsedStore !== true"
+                name="storePaymentLimitHours"
+                type="text"
+                class="form-control"
+                placeholder="支払期限（0.0h）"
+                maxlength="5"
+              >
+            </div>
+          </div>
+          <div class="text-danger fw-bold mt-3">
+            <p v-if="!storePaymentCommissionCheck">支払手数料が入力されていません。</p>
+          </div>
+          <div class="text-danger fw-bold mt-3">
+            <p v-if="!storePaymentLimitHoursCheck">支払期限が入力されていません。</p>
           </div>
         </div>
-      </div> -->
-      <!-- 在庫管理 -->
-      <!-- <div class="col-12 mb-4">
-        <label class="form-label w-100">在庫管理</label>
-        <div class="form-check form-check-inline">
-          <input
-            v-model="stockManagementType"
-            name="stockManagementType"
-            class="form-check-input"
-            type="radio"
-            id="stock_1"
-            value="1"
-          >
-          <label class="form-check-label" for="stock_1">設定を引継ぐ</label>
+      </div>
+
+      <!-- キャンセル -->
+      <div :style="cancelTabStatus ? 'height: inherit; overflow: inherit' : 'height: 55px; overflow: hidden'" class="baseShadow p-3 mb-5">
+        <div class="d-flex">
+          <div class="me-auto">
+            <h5 class="mb-4 fw-bold">キャンセル</h5>
+          </div>
+          <div style="cursor: pointer">
+            <img
+              @click="onTabToggle('cancelTabStatus')"
+              :style="cancelTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
+              src="/images/icon/arow.svg"
+            >
+          </div>
         </div>
-        <div class="form-check form-check-inline">
-          <input
-            v-model="stockManagementType"
-            name="stockManagementType"
-            class="form-check-input"
-            type="radio"
-            id="stock_2"
-            value="2"
-          >
-          <label class="form-check-label" for="stock_2">在庫管理なし</label>
+        <!-- キャンセル可否 -->
+        <label class="form-check-label mb-2">キャンセル可否</label>
+        <div class="d-flex mb-3">
+          <div class="form-check">
+            <input
+              v-model="canOrderCancel"
+              name="canOrderCancel"
+              class="form-check-input"
+              type="radio"
+              id="canOrderCancel1"
+              value="true"
+            >
+            <label class="form-check-label" for="canOrderCancel1">キャンセル可</label>
+          </div>
+          <div class="form-check" style="margin-left: 20px;">
+            <input
+              v-model="canOrderCancel"
+              name="canOrderCancel"
+              class="form-check-input"
+              type="radio"
+              id="canOrderCancel2"
+              value="false"
+            >
+            <label class="form-check-label" for="canOrderCancel2">キャンセル不可</label>
+          </div>
         </div>
-        <div class="form-check form-check-inline">
-          <input
-            v-model="stockManagementType"
-            name="stockManagementType"
-            class="form-check-input"
-            type="radio"
-            id="stock_3"
-            value="3"
-          >
-          <label class="form-check-label" for="stock_3">DMP在庫管理</label>
+        <!-- キャンセル料 -->
+        <div class="mb-2">
+          <label class="form-check-label mb-2">キャンセル料</label>
+          <div class="form-check" style="width: 160px;">
+            <input
+              v-model="cancelFeeType"
+              name="cancelFeeType"
+              class="form-check-input"
+              type="radio"
+              id="キャンセル料なし"
+              value="なし"
+            >
+            <label class="form-check-label" for="キャンセル料なし">なし</label>
+          </div>
+          <div class="form-check">
+            <div class="d-inline-block" style="width: 160px;">
+              <input
+                v-model="cancelFeeType"
+                name="cancelFeeType"
+                class="form-check-input"
+                type="radio"
+                id="キャンセル料固定"
+                value="固定"
+              >
+              <label class="form-check-label" for="キャンセル料固定">固定</label>
+            </div>
+            <div class="d-inline-block">
+              <input
+                v-model="cancelFeeFix"
+                :disabled="cancelFeeType !== '固定'"
+                name="cancelFeeFix"
+                type="text"
+                class="form-control"
+                placeholder="固定額を入力"
+                maxlength="9"
+              >
+            </div>
+            <div class="d-inline-block">円</div>
+          </div>
+          <div v-if="isAdmin" class="d-flex">
+            <div class="form-check" style="width: 160px;">
+              <input
+                v-model="cancelFeeType"
+                name="cancelFeeType"
+                class="form-check-input"
+                type="radio"
+                id="キャンセル料旅行キャンセル"
+                value="旅行キャンセル"
+              >
+              <label class="form-check-label" for="キャンセル料旅行キャンセル">旅行キャンセル</label>
+            </div>
+            <div class="mb-2" style="border-top: 1px solid #000; margin-top: 14px;">
+              <div class="form-check" style="padding: 5px 5px; border-bottom: 1px solid #DDE1E6;">
+                <div class="d-inline-block" style="width: 250px;">出発の20日～8日前</div>
+                <div class="d-inline-block" style="width: 70px;">
+                  <input
+                    v-model="cancelFee1"
+                    :disabled="cancelFeeType !== '旅行キャンセル'"
+                    name="cancelFee1"
+                    type="text"
+                    class="form-control"
+                    placeholder="割合"
+                    maxlength="2"
+                  >
+                </div>
+                <div class="d-inline-block">%</div>
+              </div>
+              <div class="form-check" style="padding: 5px 5px; border-bottom: 1px solid #DDE1E6;">
+                <div class="d-inline-block" style="width: 250px;">出発の7日～2日前</div>
+                <div class="d-inline-block" style="width: 70px;">
+                  <input
+                    v-model="cancelFee2"
+                    :disabled="cancelFeeType !== '旅行キャンセル'"
+                    name="cancelFee2"
+                    type="text"
+                    class="form-control"
+                    placeholder="割合"
+                    maxlength="2"
+                  >
+                </div>
+                <div class="d-inline-block">%</div>
+              </div>
+              <div class="form-check" style="padding: 5px 5px; border-bottom: 1px solid #DDE1E6;">
+                <div class="d-inline-block" style="width: 250px;">旅行開始日前日</div>
+                <div class="d-inline-block" style="width: 70px;">
+                  <input
+                    v-model="cancelFee3"
+                    :disabled="cancelFeeType !== '旅行キャンセル'"
+                    name="cancelFee3"
+                    type="text"
+                    class="form-control"
+                    placeholder="割合"
+                    maxlength="2"
+                  >
+                </div>
+                <div class="d-inline-block">%</div>
+              </div>
+              <div class="form-check" style="padding: 5px 5px; border-bottom: 1px solid #DDE1E6;">
+                <div class="d-inline-block" style="width: 250px;">旅行開始日当日</div>
+                <div class="d-inline-block" style="width: 70px;">
+                  <input
+                    v-model="cancelFee4"
+                    :disabled="cancelFeeType !== '旅行キャンセル'"
+                    name="cancelFee4"
+                    type="text"
+                    class="form-control"
+                    placeholder="割合"
+                    maxlength="2"
+                  >
+                </div>
+                <div class="d-inline-block">%</div>
+              </div>
+              <div class="form-check" style="padding: 5px 5px; border-bottom: 1px solid #DDE1E6;">
+                <div class="d-inline-block" style="width: 250px;">旅行開始後または無連絡不参加</div>
+                <div class="d-inline-block" style="width: 70px;">
+                  <input
+                    v-model="cancelFee5"
+                    :disabled="cancelFeeType !== '旅行キャンセル'"
+                    name="cancelFee5"
+                    type="text"
+                    class="form-control"
+                    placeholder="割合"
+                    maxlength="2"
+                  >
+                </div>
+                <div class="d-inline-block">%</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 mb-4">
+            <label class="form-label">キャンセルポリシー</label>
+            <textarea
+              v-model="cancelPolicy"
+              name="cancelPolicy"
+              rows="3"
+              class="form-control mb-2"
+              maxlength="2000"
+            ></textarea>
+          </div>
         </div>
-        <div class="form-check form-check-inline">
-          <input
-            v-model="stockManagementType"
-            name="stockManagementType"
-            class="form-check-input"
-            type="radio"
-            id="stock_4"
-            value="4"
-          >
-          <label class="form-check-label" for="stock_4">HL在庫管理</label>
+        <div v-if="$v.canOrderCancel.$dirty" class="text-danger fw-bold mt-3">
+          <p v-if="!$v.canOrderCancel.required">キャンセル可否が選択されていません。</p>
         </div>
-        <div v-if="stockManagementType === '3'" class="col-4 mt-2">
-          <input v-model="JSON.stringify(stockManagementItem)" type="hidden" name="stockManagementItem">
-          <select v-model="stockManagementItem" class="form-select">
-            <option hidden value="">在庫ID</option>
-            <option
-              v-for="item in stockDmps"
-              :key="item.id"
-              :value="item"
-            >{{ item.name }}</option>
-          </select>
+        <div v-if="$v.cancelFeeType.$dirty" class="text-danger fw-bold mt-3">
+          <p v-if="!$v.cancelFeeType.required">キャンセル料が選択されていません。</p>
         </div>
-      </div> -->
+        <div class="text-danger fw-bold mt-3">
+          <p v-if="!cancelFeeFixCheck">固定額が入力されていません。</p>
+        </div>
+        <div class="text-danger fw-bold mt-3">
+          <p v-if="!cancelFeeAllCheck">キャンセル料率が全て入力されていません。</p>
+        </div>
+        <div v-if="$v.cancelPolicy.$dirty" class="text-danger fw-bold mt-3">
+          <p v-if="!$v.cancelPolicy.required">キャンセルポリシーが入力されていません。</p>
+        </div>
+      </div>
 
       <!-- 年齢区分 -->
       <div :style="agesTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
-        <input v-model="JSON.stringify(ageCategory)" type="hidden" name="ageCategory">
+        <input v-model="JSON.stringify(productAgetype)" type="hidden" name="productAgetype">
         <div class="d-flex">
           <div class="me-auto">
             <h5 class="mb-4 fw-bold">年齢区分</h5>
@@ -688,78 +964,79 @@
           </div>
         </div>
         <div class="col-8">
+          <div class="d-flex mb-3">          
+            <input
+              v-model="ageNameInput"
+              type="text"
+              class="form-control"
+              placeholder="年齢区分"
+              maxlength="10"
+              style="width: 270px;"
+            >
+            <input
+              @click="onAddProductAgetype"
+              type="button" value="追加"
+              class="btn baseBtnBlue"
+              style="width: 156px; margin-left: 20px;"
+            >
+          </div>
           <table class="table align-middle">
             <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">年齢区分</th>
+                <th scope="col">連携パラメータ</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in ages" :key="index">
+              <tr v-for="(item, index) in productAgetype" :key="index">
                 <th>{{ index + 1 }}</th>
-                <td>{{ item.name }}</td>
+                <td>{{ item.ageElementDisplayName }}</td>
                 <td>
-                  <!-- <input
-                    :checked="ageCategory.some(i => i.name === item.name)"
-                    @change="onAgeCategoryChange($event, item)"
-                    class="form-check-input"
-                    type="checkbox"
-                  > -->
+                  <input
+                    v-model="item.integrationParameter"
+                    type="text"
+                    class="form-control"
+                    placeholder="連携パラメータ"
+                    maxlength="10"
+                  >
+                </td>
+                <td>
+                  <button @click="onDeleteProductAgetype(item)" type="button" class="btn-close"></button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
-
-      <!-- 料金設定 -->
-      <div :style="priceTabStatus ? 'height: inherit' : 'height: 55px'" class="baseShadow p-3 mb-5 overflow-hidden">
-        <div class="d-flex">
-          <div class="me-auto">
-            <h5 class="mb-4 fw-bold">料金設定</h5>
-          </div>
-          <div style="cursor: pointer">
-            <img
-              @click="onTabToggle('priceTabStatus')"
-              :style="priceTabStatus ? 'transform: inherit' : 'transform: scale(1, -1)'"
-              src="/images/icon/arow.svg"
-            >
-          </div>
-        </div>
-        <input v-model="priceSetting" type="hidden" name="priceSetting">
-        <div class="col-8">
-          <table class="table align-middle">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">料金プランID</th>
-                <th scope="col">料金プラン名</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in priceSetting" :key="index">
-                <th>{{ index + 1 }}</th>
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div style="text-align: right;">
-          <input @click="onPlanPage" type="button" value="料金プラン" class="btn baseBtnGrey"/>
-          <input @click="onDivisionPage" type="button" value="料金区分" class="btn baseBtnGrey"/>
-          <input @click="onInventoryPage" type="button" value="在庫" class="btn baseBtnGrey"/>
+        <div class="text-danger fw-bold mt-3">
+          <p v-if="!productAgetypeCheck">年齢区分が追加されていません。</p>
         </div>
       </div>
 
-      <!-- 保存ボタン -->
+      <!-- 保存・公開 -->
       <div class="d-flex flex-row-reverse">
         <input
           type="submit"
           value="保存"
-          class="btn mt-4 baseBtnGrey"
+          class="btn mt-4 baseBtnBlue"
+          style="width: 156px;"
+        />
+        <input
+          v-if="displayType === 'detail' || displayType === 'detailSet'"
+          type="submit"
+          value="公開"
+          class="btn mt-4 baseBtnBlue"
+          style="width: 156px; margin-right: 20px;"
+        />
+      </div>
+
+      <!-- 保存して次へ -->
+      <div class="d-flex flex-row-reverse">
+        <input
+          type="submit"
+          value="保存して次へ"
+          class="btn mt-4 baseBtnBlue"
           style="width: 156px;"
         />
       </div>
@@ -795,10 +1072,6 @@
 </div>
 
 <script type="text/javascript">
-const stockDmps= `<%- stock_dmps %>`;
-const ages= `<%- ages %>`;
-const tenants= `<%- tenants %>`;
-
 const isAdmin = `<%- isAdmin %>`;
 const productTags = `<%- productTags %>`;
 const cartRecommendTags = `<%- cartRecommendTags %>`;
@@ -817,34 +1090,36 @@ Vue.component('tags-input', VoerroTagsInput);
 new Vue({
   el: "#productsRegist",
   data: {
-    basicTabStatus: true,        // 基本情報（タブ）
-    agesTabStatus: true,         // 年齢区分（タブ）
-    usageTabStatus: true,        // 利用方法（タブ）
-    tagTabStatus: true,          // 商品タグ（タブ）
-    imageTabStatus: true,        // 商品画像（タブ）
-    recommendTabStatus: true,    // おすすめ商品（タブ）
-    priceTabStatus: true,        // 料金設定（タブ）
-    qrParam: '',                 // 利用方法（QR読込）
-    displayType: "",             // フォーマットタイプ
-    productTagInput: '',         // 商品タグ（input）
-    cartRecommendTagInput: '',   // おすすめカートタグ（input）
-    orderRecommendTagInput: '',  // おすすめ注文タグ（input）
-
-
-    useFromDatetimeCheck: true,  // 利用期間 from（入力チェック）
-    useToDatetimeCheck: true,    // 利用期間 to（入力チェック）
-    useLimitHoursCheck: true,    // 利用期限（入力チェック）
-    usePathElementCheck: true,   // フリーパス区分（入力チェック）
+    basicTabStatus: true,              // 基本情報（タブ）
+    tagTabStatus: true,                // 商品タグ（タブ）
+    imageTabStatus: true,              // 商品画像（タブ）
+    recommendTabStatus: true,          // おすすめ商品（タブ）
+    usageTabStatus: true,              // 利用方法（タブ）
+    settlementTabStatus: true,         // 決済方法（タブ）
+    cancelTabStatus: true,             // キャンセル（タブ）
+    agesTabStatus: true,               // 年齢区分（タブ）
+    displayType: "",                   // フォーマットタイプ
+    productTagInput: '',               // 商品タグ（input）
+    cartRecommendTagInput: '',         // おすすめカートタグ（input）
+    orderRecommendTagInput: '',        // おすすめ注文タグ（input）
+    ageNameInput: '',                  // 年齢区分（input）
+    usageOpenQuantityCheck: true,      // 利用種別 オープン回数（入力チェック）
+    useDateChangeFeeTypeCheck: true,   // 利用種別 日付変更手数料（入力チェック radio）
+    useDateChangeFeeCheck: true,       // 利用種別 日付変更手数料（入力チェック input）
+    useFromDatetimeCheck: true,        // 利用期間 from（入力チェック）
+    useToDatetimeCheck: true,          // 利用期間 to（入力チェック）
+    useLimitHoursCheck: true,          // 利用期限（入力チェック）
+    usePathElementCheck: true,         // フリーパス区分（入力チェック）
+    storePaymentCommissionCheck: true, // 決済方法 支払手数料（入力チェック）
+    storePaymentLimitHoursCheck: true, // 決済方法 支払期限（入力チェック）
+    cancelFeeFixCheck: true,           // キャンセル 固定額（入力チェック）
+    cancelFeeAllCheck: true,           // キャンセル 旅行キャンセル（キャンセル料率）
+    productAgetypeCheck: true,         // 年齢区分
     // 商品画像モーダル
     imageModal: {
       isFileAreaFocus: false,
       show: false,
     },
-    // APIデータ
-    stockDmps: JSON.parse(stockDmps),
-    ages: JSON.parse(ages),
-    tenants: JSON.parse(tenants),
-
     isAdmin: JSON.parse(isAdmin),
     productTags: JSON.parse(productTags),
     cartRecommendTags: JSON.parse(cartRecommendTags),
@@ -868,9 +1143,11 @@ new Vue({
     productImage: [],                 // 商品画像
     cartRecommendTag: [],             // おすすめカートタグ
     orderRecommendTag: [],            // おすすめ注文タグ
-
-
-
+    usageType: "",                    // 利用種別
+    usageOpenQuantity: "",            // 利用種別（オープン回数）
+    canChangeUseDate: false,          // 利用種別（日付変更可）
+    useDateChangeFeeType: "",         // 利用種別（日付変更手数料 Input）
+    useDateChangeFee: "",             // 利用種別（日付変更手数料 Value）
     usePeriodElement: "",             // 利用期間 (From)
     useFromDatetime: null,            // 利用期間 (From)
     useToDatetime: null,              // 利用期間 (To)
@@ -878,6 +1155,20 @@ new Vue({
     useWayElement: "",                // 利用区分
     usePathElement: "",               // フリーパス区分
     howToUse: "",                     // 利用説明
+    isUsedPaypay: false,              // 決済方法（PayPay）
+    isUsedStore: false,               // 決済方法（コンビニ支払）
+    storePaymentCommission: "",       // 支払手数料
+    storePaymentLimitHours: "",       // 支払期限
+    canOrderCancel: false,            // キャンセル可否
+    cancelFeeType: "",                // キャンセル料（radio）
+    cancelFeeFix: "",                 // キャンセル料（固定額）
+    cancelFee1: "",                   // 旅行キャンセル（出発の20日～8日前）
+    cancelFee2: "",                   // 旅行キャンセル（出発の7日～2日前）
+    cancelFee3: "",                   // 旅行キャンセル（旅行開始日前日）
+    cancelFee4: "",                   // 旅行キャンセル（旅行開始日当日）
+    cancelFee5: "",                   // 旅行キャンセル（旅行開始後または無連絡不参加）
+    cancelPolicy: "",                 // キャンセル料（キャンセルポリシー）
+    productAgetype: [],               // 年齢区分
   },
   computed: {
     /**
@@ -915,9 +1206,13 @@ new Vue({
     liquidateDate: { required },
     liquidateTime: { required },
     serviceCommissionPercentage: { required },
+    usageType: { required },
     usePeriodElement: { required },
     useWayElement: { required },
     howToUse: { required },
+    canOrderCancel: { required },
+    cancelFeeType: { required },
+    cancelPolicy: { required },
   },
   created() {
     this.conversionTag();
@@ -945,27 +1240,43 @@ new Vue({
       if(this.forms.productImage) this.productImage = this.forms.productImage;
       if(this.forms.cartRecommendTag) this.cartRecommendTag = this.forms.cartRecommendTag;
       if(this.forms.orderRecommendTag) this.orderRecommendTag = this.forms.orderRecommendTag;
-      
+      this.usageType = this.forms.usageType;
+      this.usageOpenQuantity = this.forms.usageOpenQuantity;
+      this.canChangeUseDate = this.forms.canChangeUseDate;
+      this.useDateChangeFeeType = this.forms.useDateChangeFeeType;
+      this.useDateChangeFee = this.forms.useDateChangeFee;
       this.usePeriodElement = this.forms.usePeriodElement;
       this.useFromDatetime = this.forms.useFromDatetime;
       this.useToDatetime = this.forms.useToDatetime;
       this.useLimitHours = this.forms.useLimitHours;
-
-      
       this.useWayElement = this.forms.useWayElement;
       this.usePathElement = this.forms.usePathElement;
       this.howToUse = this.forms.howToUse;
-      switch (location.pathname) {
-        case '/products/regist':
+      this.isUsedPaypay = this.forms.isUsedPaypay;
+      this.isUsedStore = this.forms.isUsedStore;
+      this.storePaymentCommission = this.forms.storePaymentCommission;
+      this.storePaymentLimitHours = this.forms.storePaymentLimitHours;
+      this.canOrderCancel = this.forms.canOrderCancel;
+      this.cancelFeeType = this.forms.cancelFeeType;
+      this.cancelFeeFix = this.forms.cancelFeeFix;
+      this.cancelFee1 = this.forms.cancelFee1;
+      this.cancelFee2 = this.forms.cancelFee2;
+      this.cancelFee3 = this.forms.cancelFee3;
+      this.cancelFee4 = this.forms.cancelFee4;
+      this.cancelFee5 = this.forms.cancelFee5;
+      this.cancelPolicy = this.forms.cancelPolicy;
+      if(this.forms.productAgetype) this.productAgetype = this.forms.productAgetype;
+      switch (location.pathname.split('/')[2]) {
+        case 'regist':
           this.displayType = 'regist';
           break;
-        case '/products/detail':
-          this.displayType = 'detail';
-          break;
-        case '/products/registSet':
+        case 'registSet':
           this.displayType = 'registSet';
           break;
-        case '/products/detailSet':
+        case 'detail':
+          this.displayType = 'detail';
+          break;
+        case 'detailSet':
           this.displayType = 'detailSet';
           break;          
         default:
@@ -1110,14 +1421,57 @@ new Vue({
     onDeleteFileData(target) {
       this.productImage.splice(target, 1);
     },
-    
-
-
-
+    // 年齢区分（データ追加）
+    onAddProductAgetype() {
+      this.productAgetype.push({
+        ageElementDisplayName: this.ageNameInput,
+        integrationParameter: ''
+      })
+      this.ageNameInput =  '';
+      this.productAgetypeCheck = true;
+    },
+    // 年齢区分（データ削除）
+    onDeleteProductAgetype(item) {
+      let result = this.productAgetype.filter(o => o.ageElementDisplayName !== item.ageElementDisplayName);
+      this.productAgetype = result;
+    },
+    /**
+     * 利用種別 オープン回数（入力チェック）
+     */
+    validationUsageOpenQuantity() {
+      this.usageOpenQuantityCheck = false;
+      if(this.usageType === 'オープン') {
+        if(this.usageOpenQuantity) this.usageOpenQuantityCheck = true;
+      } else {
+        this.usageOpenQuantityCheck = true;
+      }
+    },
+    /**
+     * 利用種別 日付変更手数料 radio（入力チェック）
+     */
+    validationUseDateChangeFeeType() {
+      this.useDateChangeFeeTypeCheck = false;
+      if(this.usageType === '日付指定') {
+        if(this.useDateChangeFeeType) this.useDateChangeFeeTypeCheck = true;
+      } else {
+        this.useDateChangeFeeTypeCheck = true;
+      }
+    },
+    /**
+     * 利用種別 日付変更手数料 input（入力チェック）
+     */
+     validationUseDateChangeFee() {
+      this.useDateChangeFeeCheck = false;
+      if(this.usageType === '日付指定' && this.useDateChangeFeeType === '固定') {
+        if(this.useDateChangeFee) this.useDateChangeFeeCheck = true;
+      } else {
+        this.useDateChangeFeeCheck = true;
+      }
+    },
     /**
      * 利用期間 From（入力チェック）
      */
-     validationUseFromDatetime() {
+    validationUseFromDatetime() {
       this.useFromDatetimeCheck = false;
       if(this.usePeriodElement === '日付指定') {
         if(this.useFromDatetime) this.useFromDatetimeCheck = true;
@@ -1128,7 +1482,7 @@ new Vue({
     /**
      * 利用期間 To（入力チェック）
      */
-     validationUseToDatetime() {
+    validationUseToDatetime() {
       this.useToDatetimeCheck = false;
       if(this.usePeriodElement === '日付指定') {
         if(this.useToDatetime) this.useToDatetimeCheck = true;
@@ -1139,7 +1493,7 @@ new Vue({
     /**
      * 利用期限（入力チェック）
      */
-     validationUseLimitHours() {
+    validationUseLimitHours() {
       this.useLimitHoursCheck = false;
       if(this.usePeriodElement === '期限指定') {
         if(this.useLimitHours) this.useLimitHoursCheck = true;
@@ -1150,7 +1504,7 @@ new Vue({
     /**
      * フリーパス区分（入力チェック）
      */
-     validationUsePathElement() {
+    validationUsePathElement() {
       this.usePathElementCheck = false;
       if(this.useWayElement !== '顔認証') {
         this.usePathElementCheck = true;
@@ -1161,21 +1515,88 @@ new Vue({
       }
     },
     /**
+     * 決済方法 支払手数料（入力チェック）
+     */
+    validationStorePaymentCommission() {
+      this.storePaymentCommissionCheck = false;
+      if(this.isUsedStore === true) {
+        if(this.storePaymentCommission) this.storePaymentCommissionCheck = true;
+      } else {
+        this.storePaymentCommissionCheck = true;
+      }
+    },
+    /**
+     * 決済方法 支払期限（入力チェック）
+     */
+    validationStorePaymentLimitHours() {
+      this.storePaymentLimitHoursCheck = false;
+      if(this.isUsedStore === true) {
+        if(this.storePaymentLimitHours) this.storePaymentLimitHoursCheck = true;
+      } else {
+        this.storePaymentLimitHoursCheck = true;
+      }
+    },
+    /**
+     * キャンセル 固定額（入力チェック）
+     */
+    validationCancelFeeFix() {
+      this.cancelFeeFixCheck = false;
+      if(this.cancelFeeType === '固定') {
+        if(this.cancelFeeFix) this.cancelFeeFixCheck = true;
+      } else {
+        this.cancelFeeFixCheck = true;
+      }
+    },
+    /**
+     * キャンセル キャンセル料率（入力チェック）
+     */
+     validationCancelCancelFeeAll() {
+      this.cancelFeeAllCheck = false;
+      if(this.cancelFeeType === '旅行キャンセル') {
+        if(this.cancelFee1 && this.cancelFee2 && this.cancelFee3 && this.cancelFee4 && this.cancelFee5) {
+          this.cancelFeeAllCheck = true;
+        }
+      } else {
+        this.cancelFeeAllCheck = true;
+      }
+    },
+    /**
+     * 年齢区分（入力チェック）
+     */
+     validationProductAgetype() {
+      this.productAgetypeCheck = false;
+      if(this.productAgetype.length) this.productAgetypeCheck = true;
+    },
+    /**
      * 登録処理
      */
     onRegist() {      
       this.$v.$touch();
-
-
+      this.validationUsageOpenQuantity();
+      this.validationUseDateChangeFeeType();
+      this.validationUseDateChangeFee();
       this.validationUseFromDatetime();
       this.validationUseToDatetime();
       this.validationUseLimitHours();
       this.validationUsePathElement();
+      this.validationStorePaymentCommission();
+      this.validationStorePaymentLimitHours();
+      this.validationCancelFeeFix();
+      this.validationCancelCancelFeeAll();
+      this.validationProductAgetype();
       if(!this.$v.$invalid
+        && this.usageOpenQuantityCheck
+        && this.useDateChangeFeeTypeCheck
+        && this.useDateChangeFeeCheck
         && this.useFromDatetimeCheck
         && this.useToDatetimeCheck
         && this.useLimitHoursCheck
         && this.usePathElementCheck
+        && this.storePaymentCommissionCheck
+        && this.storePaymentLimitHoursCheck
+        && this.cancelFeeFixCheck
+        && this.cancelFeeAllCheck
+        && this.productAgetypeCheck
       ) {
         document.productsForm.method="post";
         document.productsForm.action = "/products/regist";
@@ -1194,35 +1615,7 @@ new Vue({
 
 
     
-    // 年齢区分（データ更新）
-    onAgeCategoryChange(event, value) {
-      if(event.target.checked) {
-        this.ageCategory.push(value)
-      } else {
-        this.ageCategory = this.ageCategory.filter(o => o.name !== value.name);
-      }
-    },
-    // 利用方法（QR読込 追加）    
-    onQrParamAdd() {
-      if(this.qrParam) this.usageMethodItem.push(this.qrParam);
-    },
-    // 利用方法（QR読込 画像取得）    
-    onQrDownload() {
-      const link = document.createElement('a');
-      link.href = "";
-      link.download = `画像`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    },
-    // 利用施設（データ更新）
-    onTenantChange(event, value) {
-      if(event.target.checked) {
-        this.tenantsUsed.push(value)
-      } else {
-        this.tenantsUsed = this.tenantsUsed.filter(o => o.id !== value.id);
-      }
-    },
+ 
     // 画面遷移（料金プラン一覧）
     onPlanPage() {
       window.location.href = `/plans/reference?productId=${this.productId}`;

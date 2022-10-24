@@ -104,7 +104,7 @@
                 class="dropdown-menu actionList"
                 style="left: 50%; transform: translate(-50%, -50%);"
               >
-                <a :href=`/products/detail/${item.productCode}`><li class="dropdown-item small">詳細</li></a>
+                <a @click="onRedirect(item)"><li class="dropdown-item small">詳細</li></a>
               </ul>
             </td>
           </template>
@@ -230,8 +230,8 @@ new Vue({
     },
     onRedirect(item) {
       let url = "detail";
-      if(item.type == "setProduct") url = "detail-set";
-      window.location.href = `/products/${ url }/${ item.id }`;
+      if(item.type == "setProduct") url = "detailSet";
+      window.location.href = `/products/${ url }/${ item.productCode }`;
     },
   }
 })

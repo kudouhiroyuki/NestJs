@@ -129,6 +129,44 @@ import { PrismaService } from '../prisma.service'
 //   LIMIT ${'1'};
 // `)
 
+// return await this.prisma.users.create({
+//   data: {
+//     userName: 'name6',
+//     password: 'password',
+//     address: 'address',
+//     age: '30',
+//     departmentId: 'A0001',
+//     point: 100,
+//     createdAt: new Date('2010-10-01'),
+//     updateAt: new Date('2010-10-01')
+//   }
+// })
+
+// return await this.prisma.users.createMany({
+//   data: [
+//     {
+//       userName: 'name7',
+//       password: 'password',
+//       address: 'address',
+//       age: '30',
+//       departmentId: 'A0001',
+//       point: 100,
+//       createdAt: new Date('2010-10-01'),
+//       updateAt: new Date('2010-10-01')
+//     },
+//     {
+//       userName: 'name8',
+//       password: 'password',
+//       address: 'address',
+//       age: '30',
+//       departmentId: 'A0001',
+//       point: 100,
+//       createdAt: new Date('2010-10-01'),
+//       updateAt: new Date('2010-10-01')
+//     }
+//   ]
+// })
+
 // return await this.prisma.users.findMany({
 //   where: {
 //     id: 1
@@ -137,29 +175,6 @@ import { PrismaService } from '../prisma.service'
 //     department: true
 //   }
 // })
-
-// return await this.prisma.users.groupBy({
-//   by: ['departmentId'],
-//   _count: {
-//     _all: true
-//   }
-// })
-
-// return await this.prisma.users.groupBy({
-//   by: ['departmentId'],
-//   _sum: {
-//     point: true
-//   }
-// })
-
-// return await this.prisma.$transaction([
-//   this.prisma.users.count(),
-//   this.prisma.users.findMany({
-//     select: {
-//       id: true
-//     }
-//   })
-// ])
 
 // return await this.prisma.users.aggregate({
 //   _sum: {
@@ -179,6 +194,25 @@ import { PrismaService } from '../prisma.service'
 // }
 // return { sum: pointSum }
 
+// return await this.prisma.users.groupBy({
+//   by: ['departmentId'],
+//   _sum: {
+//     point: true
+//   }
+// })
+
+// return await this.prisma.users.groupBy({
+//   by: ['departmentId'],
+//   _sum: {
+//     point: true
+//   },
+//   where: {
+//     NOT: {
+//       userName: 'name2'
+//     }
+//   }
+// })
+
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
@@ -190,22 +224,22 @@ export class UsersService {
     if (query.userName) whereConditions['userName'] = { contains: query.userName }
     if (query.sort) orderConditions['id'] = query.sort
 
-    return await this.prisma.users.findMany({
-      select: {
-        id: true,
-        userName: true,
-        password: true,
-        address: true,
-        age: true,
-        departmentId: true,
-        point: true,
-        createdAt: true,
-        updateAt: true
-      },
-      where: whereConditions,
-      orderBy: orderConditions,
-      skip: 0
-    })
+    // return await this.prisma.users.findMany({
+    //   select: {
+    //     id: true,
+    //     userName: true,
+    //     password: true,
+    //     address: true,
+    //     age: true,
+    //     departmentId: true,
+    //     point: true,
+    //     createdAt: true,
+    //     updateAt: true
+    //   },
+    //   where: whereConditions,
+    //   orderBy: orderConditions,
+    //   skip: 0
+    // })
   }
 
   async createUser(data: {

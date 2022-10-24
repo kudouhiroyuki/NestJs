@@ -55,20 +55,18 @@ export class ProductsController {
     return this.createdRegistTemplate()
   }
   /**
+   * POST 商品登録処理（単体・セット）
+   */
+  @Post('regist')
+  @Redirect('http://localhost:3000/products')
+  async postRegist(@Body() body: any) {
+    console.log('商品登録処理')
+    console.log(body)
+  }
+  /**
    * 共通テンプレート（商品登録）
    */
   createdRegistTemplate() {
-    const stock_dmps = [
-      { id: '1', name: '1******01: ○○チケット' },
-      { id: '2', name: '1******02: ○○チケット' },
-      { id: '3', name: '1******03: ○○チケット' }
-    ]
-    const ages = [{ name: '大人' }, { name: '中人' }, { name: '小人' }, { name: '幼児' }, { name: 'シニア' }]
-    const tenants = [
-      { id: '1001', name: '施設１' },
-      { id: '1002', name: '施設２' },
-      { id: '1003', name: '施設３' }
-    ]
     // DMP管理者
     const isAdmin = true
     // 商品タグ
@@ -90,9 +88,55 @@ export class ProductsController {
       { id: '3', tagString: '注文Cクーポン' }
     ]
     return {
-      stock_dmps: JSON.stringify(stock_dmps),
-      ages: JSON.stringify(ages),
-      tenants: JSON.stringify(tenants),
+      isAdmin: JSON.stringify(isAdmin),
+      productTags: JSON.stringify(productTags),
+      cartRecommendTags: JSON.stringify(cartRecommendTags),
+      orderRecommendTags: JSON.stringify(orderRecommendTags),
+      forms: JSON.stringify({})
+    }
+  }
+
+  /**
+   * GET 商品詳細画面（単体）
+   */
+  @Get('/detail/:id')
+  @Render('products/regist')
+  async getDetail() {
+    return this.createdDetailTemplate()
+  }
+  /**
+   * GET 商品詳細画面（セット）
+   */
+  @Get('/detailSet/:id')
+  @Render('products/regist')
+  async getDetailSet() {
+    return this.createdDetailTemplate()
+  }
+  /**
+   * 共通テンプレート（商品詳細）
+   */
+  createdDetailTemplate() {
+    // DMP管理者
+    const isAdmin = true
+    // 商品タグ
+    const productTags = [
+      { id: '1', tagString: 'チケット' },
+      { id: '2', tagString: '宿泊' },
+      { id: '3', tagString: '室内' }
+    ]
+    // おすすめ商品（カート画面）
+    const cartRecommendTags = [
+      { id: '1', tagString: 'カートAクーポン' },
+      { id: '2', tagString: 'カートBクーポン' },
+      { id: '3', tagString: 'カートCクーポン' }
+    ]
+    // おすすめ商品（注文完了画面）
+    const orderRecommendTags = [
+      { id: '1', tagString: '注文Aクーポン' },
+      { id: '2', tagString: '注文Bクーポン' },
+      { id: '3', tagString: '注文Cクーポン' }
+    ]
+    return {
       isAdmin: JSON.stringify(isAdmin),
       productTags: JSON.stringify(productTags),
       cartRecommendTags: JSON.stringify(cartRecommendTags),
@@ -121,54 +165,42 @@ export class ProductsController {
         ],
         cartRecommendTag: [{ id: '1', tagString: 'カートAクーポン' }],
         orderRecommendTag: [{ id: '1', tagString: '注文Aクーポン' }],
-
-
+        usageType: '日付指定',
+        usageOpenQuantity: '',
+        canChangeUseDate: true,
+        useDateChangeFeeType: '固定',
+        useDateChangeFee: '1000',
         usePeriodElement: '日付指定',
         useFromDatetime: '2022/11/30',
         useToDatetime: '2022/11/30',
         useLimitHours: '',
         useWayElement: '顔認証',
         usePathElement: 'フリーパス区分',
-        howToUse: '利用説明'
+        howToUse: '利用説明',
+        isUsedPaypay: false,
+        isUsedStore: true,
+        storePaymentCommission: '1000',
+        storePaymentLimitHours: '1',
+        canOrderCancel: true,
+        cancelFeeType: '旅行キャンセル',
+        cancelFeeFix: '',
+        cancelFee1: '1',
+        cancelFee2: '2',
+        cancelFee3: '3',
+        cancelFee4: '4',
+        cancelFee5: '5',
+        cancelPolicy: 'キャンセルポリシー',
+        productAgetype: [
+          {
+            ageElementDisplayName: '年齢区分1',
+            integrationParameter: 'パラメータ1'
+          },
+          {
+            ageElementDisplayName: '年齢区分2',
+            integrationParameter: 'パラメータ2'
+          }
+        ]
       })
     }
-  }
-
-  /**
-   * POST 商品登録処理（単体）
-   */
-  @Post('regist')
-  @Redirect('http://localhost:3000/products/reference')
-  async postRegist(@Body() body: any) {
-    console.log('商品登録処理（単体）')
-    console.log(body)
-  }
-
-  /**
-   * GET 商品詳細画面（単体）
-   */
-  @Get('/detail/:id')
-  @Render('products/detail')
-  async getDetail() {
-    return {}
-  }
-
-  /**
-   * POST 商品登録処理（セット）
-   */
-  @Post('regist-set')
-  @Redirect('http://localhost:3000/products/reference')
-  async postRegistSet(@Body() body: any) {
-    console.log('商品登録処理（単体）')
-    console.log(body)
-  }
-
-  /**
-   * GET 商品詳細画面（セット）
-   */
-  @Get('/detail-set/:id')
-  @Render('products/detailSet')
-  async getDetailSet() {
-    return {}
   }
 }
