@@ -104,7 +104,15 @@
                 class="dropdown-menu actionList"
                 style="left: 50%; transform: translate(-50%, -50%);"
               >
-                <a @click="onRedirect(item)"><li class="dropdown-item small">詳細</li></a>
+                <a @click="onDetailPage(item)">
+                  <li class="dropdown-item small">詳細</li>
+                </a>
+                <a @click="onCopyPage(item)">
+                  <li class="dropdown-item small">コピー</li>
+                </a>
+                <a @click="onPreviewPage(item)">
+                  <li class="dropdown-item small">プレビュー</li>
+                </a>
               </ul>
             </td>
           </template>
@@ -216,8 +224,28 @@ new Vue({
       this.$refs[item.productCode][0].style.display = 'block';
       this.$refs[item.productCode][0].closest('tr').style.backgroundColor = '#E7E7E7';
     },
-
-
+    /**
+     * 詳細ページ（遷移）
+     */ 
+    onDetailPage(item) {
+      let url = "detail";
+      if(item.type == "setProduct") url = "detailSet";
+      window.location.href = `/products/${ url }/${ item.productCode }`;
+    },
+    /**
+     * コピーページ（遷移）
+     */ 
+    onCopyPage(item) {
+      let url = "regist";
+      if(item.type == "setProduct") url = "registSet";
+      window.location.href = `/products/${ url }?productCode=${ item.productCode }`;
+    },
+    /**
+     * プレビューページ（遷移）
+     */ 
+    onPreviewPage(item) {
+      window.open(`/consumerWeb/?productCode=${ item.productCode }`, '_blank');
+    },
     onFormChange(e) {
       queryParam.set(e.target.name, e.target.value);
     },
@@ -225,13 +253,11 @@ new Vue({
       queryParam.set("pageNumber", page);
       this.onSerch();
     },
+    /**
+     * 検索処理
+     */
     onSerch() {
       window.location.href = "/products?" + queryParam;
-    },
-    onRedirect(item) {
-      let url = "detail";
-      if(item.type == "setProduct") url = "detailSet";
-      window.location.href = `/products/${ url }/${ item.productCode }`;
     },
   }
 })
