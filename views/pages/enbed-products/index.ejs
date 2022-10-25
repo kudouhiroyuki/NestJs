@@ -1,0 +1,72 @@
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="enbedProductsIndex">
+    <div class="d-flex mb-5">
+      <div class="me-auto">
+        <h4 class="mb-4 fw-bold" style="color:#0069D9;">
+          <img src="/images/icon/products.svg" style="width: 24px;">
+          組込商品設定
+        </h4>
+      </div>
+    </div>
+
+    <!-- 保存して次へ -->
+    <div v-if="displayType === 'regist'" class="d-flex flex-row-reverse">
+      <input
+        type="submit"
+        value="保存して次へ"
+        class="btn mt-4 baseBtnBlue"
+        style="width: 156px;"
+      />
+    </div>
+
+    <!-- 戻る -->
+    <div v-if="displayType === 'detail'" class="d-flex flex-row-reverse">
+      <input
+        type="submit"
+        value="戻る"
+        class="btn mt-4 baseBtnBlue"
+        style="width: 156px;"
+      />
+    </div>
+  </main>
+</div>
+
+<script type="text/javascript">
+new Vue({
+  el: "#enbedProductsIndex",
+  data: {
+    displayType: "",                   // フォーマットタイプ
+  },
+  created() {
+    this.setInitData();
+  },
+  mounted() {
+  },
+  methods: {
+    /**
+     * 登録情報セット
+     */ 
+    setInitData() {
+      console.log(location.pathname.split('/')[2])
+      switch (location.pathname.split('/')[2]) {
+        case 'regist':
+          this.displayType = 'regist';
+          break;
+        case 'detail':
+          this.displayType = 'detail';
+          break;         
+        default:
+      }
+    },
+  }
+})
+</script>
+</body>
+</html>

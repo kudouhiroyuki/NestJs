@@ -9,25 +9,26 @@
   <main id="productsRegist">    
     <h4 class="fw-bold">商品登録</h4>
 
-    <form @submit.prevent="onRegist" name="productsForm">
+    <form name="productsForm">
       <input v-model="displayType" type="hidden" name="displayType">
 
       <!-- 組込商品設定・料金設定・在庫設定 -->
       <div v-if="displayType === 'detail' || displayType === 'detailSet'" class="d-flex flex-row-reverse mb-5">
         <input
-          type="submit"
+          type="button"
           value="在庫設定"
           class="btn mt-4 baseBtnBlue"
           style="width: 156px;"
         />
         <input
-          type="submit"
+          type="button"
           value="料金設定"
           class="btn mt-4 baseBtnBlue"
           style="width: 156px; margin-right: 20px;"
         />
         <input
-          type="submit"
+          @click="onEnbedProductsDetailPage"
+          type="button"
           value="組込商品設定"
           class="btn mt-4 baseBtnBlue"
           style="width: 156px; margin-right: 20px;"
@@ -1013,34 +1014,36 @@
           <p v-if="!productAgetypeCheck">年齢区分が追加されていません。</p>
         </div>
       </div>
-
-      <!-- 保存・公開 -->
-      <div class="d-flex flex-row-reverse">
-        <input
-          type="submit"
-          value="保存"
-          class="btn mt-4 baseBtnBlue"
-          style="width: 156px;"
-        />
-        <input
-          v-if="displayType === 'detail' || displayType === 'detailSet'"
-          type="submit"
-          value="公開"
-          class="btn mt-4 baseBtnBlue"
-          style="width: 156px; margin-right: 20px;"
-        />
-      </div>
-
-      <!-- 保存して次へ -->
-      <div v-if="displayType === 'regist' || displayType === 'registSet'" class="d-flex flex-row-reverse">
-        <input
-          type="submit"
-          value="保存して次へ"
-          class="btn mt-4 baseBtnBlue"
-          style="width: 156px;"
-        />
-      </div>
     </form>
+
+    <!-- 保存・公開 -->
+    <div class="d-flex flex-row-reverse">
+    <input
+      @click="onResist"
+      type="button"
+      value="保存"
+      class="btn mt-4 baseBtnBlue"
+      style="width: 156px;"
+    />
+    <input
+      v-if="displayType === 'detail' || displayType === 'detailSet'"
+      type="submit"
+      value="公開"
+      class="btn mt-4 baseBtnBlue"
+      style="width: 156px; margin-right: 20px;"
+    />
+  </div>
+
+  <!-- 保存して次へ -->
+  <div v-if="displayType === 'regist' || displayType === 'registSet'" class="d-flex flex-row-reverse">
+    <input
+      @click="onEnbedProductsRegistPage"
+      type="button"
+      value="保存して次へ"
+      class="btn mt-4 baseBtnBlue"
+      style="width: 156px;"
+    />
+  </div>
 
     <!-- 商品画像モーダル -->
     <div :style="imageModal.show ? 'display: block' : 'display: none'" class="modalMain">
@@ -1570,7 +1573,7 @@ new Vue({
     /**
      * 登録処理
      */
-    onRegist() {      
+    onResist() {    
       this.$v.$touch();
       this.validationUsageOpenQuantity();
       this.validationUseDateChangeFeeType();
@@ -1603,31 +1606,16 @@ new Vue({
         document.productsForm.submit();
       }
     },
-
-
-
-
-
-
-
-
-
-
-
-    
- 
-    // 画面遷移（料金プラン一覧）
-    onPlanPage() {
-      window.location.href = `/plans/reference?productId=${this.productId}`;
+    // 組込商品設定 登録（画面遷移）
+    onEnbedProductsRegistPage() {
+      document.productsForm.method="post";
+      document.productsForm.action = "/products/enbedProducts";
+      document.productsForm.submit();
     },
-    // 画面遷移（料金区分一覧）
-    onDivisionPage() {
-      window.location.href = `/divisions/reference?productId=${this.productId}`;
-    },
-    // 画面遷移（在庫一覧）
-    onInventoryPage() {
-      window.location.href = `/inventorys/reference?productId=${this.productId}`;
-    },
+    // 組込商品設定 詳細（画面遷移）
+    onEnbedProductsDetailPage() {
+      window.location.href = `/enbedProducts/detail/${this.productCode}`;
+    }
   }
 })
 </script>

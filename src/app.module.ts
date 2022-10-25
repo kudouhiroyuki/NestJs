@@ -39,7 +39,6 @@ import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
-import { ProductsModule } from './products/products.module'
 import { PlansModule } from './plans/plans.module'
 import { DivisionsModule } from './divisions/divisions.module'
 import { InventorysModule } from './inventorys/inventorys.module'
@@ -47,6 +46,8 @@ import { InventorysModule } from './inventorys/inventorys.module'
 import { LoginModule } from './login/login.module'
 import { PasswordResetModule } from './password-reset/password-reset.module'
 import { TenantsModule } from './tenants/tenants.module'
+import { ProductsModule } from './products/products.module'
+import { EnbedProductsModule } from './enbed-products/enbed-products.module'
 import { OrdersModule } from './orders/orders.module'
 import { AccountsModule } from './accounts/accounts.module'
 import { AccountGroupsModule } from './accountGroups/accountGroups.module'
@@ -58,7 +59,6 @@ import { UsersModule } from './users/users.module'
 
 @Module({
   imports: [
-    ProductsModule,
     PlansModule,
     DivisionsModule,
     InventorysModule,
@@ -66,6 +66,8 @@ import { UsersModule } from './users/users.module'
     LoginModule,
     PasswordResetModule,
     TenantsModule,
+    ProductsModule,
+    EnbedProductsModule,
     OrdersModule,
     AccountsModule,
     AccountGroupsModule,

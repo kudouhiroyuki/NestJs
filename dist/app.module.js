@@ -10,13 +10,14 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
-const products_module_1 = require("./products/products.module");
 const plans_module_1 = require("./plans/plans.module");
 const divisions_module_1 = require("./divisions/divisions.module");
 const inventorys_module_1 = require("./inventorys/inventorys.module");
 const login_module_1 = require("./login/login.module");
 const password_reset_module_1 = require("./password-reset/password-reset.module");
 const tenants_module_1 = require("./tenants/tenants.module");
+const products_module_1 = require("./products/products.module");
+const enbed_products_module_1 = require("./enbed-products/enbed-products.module");
 const orders_module_1 = require("./orders/orders.module");
 const accounts_module_1 = require("./accounts/accounts.module");
 const accountGroups_module_1 = require("./accountGroups/accountGroups.module");
@@ -29,13 +30,14 @@ let AppModule = class AppModule {
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            products_module_1.ProductsModule,
             plans_module_1.PlansModule,
             divisions_module_1.DivisionsModule,
             inventorys_module_1.InventorysModule,
             login_module_1.LoginModule,
             password_reset_module_1.PasswordResetModule,
             tenants_module_1.TenantsModule,
+            products_module_1.ProductsModule,
+            enbed_products_module_1.EnbedProductsModule,
             orders_module_1.OrdersModule,
             accounts_module_1.AccountsModule,
             accountGroups_module_1.AccountGroupsModule,

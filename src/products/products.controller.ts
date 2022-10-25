@@ -1,4 +1,4 @@
-import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect } from '@nestjs/common';
+import { Get, Post, Put, Body, Param, Controller, Render, Query, Redirect, Res } from '@nestjs/common';
 
 @Controller('products')
 export class ProductsController {
@@ -60,8 +60,18 @@ export class ProductsController {
   @Post('/regist')
   @Redirect('http://localhost:3000/products')
   async postRegist(@Body() body: any) {
-    console.log('商品登録処理')
+    console.log('商品登録処理（単体・セット）')
     console.log(body)
+  }
+  /**
+   * POST 保存して次へ処理（リダイレクト 組込商品設定）
+   */
+  @Post('/enbedProducts')
+  async redirectEnbedProducts(@Res() res: any, @Body() body: any) {
+    console.log('保存して次へ処理')
+    console.log(body)
+    const productCode = '1003'
+    return res.redirect(`/enbedProducts/regist?productCode=${productCode}`)
   }
   /**
    * 共通テンプレート（商品登録）
