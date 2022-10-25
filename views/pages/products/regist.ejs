@@ -7,7 +7,11 @@
   <%- include('../../partials/sidebar'); %>
 
   <main id="productsRegist">    
-    <h4 class="fw-bold">商品登録</h4>
+    <h4 class="mb-4 fw-bold" style="color:#0069D9;">
+      <img src="/images/icon/products.svg" style="width: 24px;">
+      <template v-if="displayType === 'regist' || displayType === 'registSet'" class="fs-4">商品登録</template>
+      <template v-else class="fs-4">商品詳細</template>
+    </h4>
 
     <form name="productsForm">
       <input v-model="displayType" type="hidden" name="displayType">
@@ -21,6 +25,7 @@
           style="width: 156px;"
         />
         <input
+          @click="onProductFeePlansPage"
           type="button"
           value="料金設定"
           class="btn mt-4 baseBtnBlue"
@@ -1615,6 +1620,10 @@ new Vue({
     // 組込商品設定 詳細（画面遷移）
     onEnbedProductsDetailPage() {
       window.location.href = `/enbedProducts/detail/${this.productCode}`;
+    },
+    // 料金プラン 照会（画面遷移）
+    onProductFeePlansPage() {
+      window.location.href = `/productFeePlans?productCode=${this.productCode}`;
     }
   }
 })

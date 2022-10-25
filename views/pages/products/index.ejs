@@ -80,7 +80,7 @@
           <th scope="col">商品名</th>
           <th scope="col">販売ステータス</th>
           <th scope="col">表示期間</th>
-          <th scope="col"></th>
+          <th scope="col">公開ステータス</th>
         </tr>
       </thead>
       <tbody>
@@ -97,16 +97,24 @@
             <td>{{ item.productName }}</td>
             <td>{{ item.isSoldStatus }}</td>
             <td>{{ item.saleFromDatetime }} - {{ item.saleToDatetime }}</td>
-            <td><button type="button" class="btn baseBtnGrey">Copy</button></td>
+            <td>
+              <button
+                @click="onDetailPage(item)"
+                type="button"
+                class="btn baseBtnGrey"
+              >公開中</button>
+              <button
+                @click="onDetailPage(item)"
+                type="button"
+                class="btn baseBtnGrey"
+              >作業中</button>
+            </td>
             <td style="width: 0;">
               <ul
                 :ref="item.productCode"
                 class="dropdown-menu actionList"
                 style="left: 50%; transform: translate(-50%, -50%);"
               >
-                <a @click="onDetailPage(item)">
-                  <li class="dropdown-item small">詳細</li>
-                </a>
                 <a @click="onCopyPage(item)">
                   <li class="dropdown-item small">コピー</li>
                 </a>

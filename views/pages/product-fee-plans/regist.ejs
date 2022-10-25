@@ -1,0 +1,69 @@
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="enbedProductsIndex">
+    <div class="d-flex mb-5">
+      <div class="me-auto">
+        <h4 class="mb-4 fw-bold" style="color:#0069D9;">
+          <img src="/images/icon/products.svg" style="width: 24px;">
+          料金プラン登録
+        </h4>
+      </div>
+    </div>
+
+    <!-- 保存して次へ -->
+    <div v-if="displayType === 'regist'" class="d-flex flex-row-reverse">
+      <input
+        type="submit"
+        value="保存して次へ"
+        class="btn mt-4 baseBtnBlue"
+        style="width: 156px;"
+      />
+    </div>
+
+    <!-- 戻る -->
+    <div class="d-flex flex-row-reverse">
+      <input
+        @click="onProductsDetailPage"
+        type="button"
+        value="戻る"
+        class="btn mt-4 baseBtnBlue"
+        style="width: 156px;"
+      />
+    </div>
+  </main>
+</div>
+
+<script type="text/javascript">
+const queryParam = new URLSearchParams(location.search);
+
+new Vue({
+  el: "#enbedProductsIndex",
+  data: {
+    displayType: "",                   // フォーマットタイプ
+  },
+  created() {
+    this.setInitData();
+  },
+  mounted() {
+  },
+  methods: {
+    /**
+     * 登録情報セット
+     */ 
+    setInitData() {
+    },
+    // 商品詳細（画面遷移）
+    onProductsDetailPage() {
+      window.location.href = `/products/detail/${queryParam.get('productCode')}`;
+    },
+  }
+})
+</script>
+</body>
+</html>

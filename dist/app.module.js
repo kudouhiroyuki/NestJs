@@ -18,6 +18,7 @@ const password_reset_module_1 = require("./password-reset/password-reset.module"
 const tenants_module_1 = require("./tenants/tenants.module");
 const products_module_1 = require("./products/products.module");
 const enbed_products_module_1 = require("./enbed-products/enbed-products.module");
+const product_fee_plans_module_1 = require("./product-fee-plans/product-fee-plans.module");
 const orders_module_1 = require("./orders/orders.module");
 const accounts_module_1 = require("./accounts/accounts.module");
 const accountGroups_module_1 = require("./accountGroups/accountGroups.module");
@@ -38,6 +39,7 @@ AppModule = __decorate([
             tenants_module_1.TenantsModule,
             products_module_1.ProductsModule,
             enbed_products_module_1.EnbedProductsModule,
+            product_fee_plans_module_1.ProductFeePlansModule,
             orders_module_1.OrdersModule,
             accounts_module_1.AccountsModule,
             accountGroups_module_1.AccountGroupsModule,

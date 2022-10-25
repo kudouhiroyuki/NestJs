@@ -48,6 +48,7 @@ import { PasswordResetModule } from './password-reset/password-reset.module'
 import { TenantsModule } from './tenants/tenants.module'
 import { ProductsModule } from './products/products.module'
 import { EnbedProductsModule } from './enbed-products/enbed-products.module'
+import { ProductFeePlansModule } from './product-fee-plans/product-fee-plans.module'
 import { OrdersModule } from './orders/orders.module'
 import { AccountsModule } from './accounts/accounts.module'
 import { AccountGroupsModule } from './accountGroups/accountGroups.module'
@@ -68,6 +69,7 @@ import { UsersModule } from './users/users.module'
     TenantsModule,
     ProductsModule,
     EnbedProductsModule,
+    ProductFeePlansModule,
     OrdersModule,
     AccountsModule,
     AccountGroupsModule,

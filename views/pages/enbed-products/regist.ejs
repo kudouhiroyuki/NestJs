@@ -1,0 +1,87 @@
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+
+  <%- include('../../partials/sidebar'); %>
+
+  <main id="enbedProductsIndex">
+    <div class="d-flex mb-5">
+      <div class="me-auto">
+        <h4 class="mb-4 fw-bold" style="color:#0069D9;">
+          <img src="/images/icon/products.svg" style="width: 24px;">
+          <template v-if="displayType === 'regist'" class="fs-4">組込商品登録</template>
+          <template v-else class="fs-4">組込商品詳細</template>
+        </h4>
+      </div>
+    </div>
+
+    <form name="enbedProductsForm">
+    </form>
+
+    <!-- 保存して次へ -->
+    <div v-if="displayType === 'regist'" class="d-flex flex-row-reverse">
+      <input
+        @click="onProductFeePlansRegistPage"
+        type="button"
+        value="保存して次へ"
+        class="btn mt-4 baseBtnBlue"
+        style="width: 156px;"
+      />
+    </div>
+
+    <!-- 戻る -->
+    <div v-if="displayType === 'detail'" class="d-flex flex-row-reverse">
+      <input
+        @click="onProductsDetailPage"
+        type="button"
+        value="戻る"
+        class="btn mt-4 baseBtnBlue"
+        style="width: 156px;"
+      />
+    </div>
+  </main>
+</div>
+
+<script type="text/javascript">
+new Vue({
+  el: "#enbedProductsIndex",
+  data: {
+    displayType: "",                   // フォーマットタイプ
+  },
+  created() {
+    this.setInitData();
+  },
+  mounted() {
+  },
+  methods: {
+    /**
+     * 登録情報セット
+     */ 
+    setInitData() {
+      switch (location.pathname.split('/')[2]) {
+        case 'regist':
+          this.displayType = 'regist';
+          break;
+        case 'detail':
+          this.displayType = 'detail';
+          break;         
+        default:
+      }
+    },
+    // 商品料金設定 登録（画面遷移）
+    onProductFeePlansRegistPage() {
+      document.enbedProductsForm.method="post";
+      document.enbedProductsForm.action = "/enbedProducts/productFeePlans";
+      document.enbedProductsForm.submit();
+    },
+    // 商品詳細（画面遷移）
+    onProductsDetailPage() {
+      window.location.href = `/products/detail/${location.pathname.split('/')[3]}`;
+    },
+  }
+})
+</script>
+</body>
+</html>

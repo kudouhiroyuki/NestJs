@@ -11,7 +11,7 @@
       <div class="me-auto">
         <h4 class="mb-4 fw-bold" style="color:#0069D9;">
           <img src="/images/icon/products.svg" style="width: 24px;">
-          組込商品設定
+          料金プラン照会
         </h4>
       </div>
     </div>
@@ -27,9 +27,10 @@
     </div>
 
     <!-- 戻る -->
-    <div v-if="displayType === 'detail'" class="d-flex flex-row-reverse">
+    <div class="d-flex flex-row-reverse">
       <input
-        type="submit"
+        @click="onProductsDetailPage"
+        type="button"
         value="戻る"
         class="btn mt-4 baseBtnBlue"
         style="width: 156px;"
@@ -39,6 +40,8 @@
 </div>
 
 <script type="text/javascript">
+const queryParam = new URLSearchParams(location.search);
+
 new Vue({
   el: "#enbedProductsIndex",
   data: {
@@ -54,16 +57,10 @@ new Vue({
      * 登録情報セット
      */ 
     setInitData() {
-      console.log(location.pathname.split('/')[2])
-      switch (location.pathname.split('/')[2]) {
-        case 'regist':
-          this.displayType = 'regist';
-          break;
-        case 'detail':
-          this.displayType = 'detail';
-          break;         
-        default:
-      }
+    },
+    // 商品詳細（画面遷移）
+    onProductsDetailPage() {
+      window.location.href = `/products/detail/${queryParam.get('productCode')}`;
     },
   }
 })
