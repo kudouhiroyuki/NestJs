@@ -15,6 +15,17 @@
           <template v-else class="fs-4">組込商品詳細</template>
         </h4>
       </div>
+      <div class="d-flex flex-row-reverse mb-4">
+        <button class="dropdown border-0 bg-white" type="button" data-bs-toggle="dropdown">
+          <img src="/images/icon/plus.svg">
+        </button>
+        <ul class="dropdown-menu">
+          <li @click="onProductModalOpen('privateCompany')" class="dropdown-item small">自社商品を追加する</li>
+          <li @click="onProductModalOpen('otherCompany')" class="dropdown-item small">他社商品を追加する</li>
+          <li @click="onBusModalOpen('top')" class="dropdown-item small">バス路線を追加する</li>
+          <li @click="onHotelModalOpen('top')" class="dropdown-item small">宿泊プランを追加する</li>
+        </ul>
+      </div>
     </div>
 
     <form name="enbedProductsForm">
@@ -41,6 +52,60 @@
         style="width: 156px;"
       />
     </div>
+
+    <!-- 商品モーダル -->
+    <div :style="productModal.show ? 'display: block' : 'display: none'" class="modalMain">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <template v-if="productModal.type === 'privateCompany'">組み込み商品選択（自社）</template>
+              <template v-if="productModal.type === 'otherCompany'">組み込み商品選択（他社）</template>
+            </h5>
+            <button @click="onProductModalClose" type="button" class="btn-close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      :style="productModal.show ? 'display: block' : 'display: none'"
+      class="modalBg"
+      @click="onProductModalClose">
+    </div>
+
+    <!-- バスモーダル -->
+    <div :style="busModal.show ? 'display: block' : 'display: none'" class="modalMain">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">バス路線・便選択</h5>
+            <button @click="onBusModalClose" type="button" class="btn-close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      :style="busModal.show ? 'display: block' : 'display: none'"
+      class="modalBg"
+      @click="onBusModalClose">
+    </div>
+
+    <!-- ホテルモーダル -->
+    <div :style="hotelModal.show ? 'display: block' : 'display: none'" class="modalMain">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">ホテル選択</h5>
+            <button @click="onHotelModalClose" type="button" class="btn-close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      :style="hotelModal.show ? 'display: block' : 'display: none'"
+      class="modalBg"
+      @click="onHotelModalClose">
+    </div>
   </main>
 </div>
 
@@ -49,6 +114,21 @@ new Vue({
   el: "#enbedProductsIndex",
   data: {
     displayType: "",                   // フォーマットタイプ
+    // 商品モーダル
+    productModal: {
+      show: false,
+      type: '',
+    },
+    // バスモーダル
+    busModal: {
+      show: false,
+      current: '',
+    },
+    // ホテルモーダル
+    hotelModal: {
+      show: false,
+      current: '',
+    },
   },
   created() {
     this.setInitData();
@@ -79,6 +159,51 @@ new Vue({
     // 商品詳細（画面遷移）
     onProductsDetailPage() {
       window.location.href = `/products/detail/${location.pathname.split('/')[3]}`;
+    },
+
+    /**
+     * 商品モーダル（Open）
+     */
+    onProductModalOpen(type) {
+      this.productModal.show = true;
+      this.productModal.type = type;
+    },
+    /**
+     * 商品モーダル（Close）
+     */ 
+    onProductModalClose() {
+      this.productModal.show = false;
+      this.productModal.type = '';
+    },
+
+    /**
+     * バスモーダル（Open）
+     */
+    onBusModalOpen(current) {
+      this.busModal.show = true;
+      this.busModal.current = current;
+    },
+    /**
+     * バスモーダル（Close）
+     */ 
+    onBusModalClose() {
+      this.busModal.show = false;
+      this.busModal.current = '';
+    },
+
+    /**
+     * ホテルモーダル（Open）
+     */
+    onHotelModalOpen(current) {
+      this.hotelModal.show = true;
+      this.hotelModal.current = current;
+    },
+    /**
+     * ホテルモーダル（Close）
+     */ 
+    onHotelModalClose() {
+      this.hotelModal.show = false;
+      this.hotelModal.current = '';
     },
   }
 })
