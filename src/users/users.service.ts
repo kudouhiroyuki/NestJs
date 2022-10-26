@@ -182,6 +182,9 @@ import { PrismaService } from '../prisma.service'
 //   }
 // })
 
+// const users = await this.prisma.users.groupBy({
+//   by: ['point']
+// })
 // const users = await this.prisma.users.findMany({
 //   distinct: ['point'],
 //   select: {
