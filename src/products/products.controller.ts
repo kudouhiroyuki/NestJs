@@ -74,6 +74,16 @@ export class ProductsController {
     return res.redirect(`/enbedProducts/regist?productCode=${productCode}`)
   }
   /**
+   * POST 保存して次へ処理（リダイレクト 商品料金設定）
+   */
+  @Post('/productFeePlans')
+  async redirectProductFeePlans(@Res() res: any, @Body() body: any) {
+    console.log('保存して次へ処理')
+    console.log(body)
+    const productCode = '1003'
+    return res.redirect(`/productFeePlans/regist?productCode=${productCode}`)
+  }
+  /**
    * 共通テンプレート（商品登録）
    */
   createdRegistTemplate(query: any) {
