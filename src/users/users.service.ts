@@ -216,6 +216,14 @@ import { PrismaService } from '../prisma.service'
 //   }
 // })
 
+// const result = await this.prisma.users.aggregate({
+//   _sum: {
+//     id: true,
+//     point: true
+//   }
+// })
+// return result._sum.id + result._sum.point
+
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
