@@ -470,16 +470,25 @@ GROUP BY age;<br>
 SELECT SUM(point)
 FROM nest.users;
 
-return await this.prisma.users.aggregate({
+const result = await this.prisma.users.aggregate({
   _sum: {
     point: true
-    }
+  }
 })
+return result._sum
 ```
 
+```
+SELECT SUM(DISTINCT point)
+FROM nest.users;
 
-SELECT SUM(DISTINCT point)<br>
-FROM nest.users;<br>
+const result = await this.prisma.users.groupBy({
+  by: ['point']
+})
+return {
+  point: result.reduce((sum, i) => sum + i.point, 0)
+}
+```
 
 SELECT departmentId, SUM(point)<br>
 FROM nest.users<br>
