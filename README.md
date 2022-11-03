@@ -467,8 +467,8 @@ GROUP BY age;<br>
 ※HAVING：GROUP BYの後に条件適応<br>
 
 ```
-SELECT SUM(point)<br>
-FROM nest.users;<br>
+SELECT SUM(point)
+FROM nest.users;
 
 return await this.prisma.users.aggregate({
   _sum: {
