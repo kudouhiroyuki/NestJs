@@ -488,6 +488,16 @@ const result = await this.prisma.users.groupBy({
 return {
   point: result.reduce((sum, i) => sum + i.point, 0)
 }
+
+const result = await this.prisma.users.findMany({
+  distinct: ['point'],
+  select: {
+    point: true
+  }
+})
+return {
+  point: result.reduce((sum, i) => sum + i.point, 0)
+}
 ```
 
 SELECT departmentId, SUM(point)<br>
