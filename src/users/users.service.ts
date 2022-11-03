@@ -176,34 +176,6 @@ import { PrismaService } from '../prisma.service'
 //   }
 // })
 
-// return await this.prisma.users.aggregate({
-//   _sum: {
-//     point: true
-//   }
-// })
-
-// const users = await this.prisma.users.groupBy({
-//   by: ['point']
-// })
-// const users = await this.prisma.users.findMany({
-//   distinct: ['point'],
-//   select: {
-//     point: true
-//   }
-// })
-// let pointSum = 0
-// for (const user of users) {
-//   pointSum += user.point
-// }
-// return { sum: pointSum }
-
-// return await this.prisma.users.groupBy({
-//   by: ['departmentId'],
-//   _sum: {
-//     point: true
-//   }
-// })
-
 // return await this.prisma.users.groupBy({
 //   by: ['departmentId'],
 //   _sum: {
