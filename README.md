@@ -500,9 +500,22 @@ return {
 }
 ```
 
-SELECT departmentId, SUM(point)<br>
-FROM nest.users<br>
-GROUP BY departmentId;<br>
+```
+SELECT departmentId, SUM(point)
+FROM nest.users
+GROUP BY departmentId;
+
+const result = await this.prisma.users.groupBy({
+  by: ['departmentId'],
+  _sum: {
+    point: true
+  }
+})
+return result.map((item) => ({
+  departmentId: item.departmentId,
+  point: item._sum.point
+}))
+```
 
 SELECT departmentId, SUM(point)<br>
 FROM nest.users<br>
