@@ -537,9 +537,20 @@ SELECT SUM(u.id), COUNT(d.departmentId) FROM nest.users AS u<br>
 INNER JOIN nest.departments AS d<br>
 ON u.departmentId = d.departmentId;<br>
 
-SELECT SUM(u.id) + COUNT(d.departmentId) FROM nest.users AS u<br>
-INNER JOIN nest.departments AS d<br>
-ON u.departmentId = d.departmentId;<br>
+```
+SELECT SUM(u.id) + COUNT(d.departmentId) FROM nest.users AS u<
+INNER JOIN nest.departments AS d
+ON u.departmentId = d.departmentId;
+
+const result = await this.prisma.users.findMany({
+  include: {
+    department: true
+  }
+})
+return {
+  sum: result.reduce((sum, i) => sum + i.id, 0) + result.length
+}
+```
 
 #### 用語<br>
 - ステートメント
