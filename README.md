@@ -29,8 +29,15 @@ npm i<br>
 npm run start:dev<br>
 
 ## 起動（Docker有）<br>
+.env
+DATABASE_URL="mysql://root:root@nestjs-demo-db:3306/nestjs_demo"
+
 cd NestJs<br>
 docker compose up -d --build<br>
+
+docker container exec -it minto-ec-nest bash<br>
+npx prisma migrate dev --name init<br>
+npm i<br>
 
 docker container exec -it nestjs-demo-db bash<br>
 mysql -u root -p<br>
