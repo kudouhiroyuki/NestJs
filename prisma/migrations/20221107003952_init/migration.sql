@@ -10,6 +10,7 @@ CREATE TABLE `users` (
     `createdAt` DATETIME(0) NOT NULL,
     `updateAt` DATETIME(0) NOT NULL,
 
+    INDEX `users_departmentId_fkey`(`departmentId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
