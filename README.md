@@ -21,22 +21,22 @@ mysql -u root -p;<br>
 CREATE DATABASE nest;<br>
 
 .env<br>
-DATABASE_URL="mysql://root:@localhost:3306/nest"
+DATABASE_URL="mysql://root:@localhost:3306/nest"<br>
 
 cd NestJs<br>
 npx prisma migrate dev --name init<br>
 npm i<br>
-npm run start:dev
+npm run start:dev<br>
 
 ## 起動（Docker有）<br>
 cd NestJs<br>
 docker compose up -d --build<br>
 
-docker container exec -it nestjs-demo-db bash
-mysql -u root -p
-SHOW DATABASES;
-USE nestjs_demo;
-SHOW TABLES;
+docker container exec -it nestjs-demo-db bash<br>
+mysql -u root -p<br>
+SHOW DATABASES;<br>
+USE nestjs_demo;<br>
+SHOW TABLES;<br>
 
 docker compose exec nest npm run start:dev
 
