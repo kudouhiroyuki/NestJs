@@ -31,6 +31,13 @@ npm run start:dev
 ## 起動（Docker有）<br>
 cd NestJs<br>
 docker compose up -d --build<br>
+
+docker container exec -it nestjs-demo-db bash
+mysql -u root -p
+SHOW DATABASES;
+USE nestjs_demo;
+SHOW TABLES;
+
 docker compose exec nest npm run start:dev
 
 ## Dockerコマンド<br>
@@ -46,9 +53,13 @@ docker rmi {IMAGE ID}（イメージ削除）
 ## Prismaコマンド<br>
 - マイグレーションファイル（作成・更新）<br>
 ※テーブル内にデータがあれば更新できない<br>
-npx prisma migrate dev --name init
-- フォーマット修正
-npx prisma format
+npx prisma migrate dev --name init<br>
+
+- フォーマット修正<br>
+npx prisma format<br>
+
+- 既存DBの反映<br>
+npx prisma db pull<br>
 
 ## Nestコマンド<br>
 - モジュール・コントローラー・サービス作成<br>

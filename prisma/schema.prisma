@@ -14,10 +14,12 @@ model users {
   address      String
   age          String
   departmentId String
-  department   departments @relation(fields: [departmentId], references: [departmentId])
   point        Int?
   createdAt    DateTime    @db.DateTime(0)
   updateAt     DateTime    @db.DateTime(0)
+  department   departments @relation(fields: [departmentId], references: [departmentId])
+
+  @@index([departmentId], map: "users_departmentId_fkey")
 }
 
 model departments {

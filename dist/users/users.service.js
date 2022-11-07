@@ -25,6 +25,15 @@ let UsersService = class UsersService {
             whereConditions['userName'] = { contains: query.userName };
         if (query.sort)
             orderConditions['id'] = query.sort;
+        const result = await this.prisma.users.findMany({
+            include: {
+                department: true
+            }
+        });
+        return {
+            sum: result.reduce((sum, i) => sum + i.id, 0),
+            count: result.length
+        };
     }
     async createUser(data) {
         return await this.prisma.users.create({ data });
