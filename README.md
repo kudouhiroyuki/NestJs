@@ -29,8 +29,8 @@ npm i<br>
 npm run start:dev<br>
 
 ## 起動（Docker有）<br>
-.env
-DATABASE_URL="mysql://root:root@nestjs-demo-db:3306/nestjs_demo"
+.env<br>
+DATABASE_URL="mysql://root:root@nestjs-demo-db:3306/nestjs_demo"<br>
 
 cd NestJs<br>
 docker compose up -d --build<br>

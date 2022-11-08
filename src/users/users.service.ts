@@ -207,22 +207,22 @@ export class UsersService {
     if (query.userName) whereConditions['userName'] = { contains: query.userName }
     if (query.sort) orderConditions['id'] = query.sort
 
-    // return await this.prisma.users.findMany({
-    //   select: {
-    //     id: true,
-    //     userName: true,
-    //     password: true,
-    //     address: true,
-    //     age: true,
-    //     departmentId: true,
-    //     point: true,
-    //     createdAt: true,
-    //     updateAt: true
-    //   },
-    //   where: whereConditions,
-    //   orderBy: orderConditions,
-    //   skip: 0
-    // })
+    return await this.prisma.users.findMany({
+      select: {
+        id: true,
+        userName: true,
+        password: true,
+        address: true,
+        age: true,
+        departmentId: true,
+        point: true,
+        createdAt: true,
+        updateAt: true
+      },
+      where: whereConditions,
+      orderBy: orderConditions,
+      skip: 0
+    })
   }
 
   async createUser(data: {
