@@ -48,7 +48,26 @@ SHOW TABLES;<br>
 docker compose exec nest npm run start:dev
 
 ## Dockerコマンド<br>
+■Webサーバー（http://localhost/）<br>
+docker run --name static-site -e AUTHOR="Docker" -d -p 80:80 seqvence/static-site<br>
+
+■MySQL<br>
+docker pull mysql（MySQLイメージ取得）<br>
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=mysql -d -p 3306:3306 mysql（コンテナ起動･作成）<br>
+docker exec -it mysql bash -p（コンテナ接続）<br>
+mysql -u root -p mysql（MySQL接続）<br>
+■MySQL Workbench（Connections追加）<br>
+Connection Name: MysqlTest<br>
+Hostname: 127.0.0.1<br>
+Port: 3306<br>
+Username: root<br>
+
+<-----------次やること-----------------><br>
+■MySQL Workbench 一通り確認<br>
+■Swagger（構築　＋　一通り確認）<br>
+
 docker version（バージョン）<br>
+docker-compose version（バージョン）<br>
 docker images（イメージ一覧）<br>
 docker ps（起動中コンテナ）<br>
 docker ps -a（起動中/停止中コンテナ）<br>
