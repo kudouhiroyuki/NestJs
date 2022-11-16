@@ -30,7 +30,7 @@ npm run start:dev<br>
 
 ## 起動（Docker有）<br>
 .env<br>
-DATABASE_URL="mysql://root:root@nestjs-demo-db:3306/nestjs_demo"<br>
+DATABASE_URL="mysql://root:root@nest-db:3306/nest"<br>
 
 cd NestJs<br>
 docker compose up -d --build<br>
@@ -39,11 +39,18 @@ docker container exec -it minto-ec-nest bash<br>
 npx prisma migrate dev --name init<br>
 npm i<br>
 
+■MySQL Container<br>
 docker container exec -it nestjs-demo-db bash<br>
 mysql -u root -p<br>
 SHOW DATABASES;<br>
 USE nestjs_demo;<br>
 SHOW TABLES;<br>
+
+■MySQL Workbench<br>
+Connection Name: nestDb<br>
+Hostname: 127.0.0.1<br>
+Port: 3306<br>
+Username: root<br>
 
 docker compose exec nest npm run start:dev
 
@@ -64,7 +71,9 @@ Username: root<br>
 
 <-----------次やること-----------------><br>
 ■MySQL Workbench 一通り確認<br>
-■Swagger（構築　＋　一通り確認）<br>
+■Swagger（構築 + 一通り確認）<br>
+■SQL 一般クエリーlogの復習（ローカル ＋ docker）<br>
+■ShellスクリプトでJSを実行できるか？ テストの自動化<br>
 
 docker version（バージョン）<br>
 docker-compose version（バージョン）<br>
