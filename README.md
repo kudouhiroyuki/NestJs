@@ -35,12 +35,12 @@ DATABASE_URL="mysql://root:root@nest-db:3306/nest"<br>
 cd NestJs<br>
 docker compose up -d --build<br>
 
-docker container exec -it minto-ec-nest bash<br>
+docker container exec -it nest-web bash<br>
 npx prisma migrate dev --name init<br>
 npm i<br>
 
 ■MySQL Container<br>
-docker container exec -it nestjs-demo-db bash<br>
+docker container exec -it nest-db bash<br>
 mysql -u root -p<br>
 SHOW DATABASES;<br>
 USE nestjs_demo;<br>
