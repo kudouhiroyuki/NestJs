@@ -43,7 +43,7 @@ npm i<br>
 docker container exec -it nest-db bash<br>
 mysql -u root -p<br>
 SHOW DATABASES;<br>
-USE nest<br>
+USE nest;<br>
 SHOW TABLES;<br>
 
 ■MySQL Workbench<br>
@@ -52,7 +52,7 @@ Hostname: 127.0.0.1<br>
 Port: 3306<br>
 Username: root<br>
 
-docker compose exec nest npm run start:dev
+docker compose exec web npm run start:dev
 
 ## Dockerコマンド<br>
 ■Webサーバー（http://localhost/）<br>
