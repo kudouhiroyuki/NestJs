@@ -43,7 +43,7 @@ npm i<br>
 docker container exec -it nest-db bash<br>
 mysql -u root -p<br>
 SHOW DATABASES;<br>
-USE nestjs_demo;<br>
+USE nest<br>
 SHOW TABLES;<br>
 
 ■MySQL Workbench<br>
