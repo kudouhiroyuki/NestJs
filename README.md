@@ -1,3 +1,10 @@
+<-----------次やること-----------------><br>
+■Postman 一通り確認
+■MySQL Workbench 一通り確認<br>
+■Swagger（構築 + 一通り確認）<br>
+■SQL 一般クエリーlogの復習（ローカル ＋ docker）<br>
+■ShellスクリプトでJSを実行できるか？ テストの自動化<br>
+
 - 動作確認用（users）<br>
 OK curl -X GET "http://localhost:3000/users"<br>
 OK curl -X GET "http://localhost:3000/users?id=&userName=&sort="<br>
@@ -68,12 +75,6 @@ Connection Name: MysqlTest<br>
 Hostname: 127.0.0.1<br>
 Port: 3306<br>
 Username: root<br>
-
-<-----------次やること-----------------><br>
-■MySQL Workbench 一通り確認<br>
-■Swagger（構築 + 一通り確認）<br>
-■SQL 一般クエリーlogの復習（ローカル ＋ docker）<br>
-■ShellスクリプトでJSを実行できるか？ テストの自動化<br>
 
 docker version（バージョン）<br>
 docker-compose version（バージョン）<br>
