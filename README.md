@@ -30,30 +30,11 @@
 ■単体テスト<br>
 
 <-----------次やること-----------------><br>
-■Postman 一通り確認
-■Curl 一通り確認
 ■MySQL Workbench 一通り確認<br>
 ■Swagger（構築 + 一通り確認）<br>
 ■SQL 一般クエリーlogの復習（ローカル ＋ docker）<br>
 ■jwt認証(JSON Web Token)
 ■ShellスクリプトでJSを実行できるか？ テストの自動化<br>
-
-- 動作確認用（users）<br>
-OK curl -X GET "http://localhost:3000/users"<br>
-OK curl -X GET "http://localhost:3000/users?id=&userName=&sort="<br>
-OK curl -X GET "http://localhost:3000/users?id=1&userName=kudou"<br>
-OK curl -X GET "http://localhost:3000/users?id=2&userName=tanaka"<br>
-OK curl -X GET "http://localhost:3000/users?sort=asc"<br>
-OK curl -X GET "http://localhost:3000/users?sort=desc"<br>
-curl -X GET "http://localhost:3000/users?sort=ASC&limit=5&page_number=1"<br>
-curl -X GET "http://localhost:3000/users?sort=DESC&limit=5&page_number=1"<br>
-curl -X GET "http://localhost:3000/users?id=&userName=&sort=ASC&limit=5&page_number=1"<br>
-curl -X GET "http://localhost:3000/users?id=1&userName=kudou&sort=ASC&limit=5&page_number=1"<br>
-curl -X GET "http://localhost:3000/users/1"<br>
-curl -X POST http://localhost:3000/users -d "userName=name&password=password"<br>
-curl -X PUT http://localhost:3000/users/1 -d "userName=updateName&password=updatePassword"<br>
-curl -X DELETE http://localhost:3000/users/1<br>
--v<br>
 
 ## 起動（Docker無）<br>
 MySQL<br>
@@ -116,6 +97,14 @@ docker start {CONTAINER ID}（コンテナ起動）<br>
 docker stop {CONTAINER ID}（コンテナ停止）<br>
 docker rm {CONTAINER ID}（コンテナ削除）<br>
 docker rmi {IMAGE ID}（イメージ削除）
+
+## Curlコマンド<br>
+curl --version<br>
+curl -v -X GET "http://localhost:3000/users"<br>
+curl -X GET "http://localhost:3000/users"<br>
+curl -X POST http://localhost:3000/users -d "userName=name&password=password"<br>
+curl -X PUT http://localhost:3000/users/1 -d "userName=updateName&password=updatePassword"<br>
+curl -X DELETE http://localhost:3000/users/1<br>
 
 ## Prismaコマンド<br>
 - マイグレーションファイル（作成・更新）<br>
