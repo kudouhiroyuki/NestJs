@@ -26,7 +26,7 @@
 
 ## CRUD<br>
 |  Method  |  URL  |  controller  |  service  |  画面の有無  |  内容  |
-|  ----  | ----  |  ----  |  ----  |  ----  |
+|  ----  | ----  |  ----  |  ----  |  ----  |  ----  
 |  GET  |  users  |  getUsers()  |  findAll()  |  有  |  一覧表示画面  |
 |  GET  |  users/create  |  createUser()  |  有  |  新規登録画面  |
 |  POST  |  users  |  @store  |  無  |  追加処理(新規登録画面：登録ボタン)  |
