@@ -1,0 +1,58 @@
+<nav id="sidebar">
+  <div :class="{active: isTabStatus}" class="userRow">
+    <div class="topArea">
+      <img class="icon" src="/images/photo/user.png">
+      <span class="name">名前名前名前名前名前名前</span>
+      <img @click="onTabToggle" class="arow" src="/images/icon/arow.svg">
+    </div>
+    <p>グループ切替</p>
+    <button type="button">アカウントグループ<img class="arow" src="/images/icon/arow.svg"></button>
+  </div>
+  <a href="/tenants" class="">
+    <img src="/images/icon/tenant.svg">テナント管理
+  </a>
+  <a href="/products" class="">
+    <img src="/images/icon/products.svg">商品管理
+  </a>
+  <a href="" class=""><img src="/images/icon/bus.svg">バス管理</a>
+  <a href="" class=""><img src="/images/icon/hotel.svg">ホテル管理</a>
+  <a href="/inventorys/reference" class="">
+    <img src="/images/icon/inventory.svg">在庫管理
+  </a>
+  <a href="/orders" class="">
+    <img src="/images/icon/order.svg">注文管理
+  </a>
+  <a href="" class=""><img src="/images/icon/receipt.svg">レポート</a>
+  <a href="" class=""><img src="/images/icon/coupon.svg">クーポン管理</a>
+  <a href="/accounts" class="">
+    <img src="/images/icon/account.svg">アカウント管理
+  </a>
+  <a href="/accountGroups" class="">
+    <img src="/images/icon/account.svg">アカウントグループ管理
+  </a>
+  <a href="/notifications" class="">
+    <img src="/images/icon/notification.svg">お知らせ管理
+  </a>
+  <a href="/members">
+    <img src="/images/icon/members.svg">会員管理
+  </a>
+  <a href="/maintenances">
+    <img src="/images/icon/maintenance.svg">メンテナンス管理
+  </a>
+  <a href="" class=""><img src="/images/icon/logging.svg">ログ照会</a>
+  <a href="" class=""><img src="/images/icon/logout.svg">ログアウト</a>
+</nav>
+
+<script type="text/javascript">
+new Vue({
+  el: "#sidebar",
+  data: {
+    isTabStatus: false,
+  },
+  methods: {
+    onTabToggle() {
+      this.isTabStatus = !this.isTabStatus;
+    },
+  }
+})
+</script>
