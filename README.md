@@ -1,8 +1,3 @@
-■Postman<br>
-■Curl<br>
-■MySQL Workbench<br>
-■Swagger<br>
-
 ## 開発工程<br>
 要件定義→外部設計→内部設計→開発→単体テスト→結合テスト→システムテスト→運用テスト→システム移行<br>
 
@@ -29,12 +24,16 @@
 
 ■単体テスト<br>
 
-<-----------次やること-----------------><br>
-■MySQL Workbench 一通り確認<br>
-■Swagger（構築 + 一通り確認）<br>
-■SQL 一般クエリーlogの復習（ローカル ＋ docker）<br>
-■jwt認証(JSON Web Token)
-■ShellスクリプトでJSを実行できるか？ テストの自動化<br>
+## CRUD<br>
+|  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
+|  ----  | ----  |  ----  |  ----  |  ----  |
+|  GET  |  users  |  @index  |  有  |  一覧画面  |
+|  GET  |  users/create  |  @create  |  有  |  新規作成画面  |
+|  POST  |  users  |  @store  |  無  |  追加処理(新規作成画面：登録ボタン)  |
+|  GET  |  users/{id}  |  @show  |  有  |  詳細画面  |
+|  GET  |  users/{id}/edit  |  @edit  |  有  |  編集画面  |
+|  PUT  |  users/{id}  |  @update  |  無  |  変更処理(編集画面：更新ボタン)  |
+|  DELETE  |  users/{id}  |  @destroy  |  無  |  変更処理(編集画面：削除ボタン)  |
 
 ## 起動（Docker無）<br>
 MySQL<br>
@@ -669,17 +668,6 @@ SQLでDELETE文を発行してレコードを削除すること<br>
 オペレーティングシステム（OS）の基本機能の役割を担うソフトウェア<br>
 
 - RDBMS（リレーショナルデータベース管理システム）<br>
-
-## CRUD<br>
-|  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
-|  ----  | ----  |  ----  |  ----  |  ----  |
-|  GET  |  users  |  @index  |  有  |  一覧画面  |
-|  GET  |  users/create  |  @create  |  有  |  新規作成画面  |
-|  POST  |  users  |  @store  |  無  |  追加処理(新規作成画面：登録ボタン)  |
-|  GET  |  users/{id}  |  @show  |  有  |  詳細画面  |
-|  GET  |  users/{id}/edit  |  @edit  |  有  |  編集画面  |
-|  PUT  |  users/{id}  |  @update  |  無  |  変更処理(編集画面：更新ボタン)  |
-|  DELETE  |  users/{id}  |  @destroy  |  無  |  変更処理(編集画面：削除ボタン)  |
 
 ## 参考サイト<br>
 - Nestjs(公式)<br>
