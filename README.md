@@ -25,9 +25,9 @@
 ■単体テスト<br>
 
 ## CRUD<br>
-|  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
+|  Method  |  URL  |  controller  |  service  |  画面の有無  |  内容  |
 |  ----  | ----  |  ----  |  ----  |  ----  |
-|  GET  |  users  |  getUsers()  |  有  |  一覧表示画面  |
+|  GET  |  users  |  getUsers()  |  findAll()  |  有  |  一覧表示画面  |
 |  GET  |  users/create  |  createUser()  |  有  |  新規登録画面  |
 |  POST  |  users  |  @store  |  無  |  追加処理(新規登録画面：登録ボタン)  |
 |  GET  |  users/{id}  |  @show  |  有  |  詳細画面  |
