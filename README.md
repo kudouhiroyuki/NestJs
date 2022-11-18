@@ -28,8 +28,8 @@
 |  Method  |  URL  |  アクション  |  画面の有無  |  内容  |
 |  ----  | ----  |  ----  |  ----  |  ----  |
 |  GET  |  users  |  @index  |  有  |  一覧画面  |
-|  GET  |  users/create  |  @create  |  有  |  新規作成画面  |
-|  POST  |  users  |  @store  |  無  |  追加処理(新規作成画面：登録ボタン)  |
+|  GET  |  users/create  |  @create  |  有  |  新規登録画面  |
+|  POST  |  users  |  @store  |  無  |  追加処理(新規登録画面：登録ボタン)  |
 |  GET  |  users/{id}  |  @show  |  有  |  詳細画面  |
 |  GET  |  users/{id}/edit  |  @edit  |  有  |  編集画面  |
 |  PUT  |  users/{id}  |  @update  |  無  |  変更処理(編集画面：更新ボタン)  |
