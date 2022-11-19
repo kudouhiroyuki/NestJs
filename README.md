@@ -40,7 +40,7 @@ update update
 |  Method  |  URL  |  controller  |  service  |  画面  |  内容  |
 |  ----| ----  |  ----  |  ----  |  ----  |  ----  
 |  GET  |  users  |  getIndex()  |  findUsersAll()  |  index.ejs  |  一覧表示画面  |
-|  GET  |  users/regist  |  getRegist()  |  findDepartmentsAll()  |  regist.ejs  |  新規登録画面  |
+|  GET  |  users/regist  |  getRegist()  |  findDepartmentsAll()<br>findPostsAll()  |  regist.ejs  |  新規登録画面  |
 |  POST  |  users/regist  |  postRegist()  |  create()  |  無  |  新規登録画面：追加処理  |
 |  GET  |  users/{id}  |  getDetail()  |  findUser()  |  detail.ejs  |  詳細画面  |
 |  POST  |  users/{id}/update  |  postDetailUpdate()  |  update()  |  無  |  詳細画面：更新処理  |
