@@ -29,10 +29,10 @@
 |  ----| ----  |  ----  |  ----  |  ----  |  ----  
 |  GET  |  users  |  getIndex()  |  findUsersAll()  |  index.ejs  |  一覧表示画面  |
 |  GET  |  users/regist  |  getRegist()  |  無  |  regist.ejs  |  新規登録画面  |
-|  POST  |  users  |  postRegist  |  無  |  追加処理(新規登録画面：登録ボタン)  |
-|  GET  |  users/detail/{id}  |  @show  |  detail.ejs  |  詳細画面  |
-|  PUT  |  users/detail/{id}  |  @update  |  無  |  変更処理(詳細画面：更新ボタン)  |
-|  DELETE  |  users/detail/{id}  |  @destroy  |  無  |  変更処理(詳細画面：削除ボタン)  |
+|  POST  |  users  |  createUser()  |  無  |  追加処理(新規登録画面：登録ボタン)  |
+|  GET  |  users/{id}  |  getDetail()  ||  findUser()    detail.ejs  |  詳細画面  |
+|  POST  |  users/{id}/update  |  @update  |  無  |  変更処理(詳細画面：更新ボタン)  |
+|  POST  |  users/{id}/delete  |  @destroy  |  無  |  変更処理(詳細画面：削除ボタン)  |
 
 ## 起動（Docker無）<br>
 MySQL<br>
