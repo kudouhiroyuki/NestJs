@@ -26,7 +26,7 @@
 
 ## CRUD<br>
 |  Method  |  URL  |  controller  |  service  |  画面/処理  |
-|  ----| ----  |  ----  |  ----  |  ----  |  ----  
+|  ----　| ----  |  ----  |  ----  |  ----  |  
 |  GET  |  users  |  getIndex()  |  【Init処理データ】<br>findUsersAll()  |  一覧表示画面<br>index.ejs  |
 |  GET  |  users/regist  |  getRegist()  |  【Init処理データ】<br>findDepartmentsAll()<br>findPostsAll()  |  新規登録画面<br>regist.ejs  |
 |  POST  |  users/regist  |  postRegist()  |  create()  |  追加処理（新規登録画面）  |
