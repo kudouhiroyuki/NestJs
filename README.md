@@ -27,9 +27,9 @@
 ## CRUD<br>
 |  Method  |  URL  |  controller  |  service  |  画面  |  内容  |
 |  ----| ----  |  ----  |  ----  |  ----  |  ----  
-|  GET  |  users  |  indexPage()  |  getUsers()  |  有  |  一覧表示画面  |
-|  GET  |  users/create  |  createPage()  |  無  |  有  |  新規登録画面  |
-|  POST  |  users  |  @store  |  無  |  追加処理(新規登録画面：登録ボタン)  |
+|  GET  |  users  |  indexPage()  |  findUsersAll()  |  有  |  一覧表示画面  |
+|  GET  |  users/regist  |  registPage()  |  無  |  有  |  新規登録画面  |
+|  POST  |  users  |  postRegist  |  無  |  追加処理(新規登録画面：登録ボタン)  |
 |  GET  |  users/{id}  |  @show  |  有  |  詳細画面  |
 |  GET  |  users/{id}/edit  |  @edit  |  有  |  編集画面  |
 |  PUT  |  users/{id}  |  @update  |  無  |  変更処理(編集画面：更新ボタン)  |
