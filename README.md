@@ -34,7 +34,7 @@
 |  POST  |  users/{id}/update  |  postDetailUpdate()  |  update()  |  無  |  詳細画面：更新処理  |
 |  POST  |  users/{id}/delete  |  postDetailDelete()  |  delete()  |  無  |  詳細画面：削除処理  |
 
-## NestJS<br>
+## Controller, Service, Repository<br>
 ■Controller<br>
 ・クライアントからのリクエストを受け付け、クライアントにレスポンスを返す<br>
 ・ルーティングの役割を担うファイル<br>
