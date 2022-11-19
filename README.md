@@ -24,18 +24,6 @@
 
 ■単体テスト<br>
 
-一覧表示画面
-getList findAccountGroupsAll
-新規登録画面
-getListTenant findAllTenant
-新規登録画面：追加処理
-postRegist　updateAccountGroup
-詳細画面
-init findById
-詳細画面：更新処理
-update update
-
-
 ## CRUD<br>
 |  Method  |  URL  |  controller  |  service  |  画面  |  内容  |
 |  ----| ----  |  ----  |  ----  |  ----  |  ----  
