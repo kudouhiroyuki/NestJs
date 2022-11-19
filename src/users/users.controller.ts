@@ -48,8 +48,8 @@ export class UsersController {
   constructor(private readonly service: UsersService) {}
 
   @Get()
-  async getUsers(@Query() query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
-    return await this.service.getUsers(query)
+  async getIndex(@Query() query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
+    return await this.service.findUsersAll(query)
   }
 
   @Post()

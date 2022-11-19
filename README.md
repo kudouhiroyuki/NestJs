@@ -34,6 +34,16 @@
 |  POST  |  users/{id}/update  |  postDetailUpdate()  |  update()  |  無  |  詳細画面：更新処理  |
 |  POST  |  users/{id}/delete  |  postDetailDelete()  |  delete()  |  無  |  詳細画面：削除処理  |
 
+## NestJS<br>
+■Controller
+・クライアントからのリクエストを受け付け、クライアントにレスポンスを返す（ルーティングの役割を担うファイル）
+・ロジックにあたる処理は書かない
+■Service
+・ビジネスロジックを定義するファイル
+・細かい処理はここに書いていく
+■Repository
+データベースへの参照や作成、更新、削除などのいわゆるCRUD処理を記述するためのファイル
+
 ## 起動（Docker無）<br>
 MySQL<br>
 mysql -u root -p;<br>
@@ -114,12 +124,6 @@ npx prisma format<br>
 
 - 既存DBの反映<br>
 npx prisma db pull<br>
-
-## Nestコマンド<br>
-- モジュール・コントローラー・サービス作成<br>
-nest g module users<br>
-nest g controller users<br>
-nest g service users
 
 ## MySQL<br>
 #### MySQLコマンドラインツールの利用<br>

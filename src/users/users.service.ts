@@ -200,13 +200,12 @@ import { PrismaService } from '../prisma.service'
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getUsers(query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<any> {
+  async findUsersAll(query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<any> {
     const whereConditions = {}
     const orderConditions = {}
     if (query.id) whereConditions['id'] = Number(query.id)
     if (query.userName) whereConditions['userName'] = { contains: query.userName }
     if (query.sort) orderConditions['id'] = query.sort
-
     return await this.prisma.users.findMany({
       select: {
         id: true,
@@ -250,3 +249,13 @@ export class UsersService {
     return await this.prisma.users.delete({ where })
   }
 }
+
+// async findTenantsAll(): Promise<TenantResponseDto[]> {
+//   const resultTenants = await this.tenantsRepository.findTenantsAll(); //リポジトリ呼び出す
+//   const tenants = new Array<TenantResponseDto>(); //インスタンス生成
+//   for (const resultTenant of resultTenants) {
+//     const tenant = new TenantResponseDto(resultTenant); //resultTenantが1つはいる、一テナント情報を取得
+//     tenants.push(tenant); //tenantsに一テナント情報を入れていく
+//   }
+//   return tenants;
+// }
