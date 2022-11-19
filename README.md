@@ -25,14 +25,14 @@
 ■単体テスト<br>
 
 ## CRUD<br>
-|  Method  |  URL  |  controller  |  service  |  画面  |  内容  |
+|  Method  |  URL  |  controller  |  service  |  画面/処理  |
 |  ----| ----  |  ----  |  ----  |  ----  |  ----  
-|  GET  |  users  |  getIndex()  |  【Init処理データ】<br>findUsersAll()  |  index.ejs  |  一覧表示画面  |
-|  GET  |  users/regist  |  getRegist()  |  【Init処理データ】<br>findDepartmentsAll()<br>findPostsAll()  |  regist.ejs  |  新規登録画面  |
-|  POST  |  users/regist  |  postRegist()  |  create()  |  無  |  新規登録画面：追加処理  |
-|  GET  |  users/{id}  |  getDetail()  |  【Init処理データ】<br>findUser()  |  detail.ejs  |  詳細画面  |
-|  POST  |  users/{id}/update  |  postDetailUpdate()  |  update()  |  無  |  詳細画面：更新処理  |
-|  POST  |  users/{id}/delete  |  postDetailDelete()  |  delete()  |  無  |  詳細画面：削除処理  |
+|  GET  |  users  |  getIndex()  |  【Init処理データ】<br>findUsersAll()  |  一覧表示画面<br>index.ejs  |
+|  GET  |  users/regist  |  getRegist()  |  【Init処理データ】<br>findDepartmentsAll()<br>findPostsAll()  |  新規登録画面<br>regist.ejs  |
+|  POST  |  users/regist  |  postRegist()  |  create()  |  追加処理（新規登録画面）  |
+|  GET  |  users/{id}  |  getDetail()  |  【Init処理データ】<br>findUser()  |  詳細画面<br>detail.ejs  |
+|  POST  |  users/{id}/update  |  postDetailUpdate()  |  update()  |  更新処理（詳細画面）  |
+|  POST  |  users/{id}/delete  |  postDetailDelete()  |  delete()  |  削除処理（詳細画面）  |
 
 ## Controller, Service, Repository<br>
 ■Controller<br>
