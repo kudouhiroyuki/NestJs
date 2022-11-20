@@ -25,7 +25,7 @@
 ■単体テスト<br>
 
 ## CRUD<br>
-※service：画面Init処理により複数呼び出し（repository）
+※serviceは画面Init処理によって、複数repositoryを呼び出す
   画面/処理  |  URL  |  controller  |  service  |  repository  |
 |  ----  |  ----  |  ----  |  ----  |  ----  |  
 |  【一覧表示画面】<br>users/index.ejs  |  【GET】<br>users  |  getIndex()  |  findUsersAll()  |  findUsersAll()  |
