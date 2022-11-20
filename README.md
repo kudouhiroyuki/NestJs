@@ -25,9 +25,13 @@
 ■単体テスト<br>
 
 ## CRUD<br>
-  画面/処理  |  URL  |  controller  |  service  |  service  |
+※service：画面のInit処理により複数呼び出し
+  画面/処理  |  URL  |  controller  |  service  |  repository  |
 |  ----  |  ----  |  ----  |  ----  |  ----  |  
-|  【一覧表示画面】<br>index.ejs  |  【GET】<br>users  |  getIndex()  |  【Init処理データ】<br>findUsersAll()  |  findUsersAll()  |
+|  【一覧表示画面】<br>index.ejs  |  【GET】<br>users  |  getIndex()  |  findUsersAll()  |  findUsersAll()  |
+|  【新規登録画面】<br>regist.ejs  |  【GET】<br>users/regist  |  getRegist()  |  findDepartmentsAll()  |  findDepartmentsAll()  |
+
+
 <!-- |  GET  |  users/regist  |  getRegist()  |  【Init処理データ】<br>findDepartmentsAll()<br>findPostsAll()  |  【新規登録画面】<br>regist.ejs  |
 |  POST  |  users/regist  |  postRegist()  |  create()  |  【追加処理】<br>新規登録画面  |
 |  GET  |  users/{id}  |  getDetail()  |  【Init処理データ】<br>findUser()  |  【詳細画面】<br>detail.ejs  |
