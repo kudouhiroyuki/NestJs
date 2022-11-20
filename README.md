@@ -30,13 +30,12 @@
 |  ----  |  ----  |  ----  |  ----  |  ----  |  
 |  【一覧表示画面】<br>index.ejs  |  【GET】<br>users  |  getIndex()  |  findUsersAll()  |  findUsersAll()  |
 |  【新規登録画面】<br>regist.ejs  |  【GET】<br>users/regist  |  getRegist()  |  findDepartmentsAll()  |  findDepartmentsAll()  |
+|  【追加処理】<br>新規登録画面  |  【POST】<br>users/regist  |  postRegist()  |  createUsers()  |  createUsers()  |
+|  【詳細画面】<br>detail.ejs  |  【GET】<br>users/{id}  |  getDetail()  |  findUserDetail()  |  findUserById()  |
 
-
-<!-- |  GET  |  users/regist  |  getRegist()  |  【Init処理データ】<br>findDepartmentsAll()<br>findPostsAll()  |  【新規登録画面】<br>regist.ejs  |
-|  POST  |  users/regist  |  postRegist()  |  create()  |  【追加処理】<br>新規登録画面  |
-|  GET  |  users/{id}  |  getDetail()  |  【Init処理データ】<br>findUser()  |  【詳細画面】<br>detail.ejs  |
+<!--
 |  POST  |  users/{id}/update  |  postDetailUpdate()  |  update()  |  【更新処理】<br>詳細画面  |
-|  POST  |  users/{id}/delete  |  postDetailDelete()  |  delete()  |  【削除処理】<br>詳細画面  | -->
+|  POST  |  users/{id}/delete  |  postDetailDelete()  |  delete()  |  【削除処理】<br>詳細画面  |  -->
 
 ## Controller, Service, Repository<br>
 ■Controller<br>
