@@ -25,17 +25,15 @@
 ■単体テスト<br>
 
 ## CRUD<br>
-※service：画面のInit処理により複数呼び出し
+※service：画面Init処理により複数呼び出し
   画面/処理  |  URL  |  controller  |  service  |  repository  |
 |  ----  |  ----  |  ----  |  ----  |  ----  |  
 |  【一覧表示画面】<br>index.ejs  |  【GET】<br>users  |  getIndex()  |  findUsersAll()  |  findUsersAll()  |
-|  【新規登録画面】<br>regist.ejs  |  【GET】<br>users/regist  |  getRegist()  |  findDepartmentsAll()  |  findDepartmentsAll()  |
-|  【追加処理】<br>新規登録画面  |  【POST】<br>users/regist  |  postRegist()  |  createUsers()  |  createUsers()  |
+|  【新規登録画面】<br>create.ejs  |  【GET】<br>users/create  |  getCreate()  |  findDepartmentsAll()  |  findDepartmentsAll()  |
+|  【追加処理】<br>新規登録画面  |  【POST】<br>users/create  |  postCreate()  |  createUser()  |  createUser()  |
 |  【詳細画面】<br>detail.ejs  |  【GET】<br>users/{id}  |  getDetail()  |  findUserDetail()  |  findUserById()  |
-
-<!--
-|  POST  |  users/{id}/update  |  postDetailUpdate()  |  update()  |  【更新処理】<br>詳細画面  |
-|  POST  |  users/{id}/delete  |  postDetailDelete()  |  delete()  |  【削除処理】<br>詳細画面  |  -->
+|  【更新処理】<br>詳細画面  |  【POST】<br>users/{id}/update  |  postUpdate()  |  updateUser()  |  updateUser()  |
+|  【削除処理】<br>詳細画面  |  【POST】<br>users/{id}/delete  |  postDelete()  |  deleteUser()  |  deleteUser()  |
 
 ## Controller, Service, Repository<br>
 ■Controller<br>
