@@ -39,7 +39,7 @@
 /**
  * ORM（Prismaの場合）
  */
-import { Controller, Get, Post, Put, Delete, Query, Body, Param } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Query, Body, Param, Render } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { users as Users } from '@prisma/client'
 
@@ -47,7 +47,8 @@ import { users as Users } from '@prisma/client'
 export class UsersController {
   constructor(private readonly service: UsersService) {}
 
-  @Get()
+  @Get('')
+  @Render('users/index')
   async getIndex(@Query() query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
     return await this.service.findUsersAll(query)
   }
