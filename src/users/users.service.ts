@@ -200,12 +200,13 @@ import { PrismaService } from '../prisma.service'
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findUsersAll(query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<any> {
-    const whereConditions = {}
-    const orderConditions = {}
-    if (query.id) whereConditions['id'] = Number(query.id)
-    if (query.userName) whereConditions['userName'] = { contains: query.userName }
-    if (query.sort) orderConditions['id'] = query.sort
+  // query: { id: number; userName: string; sort: 'asc' | 'desc' }
+  async findUsersAll(): Promise<any> {
+    // const whereConditions = {}
+    // const orderConditions = {}
+    // if (query.id) whereConditions['id'] = Number(query.id)
+    // if (query.userName) whereConditions['userName'] = { contains: query.userName }
+    // if (query.sort) orderConditions['id'] = query.sort
     return await this.prisma.users.findMany({
       select: {
         id: true,
@@ -217,10 +218,10 @@ export class UsersService {
         point: true,
         createdAt: true,
         updateAt: true
-      },
-      where: whereConditions,
-      orderBy: orderConditions,
-      skip: 0
+      }
+      // where: whereConditions,
+      // orderBy: orderConditions,
+      // skip: 0
     })
   }
 

@@ -1,4 +1,27 @@
-一覧表示画面(users)
+<%- include('../../partials/head'); %>
+
+<body>
+<div class="layout">
+  <main id="usersIndex">
+    一覧表示画面(users)
+    <p>{{ users }}</p>
+  </main>
+</div>
 
 <script type="text/javascript">
+const users = `<%- users %>`;
+
+new Vue({
+  el: "#usersIndex",
+  data: {
+    users: JSON.parse(users)
+  },
+  mounted() {
+  },
+  methods: {
+  }
+})
+
 </script>
+</body>
+</html>

@@ -49,37 +49,44 @@ export class UsersController {
 
   @Get('')
   @Render('users/index')
-  async getIndex(@Query() query: { id: number; userName: string; sort: 'asc' | 'desc' }): Promise<Users[]> {
-    return await this.service.findUsersAll(query)
-  }
+  // @Query() query: { id: number; userName: string; sort: 'asc' | 'desc' }
+  // notifications.controller.ts
+  async getIndex() {
+    const users = await this.service.findUsersAll()
 
-  @Post()
-  async createUser(
-    @Body()
-    user: {
-      userName: string
-      password: string
-      address: string
-      age: string
-      departmentId: string
-      point: number
-      createdAt: string
-      updateAt: string
+    console.log(users)
+    return {
+      users: JSON.stringify(users)
     }
-  ): Promise<Users> {
-    return await this.service.createUser(user)
   }
 
-  @Put(':id')
-  async updateUser(@Param('id') id: string, @Body() user: Users): Promise<Users> {
-    return this.service.updateUser({
-      where: { id: Number(id) },
-      data: user
-    })
-  }
+  // @Post()
+  // async createUser(
+  //   @Body()
+  //   user: {
+  //     userName: string
+  //     password: string
+  //     address: string
+  //     age: string
+  //     departmentId: string
+  //     point: number
+  //     createdAt: string
+  //     updateAt: string
+  //   }
+  // ): Promise<Users> {
+  //   return await this.service.createUser(user)
+  // }
 
-  @Delete(':id')
-  async deleteUser(@Param('id') id: string): Promise<Users> {
-    return await this.service.deleteUser({ id: Number(id) })
-  }
+  // @Put(':id')
+  // async updateUser(@Param('id') id: string, @Body() user: Users): Promise<Users> {
+  //   return this.service.updateUser({
+  //     where: { id: Number(id) },
+  //     data: user
+  //   })
+  // }
+
+  // @Delete(':id')
+  // async deleteUser(@Param('id') id: string): Promise<Users> {
+  //   return await this.service.deleteUser({ id: Number(id) })
+  // }
 }
