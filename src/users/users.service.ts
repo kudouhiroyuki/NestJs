@@ -1,60 +1,65 @@
-import { users as Users, Prisma } from '@prisma/client'
-import { Injectable, Query } from '@nestjs/common'
-import { PrismaService } from '../prisma.service'
+import { Injectable } from '@nestjs/common'
+import { users as Users } from '@prisma/client'
+import { UsersRepository } from './repository/users.repository'
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
-  // query: { id: number; userName: string; sort: 'asc' | 'desc' }
-  async findUsersAll(): Promise<any> {
-    // const whereConditions = {}
-    // const orderConditions = {}
-    // if (query.id) whereConditions['id'] = Number(query.id)
-    // if (query.userName) whereConditions['userName'] = { contains: query.userName }
-    // if (query.sort) orderConditions['id'] = query.sort
-    return await this.prisma.users.findMany({
-      select: {
-        id: true,
-        userName: true,
-        password: true,
-        address: true,
-        age: true,
-        departmentId: true,
-        point: true,
-        createdAt: true,
-        updateAt: true
-      }
-      // where: whereConditions,
-      // orderBy: orderConditions,
-      // skip: 0
-    })
+  async findUsersAll(): Promise<Users[]> {
+    const users = await this.usersRepository.findUsersAll()
+    return users
   }
 
-  async createUser(data: {
-    userName: string
-    password: string
-    address: string
-    age: string
-    departmentId: string
-    point: number
-    createdAt: string
-    updateAt: string
-  }): Promise<Users> {
-    return await this.prisma.users.create({ data })
-  }
+  // // query: { id: number; userName: string; sort: 'asc' | 'desc' }
+  // async findUsersAll(): Promise<any> {
+  //   // const whereConditions = {}
+  //   // const orderConditions = {}
+  //   // if (query.id) whereConditions['id'] = Number(query.id)
+  //   // if (query.userName) whereConditions['userName'] = { contains: query.userName }
+  //   // if (query.sort) orderConditions['id'] = query.sort
+  //   return await this.prisma.users.findMany({
+  //     select: {
+  //       id: true,
+  //       userName: true,
+  //       password: true,
+  //       address: true,
+  //       age: true,
+  //       departmentId: true,
+  //       point: true,
+  //       createdAt: true,
+  //       updateAt: true
+  //     }
+  //     // where: whereConditions,
+  //     // orderBy: orderConditions,
+  //     // skip: 0
+  //   })
+  // }
 
-  async updateUser(params: { where: Prisma.usersWhereUniqueInput; data: Prisma.usersUpdateInput }): Promise<Users> {
-    const { where, data } = params
-    return this.prisma.users.update({
-      where,
-      data
-    })
-  }
+  // async createUser(data: {
+  //   userName: string
+  //   password: string
+  //   address: string
+  //   age: string
+  //   departmentId: string
+  //   point: number
+  //   createdAt: string
+  //   updateAt: string
+  // }): Promise<Users> {
+  //   return await this.prisma.users.create({ data })
+  // }
 
-  async deleteUser(where: Prisma.usersWhereUniqueInput): Promise<Users> {
-    return await this.prisma.users.delete({ where })
-  }
+  // async updateUser(params: { where: Prisma.usersWhereUniqueInput; data: Prisma.usersUpdateInput }): Promise<Users> {
+  //   const { where, data } = params
+  //   return this.prisma.users.update({
+  //     where,
+  //     data
+  //   })
+  // }
+
+  // async deleteUser(where: Prisma.usersWhereUniqueInput): Promise<Users> {
+  //   return await this.prisma.users.delete({ where })
+  // }
 }
 
 // async findTenantsAll(): Promise<TenantResponseDto[]> {

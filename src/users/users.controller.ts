@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Query, Body, Param, Render } from '@nestjs/common'
+import { Controller, Get, Render } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { users as Users } from '@prisma/client'
 
@@ -8,9 +8,6 @@ export class UsersController {
 
   @Get('')
   @Render('users/index')
-  // @Query() query: { id: number; userName: string; sort: 'asc' | 'desc' }
-  // notifications.controller.ts
-  // members.controller.ts
   async getIndex() {
     const users = await this.usersService.findUsersAll()
     return {
