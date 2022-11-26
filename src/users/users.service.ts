@@ -6,8 +6,8 @@ import { UsersRepository } from './repository/users.repository'
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async findUsersAll(): Promise<Users[]> {
-    const users = await this.usersRepository.findUsersAll()
+  async findUsers(): Promise<Users[]> {
+    const users = await this.usersRepository.findUsers()
     return users
   }
 
