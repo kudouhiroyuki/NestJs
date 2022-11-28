@@ -1,19 +1,52 @@
 <%- include('../../partials/head'); %>
 
 <body>
-<div class="layout">
-  <main id="usersIndex">
-    一覧表示画面(users)
-    <p>{{ users }}</p>
-  </main>
+<div id="usersIndex" class="container">
+  <div v-if="errors.length" class="alert alert-danger">
+    <template v-for="item in errors" :key="item">
+      ■{{ item.property }}エラー
+      <p v-for="i in item.constraints" :key="item">{{ i }}</p>
+    </template>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>userName</th>
+        <th>password</th>
+        <th>address</th>
+        <th>age</th>
+        <th>departmentId</th>
+        <th>point</th>
+        <th>createdAt</th>
+        <th>updateAt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in users" :key="item.id">
+        <td>{{ item.id }}</td>
+        <td>{{ item.userName }}</td>
+        <td>{{ item.password }}</td>
+        <td>{{ item.address }}</td>
+        <td>{{ item.age }}</td>
+        <td>{{ item.departmentId }}</td>
+        <td>{{ item.point }}</td>
+        <td>{{ item.createdAt }}</td>
+        <td>{{ item.updateAt }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <script type="text/javascript">
+const errors = `<%- errors %>`;
 const users = `<%- users %>`;
 
 new Vue({
   el: "#usersIndex",
   data: {
+    errors: JSON.parse(errors),
     users: JSON.parse(users)
   },
   mounted() {

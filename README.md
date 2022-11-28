@@ -46,12 +46,6 @@
 ・データベースへの参照や作成、更新、削除などのいわゆるCRUD処理を記述するためのファイル<br>
 ・データ加工する部分をRepository書かないように<br>
 
-## Dto<br>
-```
-import { IsInt } from 'class-validator';
-@IsInt()
-```
-
 ## 起動（Docker無）<br>
 MySQL<br>
 mysql -u root -p;<br>

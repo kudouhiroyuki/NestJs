@@ -7,19 +7,20 @@ import { UserSearchDto, UserSearchCheckDto } from './dto/request/userSearch.dto'
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  // http://localhost:3000/users?id=1&userName=名前
-  // https://qiita.com/t-kubodera/items/2839ec4e4fe667b43f18
   // https://github.com/typestack/class-validator
+  // 正常系
+  // http://localhost:3000/users?id=1&userName=名前&createdAt=2010-10-01
+  // 異常系
+  // http://localhost:3000/users?id=あ&userName=名前&createdAt=2010-10-0あ
   @Get('')
   @Render('users/index')
   async getIndex(@Query() query: UserSearchDto) {
+    console.log(query.createdAt)
     console.log(typeof query.id)
-    const validateResult = await validate(new UserSearchCheckDto(query))
-    console.log(validateResult.length)
-
+    const errors = await validate(new UserSearchCheckDto(query))
     const users = await this.usersService.findUsers()
     return {
+      errors: JSON.stringify(errors),
       users: JSON.stringify(users)
     }
   }
