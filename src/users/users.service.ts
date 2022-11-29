@@ -6,8 +6,10 @@ import { UsersRepository } from './repository/users.repository'
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async findUsers(): Promise<Users[]> {
-    const users = await this.usersRepository.findUsers()
+  async findUsers(id: string): Promise<Users[]> {
+    const whereConditions = {}
+    if (id) whereConditions['id'] = Number(id)
+    const users = await this.usersRepository.findUsers(whereConditions)
     return users
   }
 

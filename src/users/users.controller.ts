@@ -10,15 +10,15 @@ export class UsersController {
   // https://github.com/typestack/class-validator
   // 正常系
   // http://localhost:3000/users?id=1&userName=名前&createdAt=2010-10-01
+  // http://localhost:3000/users?id=2&userName=名前&createdAt=2010-10-01
   // 異常系
   // http://localhost:3000/users?id=あ&userName=名前&createdAt=2010-10-0あ
   @Get('')
   @Render('users/index')
   async getIndex(@Query() query: UserSearchDto) {
-    console.log(query.createdAt)
-    console.log(typeof query.id)
     const errors = await validate(new UserSearchCheckDto(query))
-    const users = await this.usersService.findUsers()
+    let users = []
+    if (!errors.length) users = await this.usersService.findUsers(query.id)
     return {
       errors: JSON.stringify(errors),
       users: JSON.stringify(users)

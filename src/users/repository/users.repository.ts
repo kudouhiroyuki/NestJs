@@ -6,7 +6,9 @@ import { users as Users } from '@prisma/client'
 export class UsersRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findUsers(): Promise<Users[]> {
-    return await this.prisma.users.findMany()
+  async findUsers(whereConditions: object): Promise<Users[]> {
+    return await this.prisma.users.findMany({
+      where: whereConditions
+    })
   }
 }
