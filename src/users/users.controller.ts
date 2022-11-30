@@ -1,7 +1,6 @@
 import { Get, Controller, Render, Query } from '@nestjs/common'
 import { UsersService } from './users.service'
-import { users as Users } from '@prisma/client'
-import { validate } from 'class-validator'
+import { validate, ValidationError } from 'class-validator'
 import { UserSearchDto, UserSearchCheckDto } from './dto/request/userSearch.dto'
 
 @Controller('users')
@@ -16,9 +15,12 @@ export class UsersController {
   @Get('')
   @Render('users/index')
   async getIndex(@Query() query: UserSearchDto) {
-    const errors = await validate(new UserSearchCheckDto(query))
+    const errors: ValidationError[] = await validate(new UserSearchCheckDto(query))
     let users = []
-    if (!errors.length) users = await this.usersService.findUsers(query.id)
+    if (!errors.length) {
+      const resultUsers = await this.usersService.findUsers(query.id)
+      users = resultUsers.users
+    }
     return {
       errors: JSON.stringify(errors),
       users: JSON.stringify(users)

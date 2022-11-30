@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common'
-import { users as Users } from '@prisma/client'
 import { UsersRepository } from './repository/users.repository'
+import { UserListDto } from './dto/response/userList.dto'
 
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async findUsers(id: string): Promise<Users[]> {
+  async findUsers(id: string): Promise<{ users: UserListDto[] }> {
     const whereConditions = {}
     if (id) whereConditions['id'] = Number(id)
     const users = await this.usersRepository.findUsers(whereConditions)
-    return users
+    return { users: users }
   }
 
   // // query: { id: number; userName: string; sort: 'asc' | 'desc' }
