@@ -37,17 +37,22 @@
       </tr>
     </tbody>
   </table>
+  <ul>
+    <li v-for="(item, index) in pagination" :key="index">{{ index + 1 }}</li>
+  </ul>
 </div>
 
 <script type="text/javascript">
 const errors = `<%- errors %>`;
 const users = `<%- users %>`;
+const pagination = `<%- pagination %>`;
 
 new Vue({
   el: "#usersIndex",
   data: {
     errors: JSON.parse(errors),
-    users: JSON.parse(users)
+    users: JSON.parse(users),
+    pagination: JSON.parse(pagination)
   },
   mounted() {
   },

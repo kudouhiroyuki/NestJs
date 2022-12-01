@@ -17,13 +17,16 @@ export class UsersController {
   async getIndex(@Query() query: UserSearchDto) {
     const errors: ValidationError[] = await validate(new UserSearchCheckDto(query))
     let users = []
+    let pagination = 0
     if (!errors.length) {
       const resultUsers = await this.usersService.findUsers(query.id)
       users = resultUsers.users
+      pagination = resultUsers.pagination
     }
     return {
       errors: JSON.stringify(errors),
-      users: JSON.stringify(users)
+      users: JSON.stringify(users),
+      pagination: pagination
     }
   }
 

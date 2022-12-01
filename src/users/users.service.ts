@@ -6,11 +6,15 @@ import { UserListDto } from './dto/response/userList.dto'
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async findUsers(id: string): Promise<{ users: UserListDto[] }> {
+  async findUsers(id: string): Promise<{ users: UserListDto[]; pagination: number }> {
     const whereConditions = {}
     if (id) whereConditions['id'] = Number(id)
-    const users = await this.usersRepository.findUsers(whereConditions)
-    return { users: users }
+    const take = 5
+    const skip = (1 - 1) * take
+    const users = await this.usersRepository.findUsers(whereConditions, take, skip)
+    const usersCount = await this.usersRepository.getUsersCount(whereConditions)
+    const pagination = Math.ceil(usersCount / take)
+    return { users: users, pagination: pagination }
   }
 
   // // query: { id: number; userName: string; sort: 'asc' | 'desc' }
@@ -63,13 +67,3 @@ export class UsersService {
   //   return await this.prisma.users.delete({ where })
   // }
 }
-
-// async findTenantsAll(): Promise<TenantResponseDto[]> {
-//   const resultTenants = await this.tenantsRepository.findTenantsAll(); //リポジトリ呼び出す
-//   const tenants = new Array<TenantResponseDto>(); //インスタンス生成
-//   for (const resultTenant of resultTenants) {
-//     const tenant = new TenantResponseDto(resultTenant); //resultTenantが1つはいる、一テナント情報を取得
-//     tenants.push(tenant); //tenantsに一テナント情報を入れていく
-//   }
-//   return tenants;
-// }
