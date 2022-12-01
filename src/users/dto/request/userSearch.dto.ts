@@ -4,6 +4,7 @@ export class UserSearchDto {
   id: string
   userName: string
   createdAt: string
+  pageNumber: string
 }
 
 export class UserSearchCheckDto {

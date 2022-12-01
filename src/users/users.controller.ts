@@ -8,7 +8,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   // https://github.com/typestack/class-validator
   // 正常系
-  // http://localhost:3000/users?id=1&userName=名前&createdAt=2010-10-01
+  // http://localhost:3000/users?pageNumber=1
+  // http://localhost:3000/users?id=&userName=&createdAt=
   // http://localhost:3000/users?id=2&userName=名前&createdAt=2010-10-01
   // 異常系
   // http://localhost:3000/users?id=あ&userName=名前&createdAt=2010-10-0あ
@@ -19,7 +20,7 @@ export class UsersController {
     let users = []
     let pagination = 0
     if (!errors.length) {
-      const resultUsers = await this.usersService.findUsers(query.id)
+      const resultUsers = await this.usersService.findUsers(query.id, query.pageNumber)
       users = resultUsers.users
       pagination = resultUsers.pagination
     }
