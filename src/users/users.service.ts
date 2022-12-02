@@ -6,12 +6,18 @@ import { UserListDto } from './dto/response/userList.dto'
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async findUsers(id: string, pageNumber: string): Promise<{ users: UserListDto[]; pagination: number }> {
+  async findUsers(
+    id: string,
+    createdAt: string,
+    pageNumber: string
+  ): Promise<{ users: UserListDto[]; pagination: number }> {
     const take = 5
     let skip = 0
     const whereConditions = {}
     if (id) whereConditions['id'] = Number(id)
+    if (createdAt) whereConditions['createdAt'] = createdAt
     if (pageNumber) skip = (Number(pageNumber) - 1) * take
+    console.log(whereConditions)
     const users = await this.usersRepository.findUsers(whereConditions, take, skip)
     const usersCount = await this.usersRepository.getUsersCount(whereConditions)
     const pagination = Math.ceil(usersCount / take)

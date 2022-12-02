@@ -7,12 +7,29 @@ import { UserSearchDto, UserSearchCheckDto } from './dto/request/userSearch.dto'
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   // https://github.com/typestack/class-validator
-  // 正常系
-  // http://localhost:3000/users?pageNumber=1
-  // http://localhost:3000/users?id=&userName=&createdAt=
+  // https://qiita.com/t-kubodera/items/2839ec4e4fe667b43f18
+
+  /*
+  ■正常系テスト
+  http://localhost:3000/users
+  http://localhost:3000/users?id=
+  http://localhost:3000/users?id=1
+  http://localhost:3000/users?id=2
+  http://localhost:3000/users?pageNumber=
+  http://localhost:3000/users?pageNumber=1
+  http://localhost:3000/users?pageNumber=2
+  ■異常系テスト
+  http://localhost:3000/users?id=あ
+  http://localhost:3000/users?createdAt=あ
+  http://localhost:3000/users?createdAt=2010-10-1a
+  http://localhost:3000/users?pageNumber=あ
+  */
+
+  // Date型のバリデーション検証＋クエリービルダー調整
+  // http://localhost:3000/users?createdAt=
+  // http://localhost:3000/users?createdAt=2010-10-01
   // http://localhost:3000/users?id=2&userName=名前&createdAt=2010-10-01
-  // 異常系
-  // http://localhost:3000/users?id=あ&userName=名前&createdAt=2010-10-0あ
+
   @Get('')
   @Render('users/index')
   async getIndex(@Query() query: UserSearchDto) {
@@ -20,7 +37,7 @@ export class UsersController {
     let users = []
     let pagination = 0
     if (!errors.length) {
-      const resultUsers = await this.usersService.findUsers(query.id, query.pageNumber)
+      const resultUsers = await this.usersService.findUsers(query.id, query.createdAt, query.pageNumber)
       users = resultUsers.users
       pagination = resultUsers.pagination
     }
