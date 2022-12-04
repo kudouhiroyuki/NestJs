@@ -15,20 +15,22 @@ export class UsersController {
   http://localhost:3000/users?id=
   http://localhost:3000/users?id=1
   http://localhost:3000/users?id=2
+  http://localhost:3000/users?startDate=
+  http://localhost:3000/users?startDate=2010-10-01
+  http://localhost:3000/users?startDate=2010-12-01
+  http://localhost:3000/users?endDate=
+  http://localhost:3000/users?endDate=2010-11-01
+  http://localhost:3000/users?endDate=2010-11-02
+  http://localhost:3000/users?startDate=2010-10-02&endDate=2010-11-30
   http://localhost:3000/users?pageNumber=
   http://localhost:3000/users?pageNumber=1
   http://localhost:3000/users?pageNumber=2
   ■異常系テスト
   http://localhost:3000/users?id=あ
-  http://localhost:3000/users?createdAt=あ
-  http://localhost:3000/users?createdAt=2010-10-1a
+  http://localhost:3000/users?startDate=あ
+  http://localhost:3000/users?startDate=2010-10-1a
   http://localhost:3000/users?pageNumber=あ
   */
-
-  // Date型のバリデーション検証＋クエリービルダー調整
-  // http://localhost:3000/users?createdAt=
-  // http://localhost:3000/users?createdAt=2010-10-01
-  // http://localhost:3000/users?id=2&userName=名前&createdAt=2010-10-01
 
   @Get('')
   @Render('users/index')
@@ -37,7 +39,7 @@ export class UsersController {
     let users = []
     let pagination = 0
     if (!errors.length) {
-      const resultUsers = await this.usersService.findUsers(query.id, query.createdAt, query.pageNumber)
+      const resultUsers = await this.usersService.findUsers(query.id, query.startDate, query.endDate, query.pageNumber)
       users = resultUsers.users
       pagination = resultUsers.pagination
     }

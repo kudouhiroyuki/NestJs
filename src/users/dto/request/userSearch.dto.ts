@@ -3,7 +3,8 @@ import { IsOptional, IsNumberString, IsString, IsDateString, ValidateIf } from '
 export class UserSearchDto {
   id: string
   userName: string
-  createdAt: string
+  startDate: string
+  endDate: string
   pageNumber: string
 }
 
@@ -11,7 +12,8 @@ export class UserSearchCheckDto {
   constructor(params: UserSearchDto) {
     this.id = params.id
     this.userName = params.userName
-    this.createdAt = params.createdAt
+    this.startDate = params.startDate
+    this.endDate = params.endDate
     this.pageNumber = params.pageNumber
   }
 
@@ -26,8 +28,13 @@ export class UserSearchCheckDto {
 
   @IsOptional()
   @ValidateIf((o, v) => v != null && v.length)
-  @IsDateString({}, { message: 'createdAtを正しく入力してください' })
-  createdAt: string
+  @IsDateString({}, { message: 'startDateを正しく入力してください' })
+  startDate: string
+
+  @IsOptional()
+  @ValidateIf((o, v) => v != null && v.length)
+  @IsDateString({}, { message: 'endDateを正しく入力してください' })
+  endDate: string
 
   @IsOptional()
   @ValidateIf((o, v) => v != null && v.length)

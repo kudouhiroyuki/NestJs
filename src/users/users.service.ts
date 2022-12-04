@@ -8,16 +8,18 @@ export class UsersService {
 
   async findUsers(
     id: string,
-    createdAt: string,
+    startDate: string,
+    endDate: string,
     pageNumber: string
   ): Promise<{ users: UserListDto[]; pagination: number }> {
     const take = 5
-    let skip = 0
+    const skip = pageNumber ? (Number(pageNumber) - 1) * take : 0
     const whereConditions = {}
+    const createdAt = {}
     if (id) whereConditions['id'] = Number(id)
-    if (createdAt) whereConditions['createdAt'] = createdAt
-    if (pageNumber) skip = (Number(pageNumber) - 1) * take
-    console.log(whereConditions)
+    if (startDate) createdAt['gte'] = new Date(startDate)
+    if (endDate) createdAt['lte'] = new Date(endDate)
+    whereConditions['createdAt'] = createdAt
     const users = await this.usersRepository.findUsers(whereConditions, take, skip)
     const usersCount = await this.usersRepository.getUsersCount(whereConditions)
     const pagination = Math.ceil(usersCount / take)
