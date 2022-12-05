@@ -1,0 +1,36 @@
+<%- include('../../partials/head'); %>
+
+<body>
+<div id="usersResist" class="container">
+  <h4 class="mb-4 fw-bold">
+    新規登録画面
+  </h4>
+
+  <form @submit.prevent="onSubmit" name="users">    
+    <div class="text-end">
+      <button type="submit" class="btn baseBtnBlue" style="width: 156px;">登録</button>
+    </div>
+  </form>
+</div>
+
+<script type="text/javascript">
+new Vue({
+  el: "#usersResist",
+  data: {
+  },
+  mounted() {
+  },
+  methods: {
+    /**
+     * 登録処理
+     */ 
+    onSubmit() {
+      document.users.method = 'post';
+      document.users.action = '/users/create';
+      document.users.submit();
+    }
+  }
+})
+</script>
+</body>
+</html>

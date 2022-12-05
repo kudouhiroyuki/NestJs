@@ -3,7 +3,7 @@ import { PrismaService } from '../../prisma.service'
 import { users as Users } from '@prisma/client'
 
 @Injectable()
-export class UsersRepository {
+export class UserRepository {
   constructor(private prisma: PrismaService) {}
 
   async findUsers(whereConditions: object, take: number, skip: number): Promise<Users[]> {

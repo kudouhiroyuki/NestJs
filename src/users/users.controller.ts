@@ -1,4 +1,4 @@
-import { Get, Controller, Render, Query } from '@nestjs/common'
+import { Get, Post, Body, Controller, Render, Query } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { validate, ValidationError } from 'class-validator'
 import { UserSearchDto, UserSearchCheckDto } from './dto/request/userSearch.dto'
@@ -32,6 +32,9 @@ export class UsersController {
   http://localhost:3000/users?pageNumber=あ
   */
 
+  /**
+   * GET ユーザー一覧画面
+   */
   @Get('')
   @Render('users/index')
   async getIndex(@Query() query: UserSearchDto) {
@@ -50,22 +53,23 @@ export class UsersController {
     }
   }
 
-  // @Post()
-  // async createUser(
-  //   @Body()
-  //   user: {
-  //     userName: string
-  //     password: string
-  //     address: string
-  //     age: string
-  //     departmentId: string
-  //     point: number
-  //     createdAt: string
-  //     updateAt: string
-  //   }
-  // ): Promise<Users> {
-  //   return await this.usersService.createUser(user)
-  // }
+  /**
+   * GET ユーザー登録画面（新規登録・コピー新規登録）
+   */
+  @Get('/create')
+  @Render('users/create')
+  async getCreate() {
+    return {}
+  }
+  /**
+   * POST ユーザー登録処理
+   */
+  @Post('/create')
+  async postCreate(@Body() body: any): Promise<any> {
+    console.log('ユーザー登録処理')
+    console.log(body)
+    // return await this.usersService.createUser(user)
+  }
 
   // @Put(':id')
   // async updateUser(@Param('id') id: string, @Body() user: Users): Promise<Users> {

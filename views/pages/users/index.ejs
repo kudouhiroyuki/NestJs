@@ -2,6 +2,14 @@
 
 <body>
 <div id="usersIndex" class="container">
+  <h4 class="mb-4 fw-bold">
+    一覧表示画面
+  </h4>
+
+  <div class="mb-4">
+    <a href="users/create">新規登録</a>
+  </div>
+
   <div v-if="errors.length" class="alert alert-danger">
     <template v-for="item in errors" :key="item">
       ■{{ item.property }}エラー
@@ -21,6 +29,7 @@
         <th>point</th>
         <th>createdAt</th>
         <th>updateAt</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -34,6 +43,8 @@
         <td>{{ item.point }}</td>
         <td>{{ item.createdAt }}</td>
         <td>{{ item.updateAt }}</td>
+        <td>詳細</td>
+        <td>コピー</td>
       </tr>
     </tbody>
   </table>
