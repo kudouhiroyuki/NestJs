@@ -2,6 +2,7 @@ import { Get, Post, Body, Controller, Render, Query } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { validate, ValidationError } from 'class-validator'
 import { UserSearchDto, UserSearchCheckDto } from './dto/request/userSearch.dto'
+import { UserCreateDto, UserCreateCheckDto } from './dto/request/UserCreateDto.dto'
 
 @Controller('users')
 export class UsersController {
@@ -10,7 +11,8 @@ export class UsersController {
   // https://qiita.com/t-kubodera/items/2839ec4e4fe667b43f18
 
   /*
-  ■正常系テスト
+ 【一覧検索】
+ ■正常系
   http://localhost:3000/users
   http://localhost:3000/users?id=
   http://localhost:3000/users?id=1
@@ -25,7 +27,7 @@ export class UsersController {
   http://localhost:3000/users?pageNumber=
   http://localhost:3000/users?pageNumber=1
   http://localhost:3000/users?pageNumber=2
-  ■異常系テスト
+  ■異常系
   http://localhost:3000/users?id=あ
   http://localhost:3000/users?startDate=あ
   http://localhost:3000/users?startDate=2010-10-1a
@@ -59,15 +61,20 @@ export class UsersController {
   @Get('/create')
   @Render('users/create')
   async getCreate() {
-    return {}
+    return {
+      errors: JSON.stringify([])
+    }
   }
   /**
    * POST ユーザー登録処理
    */
   @Post('/create')
-  async postCreate(@Body() body: any): Promise<any> {
-    console.log('ユーザー登録処理')
-    console.log(body)
+  @Render('users/create')
+  async postCreate(@Body() body: UserCreateDto): Promise<any> {
+    const errors: ValidationError[] = await validate(new UserCreateCheckDto(body))
+    return {
+      errors: JSON.stringify(errors)
+    }
     // return await this.usersService.createUser(user)
   }
 
