@@ -17,6 +17,19 @@
     </template>
   </div>
 
+  <form @submit.prevent="onSearch">
+    <input
+      @input="onFormChange"
+      :value="id"
+      type="text"
+      name="id"
+      placeholder="id"
+      class="form-control mb-3"
+      style="width: 214px;"
+    >
+    <button type="submit" class="btn btn-primary" style="width: 156px;">検索</button> 
+  </form>
+
   <table class="table">
     <thead>
       <tr>
@@ -58,16 +71,36 @@ const errors = `<%- errors %>`;
 const users = `<%- users %>`;
 const pagination = `<%- pagination %>`;
 
+const queryParam = new URLSearchParams(location.search);
+
 new Vue({
   el: "#usersIndex",
   data: {
     errors: JSON.parse(errors),
     users: JSON.parse(users),
-    pagination: JSON.parse(pagination)
+    pagination: JSON.parse(pagination),
+    // 検索データ
+    id: queryParam.get("id") ?? "",
+  },
+  created() {
+    queryParam.set("id", this.id);
   },
   mounted() {
   },
   methods: {
+    /**
+     * 検索条件（更新）
+     */ 
+    onFormChange(e) {
+      this[e.target.name] = e.target.value;
+      queryParam.set(e.target.name, e.target.value);
+    },
+    /**
+     * 検索処理
+     */ 
+    onSearch() {
+      window.location.href = '/users?' + queryParam;
+    },
   }
 })
 </script>

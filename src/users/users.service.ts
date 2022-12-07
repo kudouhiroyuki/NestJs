@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { UserRepository } from './repository/user.repository'
 import { UserListDto } from './dto/response/userList.dto'
+import { UserCreateDto } from './dto/request/UserCreateDto.dto'
 
 @Injectable()
 export class UsersService {
@@ -26,18 +27,19 @@ export class UsersService {
     return { users: users, pagination: pagination }
   }
 
-  // async createUser(data: {
-  //   userName: string
-  //   password: string
-  //   address: string
-  //   age: string
-  //   departmentId: string
-  //   point: number
-  //   createdAt: string
-  //   updateAt: string
-  // }): Promise<Users> {
-  //   return await this.prisma.users.create({ data })
-  // }
+  async createUser(user: UserCreateDto) {
+    const item = {
+      userName: user.userName,
+      password: 'password',
+      address: 'address',
+      age: '30',
+      departmentId: 'A0001',
+      point: 0,
+      createdAt: new Date('2010-10-01'),
+      updateAt: new Date('2010-10-01')
+    }
+    return await this.userRepository.createUser(item)
+  }
 
   // async updateUser(params: { where: Prisma.usersWhereUniqueInput; data: Prisma.usersUpdateInput }): Promise<Users> {
   //   const { where, data } = params

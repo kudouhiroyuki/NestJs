@@ -13,9 +13,16 @@ export class UserRepository {
       skip: skip
     })
   }
+
   async getUsersCount(whereConditions: object): Promise<number> {
     return await this.prisma.users.count({
       where: whereConditions
+    })
+  }
+
+  async createUser(user: any) {
+    return await this.prisma.users.create({
+      data: user
     })
   }
 }

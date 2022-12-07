@@ -1,4 +1,5 @@
-import { Get, Post, Body, Controller, Render, Query } from '@nestjs/common'
+import { Get, Post, Body, Controller, Render, Query, Res } from '@nestjs/common'
+import { Response } from 'express'
 import { UsersService } from './users.service'
 import { validate, ValidationError } from 'class-validator'
 import { UserSearchDto, UserSearchCheckDto } from './dto/request/userSearch.dto'
@@ -70,12 +71,15 @@ export class UsersController {
    */
   @Post('/create')
   @Render('users/create')
-  async postCreate(@Body() body: UserCreateDto): Promise<any> {
+  async postCreate(@Body() body: UserCreateDto, @Res() res: Response) {
     const errors: ValidationError[] = await validate(new UserCreateCheckDto(body))
-    return {
-      errors: JSON.stringify(errors)
+    await this.usersService.createUser(body)
+    if (errors.length) {
+      return {
+        errors: JSON.stringify(errors)
+      }
     }
-    // return await this.usersService.createUser(user)
+    return res.redirect(`/users`)
   }
 
   // @Put(':id')
