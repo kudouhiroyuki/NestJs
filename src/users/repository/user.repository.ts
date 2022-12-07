@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../../prisma.service'
-import { users as Users } from '@prisma/client'
+import { Prisma, users as Users } from '@prisma/client'
 
 @Injectable()
 export class UserRepository {
@@ -14,13 +14,17 @@ export class UserRepository {
     })
   }
 
+  async findUserById(id: number): Promise<Users> {
+    return await this.prisma.users.findFirst({ where: { id: id } })
+  }
+
   async getUsersCount(whereConditions: object): Promise<number> {
     return await this.prisma.users.count({
       where: whereConditions
     })
   }
 
-  async createUser(user: any) {
+  async createUser(user: Prisma.usersUncheckedCreateInput) {
     return await this.prisma.users.create({
       data: user
     })

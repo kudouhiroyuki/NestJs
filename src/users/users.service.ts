@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { UserRepository } from './repository/user.repository'
+import { Prisma, users as Users } from '@prisma/client'
 import { UserListDto } from './dto/response/userList.dto'
 import { UserCreateDto } from './dto/request/UserCreateDto.dto'
 
@@ -13,7 +14,7 @@ export class UsersService {
     endDate: string,
     pageNumber: string
   ): Promise<{ users: UserListDto[]; pagination: number }> {
-    const take = 5
+    const take = 100
     const skip = pageNumber ? (Number(pageNumber) - 1) * take : 0
     const whereConditions = {}
     const createdAt = {}
@@ -27,16 +28,20 @@ export class UsersService {
     return { users: users, pagination: pagination }
   }
 
+  async findUserById(id: number): Promise<Users> {
+    return await this.userRepository.findUserById(id)
+  }
+
   async createUser(user: UserCreateDto) {
-    const item = {
+    const item: Prisma.usersUncheckedCreateInput = {
       userName: user.userName,
-      password: 'password',
-      address: 'address',
-      age: '30',
-      departmentId: 'A0001',
-      point: 0,
-      createdAt: new Date('2010-10-01'),
-      updateAt: new Date('2010-10-01')
+      password: user.password,
+      address: user.address,
+      age: user.age,
+      departmentId: user.departmentId,
+      point: null,
+      createdAt: new Date(),
+      updateAt: new Date()
     }
     return await this.userRepository.createUser(item)
   }

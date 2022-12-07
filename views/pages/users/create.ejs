@@ -3,21 +3,56 @@
 <body>
 <div id="usersResist" class="container">
   <h4 class="mb-4 fw-bold">
-    新規登録画面
+    <span v-if="displayType === 'create'" class="fs-4">ユーザー登録</span>
+    <span v-if="displayType === 'detail'" class="fs-4">ユーザー詳細</span>
   </h4>
 
   <div v-if="errors.length" class="alert alert-danger">
-    <template v-for="item in errors" :key="item">
+    <div v-for="item in errors" :key="item">
       ■{{ item.property }}エラー
       <p v-for="i in item.constraints" :key="item">{{ i }}</p>
-    </template>
+    </div>
   </div>
 
   <form @submit.prevent="onSubmit" name="users">
-    <input v-model="userName" type="text" name="userName">
-    <div v-if="$v.userName.$dirty" class="text-danger fw-bold">
-      <span v-if="!$v.userName.required">userNameが入力されていません。</span>
-    </div> 
+    <div class="row mb-4">    
+      <label class="form-label">id: {{ id }}</label>
+    </div>
+    <div class="row mb-4">    
+      <label class="form-label">userName</label>
+      <input v-model="userName" type="text" name="userName">
+      <div v-if="$v.userName.$dirty" class="text-danger fw-bold">
+        <span v-if="!$v.userName.required">userNameが入力されていません。</span>
+      </div>
+    </div>
+    <div class="row mb-4">    
+      <label class="form-label">password</label>
+      <input v-model="password" type="text" name="password">
+      <div v-if="$v.password.$dirty" class="text-danger fw-bold">
+        <span v-if="!$v.password.required">passwordが入力されていません。</span>
+      </div>
+    </div>
+    <div class="row mb-4">    
+      <label class="form-label">address</label>
+      <input v-model="address" type="text" name="address">
+      <div v-if="$v.address.$dirty" class="text-danger fw-bold">
+        <span v-if="!$v.address.required">addressが入力されていません。</span>
+      </div>
+    </div>
+    <div class="row mb-4">    
+      <label class="form-label">age</label>
+      <input v-model="age" type="text" name="age">
+      <div v-if="$v.age.$dirty" class="text-danger fw-bold">
+        <span v-if="!$v.age.required">ageが入力されていません。</span>
+      </div>
+    </div>
+    <div class="row mb-4">    
+      <label class="form-label">departmentId</label>
+      <input v-model="departmentId" type="text" name="departmentId">
+      <div v-if="$v.departmentId.$dirty" class="text-danger fw-bold">
+        <span v-if="!$v.departmentId.required">departmentIdが入力されていません。</span>
+      </div>
+    </div>
     <div class="text-end">
       <button type="submit" class="btn baseBtnBlue" style="width: 156px;">登録</button>
     </div>
@@ -26,6 +61,7 @@
 
 <script type="text/javascript">
 const errors = `<%- errors %>`;
+const forms = `<%- forms %>`;
 
 Vue.use(window.vuelidate.default);
 const { required } = window.validators;
@@ -33,18 +69,61 @@ const { required } = window.validators;
 new Vue({
   el: "#usersResist",
   data: {
+    displayType: "",                   // フォーマットタイプ
+    // サーバーデータ
     errors: JSON.parse(errors),
+    forms: JSON.parse(forms),
     // 登録データ
-    userName: ''
+    id: '',
+    userName: '',
+    password: '',
+    address: '',
+    age: '',
+    departmentId: '',
+  },
+  created() {
+    this.setInitData();
   },
   mounted() {
   },
   validations: {
     userName: {
       required
+    },
+    password: {
+      required
+    },
+    address: {
+      required
+    },
+    age: {
+      required
+    },
+    departmentId: {
+      required
     }
   },
   methods: {
+    /**
+     * 登録情報セット
+     */ 
+    setInitData() {
+      this.id = this.forms.id;
+      this.userName = this.forms.userName;
+      this.password = this.forms.password;
+      this.address = this.forms.address;
+      this.age = this.forms.age;
+      this.departmentId = this.forms.departmentId;
+      switch (location.pathname.split('/')[2]) {
+        case 'create':
+          this.displayType = 'create';
+          break;
+        case 'detail':
+          this.displayType = 'detail';
+          break;        
+        default:
+      }
+    },
     /**
      * 登録処理
      */ 

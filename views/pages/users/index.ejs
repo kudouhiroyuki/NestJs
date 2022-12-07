@@ -11,10 +11,10 @@
   </div>
 
   <div v-if="errors.length" class="alert alert-danger">
-    <template v-for="item in errors" :key="item">
-      ■{{ item.property }}エラー
-      <p v-for="i in item.constraints" :key="item">{{ i }}</p>
-    </template>
+    <div v-for="(value, index) in errors" :key="index">
+      ■{{ value.property }}エラー
+      <p v-for="(i, v) in value.constraints" :key="v">{{ i }}</p>
+    </div>
   </div>
 
   <form @submit.prevent="onSearch">
@@ -56,7 +56,7 @@
         <td>{{ item.point }}</td>
         <td>{{ item.createdAt }}</td>
         <td>{{ item.updateAt }}</td>
-        <td>詳細</td>
+        <td><a :href=`users/detail/${item.id}`>詳細</a></td>
         <td>コピー</td>
       </tr>
     </tbody>

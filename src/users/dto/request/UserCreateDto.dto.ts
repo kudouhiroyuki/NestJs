@@ -2,6 +2,12 @@ import { IsString, IsNotEmpty, Length } from 'class-validator'
 
 export class UserCreateDto {
   userName: string
+  password: string
+  address: string
+  age: string
+  departmentId: string
+  createdAt: string
+  updateAt: string
 }
 
 export class UserCreateCheckDto {

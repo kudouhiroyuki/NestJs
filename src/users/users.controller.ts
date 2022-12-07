@@ -1,4 +1,4 @@
-import { Get, Post, Body, Controller, Render, Query, Res } from '@nestjs/common'
+import { Get, Post, Body, Controller, Render, Query, Res, Param } from '@nestjs/common'
 import { Response } from 'express'
 import { UsersService } from './users.service'
 import { validate, ValidationError } from 'class-validator'
@@ -63,6 +63,7 @@ export class UsersController {
   @Render('users/create')
   async getCreate() {
     return {
+      forms: JSON.stringify({}),
       errors: JSON.stringify([])
     }
   }
@@ -80,6 +81,19 @@ export class UsersController {
       }
     }
     return res.redirect(`/users`)
+  }
+
+  /**
+   * GET ユーザー詳細画面
+   */
+  @Get('detail/:id')
+  @Render('users/create')
+  async getDetail(@Param('id') id: number) {
+    const from = await this.usersService.findUserById(id)
+    return {
+      forms: JSON.stringify(from),
+      errors: JSON.stringify([])
+    }
   }
 
   // @Put(':id')
