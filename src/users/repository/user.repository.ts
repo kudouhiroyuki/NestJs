@@ -6,6 +6,10 @@ import { Prisma, users as Users } from '@prisma/client'
 export class UserRepository {
   constructor(private prisma: PrismaService) {}
 
+  async findUsersAll(): Promise<Users[]> {
+    return await this.prisma.users.findMany({})
+  }
+
   async findUsers(whereConditions: object, take: number, skip: number): Promise<Users[]> {
     return await this.prisma.users.findMany({
       where: whereConditions,
@@ -28,5 +32,9 @@ export class UserRepository {
     return await this.prisma.users.create({
       data: user
     })
+  }
+
+  async deleteUser(id: number) {
+    return await this.prisma.users.delete({ where: { id: id } })
   }
 }

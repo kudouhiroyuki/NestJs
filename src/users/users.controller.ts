@@ -1,4 +1,4 @@
-import { Get, Post, Body, Controller, Render, Query, Res, Param } from '@nestjs/common'
+import { Get, Post, Body, Controller, Render, Query, Res, Param, Redirect, ParseIntPipe } from '@nestjs/common'
 import { Response } from 'express'
 import { UsersService } from './users.service'
 import { validate, ValidationError } from 'class-validator'
@@ -41,11 +41,12 @@ export class UsersController {
   @Get('')
   @Render('users/index')
   async getIndex(@Query() query: UserSearchDto) {
-    const errors: ValidationError[] = await validate(new UserSearchCheckDto(query))
+    let errors: ValidationError[] = await validate(new UserSearchCheckDto(query))
     let users = []
     let pagination = 0
     if (!errors.length) {
       const resultUsers = await this.usersService.findUsers(query.id, query.startDate, query.endDate, query.pageNumber)
+      errors = []
       users = resultUsers.users
       pagination = resultUsers.pagination
     }
@@ -71,15 +72,15 @@ export class UsersController {
    * POST ユーザー登録処理
    */
   @Post('/create')
-  @Render('users/create')
   async postCreate(@Body() body: UserCreateDto, @Res() res: Response) {
     const errors: ValidationError[] = await validate(new UserCreateCheckDto(body))
-    await this.usersService.createUser(body)
     if (errors.length) {
-      return {
+      return res.render('users/create', {
+        forms: JSON.stringify({}),
         errors: JSON.stringify(errors)
-      }
+      })
     }
+    await this.usersService.createUser(body)
     return res.redirect(`/users`)
   }
 
@@ -104,8 +105,12 @@ export class UsersController {
   //   })
   // }
 
-  // @Delete(':id')
-  // async deleteUser(@Param('id') id: string): Promise<Users> {
-  //   return await this.usersService.deleteUser({ id: Number(id) })
-  // }
+  /**
+   * POST ユーザー削除処理
+   */
+  @Post('/delete')
+  @Redirect('/users')
+  async postDelete(@Body('id', ParseIntPipe) id: number) {
+    await this.usersService.deleteUser(id)
+  }
 }

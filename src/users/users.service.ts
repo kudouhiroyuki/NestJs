@@ -8,13 +8,21 @@ import { UserCreateDto } from './dto/request/UserCreateDto.dto'
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
+  async findUsersAll(): Promise<{ users: UserListDto[]; pagination: number }> {
+    const take = 5
+    const users = await this.userRepository.findUsersAll()
+    const usersCount = await this.userRepository.getUsersCount({})
+    const pagination = Math.ceil(usersCount / take)
+    return { users: users, pagination: pagination }
+  }
+
   async findUsers(
     id: string,
     startDate: string,
     endDate: string,
     pageNumber: string
   ): Promise<{ users: UserListDto[]; pagination: number }> {
-    const take = 100
+    const take = 5
     const skip = pageNumber ? (Number(pageNumber) - 1) * take : 0
     const whereConditions = {}
     const createdAt = {}
@@ -54,7 +62,7 @@ export class UsersService {
   //   })
   // }
 
-  // async deleteUser(where: Prisma.usersWhereUniqueInput): Promise<Users> {
-  //   return await this.prisma.users.delete({ where })
-  // }
+  async deleteUser(id: number) {
+    return await this.userRepository.deleteUser(id)
+  }
 }
