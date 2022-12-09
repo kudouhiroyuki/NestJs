@@ -14,8 +14,9 @@
     </div>
   </div>
 
-  <form @submit.prevent="onSubmit" name="users">
-    <div class="row mb-4">    
+  <form @submit.prevent="onUpsert" name="usersFrom">
+    <div class="row mb-4">
+      <input v-model="id" type="hidden" name="id">
       <label class="form-label">id: {{ id }}</label>
     </div>
     <div class="row mb-4">    
@@ -54,7 +55,8 @@
       </div>
     </div>
     <div class="text-end">
-      <button type="submit" class="btn baseBtnBlue" style="width: 156px;">登録</button>
+      <button type="submit" class="btn btn-primary" style="width: 156px;">登録
+      </button>
     </div>
   </form>
 </div>
@@ -125,14 +127,15 @@ new Vue({
       }
     },
     /**
-     * 登録処理
+     * アップサート処理
      */ 
-    onSubmit() {
+    onUpsert() {
+      let action = this.displayType === 'create' ? '/users/create' : `/users/detail/${location.pathname.split('/')[3]}`;
       this.$v.$touch();
       if(!this.$v.$invalid) {
-        document.users.method = 'post';
-        document.users.action = '/users/create';
-        document.users.submit();
+        document.usersFrom.method = 'post';
+        document.usersFrom.action = action;
+        document.usersFrom.submit();
       }
     }
   }

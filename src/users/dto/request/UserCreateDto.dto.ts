@@ -1,6 +1,7 @@
 import { IsString, IsNotEmpty, Length } from 'class-validator'
 
 export class UserCreateDto {
+  id: string
   userName: string
   password: string
   address: string

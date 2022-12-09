@@ -34,6 +34,10 @@ export class UserRepository {
     })
   }
 
+  async updateUser(user: Prisma.usersUpdateArgs) {
+    return await this.prisma.users.update(user)
+  }
+
   async deleteUser(id: number) {
     return await this.prisma.users.delete({ where: { id: id } })
   }

@@ -28,11 +28,12 @@
   画面/処理  |  URL  |  controller  |  service  |  repository  |
 |  ----  |  ----  |  ----  |  ----  |  ----  |  
 |  【一覧表示画面】<br>users/index.ejs  |  【GET】<br>users  |  getIndex()  |  findUsersAll()  |  findUsersAll()  |
+|  【削除処理】<br>一覧表示画面  |  【POST】<br>users  |  postIndex()  |  deleteUser()  |  deleteUser()  
 |  【新規登録画面】<br>users/create.ejs  |  【GET】<br>users/create  |  getCreate()  |  findDepartmentsAll()  |  findDepartmentsAll()  |
 |  【追加処理】<br>新規登録画面  |  【POST】<br>users/create  |  postCreate()  |  createUser()  |  createUser()  |
 |  【詳細画面】<br>users/detail.ejs  |  【GET】<br>users/detail/{id}  |  getDetail()  |  findUserDetail()  |  findUserById()  |
-|  【更新処理】<br>詳細画面  |  【POST】<br>users/update  |  postUpdate()  |  updateUser()  |  updateUser()  |
-|  【削除処理】<br>詳細画面  |  【POST】<br>users/delete  |  postDelete()  |  deleteUser()  |  deleteUser()  |
+|  【更新処理】<br>詳細画面  |  【POST】<br>users/detail/:id  |  postDetail()  |  updateUser()  |  updateUser()  |
+
 
 ## Controller, Service, Repository<br>
 ■Controller<br>

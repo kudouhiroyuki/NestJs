@@ -38,9 +38,9 @@ export class UsersController {
   /**
    * GET ユーザー一覧画面
    */
-  @Get('')
+  @Get('/')
   @Render('users/index')
-  async getIndex(@Query() query: UserSearchDto) {
+  async index(@Query() query: UserSearchDto) {
     let errors: ValidationError[] = await validate(new UserSearchCheckDto(query))
     let users = []
     let pagination = 0
@@ -56,15 +56,37 @@ export class UsersController {
       pagination: pagination
     }
   }
+  /**
+   * POST ユーザー削除処理
+   */
+  @Post('/')
+  @Redirect('/users')
+  async postIndex(@Body('id', ParseIntPipe) id: number) {
+    await this.usersService.deleteUser(id)
+  }
 
   /**
    * GET ユーザー登録画面（新規登録・コピー新規登録）
    */
   @Get('/create')
   @Render('users/create')
-  async getCreate() {
+  async getCreate(@Query() query: any) {
+    let froms = {}
+    if (query.id) {
+      const user = await this.usersService.findUserById(Number(query.id))
+      froms = {
+        userName: user.userName,
+        password: user.password,
+        address: user.address,
+        age: user.age,
+        departmentId: user.departmentId,
+        point: null,
+        createdAt: new Date(),
+        updateAt: new Date()
+      }
+    }
     return {
-      forms: JSON.stringify({}),
+      forms: JSON.stringify(froms),
       errors: JSON.stringify([])
     }
   }
@@ -76,7 +98,7 @@ export class UsersController {
     const errors: ValidationError[] = await validate(new UserCreateCheckDto(body))
     if (errors.length) {
       return res.render('users/create', {
-        forms: JSON.stringify({}),
+        forms: JSON.stringify(body),
         errors: JSON.stringify(errors)
       })
     }
@@ -90,27 +112,25 @@ export class UsersController {
   @Get('detail/:id')
   @Render('users/create')
   async getDetail(@Param('id') id: number) {
-    const from = await this.usersService.findUserById(id)
+    const froms = await this.usersService.findUserById(id)
     return {
-      forms: JSON.stringify(from),
+      forms: JSON.stringify(froms),
       errors: JSON.stringify([])
     }
   }
-
-  // @Put(':id')
-  // async updateUser(@Param('id') id: string, @Body() user: Users): Promise<Users> {
-  //   return this.usersService.updateUser({
-  //     where: { id: Number(id) },
-  //     data: user
-  //   })
-  // }
-
   /**
-   * POST ユーザー削除処理
+   * POST ユーザー更新処理
    */
-  @Post('/delete')
-  @Redirect('/users')
-  async postDelete(@Body('id', ParseIntPipe) id: number) {
-    await this.usersService.deleteUser(id)
+  @Post('detail/:id')
+  async postDetail(@Param('id') id: number, @Body() body: UserCreateDto, @Res() res: Response) {
+    const errors: ValidationError[] = await validate(new UserCreateCheckDto(body))
+    if (errors.length) {
+      return res.render(`users/create`, {
+        forms: JSON.stringify(body),
+        errors: JSON.stringify(errors)
+      })
+    }
+    await this.usersService.updateUser(body)
+    return res.redirect(`/users`)
   }
 }

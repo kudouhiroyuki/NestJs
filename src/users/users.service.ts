@@ -54,13 +54,23 @@ export class UsersService {
     return await this.userRepository.createUser(item)
   }
 
-  // async updateUser(params: { where: Prisma.usersWhereUniqueInput; data: Prisma.usersUpdateInput }): Promise<Users> {
-  //   const { where, data } = params
-  //   return this.prisma.users.update({
-  //     where,
-  //     data
-  //   })
-  // }
+  async updateUser(user: UserCreateDto) {
+    const item: Prisma.usersUncheckedUpdateInput = {
+      userName: user.userName,
+      password: user.password,
+      address: user.address,
+      age: user.age,
+      departmentId: user.departmentId,
+      point: null,
+      createdAt: user.createdAt,
+      updateAt: new Date()
+    }
+    const updateArgs: Prisma.usersUpdateArgs = {
+      data: item,
+      where: { id: Number(user.id) }
+    }
+    return await this.userRepository.updateUser(updateArgs)
+  }
 
   async deleteUser(id: number) {
     return await this.userRepository.deleteUser(id)
