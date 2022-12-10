@@ -17,10 +17,12 @@
     </div>
   </div>
 
+  <!-- 削除フォーム -->
   <form name="deleteForm">
     <input type="hidden" name="id">
   </form>
 
+  <!-- 検索フォーム -->
   <form @submit.prevent="onSearch" name="searchForm">
     <input
       @input="onFormChange"
@@ -34,6 +36,7 @@
     <button type="submit" class="btn btn-primary" style="width: 156px;">検索</button> 
   </form>
 
+  <!-- 一覧テーブル -->
   <table class="table">
     <thead>
       <tr>
@@ -70,9 +73,38 @@
       </tr>
     </tbody>
   </table>
-  <ul>
-    <li v-for="(item, index) in pagination" :key="index">{{ index + 1 }}</li>
-  </ul>
+
+  <!-- ページネーション -->
+  <nav class="d-flex justify-content-center" aria-label="Page navigation">
+    <ul class="pagination mb-0">
+      <li :class="{'disabled': pagination === 0 || Number(pageNumber) === 1}" class="page-item">
+        <button
+          @click="onPagingChange(Number(pageNumber) - 1)"
+          type="button"
+          class="page-link">Previous
+        </button>
+      </li>
+      <li
+        v-for="value of pagination"
+        :key="value"
+        :class="{'active': value === Number(pageNumber)}"
+        class="page-item"
+      >
+        <button
+          @click="onPagingChange(value)"
+          type="button"
+          class="page-link">{{value}}
+        </button>
+      </li>
+      <li :class="{'disabled': pagination === 0 || Number(pageNumber) === Number(pagination)}" class="page-item">
+        <button
+          @click="onPagingChange(Number(pageNumber) + 1)"
+          type="button"
+          class="page-link">Next
+        </button>
+      </li>
+    </ul>
+  </nav>
 </div>
 
 <script type="text/javascript">
@@ -90,9 +122,11 @@ new Vue({
     pagination: JSON.parse(pagination),
     // 検索データ
     id: queryParam.get('id') ?? '',
+    pageNumber: queryParam.get('pageNumber') ?? 1,
   },
   created() {
     queryParam.set('id', this.id);
+    queryParam.set('pageNumber', this.pageNumber);
   },
   mounted() {
   },
@@ -103,6 +137,13 @@ new Vue({
     onFormChange(e) {
       this[e.target.name] = e.target.value;
       queryParam.set(e.target.name, e.target.value);
+    },
+    /**
+     * ページング（更新）
+     */ 
+    onPagingChange(page) {
+      queryParam.set("pageNumber", page);
+      this.onSearch();
     },
     /**
      * 検索処理
