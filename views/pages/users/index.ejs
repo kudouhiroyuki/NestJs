@@ -23,17 +23,43 @@
   </form>
 
   <!-- 検索フォーム -->
-  <form @submit.prevent="onSearch" name="searchForm">
-    <input
-      @input="onFormChange"
-      :value="id"
-      type="text"
-      name="id"
-      placeholder="id"
-      class="form-control mb-3"
-      style="width: 214px;"
-    >
-    <button type="submit" class="btn btn-primary" style="width: 156px;">検索</button> 
+  <form name="searchForm">
+    <div class="col mb-2">
+      <input
+        v-model="id"
+        type="text"
+        name="id"
+        placeholder="id"
+        class="form-control mb-3"
+        style="width: 214px;"
+      >
+    </div>
+    <div class="col mb-3">
+      <vue-ctk-date-time-picker
+        v-model="startDate"
+        name="startDate"
+        formatted="YYYY-MM-DD"
+        only-date
+        position="bottom"
+        :label="'startDate'"
+        style="width: 214px; margin: inherit;"
+      /></vue-ctk-date-time-picker>
+    </div>
+    <div class="col mb-2">
+      <vue-ctk-date-time-picker
+        v-model="endDate"
+        name="endDate"
+        formatted="YYYY-MM-DD"
+        only-date
+        position="bottom"
+        :label="'endDate'"
+        style="width: 214px; margin: inherit;"
+      /></vue-ctk-date-time-picker>
+    </div>
+    <div class="row mb-4">
+      <input v-model="pageNumber" type="hidden" name="pageNumber">
+    </div>
+    <button @click="onSearch" class="btn btn-primary" style="width: 156px;">検索</button> 
   </form>
 
   <!-- 一覧テーブル -->
@@ -112,6 +138,9 @@ const errors = `<%- errors %>`;
 const users = `<%- users %>`;
 const pagination = `<%- pagination %>`;
 
+const VueCtkDateTimePicker = window['vue-ctk-date-time-picker'];
+Vue.component('vue-ctk-date-time-picker', VueCtkDateTimePicker);
+
 const queryParam = new URLSearchParams(location.search);
 
 new Vue({
@@ -122,34 +151,29 @@ new Vue({
     pagination: JSON.parse(pagination),
     // 検索データ
     id: queryParam.get('id') ?? '',
+    startDate: queryParam.get('startDate') ?? null,
+    endDate: queryParam.get('endDate') ?? null,
     pageNumber: queryParam.get('pageNumber') ?? 1,
   },
   created() {
-    queryParam.set('id', this.id);
-    queryParam.set('pageNumber', this.pageNumber);
   },
   mounted() {
   },
   methods: {
     /**
-     * 検索条件（更新）
-     */ 
-    onFormChange(e) {
-      this[e.target.name] = e.target.value;
-      queryParam.set(e.target.name, e.target.value);
-    },
-    /**
      * ページング（更新）
      */ 
     onPagingChange(page) {
-      queryParam.set("pageNumber", page);
+      document.searchForm.pageNumber.value = page;
       this.onSearch();
     },
     /**
      * 検索処理
      */ 
     onSearch() {
-      window.location.href = '/users?' + queryParam;
+      document.searchForm.method='get';
+      document.searchForm.action = '/users';
+      document.searchForm.submit();
     },
     /**
      * 削除処理

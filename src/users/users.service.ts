@@ -22,7 +22,7 @@ export class UsersService {
     endDate: string,
     pageNumber: string
   ): Promise<{ users: UserListDto[]; pagination: number }> {
-    const take = 5
+    const take = 1
     const skip = pageNumber ? (Number(pageNumber) - 1) * take : 0
     const whereConditions = {}
     const createdAt = {}
