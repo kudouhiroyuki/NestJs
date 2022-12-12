@@ -1,4 +1,5 @@
-import { IsString, IsNotEmpty, Length } from 'class-validator'
+import { IsString, IsEmail, IsNotEmpty, Length, IsIn } from 'class-validator'
+import { IsJpName } from '../../../utils/validation.utils'
 
 export class UserCreateDto {
   id: string
@@ -14,10 +15,23 @@ export class UserCreateDto {
 export class UserCreateCheckDto {
   constructor(params: UserCreateDto) {
     this.userName = params.userName
+    this.address = params.address
+    this.departmentId = params.departmentId
   }
 
-  @IsString()
-  @IsNotEmpty({ message: 'userNameが入力されていません。' })
-  @Length(1, 10, { message: 'userNameは10文字以内で入力してください' })
+  @IsString({ message: '名前を正しく入力してください' })
+  @IsNotEmpty({ message: '名前を入力してください' })
+  @Length(1, 30, { message: '名前は30文字以内で入力してください' })
+  @IsJpName({ message: '名前は漢字・カタカナ・ひらがなで入力してください' })
   userName: string
+
+  @IsEmail({}, { message: 'メールアドレスを正しく入力してください' })
+  @IsNotEmpty({ message: 'メールアドレスを入力してください' })
+  @Length(5, 50, { message: 'メールアドレスは50文字以内で入力してください' })
+  address: string
+
+  @IsString({ message: '部署IDを正しく入力してください' })
+  @IsNotEmpty({ message: '部署IDを入力してください' })
+  @IsIn(['A0001', 'B0001'], { message: '部署IDを正しく入力してください' })
+  departmentId: string
 }

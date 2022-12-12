@@ -62,16 +62,23 @@
     <button @click="onSearch" class="btn btn-primary" style="width: 156px;">検索</button> 
   </form>
 
+  <!-- CSVダウンロード -->
+  <div class="d-flex flex-row-reverse mb-5">
+    <button type="submit" class="mb-4 btn btn-primary" style="width: 156px;" @click="onDownload">
+      CSVダウンロード
+    </button>
+  </div>
+
   <!-- 一覧テーブル -->
   <table class="table">
     <thead>
       <tr>
-        <th>id</th>
-        <th>userName</th>
+        <th>ID</th>
+        <th>名前</th>
         <th>password</th>
-        <th>address</th>
+        <th>メールアドレス</th>
         <th>age</th>
-        <th>departmentId</th>
+        <th>部署ID</th>
         <th>point</th>
         <th>createdAt</th>
         <th>updateAt</th>
@@ -160,6 +167,20 @@ new Vue({
   mounted() {
   },
   methods: {
+    /**
+     * CSVダウンロード
+     */
+    onDownload() {
+      let title = 'ID,名前,メールアドレス,部署ID\n';
+      this.users.forEach(el => {
+        let line = `${el.id},${el.userName},${el.address},${el.departmentId}`;
+        title += (line + '\n');
+      })
+      let link = document.createElement('a');
+      link.href = window.URL.createObjectURL(new Blob([title], { type: 'text/csv' }));
+      link.download = 'users.csv';
+      link.click();
+    },
     /**
      * ページング（更新）
      */ 

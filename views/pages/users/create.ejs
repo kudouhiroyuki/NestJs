@@ -20,10 +20,10 @@
       <label class="form-label">id: {{ id }}</label>
     </div>
     <div class="row mb-4">    
-      <label class="form-label">userName</label>
+      <label class="form-label">名前</label>
       <input v-model="userName" type="text" name="userName">
       <div v-if="$v.userName.$dirty" class="text-danger fw-bold">
-        <span v-if="!$v.userName.required">userNameが入力されていません。</span>
+        <span v-if="!$v.userName.required">名前が入力されていません。</span>
       </div>
     </div>
     <div class="row mb-4">    
@@ -34,10 +34,10 @@
       </div>
     </div>
     <div class="row mb-4">    
-      <label class="form-label">address</label>
+      <label class="form-label">メールアドレス</label>
       <input v-model="address" type="text" name="address">
       <div v-if="$v.address.$dirty" class="text-danger fw-bold">
-        <span v-if="!$v.address.required">addressが入力されていません。</span>
+        <span v-if="!$v.address.required">メールアドレスが入力されていません。</span>
       </div>
     </div>
     <div class="row mb-4">    
@@ -48,10 +48,10 @@
       </div>
     </div>
     <div class="row mb-4">    
-      <label class="form-label">departmentId</label>
+      <label class="form-label">部署ID</label>
       <input v-model="departmentId" type="text" name="departmentId">
       <div v-if="$v.departmentId.$dirty" class="text-danger fw-bold">
-        <span v-if="!$v.departmentId.required">departmentIdが入力されていません。</span>
+        <span v-if="!$v.departmentId.required">部署IDが入力されていません。</span>
       </div>
     </div>
     <div class="text-end">
