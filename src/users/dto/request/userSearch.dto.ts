@@ -1,4 +1,4 @@
-import { IsOptional, IsNumberString, IsDateString, ValidateIf, NotContains } from 'class-validator'
+import { IsOptional, IsNumberString, IsDateString, ValidateIf } from 'class-validator'
 
 export class UserSearchDto {
   id: string
@@ -32,7 +32,6 @@ export class UserSearchCheckDto {
 
   @IsOptional()
   @ValidateIf((o, v) => v != null && v.length)
-  @NotContains('0', { message: 'pageNumberを正しく入力してください' })
   @IsNumberString({}, { message: 'pageNumberは数値で入力してください' })
   pageNumber: string
 }

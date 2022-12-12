@@ -9,8 +9,6 @@ import { UserCreateDto, UserCreateCheckDto } from './dto/request/UserCreateDto.d
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   // https://github.com/typestack/class-validator
-  // https://qiita.com/t-kubodera/items/2839ec4e4fe667b43f18
-
   /*
  【一覧検索】
  ■正常系

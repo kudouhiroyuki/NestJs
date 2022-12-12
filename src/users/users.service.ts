@@ -23,12 +23,13 @@ export class UsersService {
     pageNumber: string
   ): Promise<{ users: UserListDto[]; pagination: number }> {
     const take = 5
-    const skip = pageNumber ? (Number(pageNumber) - 1) * take : 0
+    let skip = 0
     const whereConditions = {}
     const createdAt = {}
     if (id) whereConditions['id'] = Number(id)
     if (startDate) createdAt['gte'] = new Date(startDate)
     if (endDate) createdAt['lte'] = new Date(endDate)
+    if (pageNumber && pageNumber !== '0') skip = (Number(pageNumber) - 1) * take
     whereConditions['createdAt'] = createdAt
     const users = await this.userRepository.findUsers(whereConditions, take, skip)
     const usersCount = await this.userRepository.getUsersCount(whereConditions)
@@ -47,7 +48,7 @@ export class UsersService {
       address: user.address,
       age: user.age,
       departmentId: user.departmentId,
-      point: null,
+      point: 0,
       createdAt: new Date(),
       updateAt: new Date()
     }

@@ -41,10 +41,10 @@
       </div>
     </div>
     <div class="row mb-4">    
-      <label class="form-label">age</label>
+      <label class="form-label">年齢</label>
       <input v-model="age" type="text" name="age">
       <div v-if="$v.age.$dirty" class="text-danger fw-bold">
-        <span v-if="!$v.age.required">ageが入力されていません。</span>
+        <span v-if="!$v.age.required">年齢が入力されていません。</span>
       </div>
     </div>
     <div class="row mb-4">    
@@ -132,11 +132,11 @@ new Vue({
     onUpsert() {
       let action = this.displayType === 'create' ? '/users/create' : `/users/detail/${location.pathname.split('/')[3]}`;
       this.$v.$touch();
-      if(!this.$v.$invalid) {
+      // if(!this.$v.$invalid) {
         document.usersFrom.method = 'post';
         document.usersFrom.action = action;
         document.usersFrom.submit();
-      }
+      // }
     }
   }
 })
