@@ -69,6 +69,7 @@ export class UsersController {
   @Get('/create')
   @Render('users/create')
   async getCreate(@Query() query: any) {
+    const departments = await this.usersService.findDepartmentsAll()
     let froms = {}
     if (query.id) {
       const user = await this.usersService.findUserById(Number(query.id))
@@ -84,6 +85,7 @@ export class UsersController {
       }
     }
     return {
+      departments: JSON.stringify(departments),
       forms: JSON.stringify(froms),
       errors: JSON.stringify([])
     }
@@ -93,9 +95,11 @@ export class UsersController {
    */
   @Post('/create')
   async postCreate(@Body() body: UserCreateDto, @Res() res: Response) {
+    const departments = await this.usersService.findDepartmentsAll()
     const errors: ValidationError[] = await validate(new UserCreateCheckDto(body))
     if (errors.length) {
       return res.render('users/create', {
+        departments: JSON.stringify(departments),
         forms: JSON.stringify(body),
         errors: JSON.stringify(errors)
       })
@@ -110,8 +114,10 @@ export class UsersController {
   @Get('detail/:id')
   @Render('users/create')
   async getDetail(@Param('id') id: number) {
+    const departments = await this.usersService.findDepartmentsAll()
     const froms = await this.usersService.findUserById(id)
     return {
+      departments: JSON.stringify(departments),
       forms: JSON.stringify(froms),
       errors: JSON.stringify([])
     }
@@ -121,9 +127,11 @@ export class UsersController {
    */
   @Post('detail/:id')
   async postDetail(@Param('id') id: number, @Body() body: UserCreateDto, @Res() res: Response) {
+    const departments = await this.usersService.findDepartmentsAll()
     const errors: ValidationError[] = await validate(new UserCreateCheckDto(body))
     if (errors.length) {
       return res.render(`users/create`, {
+        departments: JSON.stringify(departments),
         forms: JSON.stringify(body),
         errors: JSON.stringify(errors)
       })

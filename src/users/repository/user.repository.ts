@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../../prisma.service'
-import { Prisma, users as Users } from '@prisma/client'
+import { Prisma, users as Users, departments as Departments } from '@prisma/client'
 
 @Injectable()
 export class UserRepository {
   constructor(private prisma: PrismaService) {}
+
+  async findDepartmentsAll(): Promise<Departments[]> {
+    return await this.prisma.departments.findMany({})
+  }
 
   async findUsersAll(): Promise<Users[]> {
     return await this.prisma.users.findMany({})
@@ -14,7 +18,10 @@ export class UserRepository {
     return await this.prisma.users.findMany({
       where: whereConditions,
       take: take,
-      skip: skip
+      skip: skip,
+      include: {
+        department: true
+      }
     })
   }
 

@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common'
 import { UserRepository } from './repository/user.repository'
 import { Prisma, users as Users } from '@prisma/client'
+import { DepartmentListDto } from './dto/response/departmentList.dto'
 import { UserListDto } from './dto/response/userList.dto'
 import { UserCreateDto } from './dto/request/UserCreateDto.dto'
 
 @Injectable()
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
+
+  async findDepartmentsAll(): Promise<DepartmentListDto[]> {
+    return await this.userRepository.findDepartmentsAll()
+  }
 
   async findUsersAll(): Promise<{ users: UserListDto[]; pagination: number }> {
     const take = 5
@@ -22,7 +27,7 @@ export class UsersService {
     endDate: string,
     pageNumber: string
   ): Promise<{ users: UserListDto[]; pagination: number }> {
-    const take = 5
+    const take = 1
     let skip = 0
     const whereConditions = {}
     const createdAt = {}

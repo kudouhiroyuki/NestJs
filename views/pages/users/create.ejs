@@ -48,10 +48,16 @@
       </div>
     </div>
     <div class="row mb-4">    
-      <label class="form-label">部署ID</label>
-      <input v-model="departmentId" type="text" name="departmentId">
+      <label class="form-label">部署</label>
+      <select v-model="departmentId" class="form-select" name="departmentId">
+        <option
+          v-for="item in departments"
+          :key="item.departmentId"
+          :value="item.departmentId"
+        >{{ item.departmentName }}</option>
+      </select>
       <div v-if="$v.departmentId.$dirty" class="text-danger fw-bold">
-        <span v-if="!$v.departmentId.required">部署IDが入力されていません。</span>
+        <span v-if="!$v.departmentId.required">部署が入力されていません。</span>
       </div>
     </div>
     <div class="text-end">
@@ -63,6 +69,7 @@
 
 <script type="text/javascript">
 const errors = `<%- errors %>`;
+const departments = `<%- departments %>`;
 const forms = `<%- forms %>`;
 
 Vue.use(window.vuelidate.default);
@@ -74,6 +81,7 @@ new Vue({
     displayType: "",                   // フォーマットタイプ
     // サーバーデータ
     errors: JSON.parse(errors),
+    departments: JSON.parse(departments),
     forms: JSON.parse(forms),
     // 登録データ
     id: '',
@@ -132,11 +140,11 @@ new Vue({
     onUpsert() {
       let action = this.displayType === 'create' ? '/users/create' : `/users/detail/${location.pathname.split('/')[3]}`;
       this.$v.$touch();
-      // if(!this.$v.$invalid) {
+      if(!this.$v.$invalid) {
         document.usersFrom.method = 'post';
         document.usersFrom.action = action;
         document.usersFrom.submit();
-      // }
+      }
     }
   }
 })

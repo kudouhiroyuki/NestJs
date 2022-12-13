@@ -78,7 +78,7 @@
         <th>password</th>
         <th>メールアドレス</th>
         <th>年齢</th>
-        <th>部署ID</th>
+        <th>部署</th>
         <th>point</th>
         <th>createdAt</th>
         <th>updateAt</th>
@@ -94,7 +94,7 @@
         <td>{{ item.password }}</td>
         <td>{{ item.address }}</td>
         <td>{{ item.age }}</td>
-        <td>{{ item.departmentId }}</td>
+        <td>{{ item.department.departmentName }}</td>
         <td>{{ item.point }}</td>
         <td>{{ item.createdAt }}</td>
         <td>{{ item.updateAt }}</td>
@@ -110,7 +110,7 @@
   <!-- ページネーション -->
   <nav class="d-flex justify-content-center" aria-label="Page navigation">
     <ul class="pagination mb-0">
-      <li :class="{'disabled': pagination === 0 || Number(pageNumber) === 1}" class="page-item">
+      <li :class="{'disabled': pagination === 0 || Number(pageNumber) === 1 || pagination < Number(pageNumber)}" class="page-item">
         <button
           @click="onPagingChange(Number(pageNumber) - 1)"
           type="button"
@@ -129,7 +129,7 @@
           class="page-link">{{value}}
         </button>
       </li>
-      <li :class="{'disabled': pagination === 0 || Number(pageNumber) === Number(pagination)}" class="page-item">
+      <li :class="{'disabled': pagination === 0 || Number(pageNumber) === Number(pagination) || pagination < Number(pageNumber)}" class="page-item">
         <button
           @click="onPagingChange(Number(pageNumber) + 1)"
           type="button"
@@ -172,7 +172,7 @@ new Vue({
      * CSVダウンロード
      */
     onDownload() {
-      let title = 'ID,名前,メールアドレス,部署ID\n';
+      let title = 'ID,名前,メールアドレス,部署\n';
       this.users.forEach(el => {
         let line = `${el.id},${el.userName},${el.address},${el.departmentId}`;
         title += (line + '\n');
