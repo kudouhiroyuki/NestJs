@@ -4,6 +4,7 @@ import { UsersService } from './users.service'
 import { validate, ValidationError } from 'class-validator'
 import { UserSearchDto, UserSearchCheckDto } from './dto/request/userSearch.dto'
 import { UserCreateDto, UserCreateCheckDto } from './dto/request/UserCreateDto.dto'
+import { UserCopyDto } from './dto/request/userCopyDto.dto'
 
 @Controller('users')
 export class UsersController {
@@ -68,7 +69,7 @@ export class UsersController {
    */
   @Get('/create')
   @Render('users/create')
-  async getCreate(@Query() query: any) {
+  async getCreate(@Query() query: UserCopyDto) {
     const departments = await this.usersService.findDepartmentsAll()
     let froms = {}
     if (query.id) {
