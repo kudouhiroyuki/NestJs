@@ -8,6 +8,9 @@ export class UserRepository {
 
   async findDepartmentsAll(): Promise<Departments[]> {
     return await this.prisma.departments.findMany({})
+    // return await this.prisma.$queryRaw`
+    //   SELECT * FROM departments
+    // `
   }
 
   async findUsersAll(): Promise<Users[]> {
