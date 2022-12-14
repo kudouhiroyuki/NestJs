@@ -17,11 +17,11 @@ export class UserRepository {
     return await this.prisma.users.findMany({})
   }
 
-  async findUsers(whereConditions: object, take: number, skip: number): Promise<Users[]> {
+  async findUsers(id: string, startDate: string, endDate: string, pageNumber: string, take: number): Promise<Users[]> {
     return await this.prisma.users.findMany({
-      where: whereConditions,
+      where: this.createUsersWhere(id, startDate, endDate),
       take: take,
-      skip: skip,
+      skip: this.createUsersSkip(pageNumber, take),
       include: {
         department: true
       }
@@ -32,9 +32,9 @@ export class UserRepository {
     return await this.prisma.users.findFirst({ where: { id: id } })
   }
 
-  async getUsersCount(whereConditions: object): Promise<number> {
+  async getUsersCount(id: string, startDate: string, endDate: string): Promise<number> {
     return await this.prisma.users.count({
-      where: whereConditions
+      where: this.createUsersWhere(id, startDate, endDate)
     })
   }
 
@@ -50,5 +50,21 @@ export class UserRepository {
 
   async deleteUser(id: number) {
     return await this.prisma.users.delete({ where: { id: id } })
+  }
+
+  createUsersSkip(pageNumber: string, take: number): number {
+    let skip = 0
+    if (pageNumber && pageNumber !== '0') skip = (Number(pageNumber) - 1) * take
+    return skip
+  }
+
+  createUsersWhere(id: string, startDate: string, endDate: string): object {
+    const whereConditions = {}
+    const createdAt = {}
+    if (id) whereConditions['id'] = Number(id)
+    if (startDate) createdAt['gte'] = new Date(startDate)
+    if (endDate) createdAt['lte'] = new Date(endDate)
+    whereConditions['createdAt'] = createdAt
+    return whereConditions
   }
 }
