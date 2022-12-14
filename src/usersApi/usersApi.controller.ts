@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Query, NotFoundException, HttpStatus } from '@nestjs/common'
+import { Controller, Get, Post, HttpCode } from '@nestjs/common'
 import { UsersApiService } from './usersApi.service'
 
 @Controller('usersApi')
@@ -6,7 +6,13 @@ export class UsersApiController {
   constructor(private readonly usersApiService: UsersApiService) {}
 
   @Get()
-  getUsers(): object {
-    return { 111: 2222 }
+  @HttpCode(200)
+  findUsersAll(): string {
+    return 'findUsersAll'
+  }
+
+  @Post()
+  createUser(): string {
+    return 'createUser'
   }
 }

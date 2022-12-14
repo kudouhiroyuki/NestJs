@@ -47,6 +47,9 @@
 ・データベースへの参照や作成、更新、削除などのいわゆるCRUD処理を記述するためのファイル<br>
 ・データ加工する部分をRepository書かないように<br>
 
+## Swagger<br>
+http://localhost:3000/api/
+
 ## 起動（Docker無）<br>
 MySQL<br>
 mysql -u root -p;<br>
