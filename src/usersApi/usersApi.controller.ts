@@ -28,7 +28,7 @@ export class UsersApiController {
     description: 'Unauthorized.'
   })
   findUsersAll(): string {
-    return 'findUsersAll'
+    return 'GET ユーザー一覧取得'
   }
 
   @Post()

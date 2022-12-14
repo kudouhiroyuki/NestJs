@@ -1,4 +1,4 @@
-export class UserListDto {
+export class UsersGetResponseDto {
   id: number
   userName: string
   createdAt: Date

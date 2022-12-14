@@ -1,7 +1,11 @@
 import { IsString, IsEmail, IsNotEmpty, Length, IsIn, IsNumberString } from 'class-validator'
 import { IsJpName } from '../../../utils/validation.utils'
 
-export class UserCreateDto {
+export class UsersCreateGetRequestDto {
+  id: string
+}
+
+export class UsersCreatePostRequestDto {
   id: string
   userName: string
   password: string
@@ -11,15 +15,13 @@ export class UserCreateDto {
   createdAt: string
   updateAt: string
 }
-
-export class UserCreateCheckDto {
-  constructor(params: UserCreateDto) {
+export class UsersCreatePostRequestCheckDto {
+  constructor(params: UsersCreatePostRequestDto) {
     this.userName = params.userName
     this.address = params.address
     this.age = params.age
     this.departmentId = params.departmentId
   }
-
   @IsString({ message: '名前を正しく入力してください' })
   @IsNotEmpty({ message: '名前を入力してください' })
   @Length(1, 30, { message: '名前は30文字以内で入力してください' })

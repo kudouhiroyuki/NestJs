@@ -1,14 +1,14 @@
 import { IsOptional, IsNumberString, IsDateString, ValidateIf } from 'class-validator'
 
-export class UserSearchDto {
+export class UsersGetRequestDto {
   id: string
   startDate: string
   endDate: string
   pageNumber: string
 }
 
-export class UserSearchCheckDto {
-  constructor(params: UserSearchDto) {
+export class UsersGetRequestCheckDto {
+  constructor(params: UsersGetRequestDto) {
     this.id = params.id
     this.startDate = params.startDate
     this.endDate = params.endDate

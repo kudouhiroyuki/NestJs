@@ -1,10 +1,13 @@
 import { Get, Post, Body, Controller, Render, Query, Res, Param, Redirect, ParseIntPipe } from '@nestjs/common'
 import { Response } from 'express'
-import { UsersService } from './users.service'
 import { validate, ValidationError } from 'class-validator'
-import { UserSearchDto, UserSearchCheckDto } from './dto/request/userSearch.dto'
-import { UserCreateDto, UserCreateCheckDto } from './dto/request/UserCreateDto.dto'
-import { UserCopyDto } from './dto/request/userCopyDto.dto'
+import { UsersService } from './users.service'
+import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersGetRequest.dto'
+import {
+  UsersCreateGetRequestDto,
+  UsersCreatePostRequestDto,
+  UsersCreatePostRequestCheckDto
+} from './dto/request/usersCreateRequest.dto'
 
 @Controller('users')
 export class UsersController {
@@ -39,8 +42,8 @@ export class UsersController {
    */
   @Get('/')
   @Render('users/index')
-  async index(@Query() query: UserSearchDto) {
-    let errors: ValidationError[] = await validate(new UserSearchCheckDto(query))
+  async index(@Query() query: UsersGetRequestDto) {
+    let errors: ValidationError[] = await validate(new UsersGetRequestCheckDto(query))
     let users = []
     let pagination = 0
     if (!errors.length) {
@@ -69,7 +72,7 @@ export class UsersController {
    */
   @Get('/create')
   @Render('users/create')
-  async getCreate(@Query() query: UserCopyDto) {
+  async getCreate(@Query() query: UsersCreateGetRequestDto) {
     const departments = await this.usersService.findDepartmentsAll()
     let froms = {}
     if (query.id) {
@@ -95,9 +98,9 @@ export class UsersController {
    * POST ユーザー登録処理
    */
   @Post('/create')
-  async postCreate(@Body() body: UserCreateDto, @Res() res: Response) {
+  async postCreate(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const departments = await this.usersService.findDepartmentsAll()
-    const errors: ValidationError[] = await validate(new UserCreateCheckDto(body))
+    const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     if (errors.length) {
       return res.render('users/create', {
         departments: JSON.stringify(departments),
@@ -127,9 +130,9 @@ export class UsersController {
    * POST ユーザー更新処理
    */
   @Post('detail/:id')
-  async postDetail(@Param('id') id: number, @Body() body: UserCreateDto, @Res() res: Response) {
+  async postDetail(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const departments = await this.usersService.findDepartmentsAll()
-    const errors: ValidationError[] = await validate(new UserCreateCheckDto(body))
+    const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     if (errors.length) {
       return res.render(`users/create`, {
         departments: JSON.stringify(departments),

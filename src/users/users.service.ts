@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common'
 import { UserRepository } from './repository/user.repository'
 import { Prisma, users as Users } from '@prisma/client'
-import { DepartmentListDto } from './dto/response/departmentList.dto'
-import { UserListDto } from './dto/response/userList.dto'
-import { UserCreateDto } from './dto/request/UserCreateDto.dto'
+import { DepartmentsGetResponseDto } from './dto/response/departmentsResponse.dto'
+import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
+import { UsersCreatePostRequestDto } from './dto/request/usersCreateRequest.dto'
 
 @Injectable()
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async findDepartmentsAll(): Promise<DepartmentListDto[]> {
+  async findDepartmentsAll(): Promise<DepartmentsGetResponseDto[]> {
     return await this.userRepository.findDepartmentsAll()
   }
 
-  async findUsersAll(): Promise<{ users: UserListDto[]; pagination: number }> {
+  async findUsersAll(): Promise<{ users: UsersGetResponseDto[]; pagination: number }> {
     const take = 5
     const users = await this.userRepository.findUsersAll()
     const usersCount = await this.userRepository.getUsersCount({})
@@ -26,7 +26,7 @@ export class UsersService {
     startDate: string,
     endDate: string,
     pageNumber: string
-  ): Promise<{ users: UserListDto[]; pagination: number }> {
+  ): Promise<{ users: UsersGetResponseDto[]; pagination: number }> {
     const take = 5
     let skip = 0
     const whereConditions = {}
@@ -46,7 +46,7 @@ export class UsersService {
     return await this.userRepository.findUserById(id)
   }
 
-  async createUser(user: UserCreateDto) {
+  async createUser(user: UsersCreatePostRequestDto) {
     const item: Prisma.usersUncheckedCreateInput = {
       userName: user.userName,
       password: user.password,
@@ -60,7 +60,7 @@ export class UsersService {
     return await this.userRepository.createUser(item)
   }
 
-  async updateUser(user: UserCreateDto) {
+  async updateUser(user: UsersCreatePostRequestDto) {
     const item: Prisma.usersUncheckedUpdateInput = {
       userName: user.userName,
       password: user.password,

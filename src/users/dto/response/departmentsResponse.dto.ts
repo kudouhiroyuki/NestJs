@@ -1,4 +1,4 @@
-export class DepartmentListDto {
+export class DepartmentsGetResponseDto {
   departmentId: string
   departmentName: string
 }
