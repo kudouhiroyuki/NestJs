@@ -2,7 +2,7 @@ import { Get, Post, Body, Controller, Render, Query, Res, Param, Redirect, Parse
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 import { UsersService } from './users.service'
-import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersGetRequest.dto'
+import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
 import {
   UsersCreateGetRequestDto,
   UsersCreatePostRequestDto,
