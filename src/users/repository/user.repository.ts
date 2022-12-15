@@ -46,6 +46,16 @@ export class UserRepository {
     return await this.prisma.users.count({
       where: this.createUsersWhere(id, startDate, endDate)
     })
+    // const result = await this.prisma.$queryRaw`
+    //   SELECT COUNT(*) as cnt FROM users AS u
+    //   INNER JOIN departments AS d
+    //   ON u.departmentId = d.departmentId
+    //   WHERE
+    //   IF(${id ?? ''} = '', true, u.id = ${id})
+    //   AND IF(${startDate ?? ''} = '', true, u.createdAt >= ${startDate + 'T00:00:00.000'})
+    //   AND IF(${endDate ?? ''} = '', true, u.createdAt <= ${endDate + 'T23:59:59.999'})
+    // `
+    // return Number(String(result[0]['cnt']))
   }
 
   async createUser(user: Prisma.usersUncheckedCreateInput) {
