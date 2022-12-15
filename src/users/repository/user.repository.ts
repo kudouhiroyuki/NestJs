@@ -26,6 +26,16 @@ export class UserRepository {
         department: true
       }
     })
+    // return await this.prisma.$queryRaw`
+    //   SELECT * FROM users AS u
+    //   INNER JOIN departments AS d
+    //   ON u.departmentId = d.departmentId
+    //   WHERE
+    //   IF(${id ?? ''} = '', true, u.id = ${id})
+    //   AND IF(${startDate ?? ''} = '', true, u.createdAt >= ${startDate})
+    //   AND IF(${endDate ?? ''} = '', true, u.createdAt <= ${endDate})
+    //   LIMIT ${this.createUsersSkip(pageNumber, take)}, ${take}
+    // `
   }
 
   async findUserById(id: number): Promise<Users> {
@@ -65,7 +75,6 @@ export class UserRepository {
     if (startDate) createdAt['gte'] = new Date(startDate)
     if (endDate) createdAt['lte'] = new Date(endDate)
     whereConditions['createdAt'] = createdAt
-    console.log(whereConditions)
     return whereConditions
   }
 }
