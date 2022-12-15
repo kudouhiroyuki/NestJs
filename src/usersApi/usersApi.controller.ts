@@ -1,8 +1,9 @@
 import { Controller, Get, Post, HttpCode, HttpStatus } from '@nestjs/common'
-import { ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { UsersApiService } from './usersApi.service'
 import { ErrorResponseDto } from '../error/errorResponse.dto'
 
+@ApiTags('usersApi')
 @Controller('usersApi')
 export class UsersApiController {
   constructor(private readonly usersApiService: UsersApiService) {}
