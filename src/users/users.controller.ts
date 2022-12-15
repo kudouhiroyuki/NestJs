@@ -12,31 +12,6 @@ import {
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  // https://github.com/typestack/class-validator
-  /*
- 【一覧検索】
- ■正常系
-  http://localhost:3000/users
-  http://localhost:3000/users?id=
-  http://localhost:3000/users?id=1
-  http://localhost:3000/users?id=2
-  http://localhost:3000/users?startDate=
-  http://localhost:3000/users?startDate=2010-10-01
-  http://localhost:3000/users?startDate=2010-12-01
-  http://localhost:3000/users?endDate=
-  http://localhost:3000/users?endDate=2010-11-01
-  http://localhost:3000/users?endDate=2010-11-02
-  http://localhost:3000/users?startDate=2010-10-02&endDate=2010-11-30
-  http://localhost:3000/users?pageNumber=
-  http://localhost:3000/users?pageNumber=1
-  http://localhost:3000/users?pageNumber=2
-  ■異常系
-  http://localhost:3000/users?id=あ
-  http://localhost:3000/users?startDate=あ
-  http://localhost:3000/users?startDate=2010-10-1a
-  http://localhost:3000/users?pageNumber=あ
-  */
-
   /**
    * GET ユーザー一覧画面
    */
