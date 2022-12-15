@@ -32,8 +32,8 @@ export class UserRepository {
     //   ON u.departmentId = d.departmentId
     //   WHERE
     //   IF(${id ?? ''} = '', true, u.id = ${id})
-    //   AND IF(${startDate ?? ''} = '', true, u.createdAt >= ${startDate})
-    //   AND IF(${endDate ?? ''} = '', true, u.createdAt <= ${endDate})
+    //   AND IF(${startDate ?? ''} = '', true, u.createdAt >= ${startDate + 'T00:00:00.000'})
+    //   AND IF(${endDate ?? ''} = '', true, u.createdAt <= ${endDate + 'T23:59:59.999'})
     //   LIMIT ${this.createUsersSkip(pageNumber, take)}, ${take}
     // `
   }
