@@ -16,7 +16,7 @@ export class UsersService {
   async findUsersAll(): Promise<{ users: UsersGetResponseDto[]; pagination: number }> {
     const take = 5
     const users = await this.userRepository.findUsersAll()
-    const usersCount = await this.userRepository.getUsersCount({})
+    const usersCount = await this.userRepository.getUsersCount()
     const pagination = Math.ceil(usersCount / take)
     return { users: users, pagination: pagination }
   }

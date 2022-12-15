@@ -34,19 +34,6 @@
 |  【詳細画面】<br>users/detail.ejs  |  【GET】<br>users/detail/{id}  |  getDetail()  |  findUserDetail()  |  findUserById()  |
 |  【更新処理】<br>詳細画面  |  【POST】<br>users/detail/:id  |  postDetail()  |  updateUser()  |  updateUser()  |
 
-
-## Controller, Service, Repository<br>
-■Controller<br>
-・クライアントからのリクエストを受け付け、クライアントにレスポンスを返す<br>
-・ルーティングの役割を担うファイル<br>
-・ロジックにあたる処理は書かない<br>
-■Service<br>
-・ビジネスロジックを定義するファイル<br>
-・細かい処理はここに書いていく<br>
-■Repository<br>
-・データベースへの参照や作成、更新、削除などのいわゆるCRUD処理を記述するためのファイル<br>
-・データ加工する部分をRepository書かないように<br>
-
 ## Swagger<br>
 http://localhost:3000/api/
 
