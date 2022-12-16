@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core'
+import { NestFactory, Reflector } from '@nestjs/core'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import * as Session from 'express-session'
@@ -30,7 +30,8 @@ async function bootstrap() {
   )
 
   // 認証設定
-  app.useGlobalGuards(new AuthGuard())
+  const reflector = app.get(Reflector)
+  app.useGlobalGuards(new AuthGuard(reflector))
   // フィルター設定
   app.useGlobalFilters(new UnauthorizedExceptionFilter())
 
