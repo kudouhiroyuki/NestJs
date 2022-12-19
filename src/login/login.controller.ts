@@ -2,7 +2,6 @@ import { Get, Post, Controller, Render, Req, Body, Res } from '@nestjs/common'
 import { Request, Response } from 'express'
 import { AuthService } from '../auth/auth.service'
 import { Public } from '../auth/auth.reflecotr'
-import { SessionUtils } from '../utils/session.utils'
 
 @Controller('login')
 export class LoginController {
@@ -22,10 +21,10 @@ export class LoginController {
   @Public()
   @Post('/')
   async postLogin(@Req() request: Request, @Body() body: any, @Res() res: Response) {
-    SessionUtils.setSession(request, {}, 'account')
-
-    if (true) {
-      return res.redirect(`http://localhost:3000/users`)
+    const accounts = { test: 'hoge' }
+    const signinResult = await this.authService.signin(request, accounts)
+    if (!signinResult.err) {
+      return res.redirect('users')
     }
   }
 }

@@ -2,6 +2,8 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Request } from 'express'
 import { Observable } from 'rxjs'
 import { Reflector } from '@nestjs/core'
+
+import { SessionUtils } from '../utils/session.utils'
 import { IS_PUBLIC_KEY } from './auth.reflecotr'
 
 @Injectable()
@@ -15,11 +17,7 @@ export class AuthGuard implements CanActivate {
       context.getClass()
     ])
     const request = context.switchToHttp().getRequest<Request>()
-
-    console.log(request.session)
-
-    const sessionData = false
-    if (isPublic || sessionData) {
+    if (isPublic || SessionUtils.getSettion(request, 'account')) {
       return true
     } else {
       throw new UnauthorizedException('Access Error')
