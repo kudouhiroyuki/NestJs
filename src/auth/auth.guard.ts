@@ -15,7 +15,10 @@ export class AuthGuard implements CanActivate {
       context.getClass()
     ])
     const request = context.switchToHttp().getRequest<Request>()
-    const sessionData = true
+
+    console.log(request.session)
+
+    const sessionData = false
     if (isPublic || sessionData) {
       return true
     } else {

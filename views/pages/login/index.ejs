@@ -1,1 +1,76 @@
-ログイン画面
+<%- include('../../partials/head'); %>
+
+<div id="loginIndex" class="container">
+  <h4 class="mb-4 fw-bold">
+    ログイン画面
+  </h4>
+  <form @submit.prevent="onSubmit" name="loginForm">
+    <!-- ID -->
+    <input
+      v-model="id"
+      name="id"
+      maxlength="254"
+      type="text"
+      class="form-control"
+      placeholder="ユーザーIDまたはメールアドレスを入力"
+      style="border-bottom: 0; border-radius: .25rem .25rem 0 0;"
+    />
+    <!-- パスワード -->
+    <input
+      v-model="password"
+      name="password"
+      maxlength="99"
+      type="password"
+      class="form-control mb-3"
+      placeholder="パスワードを入力"
+      style="border-radius: 0 0 .25rem .25rem;"
+    />
+    <div v-if="$v.id.$dirty" class="text-danger fw-bold" style="font-size: 14px;">
+      <p v-if="!$v.id.required">ユーザーIDまたはメールアドレスが入力されていません。</p>
+    </div>
+    <div v-if="$v.password.$dirty" class="text-danger fw-bold" style="font-size: 14px;">
+      <p v-if="!$v.password.required">パスワードが入力されていません。</p>
+    </div>
+    <div class="text-danger fw-bold" style="font-size: 14px;">
+      <p v-if="$v.id.required && $v.password.required"><%= message %></p>
+    </div>
+    <!-- ログインボタン -->
+    <input type="submit" value="ログイン" class="btn baseBtnBlue" style="width: 156px">
+  </form>
+</div>
+
+<script type="text/javascript">
+Vue.use(window.vuelidate.default);
+const { required, minLength } = window.validators;
+
+new Vue({
+  el: "#loginIndex",
+  data: {  
+    id: "<%= id %>",              // ID
+    password: "<%= password %>",  // パスワード
+  },
+  validations: {
+    id: {
+      required
+    },
+    password: {
+      required
+    },
+  },
+  methods: {
+    /**
+     * ログイン処理
+     */ 
+    onSubmit() {
+      this.$v.$touch();
+      if(!this.$v.$invalid) {
+        document.loginForm.method="post";
+        document.loginForm.action = "/login";
+        document.loginForm.submit();
+      }
+    },
+  }
+})
+</script>
+</body>
+</html>

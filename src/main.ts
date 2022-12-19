@@ -21,6 +21,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
 
+  // Session設定
   app.use(
     Session({
       secret: 'secretkey',
@@ -32,6 +33,7 @@ async function bootstrap() {
   // 認証設定
   const reflector = app.get(Reflector)
   app.useGlobalGuards(new AuthGuard(reflector))
+
   // フィルター設定
   app.useGlobalFilters(new UnauthorizedExceptionFilter())
 
