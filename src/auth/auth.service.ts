@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common'
 import { Request } from 'express'
 
 import { SessionUtils } from '../utils/session.utils'
-import { SigninResponseDto } from './dto/response/authsResponse.dto'
+import { AuthSigninResponseDto } from './dto/response/authResponse.dto'
 
 @Injectable()
 export class AuthService {
   async signin(request: Request, account: any) {
-    const result: SigninResponseDto = {}
+    const result: AuthSigninResponseDto = {}
     try {
       SessionUtils.setSession(request, account, 'account')
     } catch (e) {
