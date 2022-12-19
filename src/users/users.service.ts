@@ -22,10 +22,10 @@ export class UsersService {
   }
 
   async findUsers(
-    id: string,
+    id: number,
     startDate: string,
     endDate: string,
-    pageNumber: string
+    pageNumber: number
   ): Promise<{ users: UsersGetResponseDto[]; pagination: number }> {
     const take = 5
     const users = await this.userRepository.findUsers(id, startDate, endDate, pageNumber, take)

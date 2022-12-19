@@ -1,10 +1,15 @@
-import { IsOptional, IsNumberString, IsDateString, ValidateIf } from 'class-validator'
+import { Type } from 'class-transformer'
+import { IsOptional, IsDateString, IsInt, Min, ValidateIf } from 'class-validator'
 
 export class UsersGetRequestDto {
-  id: string
+  @Type(() => Number)
+  id: number
+
   startDate: string
   endDate: string
-  pageNumber: string
+
+  @Type(() => Number)
+  pageNumber: number
 }
 
 export class UsersGetRequestCheckDto {
@@ -16,9 +21,8 @@ export class UsersGetRequestCheckDto {
   }
 
   @IsOptional()
-  @ValidateIf((o, v) => v != null && v.length)
-  @IsNumberString({}, { message: 'idは数値で入力してください' })
-  id: string
+  @IsInt({ message: 'idは数値で入力してください' })
+  id: number
 
   @IsOptional()
   @ValidateIf((o, v) => v != null && v.length)
@@ -31,7 +35,7 @@ export class UsersGetRequestCheckDto {
   endDate: string
 
   @IsOptional()
-  @ValidateIf((o, v) => v != null && v.length)
-  @IsNumberString({}, { message: 'pageNumberは数値で入力してください' })
-  pageNumber: string
+  @IsInt({ message: 'pageNumberは数値で入力してください' })
+  @Min(1, { message: 'pageNumberは1以上で入力してください' })
+  pageNumber: number
 }
