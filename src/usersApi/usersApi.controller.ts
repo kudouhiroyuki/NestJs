@@ -1,4 +1,4 @@
-import { Controller, Get, Post, HttpCode, HttpStatus } from '@nestjs/common'
+import { Controller, Get, Post, Param, HttpCode, HttpStatus } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { UsersApiService } from './usersApi.service'
 import { ErrorResponseDto } from '../error/errorResponse.dto'
@@ -29,11 +29,32 @@ export class UsersApiController {
     description: 'Unauthorized.'
   })
   findUsersAll(): string {
-    return 'GET ユーザー一覧取得'
+    return 'findUsersAll'
   }
 
-  @Post()
+  @Post('/')
+  @HttpCode(201)
   createUser(): string {
     return 'createUser'
+  }
+
+  @Get(':id')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'ユーザー詳細取得',
+    operationId: 'findUserById'
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: ErrorResponseDto,
+    description: 'success.'
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: ErrorResponseDto,
+    description: 'Bad Request.'
+  })
+  async findUserById(@Param('id') id: number): Promise<string> {
+    return 'ユーザー詳細取得'
   }
 }

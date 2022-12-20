@@ -18,8 +18,8 @@ export class LoginController {
   async getLogin() {
     return {
       errorMessage: '',
-      id: '',
-      password: ''
+      id: '1',
+      password: 'password'
     }
   }
   /**
