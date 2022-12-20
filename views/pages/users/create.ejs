@@ -1,70 +1,76 @@
 <%- include('../../partials/head'); %>
 
 <body>
-<div id="usersResist" class="container">
-  <h4 class="mb-4 fw-bold">
-    <span v-if="displayType === 'create'" class="fs-4">ユーザー登録</span>
-    <span v-if="displayType === 'detail'" class="fs-4">ユーザー詳細</span>
-  </h4>
+<div class="layout">
+  <%- include('../../partials/header'); %>
+  
+  <%- include('../../partials/sidebar'); %>
 
-  <div v-if="errors.length" class="alert alert-danger">
-    <div v-for="item in errors" :key="item">
-      ■{{ item.property }}エラー
-      <p v-for="i in item.constraints" :key="item">{{ i }}</p>
-    </div>
-  </div>
+  <main id="usersCreate">
+    <h4 class="mb-4 fw-bold">
+      <span v-if="displayType === 'create'" class="fs-4">ユーザー登録</span>
+      <span v-if="displayType === 'detail'" class="fs-4">ユーザー詳細</span>
+    </h4>
 
-  <form @submit.prevent="onUpsert" name="usersFrom">
-    <div class="row mb-4">
-      <input v-model="id" type="hidden" name="id">
-      <label class="form-label">id: {{ id }}</label>
-    </div>
-    <div class="row mb-4">    
-      <label class="form-label">名前</label>
-      <input v-model="userName" type="text" name="userName">
-      <div v-if="$v.userName.$dirty" class="text-danger fw-bold">
-        <span v-if="!$v.userName.required">名前が入力されていません。</span>
+    <div v-if="errors.length" class="alert alert-danger">
+      <div v-for="item in errors" :key="item">
+        ■{{ item.property }}エラー
+        <p v-for="i in item.constraints" :key="item">{{ i }}</p>
       </div>
     </div>
-    <div class="row mb-4">    
-      <label class="form-label">password</label>
-      <input v-model="password" type="text" name="password">
-      <div v-if="$v.password.$dirty" class="text-danger fw-bold">
-        <span v-if="!$v.password.required">passwordが入力されていません。</span>
+
+    <form @submit.prevent="onUpsert" name="usersFrom">
+      <div class="row mb-4">
+        <input v-model="id" type="hidden" name="id">
+        <label class="form-label">id: {{ id }}</label>
       </div>
-    </div>
-    <div class="row mb-4">    
-      <label class="form-label">メールアドレス</label>
-      <input v-model="address" type="text" name="address">
-      <div v-if="$v.address.$dirty" class="text-danger fw-bold">
-        <span v-if="!$v.address.required">メールアドレスが入力されていません。</span>
+      <div class="row mb-4">    
+        <label class="form-label">名前</label>
+        <input v-model="userName" type="text" name="userName">
+        <div v-if="$v.userName.$dirty" class="text-danger fw-bold">
+          <span v-if="!$v.userName.required">名前が入力されていません。</span>
+        </div>
       </div>
-    </div>
-    <div class="row mb-4">    
-      <label class="form-label">年齢</label>
-      <input v-model="age" type="text" name="age">
-      <div v-if="$v.age.$dirty" class="text-danger fw-bold">
-        <span v-if="!$v.age.required">年齢が入力されていません。</span>
+      <div class="row mb-4">    
+        <label class="form-label">password</label>
+        <input v-model="password" type="text" name="password">
+        <div v-if="$v.password.$dirty" class="text-danger fw-bold">
+          <span v-if="!$v.password.required">passwordが入力されていません。</span>
+        </div>
       </div>
-    </div>
-    <div class="row mb-4">    
-      <label class="form-label">部署</label>
-      <select v-model="departmentId" class="form-select" name="departmentId">
-        <option
-          v-for="item in departments"
-          :key="item.departmentId"
-          :value="item.departmentId"
-        >{{ item.departmentName }}</option>
-      </select>
-      <div v-if="$v.departmentId.$dirty" class="text-danger fw-bold">
-        <span v-if="!$v.departmentId.required">部署が入力されていません。</span>
+      <div class="row mb-4">    
+        <label class="form-label">メールアドレス</label>
+        <input v-model="address" type="text" name="address">
+        <div v-if="$v.address.$dirty" class="text-danger fw-bold">
+          <span v-if="!$v.address.required">メールアドレスが入力されていません。</span>
+        </div>
       </div>
-    </div>
-    <div class="text-end">
-      <button type="submit" class="btn btn-primary" style="width: 156px;">登録
-      </button>
-    </div>
-  </form>
+      <div class="row mb-4">    
+        <label class="form-label">年齢</label>
+        <input v-model="age" type="text" name="age">
+        <div v-if="$v.age.$dirty" class="text-danger fw-bold">
+          <span v-if="!$v.age.required">年齢が入力されていません。</span>
+        </div>
+      </div>
+      <div class="row mb-4">    
+        <label class="form-label">部署</label>
+        <select v-model="departmentId" class="form-select" name="departmentId">
+          <option
+            v-for="item in departments"
+            :key="item.departmentId"
+            :value="item.departmentId"
+          >{{ item.departmentName }}</option>
+        </select>
+        <div v-if="$v.departmentId.$dirty" class="text-danger fw-bold">
+          <span v-if="!$v.departmentId.required">部署が入力されていません。</span>
+        </div>
+      </div>
+      <div class="text-end">
+        <button type="submit" class="btn btn-primary" style="width: 156px;">登録
+        </button>
+      </div>
+    </form>
+  </main>
 </div>
 
 <script type="text/javascript">
@@ -76,7 +82,7 @@ Vue.use(window.vuelidate.default);
 const { required } = window.validators;
 
 new Vue({
-  el: "#usersResist",
+  el: "#usersCreate",
   data: {
     displayType: "",                   // フォーマットタイプ
     // サーバーデータ
