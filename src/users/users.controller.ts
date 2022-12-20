@@ -1,8 +1,10 @@
 import { Get, Post, Body, Controller, Render, Query, Res, Param, Redirect, ParseIntPipe } from '@nestjs/common'
+import { HttpCode, HttpStatus } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
+import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { UsersService } from './users.service'
 import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
 import {
@@ -11,15 +13,34 @@ import {
   UsersCreatePostRequestCheckDto
 } from './dto/request/usersCreateRequest.dto'
 
-@ApiTags('ユーザー管理')
 @Controller('users')
+@ApiTags('ユーザー管理')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   /**
-   * GET ユーザー一覧画面
+   * GET ユーザー照会画面
    */
   @Get('/')
   @Render('users/index')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'ユーザー照会画面',
+    operationId: 'index'
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'success.'
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: ErrorResponseDto,
+    description: 'Bad Request.'
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: ErrorResponseDto,
+    description: 'Unauthorized.'
+  })
   async index(@Query() query: UsersGetRequestDto) {
     let errors: ValidationError[] = await validate(new UsersGetRequestCheckDto(query))
     let users = []
