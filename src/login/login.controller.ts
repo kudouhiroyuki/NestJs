@@ -1,4 +1,5 @@
-import { Get, Post, Controller, Render, Req, Body, Res } from '@nestjs/common'
+import { Get, Post, Controller, Render, Req, Body, Res, HttpCode } from '@nestjs/common'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Request, Response } from 'express'
 
 import { AuthService } from '../auth/auth.service'
@@ -6,6 +7,7 @@ import { Public } from '../auth/auth.reflecotr'
 import { LoginService } from './login.service'
 import { LoginPostRequestDto } from './dto/request/loginRequest.dto'
 
+@ApiTags('ログイン')
 @Controller('login')
 export class LoginController {
   constructor(private readonly authService: AuthService, private readonly loginService: LoginService) {}
@@ -14,6 +16,11 @@ export class LoginController {
    */
   @Public()
   @Get('/')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'ログイン画面',
+    operationId: 'getLogin'
+  })
   @Render('login/index')
   async getLogin() {
     return {
@@ -22,11 +29,17 @@ export class LoginController {
       password: 'password'
     }
   }
+
   /**
    * POST ログイン処理
    */
   @Public()
   @Post('/')
+  @HttpCode(201)
+  @ApiOperation({
+    summary: 'ログイン処理',
+    operationId: 'postLogin'
+  })
   async postLogin(@Req() request: Request, @Body() body: LoginPostRequestDto, @Res() res: Response) {
     const accounts = await this.loginService.findLoginUser(body.id, body.password)
     if (!accounts) {

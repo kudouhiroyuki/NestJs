@@ -1,4 +1,5 @@
 import { Get, Post, Body, Controller, Render, Query, Res, Param, Redirect, ParseIntPipe } from '@nestjs/common'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
@@ -10,6 +11,7 @@ import {
   UsersCreatePostRequestCheckDto
 } from './dto/request/usersCreateRequest.dto'
 
+@ApiTags('ユーザー管理')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
