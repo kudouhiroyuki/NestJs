@@ -7,4 +7,7 @@ export class SessionUtils {
   static getSettion(request: Request, key: string): any {
     return request.session[key]
   }
+  static deleteSession(request: Request, key: string): void {
+    delete request.session[key]
+  }
 }

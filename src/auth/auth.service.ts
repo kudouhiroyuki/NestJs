@@ -15,4 +15,7 @@ export class AuthService {
     }
     return result
   }
+  async signout(request: Request) {
+    SessionUtils.deleteSession(request, 'account')
+  }
 }
