@@ -4,8 +4,9 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
-import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { UsersService } from './users.service'
+import { ErrorResponseDto } from '../error/errorResponse.dto'
+import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
 import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
 import {
   UsersCreateGetRequestDto,
@@ -13,8 +14,8 @@ import {
   UsersCreatePostRequestCheckDto
 } from './dto/request/usersCreateRequest.dto'
 
-@Controller('users')
 @ApiTags('ユーザー管理')
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   /**
@@ -25,10 +26,11 @@ export class UsersController {
   @HttpCode(200)
   @ApiOperation({
     summary: 'ユーザー照会画面',
-    operationId: 'index'
+    operationId: 'getIndex'
   })
   @ApiResponse({
     status: HttpStatus.OK,
+    type: UsersGetResponseDto,
     description: 'success.'
   })
   @ApiResponse({
@@ -41,15 +43,15 @@ export class UsersController {
     type: ErrorResponseDto,
     description: 'Unauthorized.'
   })
-  async index(@Query() query: UsersGetRequestDto) {
+  async getIndex(@Query() query: UsersGetRequestDto) {
     let errors: ValidationError[] = await validate(new UsersGetRequestCheckDto(query))
     let users = []
     let pagination = 0
     if (!errors.length) {
-      const resultUsers = await this.usersService.findUsers(query.id, query.startDate, query.endDate, query.pageNumber)
+      const resultData = await this.usersService.findUsers(query.id, query.startDate, query.endDate, query.pageNumber)
       errors = []
-      users = resultUsers.users
-      pagination = resultUsers.pagination
+      users = resultData.users
+      pagination = resultData.pagination
     }
     return {
       errors: JSON.stringify(errors),
@@ -116,6 +118,25 @@ export class UsersController {
    */
   @Get('detail/:id')
   @Render('users/create')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'ユーザー詳細画面',
+    operationId: 'getDetail'
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'success.'
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: ErrorResponseDto,
+    description: 'Bad Request.'
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: ErrorResponseDto,
+    description: 'Unauthorized.'
+  })
   async getDetail(@Param('id') id: number) {
     const departments = await this.usersService.findDepartmentsAll()
     const froms = await this.usersService.findUserById(id)

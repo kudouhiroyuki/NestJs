@@ -4,8 +4,8 @@ import { Request, Response } from 'express'
 
 import { AuthService } from '../auth/auth.service'
 
-@ApiTags('ログアウト')
 @Controller('logout')
+@ApiTags('ログアウト')
 export class LogoutController {
   constructor(private readonly authService: AuthService) {}
   /**

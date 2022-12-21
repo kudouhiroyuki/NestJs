@@ -13,24 +13,17 @@ export class UsersService {
     return await this.userRepository.findDepartmentsAll()
   }
 
-  async findUsersAll(): Promise<{ users: UsersGetResponseDto[]; pagination: number }> {
-    const take = 5
+  async findUsersAll(): Promise<UsersGetResponseDto> {
     const users = await this.userRepository.findUsersAll()
     const usersCount = await this.userRepository.getUsersCount()
-    const pagination = Math.ceil(usersCount / take)
+    const pagination = Math.ceil(usersCount / 5)
     return { users: users, pagination: pagination }
   }
 
-  async findUsers(
-    id: number,
-    startDate: string,
-    endDate: string,
-    pageNumber: number
-  ): Promise<{ users: UsersGetResponseDto[]; pagination: number }> {
-    const take = 5
-    const users = await this.userRepository.findUsers(id, startDate, endDate, pageNumber, take)
+  async findUsers(id: number, startDate: string, endDate: string, pageNumber: number): Promise<UsersGetResponseDto> {
+    const users = await this.userRepository.findUsers(id, startDate, endDate, pageNumber, 5)
     const usersCount = await this.userRepository.getUsersCount(id, startDate, endDate)
-    const pagination = Math.ceil(usersCount / take)
+    const pagination = Math.ceil(usersCount / 5)
     return { users: users, pagination: pagination }
   }
 
