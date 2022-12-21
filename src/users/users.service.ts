@@ -17,14 +17,15 @@ export class UsersService {
     const users = await this.userRepository.findUsersAll()
     const usersCount = await this.userRepository.getUsersCount()
     const pagination = Math.ceil(usersCount / 5)
-    return { users: users, pagination: pagination }
+    return new UsersGetResponseDto(users, pagination)
   }
 
   async findUsers(id: number, startDate: string, endDate: string, pageNumber: number): Promise<UsersGetResponseDto> {
     const users = await this.userRepository.findUsers(id, startDate, endDate, pageNumber, 5)
     const usersCount = await this.userRepository.getUsersCount(id, startDate, endDate)
     const pagination = Math.ceil(usersCount / 5)
-    return { users: users, pagination: pagination }
+    console.log(users)
+    return new UsersGetResponseDto(users, pagination)
   }
 
   async findUserById(id: number): Promise<Users> {
