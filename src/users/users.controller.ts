@@ -57,6 +57,19 @@ export class UsersController {
    */
   @Post('/')
   @Redirect('/users')
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'ユーザー削除処理',
+    operationId: 'postIndex'
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: '正常処理'
+  })
+  @ApiResponse({
+    status: HttpStatus.FOUND,
+    description: '認証エラー（リダイレクト）'
+  })
   async postIndex(@Body('id', ParseIntPipe) id: number) {
     await this.usersService.deleteUser(id)
   }
@@ -66,6 +79,11 @@ export class UsersController {
    */
   @Get('/create')
   @Render('users/create')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'ユーザー登録画面（新規登録・コピー新規登録）',
+    operationId: 'getCreate'
+  })
   async getCreate(@Query() query: UsersCreateGetRequestDto) {
     const departments = await this.usersService.findDepartmentsAll()
     let froms = {}
@@ -94,9 +112,18 @@ export class UsersController {
    * POST ユーザー登録処理
    */
   @Post('/create')
+  @HttpCode(201)
   @ApiOperation({
     summary: 'ユーザー登録処理',
     operationId: 'postCreate'
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: '正常処理'
+  })
+  @ApiResponse({
+    status: HttpStatus.FOUND,
+    description: '認証エラー（リダイレクト）'
   })
   @ApiBody({ type: UsersCreatePostRequestCheckDto })
   async postCreate(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
@@ -146,6 +173,19 @@ export class UsersController {
    * POST ユーザー更新処理
    */
   @Post('detail/:id')
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'ユーザー更新処理',
+    operationId: 'postDetail'
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: '正常処理'
+  })
+  @ApiResponse({
+    status: HttpStatus.FOUND,
+    description: '認証エラー（リダイレクト）'
+  })
   async postDetail(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const departments = await this.usersService.findDepartmentsAll()
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
