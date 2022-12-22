@@ -15,11 +15,12 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '../../views/pages'))
   app.setViewEngine('ejs')
 
+  app.useGlobalPipes(new ValidationPipe({ transform: true }))
+
+  // Swagger設定
   const options = new DocumentBuilder().setTitle('Api').build()
   const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup('api', app, document)
-
-  app.useGlobalPipes(new ValidationPipe({ transform: true }))
 
   // Session設定
   app.use(

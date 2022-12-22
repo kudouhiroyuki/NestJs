@@ -1,24 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class ErrorResponseDto {
+export class ValidationErrorResponseDto {
   @ApiProperty({
-    description: 'httpステータスコードと同じ値を設定',
-    type: 'integer',
-    example: 'http status code'
+    description: 'プロパティ',
+    example: 'id'
   })
-  statusCode: number
+  property: string
 
   @ApiProperty({
-    description: 'メッセージリスト',
-    example: 'messages',
-    type: [String]
+    description: 'メッセージ',
+    example: { isInt: 'idは数値で入力してください' }
   })
-  message: [string]
-
-  @ApiProperty({
-    description: 'エラーメッセージ',
-    example: 'error',
-    required: false
-  })
-  error: string
+  constraints: object
 }

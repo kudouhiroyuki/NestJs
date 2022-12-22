@@ -5,7 +5,6 @@ import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
 import { UsersService } from './users.service'
-import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
 import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
 import {
@@ -31,17 +30,11 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.OK,
     type: UsersGetResponseDto,
-    description: 'success.'
+    description: '正常処理.'
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    type: ErrorResponseDto,
-    description: 'Bad Request.'
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    type: ErrorResponseDto,
-    description: 'Unauthorized.'
+    status: HttpStatus.FOUND,
+    description: '認証エラー（リダイレクト）'
   })
   async getIndex(@Query() query: UsersGetRequestDto) {
     let errors: ValidationError[] = await validate(new UsersGetRequestCheckDto(query))
@@ -53,6 +46,7 @@ export class UsersController {
       users = resultData.users
       pagination = resultData.pagination
     }
+    console.log(errors)
     return {
       errors: JSON.stringify(errors),
       users: JSON.stringify(users),
@@ -128,14 +122,8 @@ export class UsersController {
     description: 'success.'
   })
   @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    type: ErrorResponseDto,
-    description: 'Bad Request.'
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    type: ErrorResponseDto,
-    description: 'Unauthorized.'
+    status: HttpStatus.FOUND,
+    description: '認証エラー（リダイレクト）'
   })
   async getDetail(@Param('id') id: number) {
     const departments = await this.usersService.findDepartmentsAll()
