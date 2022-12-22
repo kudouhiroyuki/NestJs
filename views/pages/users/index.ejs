@@ -11,15 +11,17 @@
       ユーザー照会
     </h4>
 
-    <div class="mb-4">
-      <a href="users/create">新規登録</a>
-    </div>
-
     <div v-if="errors.length" class="alert alert-danger">
       <div v-for="(value, index) in errors" :key="index">
         ■{{ value.property }}エラー
         <p v-for="(i, v) in value.constraints" :key="v">{{ i }}</p>
       </div>
+    </div>
+
+    <div class="d-flex flex-row-reverse mb-5">
+      <a :href=`/users/create`>
+        <input type="button" value="新規登録" class="btn btn-primary" style="margin-left: 20px;">
+      </a>
     </div>
 
     <!-- 削除フォーム -->

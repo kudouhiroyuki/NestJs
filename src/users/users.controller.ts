@@ -1,6 +1,6 @@
 import { Get, Post, Body, Controller, Render, Query, Res, Param, Redirect, ParseIntPipe } from '@nestjs/common'
 import { HttpCode, HttpStatus } from '@nestjs/common'
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
@@ -30,7 +30,7 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.OK,
     type: UsersGetResponseDto,
-    description: '正常処理.'
+    description: '正常処理'
   })
   @ApiResponse({
     status: HttpStatus.FOUND,
@@ -46,7 +46,6 @@ export class UsersController {
       users = resultData.users
       pagination = resultData.pagination
     }
-    console.log(errors)
     return {
       errors: JSON.stringify(errors),
       users: JSON.stringify(users),
@@ -72,15 +71,17 @@ export class UsersController {
     let froms = {}
     if (query.id) {
       const user = await this.usersService.findUserById(Number(query.id))
-      froms = {
-        userName: user.userName,
-        password: user.password,
-        address: user.address,
-        age: user.age,
-        departmentId: user.departmentId,
-        point: null,
-        createdAt: new Date(),
-        updateAt: new Date()
+      if (user) {
+        froms = {
+          userName: user.userName,
+          password: user.password,
+          address: user.address,
+          age: user.age,
+          departmentId: user.departmentId,
+          point: null,
+          createdAt: new Date(),
+          updateAt: new Date()
+        }
       }
     }
     return {
@@ -93,6 +94,11 @@ export class UsersController {
    * POST ユーザー登録処理
    */
   @Post('/create')
+  @ApiOperation({
+    summary: 'ユーザー登録処理',
+    operationId: 'postCreate'
+  })
+  @ApiBody({ type: UsersCreatePostRequestCheckDto })
   async postCreate(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const departments = await this.usersService.findDepartmentsAll()
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
@@ -111,7 +117,6 @@ export class UsersController {
    * GET ユーザー詳細画面
    */
   @Get('detail/:id')
-  @Render('users/create')
   @HttpCode(200)
   @ApiOperation({
     summary: 'ユーザー詳細画面',
@@ -119,20 +124,23 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'success.'
+    description: '正常処理'
   })
   @ApiResponse({
     status: HttpStatus.FOUND,
     description: '認証エラー（リダイレクト）'
   })
-  async getDetail(@Param('id') id: number) {
+  async getDetail(@Param('id') id: number, @Res() res: Response) {
     const departments = await this.usersService.findDepartmentsAll()
     const froms = await this.usersService.findUserById(id)
-    return {
-      departments: JSON.stringify(departments),
-      forms: JSON.stringify(froms),
-      errors: JSON.stringify([])
+    if (froms) {
+      return res.render(`users/create`, {
+        departments: JSON.stringify(departments),
+        forms: JSON.stringify(froms),
+        errors: JSON.stringify([])
+      })
     }
+    return res.redirect(`/users`)
   }
   /**
    * POST ユーザー更新処理

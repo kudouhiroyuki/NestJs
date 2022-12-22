@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 import { IsString, IsEmail, IsNotEmpty, Length, IsIn, IsNumberString } from 'class-validator'
 import { IsJpName } from '../../../utils/validation.utils'
 
@@ -26,6 +27,10 @@ export class UsersCreatePostRequestCheckDto {
   @IsNotEmpty({ message: '名前を入力してください' })
   @Length(1, 30, { message: '名前は30文字以内で入力してください' })
   @IsJpName({ message: '名前は漢字・カタカナ・ひらがなで入力してください' })
+  @ApiProperty({
+    description: 'ユーザー名',
+    example: '名前'
+  })
   userName: string
 
   @IsEmail({}, { message: 'メールアドレスを正しく入力してください' })
