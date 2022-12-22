@@ -31,3 +31,17 @@ export function IsJpName(validationOptions?: ValidationOptions): PropertyDecorat
     { ...validationOptions, message }
   )
 }
+
+export function IsUserPassword(validationOptions?: ValidationOptions): PropertyDecorator {
+  return ValidateBy(
+    {
+      name: 'IsUserPassword',
+      validator: {
+        validate(value): boolean {
+          return RegExp('^[!-~]+$').test(value)
+        }
+      }
+    },
+    validationOptions
+  )
+}
