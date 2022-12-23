@@ -16,7 +16,7 @@ import {
   HttpStatus
 } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
-import { Response } from 'express'
+import e, { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
 import { UsersService } from './users.service'
@@ -103,6 +103,39 @@ export class UsersController {
       errors: JSON.stringify([])
     }
   }
+
+  /**
+   * GET ユーザー詳細画面
+   */
+  @Get('detail/:id')
+  @Render('users/create')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'ユーザー詳細画面',
+    operationId: 'getEdit'
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: '正常処理'
+  })
+  @ApiResponse({
+    status: HttpStatus.FOUND,
+    description: '認証エラー（リダイレクト）'
+  })
+  async edit(@Param('id') id: number) {
+    const errors = Session['userErrors'] ? Session['userErrors'] : []
+    const departments = await this.usersService.findDepartmentsAll()
+    let forms = await this.usersService.findUserById(id)
+    if (Session['userErrors']) forms = Session['userForms']
+    Session['userErrors'] = null
+    Session['userForms'] = null
+    return {
+      errors: JSON.stringify(errors),
+      departments: JSON.stringify(departments),
+      forms: JSON.stringify(forms)
+    }
+  }
+
   /**
    * POST ユーザー登録処理
    */
@@ -110,7 +143,7 @@ export class UsersController {
   @HttpCode(201)
   @ApiOperation({
     summary: 'ユーザー登録処理',
-    operationId: 'postCreate'
+    operationId: 'store'
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -121,7 +154,7 @@ export class UsersController {
     description: '認証エラー（リダイレクト）'
   })
   @ApiBody({ type: UsersCreatePostRequestCheckDto })
-  async postCreate(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
+  async store(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const departments = await this.usersService.findDepartmentsAll()
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     if (errors.length) {
@@ -136,41 +169,13 @@ export class UsersController {
   }
 
   /**
-   * GET ユーザー詳細画面
-   */
-  @Get('detail/:id')
-  @Render('users/create')
-  @HttpCode(200)
-  @ApiOperation({
-    summary: 'ユーザー詳細画面',
-    operationId: 'getDetail'
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: '正常処理'
-  })
-  @ApiResponse({
-    status: HttpStatus.FOUND,
-    description: '認証エラー（リダイレクト）'
-  })
-  async getDetail(@Param('id') id: number) {
-    const departments = await this.usersService.findDepartmentsAll()
-    const froms = await this.usersService.findUserById(id)
-    return {
-      departments: JSON.stringify(departments),
-      forms: JSON.stringify(froms),
-      errors: Session['errors'] ?? JSON.stringify([])
-    }
-  }
-
-  /**
    * PUT ユーザー更新処理
    */
   @Put('update/:id')
   @HttpCode(204)
   @ApiOperation({
     summary: 'ユーザー更新処理',
-    operationId: 'updateUser'
+    operationId: 'update'
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
@@ -180,10 +185,11 @@ export class UsersController {
     status: HttpStatus.FOUND,
     description: '認証エラー（リダイレクト）'
   })
-  async updateUser(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
+  async update(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     if (errors.length) {
-      Session['errors'] = JSON.stringify(errors)
+      Session['userErrors'] = JSON.parse(JSON.stringify(errors))
+      Session['userForms'] = JSON.parse(JSON.stringify(body))
       return res.redirect(`/users/detail/${id}`)
     }
     await this.usersService.updateUser(body)
@@ -198,7 +204,7 @@ export class UsersController {
   @HttpCode(204)
   @ApiOperation({
     summary: 'ユーザー削除処理',
-    operationId: 'deleteUser'
+    operationId: 'destroy'
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
@@ -208,7 +214,7 @@ export class UsersController {
     status: HttpStatus.FOUND,
     description: '認証エラー（リダイレクト）'
   })
-  async deleteUser(@Body('id', ParseIntPipe) id: number) {
+  async destroy(@Body('id', ParseIntPipe) id: number) {
     await this.usersService.deleteUser(id)
   }
 }
