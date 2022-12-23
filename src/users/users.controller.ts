@@ -10,13 +10,12 @@ import {
   Res,
   Param,
   Redirect,
-  ParseIntPipe,
   Session,
   HttpCode,
   HttpStatus
 } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
-import e, { Response } from 'express'
+import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
 import { UsersService } from './users.service'
@@ -33,13 +32,13 @@ import {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   /**
-   * GET ユーザー照会画面
+   * GET 一覧画面
    */
   @Get('/')
   @Render('users/index')
   @HttpCode(200)
   @ApiOperation({
-    summary: 'ユーザー照会画面',
+    summary: '一覧画面',
     operationId: 'index'
   })
   @ApiResponse({
@@ -69,13 +68,13 @@ export class UsersController {
   }
 
   /**
-   * GET ユーザー登録画面（新規登録・コピー新規登録）
+   * GET 登録画面（新規登録・コピー新規登録）
    */
   @Get('/create')
   @Render('users/create')
   @HttpCode(200)
   @ApiOperation({
-    summary: 'ユーザー登録画面（新規登録・コピー新規登録）',
+    summary: '登録画面（新規登録・コピー新規登録）',
     operationId: 'create'
   })
   async create(@Query() query: UsersCreateGetRequestDto) {
@@ -105,13 +104,13 @@ export class UsersController {
   }
 
   /**
-   * GET ユーザー詳細画面
+   * GET 詳細画面
    */
   @Get('/:id')
   @Render('users/create')
   @HttpCode(200)
   @ApiOperation({
-    summary: 'ユーザー詳細画面',
+    summary: '詳細画面',
     operationId: 'show'
   })
   @ApiResponse({
@@ -137,12 +136,12 @@ export class UsersController {
   }
 
   /**
-   * POST ユーザー登録処理
+   * POST 登録処理
    */
   @Post('/')
   @HttpCode(201)
   @ApiOperation({
-    summary: 'ユーザー登録処理',
+    summary: '登録処理',
     operationId: 'store'
   })
   @ApiResponse({
@@ -169,12 +168,12 @@ export class UsersController {
   }
 
   /**
-   * PUT ユーザー更新処理
+   * PUT 更新処理
    */
   @Put('/:id')
   @HttpCode(204)
   @ApiOperation({
-    summary: 'ユーザー更新処理',
+    summary: '更新処理',
     operationId: 'update'
   })
   @ApiResponse({
@@ -197,13 +196,13 @@ export class UsersController {
   }
 
   /**
-   * DELETE ユーザー削除処理
+   * DELETE 削除処理
    */
   @Delete('/:id')
   @Redirect('/users')
   @HttpCode(204)
   @ApiOperation({
-    summary: 'ユーザー削除処理',
+    summary: '削除処理',
     operationId: 'destroy'
   })
   @ApiResponse({

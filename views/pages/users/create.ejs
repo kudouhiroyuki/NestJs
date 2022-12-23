@@ -8,8 +8,8 @@
 
   <main id="usersCreate">
     <h4 class="mb-4 fw-bold">
-      <span v-if="displayType === 'create'" class="fs-4">ユーザー登録</span>
-      <span v-if="displayType === 'detail'" class="fs-4">ユーザー詳細</span>
+      <span v-if="displayType === 'create'" class="fs-4">登録画面</span>
+      <span v-else class="fs-4">詳細画面</span>
     </h4>
 
     <div v-if="errors.length" class="alert alert-danger">
@@ -84,7 +84,7 @@ const { required } = window.validators;
 new Vue({
   el: "#usersCreate",
   data: {
-    displayType: "",                   // フォーマットタイプ
+    displayType: "",
     // サーバーデータ
     errors: JSON.parse(errors),
     departments: JSON.parse(departments),
@@ -130,15 +130,7 @@ new Vue({
       this.address = this.forms.address;
       this.age = this.forms.age;
       this.departmentId = this.forms.departmentId;
-      switch (location.pathname.split('/')[2]) {
-        case 'create':
-          this.displayType = 'create';
-          break;
-        case 'detail':
-          this.displayType = 'detail';
-          break;        
-        default:
-      }
+      if(location.pathname.split('/')[2] === 'create') this.displayType = 'create';
     },
     /**
      * アップサート処理
