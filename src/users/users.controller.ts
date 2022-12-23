@@ -1,5 +1,20 @@
-import { Get, Post, Body, Controller, Render, Query, Res, Param, Redirect, ParseIntPipe } from '@nestjs/common'
-import { HttpCode, HttpStatus } from '@nestjs/common'
+import {
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Controller,
+  Render,
+  Query,
+  Res,
+  Param,
+  Redirect,
+  ParseIntPipe,
+  Session,
+  HttpCode,
+  HttpStatus
+} from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
@@ -52,27 +67,6 @@ export class UsersController {
       pagination: pagination
     }
   }
-  /**
-   * POST ユーザー削除処理
-   */
-  @Post('/')
-  @Redirect('/users')
-  @HttpCode(204)
-  @ApiOperation({
-    summary: 'ユーザー削除処理',
-    operationId: 'postIndex'
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: '正常処理'
-  })
-  @ApiResponse({
-    status: HttpStatus.FOUND,
-    description: '認証エラー（リダイレクト）'
-  })
-  async postIndex(@Body('id', ParseIntPipe) id: number) {
-    await this.usersService.deleteUser(id)
-  }
 
   /**
    * GET ユーザー登録画面（新規登録・コピー新規登録）
@@ -103,6 +97,7 @@ export class UsersController {
       }
     }
     return {
+      errorMessage: 1,
       departments: JSON.stringify(departments),
       forms: JSON.stringify(froms),
       errors: JSON.stringify([])
@@ -144,6 +139,7 @@ export class UsersController {
    * GET ユーザー詳細画面
    */
   @Get('detail/:id')
+  @Render('users/create')
   @HttpCode(200)
   @ApiOperation({
     summary: 'ユーザー詳細画面',
@@ -157,26 +153,24 @@ export class UsersController {
     status: HttpStatus.FOUND,
     description: '認証エラー（リダイレクト）'
   })
-  async getDetail(@Param('id') id: number, @Res() res: Response) {
+  async getDetail(@Param('id') id: number) {
     const departments = await this.usersService.findDepartmentsAll()
     const froms = await this.usersService.findUserById(id)
-    if (froms) {
-      return res.render(`users/create`, {
-        departments: JSON.stringify(departments),
-        forms: JSON.stringify(froms),
-        errors: JSON.stringify([])
-      })
+    return {
+      departments: JSON.stringify(departments),
+      forms: JSON.stringify(froms),
+      errors: Session['errors'] ?? JSON.stringify([])
     }
-    return res.redirect(`/users`)
   }
+
   /**
-   * POST ユーザー更新処理
+   * PUT ユーザー更新処理
    */
-  @Post('detail/:id')
+  @Put('update/:id')
   @HttpCode(204)
   @ApiOperation({
     summary: 'ユーザー更新処理',
-    operationId: 'postDetail'
+    operationId: 'updateUser'
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
@@ -186,17 +180,35 @@ export class UsersController {
     status: HttpStatus.FOUND,
     description: '認証エラー（リダイレクト）'
   })
-  async postDetail(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
-    const departments = await this.usersService.findDepartmentsAll()
+  async updateUser(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     if (errors.length) {
-      return res.render(`users/create`, {
-        departments: JSON.stringify(departments),
-        forms: JSON.stringify(body),
-        errors: JSON.stringify(errors)
-      })
+      Session['errors'] = JSON.stringify(errors)
+      return res.redirect(`/users/detail/${id}`)
     }
     await this.usersService.updateUser(body)
     return res.redirect(`/users`)
+  }
+
+  /**
+   * DELETE ユーザー削除処理
+   */
+  @Delete('/')
+  @Redirect('/users')
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'ユーザー削除処理',
+    operationId: 'deleteUser'
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: '正常処理'
+  })
+  @ApiResponse({
+    status: HttpStatus.FOUND,
+    description: '認証エラー（リダイレクト）'
+  })
+  async deleteUser(@Body('id', ParseIntPipe) id: number) {
+    await this.usersService.deleteUser(id)
   }
 }

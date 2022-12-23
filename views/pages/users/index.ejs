@@ -211,7 +211,7 @@ new Vue({
     onDelete(id) {
       document.deleteForm.id.value = id;
       document.deleteForm.method='post';
-      document.deleteForm.action = '/users';
+      document.deleteForm.action = '/users?_method=DELETE';
       document.deleteForm.submit();
     },
   }

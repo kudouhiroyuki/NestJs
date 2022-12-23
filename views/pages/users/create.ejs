@@ -78,6 +78,9 @@ const errors = `<%- errors %>`;
 const departments = `<%- departments %>`;
 const forms = `<%- forms %>`;
 
+console.log(errors)
+console.log(JSON.parse(errors))
+
 Vue.use(window.vuelidate.default);
 const { required } = window.validators;
 
@@ -144,7 +147,7 @@ new Vue({
      * アップサート処理
      */ 
     onUpsert() {
-      let action = this.displayType === 'create' ? '/users/create' : `/users/detail/${location.pathname.split('/')[3]}`;
+      let action = this.displayType === 'create' ? '/users/create' : `/users/update/${location.pathname.split('/')[3]}?_method=PUT`;
       this.$v.$touch();
       if(!this.$v.$invalid) {
         document.usersFrom.method = 'post';

@@ -7,6 +7,7 @@ import { AppModule } from './app.module'
 import { ValidationPipe } from '@nestjs/common'
 import { AuthGuard } from './auth/auth.guard'
 import { UnauthorizedExceptionFilter } from './filters/unauthorizedExeption.filter'
+import * as methodOverride from 'method-override'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
@@ -16,6 +17,9 @@ async function bootstrap() {
   app.setViewEngine('ejs')
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
+
+  // フォームメソッド設定（PUT DELETE）
+  app.use(methodOverride('_method'))
 
   // Swagger設定
   const options = new DocumentBuilder().setTitle('Api').build()
