@@ -25,9 +25,7 @@
     </div>
 
     <!-- 削除フォーム -->
-    <form name="deleteForm">
-      <input type="hidden" name="id">
-    </form>
+    <form name="deleteForm"></form>
 
     <!-- 検索フォーム -->
     <form name="searchForm">
@@ -105,7 +103,7 @@
           <td>{{ item.point }}</td>
           <td>{{ item.createdAt }}</td>
           <td>{{ item.updateAt }}</td>
-          <td><a :href=`users/detail/${item.id}` class="btn btn-secondary" style="width: 60px;">詳細</a></td>
+          <td><a :href=`users/${item.id}` class="btn btn-secondary" style="width: 60px;">詳細</a></td>
           <td><a :href=`users/create?id=${item.id}` class="btn btn-secondary" style="width: 80px;">コピー</a></td>
           <td>
             <button @click="onDelete(item.id)" type="button" class="btn btn-secondary" style="width: 60px;">削除</button> 
@@ -209,9 +207,8 @@ new Vue({
      * 削除処理
      */
     onDelete(id) {
-      document.deleteForm.id.value = id;
       document.deleteForm.method='post';
-      document.deleteForm.action = '/users?_method=DELETE';
+      document.deleteForm.action = `/users/${id}?_method=DELETE`;
       document.deleteForm.submit();
     },
   }

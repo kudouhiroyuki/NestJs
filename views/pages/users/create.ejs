@@ -144,7 +144,7 @@ new Vue({
      * アップサート処理
      */ 
     onUpsert() {
-      let action = this.displayType === 'create' ? '/users/create' : `/users/update/${location.pathname.split('/')[3]}?_method=PUT`;
+      let action = this.displayType === 'create' ? '/users' : `/users/${location.pathname.split('/')[3]}?_method=PUT`;
       this.$v.$touch();
       if(!this.$v.$invalid) {
         document.usersFrom.method = 'post';

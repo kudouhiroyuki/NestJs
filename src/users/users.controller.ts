@@ -40,7 +40,7 @@ export class UsersController {
   @HttpCode(200)
   @ApiOperation({
     summary: 'ユーザー照会画面',
-    operationId: 'getIndex'
+    operationId: 'index'
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -51,7 +51,7 @@ export class UsersController {
     status: HttpStatus.FOUND,
     description: '認証エラー（リダイレクト）'
   })
-  async getIndex(@Query() query: UsersGetRequestDto) {
+  async index(@Query() query: UsersGetRequestDto) {
     let errors: ValidationError[] = await validate(new UsersGetRequestCheckDto(query))
     let users = []
     let pagination = 0
@@ -76,9 +76,9 @@ export class UsersController {
   @HttpCode(200)
   @ApiOperation({
     summary: 'ユーザー登録画面（新規登録・コピー新規登録）',
-    operationId: 'getCreate'
+    operationId: 'create'
   })
-  async getCreate(@Query() query: UsersCreateGetRequestDto) {
+  async create(@Query() query: UsersCreateGetRequestDto) {
     const departments = await this.usersService.findDepartmentsAll()
     let froms = {}
     if (query.id) {
@@ -107,12 +107,12 @@ export class UsersController {
   /**
    * GET ユーザー詳細画面
    */
-  @Get('detail/:id')
+  @Get('/:id')
   @Render('users/create')
   @HttpCode(200)
   @ApiOperation({
     summary: 'ユーザー詳細画面',
-    operationId: 'getEdit'
+    operationId: 'show'
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -122,7 +122,7 @@ export class UsersController {
     status: HttpStatus.FOUND,
     description: '認証エラー（リダイレクト）'
   })
-  async edit(@Param('id') id: number) {
+  async show(@Param('id') id: number) {
     const errors = Session['userErrors'] ? Session['userErrors'] : []
     const departments = await this.usersService.findDepartmentsAll()
     let forms = await this.usersService.findUserById(id)
@@ -139,7 +139,7 @@ export class UsersController {
   /**
    * POST ユーザー登録処理
    */
-  @Post('/create')
+  @Post('/')
   @HttpCode(201)
   @ApiOperation({
     summary: 'ユーザー登録処理',
@@ -171,7 +171,7 @@ export class UsersController {
   /**
    * PUT ユーザー更新処理
    */
-  @Put('update/:id')
+  @Put('/:id')
   @HttpCode(204)
   @ApiOperation({
     summary: 'ユーザー更新処理',
@@ -199,7 +199,7 @@ export class UsersController {
   /**
    * DELETE ユーザー削除処理
    */
-  @Delete('/')
+  @Delete('/:id')
   @Redirect('/users')
   @HttpCode(204)
   @ApiOperation({
@@ -214,7 +214,7 @@ export class UsersController {
     status: HttpStatus.FOUND,
     description: '認証エラー（リダイレクト）'
   })
-  async destroy(@Body('id', ParseIntPipe) id: number) {
+  async destroy(@Param('id') id: number) {
     await this.usersService.deleteUser(id)
   }
 }
