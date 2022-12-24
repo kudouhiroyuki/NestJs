@@ -99,10 +99,9 @@ export class UsersController {
       }
     }
     return {
-      errorMessage: 1,
+      errors: JSON.stringify([]),
       departments: JSON.stringify(departments),
-      forms: JSON.stringify(froms),
-      errors: JSON.stringify([])
+      forms: JSON.stringify(froms)
     }
   }
 
@@ -155,9 +154,9 @@ export class UsersController {
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     if (errors.length) {
       return res.render('users/create', {
+        errors: JSON.stringify(errors),
         departments: JSON.stringify(departments),
-        forms: JSON.stringify(body),
-        errors: JSON.stringify(errors)
+        forms: JSON.stringify(body)
       })
     }
     await this.usersService.createUser(body)
