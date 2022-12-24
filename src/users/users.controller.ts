@@ -151,7 +151,6 @@ export class UsersController {
   @ApiBody({ type: UsersCreatePostRequestCheckDto })
   async store(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
-    const departments = await this.usersService.findDepartmentsAll()
     if (errors.length) {
       // リダイレクト処理の修正が終わったらから動作確認
       Session['userErrors'] = JSON.parse(JSON.stringify(errors))
