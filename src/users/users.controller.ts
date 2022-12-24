@@ -153,12 +153,10 @@ export class UsersController {
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     const departments = await this.usersService.findDepartmentsAll()
     if (errors.length) {
-      // リダイレクト処理の修正
-      // return res.render('users/create', {
-      //   errors: JSON.stringify(errors),
-      //   departments: JSON.stringify(departments),
-      //   forms: JSON.stringify(body)
-      // })
+      // リダイレクト処理の修正が終わったらから動作確認
+      Session['userErrors'] = JSON.parse(JSON.stringify(errors))
+      Session['userForms'] = JSON.parse(JSON.stringify(body))
+      return res.redirect(`/users/create`)
     }
     await this.usersService.createUser(body)
     return res.redirect(`/users`)
