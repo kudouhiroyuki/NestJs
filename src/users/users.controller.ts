@@ -31,6 +31,7 @@ import {
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
   /**
    * GET 一覧画面
    */
@@ -44,11 +45,11 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.OK,
     type: UsersGetResponseDto,
-    description: '正常処理'
+    description: 'success'
   })
   @ApiResponse({
-    status: HttpStatus.FOUND,
-    description: '認証エラー（リダイレクト）'
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized'
   })
   async index(@Query() query: UsersGetRequestDto) {
     let errors: ValidationError[] = await validate(new UsersGetRequestCheckDto(query))
@@ -76,6 +77,14 @@ export class UsersController {
   @ApiOperation({
     summary: '登録画面（新規登録・コピー新規登録）',
     operationId: 'create'
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'success'
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized'
   })
   async create(@Query() query: UsersCreateGetRequestDto) {
     const departments = await this.usersService.findDepartmentsAll()
@@ -115,11 +124,11 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: '正常処理'
+    description: 'success'
   })
   @ApiResponse({
-    status: HttpStatus.FOUND,
-    description: '認証エラー（リダイレクト）'
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized'
   })
   async show(@Param('id') id: number) {
     const errors = Session['userErrors'] ? Session['userErrors'] : []
@@ -146,11 +155,11 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: '正常処理'
+    description: 'success'
   })
   @ApiResponse({
-    status: HttpStatus.FOUND,
-    description: '認証エラー（リダイレクト）'
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized'
   })
   @ApiBody({ type: UsersCreatePostRequestCheckDto })
   async store(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
@@ -178,11 +187,11 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: '正常処理'
+    description: 'success'
   })
   @ApiResponse({
-    status: HttpStatus.FOUND,
-    description: '認証エラー（リダイレクト）'
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized'
   })
   async update(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
@@ -207,11 +216,11 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: '正常処理'
+    description: 'success'
   })
   @ApiResponse({
-    status: HttpStatus.FOUND,
-    description: '認証エラー（リダイレクト）'
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized'
   })
   async destroy(@Param('id') id: number) {
     await this.usersService.deleteUser(id)
