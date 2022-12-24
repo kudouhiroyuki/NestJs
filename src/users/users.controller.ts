@@ -150,14 +150,15 @@ export class UsersController {
   })
   @ApiBody({ type: UsersCreatePostRequestCheckDto })
   async store(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
-    const departments = await this.usersService.findDepartmentsAll()
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
+    const departments = await this.usersService.findDepartmentsAll()
     if (errors.length) {
-      return res.render('users/create', {
-        errors: JSON.stringify(errors),
-        departments: JSON.stringify(departments),
-        forms: JSON.stringify(body)
-      })
+      // リダイレクト処理の修正
+      // return res.render('users/create', {
+      //   errors: JSON.stringify(errors),
+      //   departments: JSON.stringify(departments),
+      //   forms: JSON.stringify(body)
+      // })
     }
     await this.usersService.createUser(body)
     return res.redirect(`/users`)
