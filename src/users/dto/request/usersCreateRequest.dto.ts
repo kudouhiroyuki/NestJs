@@ -7,12 +7,17 @@ export class UsersCreateGetRequestDto {
 }
 
 export class UsersCreatePostRequestDto {
+  @ApiProperty({ description: 'ID' })
   id: string
-  @ApiProperty({ description: 'ユーザー名' })
+  @ApiProperty({ description: '名前' })
   userName: string
+  @ApiProperty({ description: 'パスワード' })
   password: string
+  @ApiProperty({ description: 'メールアドレス' })
   address: string
+  @ApiProperty({ description: '年齢' })
   age: string
+  @ApiProperty({ description: '部署ID' })
   departmentId: string
   createdAt: string
   updateAt: string

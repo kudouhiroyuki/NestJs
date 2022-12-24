@@ -7,14 +7,14 @@ import { Prisma, users as Users, departments as Departments } from '@prisma/clie
 export class UserRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findDepartmentsAll(): Promise<Departments[]> {
+  async findDepartmentsAll(): Promise<Departments[] | null> {
     return await this.prisma.departments.findMany({})
     // return await this.prisma.$queryRaw`
     //   SELECT * FROM departments
     // `
   }
 
-  async findUsersAll(): Promise<UserDto[]> {
+  async findUsersAll(): Promise<UserDto[] | null> {
     return await this.prisma.users.findMany({ include: { department: true } })
   }
 
@@ -24,7 +24,7 @@ export class UserRepository {
     endDate: string,
     pageNumber: number,
     take: number
-  ): Promise<UserDto[]> {
+  ): Promise<UserDto[] | null> {
     return await this.prisma.users.findMany({
       where: this.createUsersWhere(id, startDate, endDate),
       take: take,
@@ -45,7 +45,7 @@ export class UserRepository {
     // `
   }
 
-  async findUserById(id: number): Promise<Users> {
+  async findUserById(id: number): Promise<Users | null> {
     return await this.prisma.users.findFirst({ where: { id: id } })
   }
 

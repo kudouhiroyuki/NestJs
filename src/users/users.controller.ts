@@ -32,9 +32,6 @@ import {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  /**
-   * GET 一覧画面
-   */
   @Get('/')
   @Render('users/index')
   @HttpCode(200)
@@ -68,9 +65,6 @@ export class UsersController {
     }
   }
 
-  /**
-   * GET 登録画面（新規登録・コピー新規登録）
-   */
   @Get('/create')
   @Render('users/create')
   @HttpCode(200)
@@ -112,9 +106,6 @@ export class UsersController {
     }
   }
 
-  /**
-   * GET 詳細画面
-   */
   @Get('/:id')
   @Render('users/create')
   @HttpCode(200)
@@ -144,9 +135,6 @@ export class UsersController {
     }
   }
 
-  /**
-   * POST 登録処理
-   */
   @Post('/')
   @HttpCode(201)
   @ApiOperation({
@@ -176,9 +164,6 @@ export class UsersController {
     return res.redirect(`/users`)
   }
 
-  /**
-   * PUT 更新処理
-   */
   @Put('/:id')
   @HttpCode(204)
   @ApiOperation({
@@ -204,9 +189,6 @@ export class UsersController {
     return res.redirect(`/users`)
   }
 
-  /**
-   * DELETE 削除処理
-   */
   @Delete('/:id')
   @Redirect('/users')
   @HttpCode(204)
