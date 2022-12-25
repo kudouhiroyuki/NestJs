@@ -80,28 +80,31 @@ export class UsersController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized'
   })
+
   async create(@Query() query: UsersCreateGetRequestDto) {
+    const errors = Session['userErrors'] ? Session['userErrors'] : []
     const departments = await this.usersService.findDepartmentsAll()
-    let froms = {}
-    if (query.id) {
-      const user = await this.usersService.findUserById(Number(query.id))
-      if (user) {
-        froms = {
-          userName: user.userName,
-          password: user.password,
-          address: user.address,
-          age: user.age,
-          departmentId: user.departmentId,
-          point: null,
-          createdAt: new Date(),
-          updateAt: new Date()
-        }
+    const user = query.id ? await this.usersService.findUserById(Number(query.id)) : {}
+    let forms = {}
+    if (Session['userErrors']) forms = Session['userForms']
+    if (!Session['userErrors'] && user) {
+      forms = {
+        userName: user['userName'],
+        password: user['password'],
+        address: user['address'],
+        age: user['age'],
+        departmentId: user['departmentId'],
+        point: null,
+        createdAt: new Date(),
+        updateAt: new Date()
       }
     }
+    Session['userErrors'] = null
+    Session['userForms'] = null
     return {
-      errors: JSON.stringify([]),
+      errors: JSON.stringify(errors),
       departments: JSON.stringify(departments),
-      forms: JSON.stringify(froms)
+      forms: JSON.stringify(forms)
     }
   }
 
@@ -152,7 +155,6 @@ export class UsersController {
   async store(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     if (errors.length) {
-      // リダイレクト処理の修正が終わったらから動作確認
       Session['userErrors'] = JSON.parse(JSON.stringify(errors))
       Session['userForms'] = JSON.parse(JSON.stringify(body))
       return res.redirect(`/users/create`)
