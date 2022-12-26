@@ -69,3 +69,30 @@ export class UsersService {
     return await this.userRepository.deleteUser(id)
   }
 }
+
+/*
+import {
+  BadRequestException,
+  UnauthorizedException,
+  ConflictException,
+  PreconditionFailedException,
+  InternalServerErrorException
+} from '@nestjs/common'
+
+■400 Bad Request（不正なリクエスト）
+throw new BadRequestException('email auth code not found')
+
+■401 Unauthorized（未認証）
+throw new UnauthorizedException('can not authorize')
+
+■409 Conflict（競合）
+throw new ConflictException('mail address is exists')
+throw new ConflictException(`target product is exists multiple')
+
+■412 Precondition Failed（前提条件で失敗）
+throw new PreconditionFailedException('token is invalid')
+throw new PreconditionFailedException('invalid user')
+
+■500
+throw new InternalServerErrorException('many users')
+*/
