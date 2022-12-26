@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { UserRepository } from './repository/user.repository'
-import { Prisma, users as Users } from '@prisma/client'
+import { Prisma, PrismaClient, users as Users } from '@prisma/client'
 import { DepartmentsGetResponseDto } from './dto/response/departmentsResponse.dto'
 import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
 import { UsersCreatePostRequestDto } from './dto/request/usersCreateRequest.dto'
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository, private prismaClient: PrismaClient) {}
 
   async findDepartmentsAll(): Promise<DepartmentsGetResponseDto[]> {
     return await this.userRepository.findDepartmentsAll()
@@ -32,17 +32,19 @@ export class UsersService {
   }
 
   async createUser(user: UsersCreatePostRequestDto) {
-    const item: Prisma.usersUncheckedCreateInput = {
-      userName: user.userName,
-      password: user.password,
-      address: user.address,
-      age: user.age,
-      departmentId: user.departmentId,
-      point: 0,
-      createdAt: new Date(),
-      updateAt: new Date()
-    }
-    return await this.userRepository.createUser(item)
+    return await this.prismaClient.$transaction(async (prismaTransaction) => {
+      const item: Prisma.usersUncheckedCreateInput = {
+        userName: user.userName,
+        password: user.password,
+        address: user.address,
+        age: user.age,
+        departmentId: user.departmentId,
+        point: 0,
+        createdAt: new Date(),
+        updateAt: new Date()
+      }
+      await this.userRepository.createUser(prismaTransaction, item)
+    })
   }
 
   async updateUser(user: UsersCreatePostRequestDto) {

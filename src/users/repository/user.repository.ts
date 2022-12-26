@@ -46,7 +46,7 @@ export class UserRepository {
   }
 
   async findUserById(id: number): Promise<Users | null> {
-    return await this.prisma.users.findFirst({ where: { id: id } })
+    return await this.prisma.users.findUnique({ where: { id } })
   }
 
   async getUsersCount(id?: number, startDate?: string, endDate?: string): Promise<number> {
@@ -65,8 +65,8 @@ export class UserRepository {
     // return Number(String(result[0]['cnt']))
   }
 
-  async createUser(user: Prisma.usersUncheckedCreateInput) {
-    return await this.prisma.users.create({
+  async createUser(prismaTransaction: Prisma.TransactionClient, user: Prisma.usersUncheckedCreateInput) {
+    return await prismaTransaction.users.create({
       data: user
     })
   }
