@@ -74,6 +74,7 @@ export class UsersService {
 import {
   BadRequestException,
   UnauthorizedException,
+  NotFoundException,
   ConflictException,
   PreconditionFailedException,
   InternalServerErrorException
@@ -85,14 +86,19 @@ throw new BadRequestException('email auth code not found')
 ■401 Unauthorized（未認証）
 throw new UnauthorizedException('can not authorize')
 
+■404 Not Found（見つからない）
+throw new NotFoundException('CouponId does not exist')
+throw new NotFoundException('ordering not found')
+
 ■409 Conflict（競合）
 throw new ConflictException('mail address is exists')
-throw new ConflictException(`target product is exists multiple')
+throw new ConflictException('target product is exists multiple')
+throw new ConflictException('this coupon is already used')
 
 ■412 Precondition Failed（前提条件で失敗）
 throw new PreconditionFailedException('token is invalid')
 throw new PreconditionFailedException('invalid user')
 
-■500
+■500 Internal Server Error
 throw new InternalServerErrorException('many users')
 */
