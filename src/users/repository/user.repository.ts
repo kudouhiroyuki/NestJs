@@ -65,17 +65,20 @@ export class UserRepository {
     // return Number(String(result[0]['cnt']))
   }
 
-  async createUser(prismaTransaction: Prisma.TransactionClient, user: Prisma.usersUncheckedCreateInput) {
+  async createUser(
+    prismaTransaction: Prisma.TransactionClient,
+    user: Prisma.usersUncheckedCreateInput
+  ): Promise<Users> {
     return await prismaTransaction.users.create({
       data: user
     })
   }
 
-  async updateUser(user: Prisma.usersUpdateArgs) {
+  async updateUser(user: Prisma.usersUpdateArgs): Promise<Users> {
     return await this.prisma.users.update(user)
   }
 
-  async deleteUser(id: number) {
+  async deleteUser(id: number): Promise<Users> {
     return await this.prisma.users.delete({ where: { id: id } })
   }
 

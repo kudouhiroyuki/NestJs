@@ -31,7 +31,7 @@ export class UsersService {
     return await this.userRepository.findUserById(id)
   }
 
-  async createUser(user: UsersCreatePostRequestDto) {
+  async createUser(user: UsersCreatePostRequestDto): Promise<void> {
     return await this.prismaClient.$transaction(async (prismaTransaction) => {
       const item: Prisma.usersUncheckedCreateInput = {
         userName: user.userName,
@@ -47,7 +47,7 @@ export class UsersService {
     })
   }
 
-  async updateUser(user: UsersCreatePostRequestDto) {
+  async updateUser(user: UsersCreatePostRequestDto): Promise<void> {
     const item: Prisma.usersUncheckedUpdateInput = {
       userName: user.userName,
       password: user.password,
@@ -62,11 +62,11 @@ export class UsersService {
       data: item,
       where: { id: Number(user.id) }
     }
-    return await this.userRepository.updateUser(updateArgs)
+    await this.userRepository.updateUser(updateArgs)
   }
 
   async deleteUser(id: number) {
-    return await this.userRepository.deleteUser(id)
+    await this.userRepository.deleteUser(id)
   }
 }
 
