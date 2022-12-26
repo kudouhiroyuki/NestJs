@@ -79,11 +79,22 @@ import {
   PreconditionFailedException,
   InternalServerErrorException
 } from '@nestjs/common'
+import { ErrorResponseDto } from '../error/errorResponse.dto'
 
 ■400 Bad Request（不正なリクエスト）
+@ApiResponse({
+  status: HttpStatus.BAD_REQUEST,
+  type: ErrorResponseDto,
+  description: 'Bad Request'
+})
 throw new BadRequestException('email auth code not found')
 
 ■401 Unauthorized（未認証）
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  type: ErrorResponseDto,
+  description: 'Unauthorized'
+})
 throw new UnauthorizedException('can not authorize')
 
 ■404 Not Found（見つからない）
@@ -96,6 +107,11 @@ throw new ConflictException('target product is exists multiple')
 throw new ConflictException('this coupon is already used')
 
 ■412 Precondition Failed（前提条件で失敗）
+@ApiResponse({
+  status: HttpStatus.PRECONDITION_FAILED,
+  type: ErrorResponseDto,
+  description: 'Precondition Failed'
+})
 throw new PreconditionFailedException('token is invalid')
 throw new PreconditionFailedException('invalid user')
 

@@ -19,7 +19,6 @@ import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
 import { UsersService } from './users.service'
-import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
 import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
 import {
