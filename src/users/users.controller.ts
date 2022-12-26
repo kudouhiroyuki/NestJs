@@ -19,6 +19,7 @@ import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
 import { UsersService } from './users.service'
+import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
 import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
 import {
@@ -43,10 +44,6 @@ export class UsersController {
     status: HttpStatus.OK,
     type: UsersGetResponseDto,
     description: 'success'
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized'
   })
   async index(@Query() query: UsersGetRequestDto) {
     let errors: ValidationError[] = await validate(new UsersGetRequestCheckDto(query))
@@ -76,11 +73,6 @@ export class UsersController {
     status: HttpStatus.OK,
     description: 'success'
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized'
-  })
-
   async create(@Query() query: UsersCreateGetRequestDto) {
     const errors = Session['userErrors'] ? Session['userErrors'] : []
     const departments = await this.usersService.findDepartmentsAll()
@@ -119,10 +111,6 @@ export class UsersController {
     status: HttpStatus.OK,
     description: 'success'
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized'
-  })
   async show(@Param('id') id: number) {
     const errors = Session['userErrors'] ? Session['userErrors'] : []
     const departments = await this.usersService.findDepartmentsAll()
@@ -147,10 +135,6 @@ export class UsersController {
     status: HttpStatus.CREATED,
     description: 'success'
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized'
-  })
   @ApiBody({ type: UsersCreatePostRequestCheckDto })
   async store(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
@@ -173,10 +157,6 @@ export class UsersController {
     status: HttpStatus.NO_CONTENT,
     description: 'success'
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized'
-  })
   async update(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     if (errors.length) {
@@ -198,10 +178,6 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
     description: 'success'
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized'
   })
   async destroy(@Param('id') id: number) {
     await this.usersService.deleteUser(id)
