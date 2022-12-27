@@ -20,7 +20,7 @@ import { validate, ValidationError } from 'class-validator'
 
 import { UsersApiService } from './usersApi.service'
 
-@ApiTags('ユーザーAPI')
+@ApiTags('ユーザー管理（API）')
 @Controller('usersApi')
 export class UsersApiController {
   constructor(private readonly usersApiService: UsersApiService) {}
