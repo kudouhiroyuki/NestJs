@@ -49,9 +49,12 @@ export class UsersApiController {
 http://localhost:3000/usersApi
 http://localhost:3000/usersApi?id=1
 http://localhost:3000/usersApi?id=あ
-axios.get('')
-.then(response => console.log(response))
-.catch(error => console.log(error))
+
+axios.get('').then(res => {
+  console.log(res.data)
+}).catch(error => {
+  console.log(error)
+})
 
 ■400 Bad Request（不正なリクエスト）
 @ApiResponse({
