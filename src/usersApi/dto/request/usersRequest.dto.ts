@@ -6,4 +6,8 @@ export class UsersGetRequestDto {
   @IsOptional()
   @IsNumberString()
   id: number
+
+  @IsOptional()
+  @IsNumberString()
+  pageNumber: number
 }

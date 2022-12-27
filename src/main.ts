@@ -16,17 +16,15 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '../../views/pages'))
   app.setViewEngine('ejs')
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }))
-
-  // フォームメソッド設定（PUT DELETE）
+  // フォームメソッド（PUT DELETE）
   app.use(methodOverride('_method'))
 
-  // Swagger設定
+  // Swagger
   const options = new DocumentBuilder().setTitle('Api').build()
   const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup('api', app, document)
 
-  // Session設定
+  // Session
   app.use(
     Session({
       secret: 'secretkey',
@@ -35,11 +33,14 @@ async function bootstrap() {
     })
   )
 
-  // 認証設定（グローバルスコープ）
+  // オートバリデーション（グローバルスコープ）
+  app.useGlobalPipes(new ValidationPipe({ transform: true }))
+
+  // 認証ガード（グローバルスコープ）
   const reflector = app.get(Reflector)
   app.useGlobalGuards(new AuthGuard(reflector))
 
-  // フィルター設定
+  // 認証フィルター（グローバルスコープ）
   app.useGlobalFilters(new UnauthorizedExceptionFilter())
 
   await app.listen(3000)

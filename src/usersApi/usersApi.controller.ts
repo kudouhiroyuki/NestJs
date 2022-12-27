@@ -13,6 +13,7 @@ import {
   Session,
   HttpCode,
   HttpStatus,
+  UseFilters,
   BadRequestException,
   UnauthorizedException,
   NotFoundException,
@@ -20,17 +21,18 @@ import {
   PreconditionFailedException,
   InternalServerErrorException
 } from '@nestjs/common'
-
-import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
+import { ErrorResponseDto } from '../error/errorResponse.dto'
+import { ValidateExceptionFilter } from '../filters/validateException.filter'
 import { UsersApiService } from './usersApi.service'
 import { UsersGetRequestDto } from './dto/request/usersRequest.dto'
 
 @ApiTags('ユーザー管理（API）')
 @Controller('usersApi')
+@UseFilters(new ValidateExceptionFilter())
 export class UsersApiController {
   constructor(private readonly usersApiService: UsersApiService) {}
 
@@ -47,8 +49,8 @@ export class UsersApiController {
 
 /*
 http://localhost:3000/usersApi
-http://localhost:3000/usersApi?id=1
-http://localhost:3000/usersApi?id=あ
+http://localhost:3000/usersApi?id=1&pageNumber=1
+http://localhost:3000/usersApi?id=あ&pageNumber=あ
 
 axios.get('').then(res => {
   console.log(res.data)
