@@ -35,7 +35,7 @@ async function bootstrap() {
     })
   )
 
-  // 認証設定
+  // 認証設定（グローバルスコープ）
   const reflector = app.get(Reflector)
   app.useGlobalGuards(new AuthGuard(reflector))
 
