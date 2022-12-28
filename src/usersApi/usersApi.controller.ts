@@ -13,29 +13,21 @@ import {
   Session,
   HttpCode,
   HttpStatus,
-  UseFilters,
-  BadRequestException,
-  UnauthorizedException,
-  NotFoundException,
-  ConflictException,
-  PreconditionFailedException,
-  InternalServerErrorException
+  UseGuards
 } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
-import { Response } from 'express'
-import { validate, ValidationError } from 'class-validator'
+import { AuthGuard } from '@nestjs/passport'
 
 import { ErrorResponseDto } from '../error/errorResponse.dto'
-import { ValidateExceptionFilter } from '../filters/validateException.filter'
 import { UsersApiService } from './usersApi.service'
 import { UsersGetRequestDto } from './dto/request/usersRequest.dto'
 
 @ApiTags('ユーザー管理（API）')
 @Controller('usersApi')
-@UseFilters(new ValidateExceptionFilter())
 export class UsersApiController {
   constructor(private readonly usersApiService: UsersApiService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/')
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -52,7 +44,7 @@ http://localhost:3000/usersApi
 http://localhost:3000/usersApi?id=1&pageNumber=1
 http://localhost:3000/usersApi?id=あ&pageNumber=あ
 
-axios.get('').then(res => {
+axios.get('http://localhost:3000/usersApi?id=あ&pageNumber=あ').then(res => {
   console.log(res.data)
 }).catch(error => {
   console.log(error)
