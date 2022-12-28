@@ -15,9 +15,9 @@ import {
   HttpStatus,
   UseGuards
 } from '@nestjs/common'
-import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
-import { AuthGuard } from '@nestjs/passport'
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger'
 
+import { JwtAuthGuard } from '../jwtAuth/jwtAuth.guard'
 import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { UsersApiService } from './usersApi.service'
 import { UsersGetRequestDto } from './dto/request/usersRequest.dto'
@@ -27,7 +27,8 @@ import { UsersGetRequestDto } from './dto/request/usersRequest.dto'
 export class UsersApiController {
   constructor(private readonly usersApiService: UsersApiService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get('/')
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -40,11 +41,10 @@ export class UsersApiController {
 }
 
 /*
-curl -X POST http://localhost:3000/jwtAuth -d "userName=name&password=password"
-curl GET 'http://localhost:3000/usersApi' -H 'Authorization: Bearer secretKey'
-
-curl http://localhost:3000/usersApi -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NzIxOTc1ODR9.JXto7uPmyeuY5s0E22EgIcnAN0-nYyC74-BIVMHKBtw"
-
+■トークン発行
+curl -X POST http://localhost:3000/jwtAuth -d "userName=名前&password=password"
+■認証API
+curl -X GET http://localhost:3000/usersApi -H "Authorization: Bearer アクセストークン"
 
 http://localhost:3000/usersApi
 http://localhost:3000/usersApi?id=1&pageNumber=1

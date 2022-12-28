@@ -6,7 +6,10 @@ export class JwtAuthService {
   constructor(private jwtService: JwtService) {}
 
   sign() {
-    return { access_token: this.jwtService.sign({ isAdmin: true }) }
+    const payload: any = { userName: '名前', password: 'password' }
+    return {
+      access_token: this.jwtService.sign(payload)
+    }
   }
 
   // static readonly tokenPrefix = 'Bearer '

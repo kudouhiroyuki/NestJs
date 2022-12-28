@@ -10,11 +10,4 @@ export class JwtAuthController {
   login() {
     return this.jwtAuthService.sign()
   }
-
-  // @UseGuards(AuthGuard('jwt'))
-  // @Get('/')
-  // status() {
-  //   return true
-  // }
 }
-// curl -X POST http://localhost:3000/jwtAuth -d "userName=name&password=password"
