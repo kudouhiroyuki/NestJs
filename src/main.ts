@@ -16,6 +16,9 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '../../views/pages'))
   app.setViewEngine('ejs')
 
+  // CORS有効化
+  app.enableCors()
+
   // フォームメソッド（PUT DELETE）
   app.use(methodOverride('_method'))
 

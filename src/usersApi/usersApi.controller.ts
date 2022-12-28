@@ -40,6 +40,12 @@ export class UsersApiController {
 }
 
 /*
+curl -X POST http://localhost:3000/jwtAuth -d "userName=name&password=password"
+curl GET 'http://localhost:3000/usersApi' -H 'Authorization: Bearer secretKey'
+
+curl http://localhost:3000/usersApi -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NzIxOTc1ODR9.JXto7uPmyeuY5s0E22EgIcnAN0-nYyC74-BIVMHKBtw"
+
+
 http://localhost:3000/usersApi
 http://localhost:3000/usersApi?id=1&pageNumber=1
 http://localhost:3000/usersApi?id=あ&pageNumber=あ

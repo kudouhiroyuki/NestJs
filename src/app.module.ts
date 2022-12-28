@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
@@ -10,7 +11,17 @@ import { UsersModule } from './users/users.module'
 import { UsersApiModule } from './usersApi/usersApi.module'
 
 @Module({
-  imports: [LoginModule, LogoutModule, AuthModule, JwtAuthModule, UsersModule, UsersApiModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
+    LoginModule,
+    LogoutModule,
+    AuthModule,
+    JwtAuthModule,
+    UsersModule,
+    UsersApiModule
+  ],
   controllers: [AppController],
   providers: [AppService]
 })
