@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 import { users as Users } from '@prisma/client'
 import { jwtConstants } from './constants'
 
-interface JWTPayload {
+interface JwtPayload {
   userName: Users['userName']
   password: Users['password']
 }
@@ -19,7 +19,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
 
-  async validate(payload: JWTPayload): Promise<any> {
+  async validate(payload: JwtPayload): Promise<JwtPayload> {
+    console.log(payload)
     return { userName: payload.userName, password: payload.password }
   }
 }

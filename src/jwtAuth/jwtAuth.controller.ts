@@ -1,13 +1,15 @@
-import { Controller, UseGuards, Post, Get } from '@nestjs/common'
-import { AuthGuard } from '@nestjs/passport'
+import { Controller, Post, Body } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
+
 import { JwtAuthService } from './jwtAuth.service'
 
-@Controller('jwtAuth')
+@ApiTags('API JWT認証')
+@Controller('api/jwtAuth')
 export class JwtAuthController {
   constructor(private readonly jwtAuthService: JwtAuthService) {}
 
   @Post('/')
-  login() {
-    return this.jwtAuthService.sign()
+  postJwtEncode(@Body() body: any) {
+    return this.jwtAuthService.jwtEncode(body)
   }
 }

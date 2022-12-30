@@ -22,8 +22,8 @@ import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { UsersApiService } from './usersApi.service'
 import { UsersGetRequestDto } from './dto/request/usersRequest.dto'
 
-@ApiTags('ユーザー管理（API）')
-@Controller('usersApi')
+@ApiTags('API ユーザー管理')
+@Controller('api/users')
 export class UsersApiController {
   constructor(private readonly usersApiService: UsersApiService) {}
 
@@ -35,6 +35,11 @@ export class UsersApiController {
     type: ErrorResponseDto,
     description: 'Bad Request'
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: ErrorResponseDto,
+    description: 'Unauthorized'
+  })
   async getUsers(@Query() query: UsersGetRequestDto) {
     return 'getUsers'
   }
@@ -42,9 +47,9 @@ export class UsersApiController {
 
 /*
 ■トークン発行
-curl -X POST http://localhost:3000/jwtAuth -d "userName=名前&password=password"
+curl -X POST http://localhost:3000/api/jwtAuth -d "userName=名前&password=password"
 ■認証API
-curl -X GET http://localhost:3000/usersApi -H "Authorization: Bearer アクセストークン"
+curl -X GET http://localhost:3000/api/users -H "Authorization: Bearer アクセストークン"
 
 http://localhost:3000/usersApi
 http://localhost:3000/usersApi?id=1&pageNumber=1
