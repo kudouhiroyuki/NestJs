@@ -518,56 +518,15 @@ GROUP BY age;<br>
 ※WHERE：GROUP BYの前に条件適応<br>
 ※HAVING：GROUP BYの後に条件適応<br>
 
-```
-SELECT SUM(point)
-FROM nest.users;
+SELECT SUM(point)<br>
+FROM nest.users;<br>
 
-const result = await this.prisma.users.aggregate({
-  _sum: {
-    point: true
-  }
-})
-return result._sum
-```
+SELECT SUM(DISTINCT point)<br>
+FROM nest.users;<br>
 
-```
-SELECT SUM(DISTINCT point)
-FROM nest.users;
-
-const result = await this.prisma.users.groupBy({
-  by: ['point']
-})
-return {
-  point: result.reduce((sum, i) => sum + i.point, 0)
-}
-
-const result = await this.prisma.users.findMany({
-  distinct: ['point'],
-  select: {
-    point: true
-  }
-})
-return {
-  point: result.reduce((sum, i) => sum + i.point, 0)
-}
-```
-
-```
-SELECT departmentId, SUM(point)
-FROM nest.users
-GROUP BY departmentId;
-
-const result = await this.prisma.users.groupBy({
-  by: ['departmentId'],
-  _sum: {
-    point: true
-  }
-})
-return result.map((item) => ({
-  departmentId: item.departmentId,
-  point: item._sum.point
-}))
-```
+SELECT departmentId, SUM(point)<br>
+FROM nest.users<br>
+GROUP BY departmentId;<br>
 
 SELECT departmentId, SUM(point)<br>
 FROM nest.users<br>
@@ -585,36 +544,13 @@ SELECT SUM(CASE WHEN point = 100 THEN 1 ELSE 0 END) FROM nest.users;<br>
 
 SELECT SUM(IF(point = 100, 1, 0) + IF(departmentId = 'A0001', 1, 0)) FROM nest.users;<br>
 
-```
-SELECT SUM(u.id), COUNT(d.departmentId) FROM nest.users AS u
-INNER JOIN nest.departments AS d
-ON u.departmentId = d.departmentId;
+SELECT SUM(u.id), COUNT(d.departmentId) FROM nest.users AS u<br>
+INNER JOIN nest.departments AS d<br>
+ON u.departmentId = d.departmentId;<br>
 
-const result = await this.prisma.users.findMany({
-  include: {
-    department: true
-  }
-})
-return {
-  sum: result.reduce((sum, i) => sum + i.id, 0),
-  count: result.length
-}
-```
-
-```
-SELECT SUM(u.id) + COUNT(d.departmentId) FROM nest.users AS u
-INNER JOIN nest.departments AS d
-ON u.departmentId = d.departmentId;
-
-const result = await this.prisma.users.findMany({
-  include: {
-    department: true
-  }
-})
-return {
-  sum: result.reduce((sum, i) => sum + i.id, 0) + result.length
-}
-```
+SELECT SUM(u.id) + COUNT(d.departmentId) FROM nest.users AS u<br>
+INNER JOIN nest.departments AS d<br>
+ON u.departmentId = d.departmentId;<br>
 
 #### 用語<br>
 - ステートメント
@@ -654,19 +590,3 @@ SQLでDELETE文を発行してレコードを削除すること<br>
 オペレーティングシステム（OS）の基本機能の役割を担うソフトウェア<br>
 
 - RDBMS（リレーショナルデータベース管理システム）<br>
-
-## 参考サイト<br>
-- Nestjs(公式)<br>
-https://docs.nestjs.com/
-
-- TypeORM(公式)<br>
-https://typeorm.io/entities
-
-- TypeORM / Repository使い方<br>
-https://www.wakuwakubank.com/posts/732-typeorm-repository/
-
-- TypeORM / QueryBuilder使い方<br>
-https://qiita.com/taisuke-j/items/001dfaa8b61649601d73
-
-- Prisma使い方<br>
-https://zenn.dev/tossy_yukky/articles/0075f9f0054b39d4ef59
