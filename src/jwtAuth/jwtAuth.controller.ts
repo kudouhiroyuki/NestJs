@@ -38,6 +38,11 @@ export class JwtAuthController {
     type: ErrorResponseDto,
     description: 'Bad Request'
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: ErrorResponseDto,
+    description: 'Unauthorized'
+  })
   @ApiBody({ type: JwtAuthPostRequestDto })
   async postJwtAuth(@Body() body: JwtAuthPostRequestDto) {
     const accounts = await this.jwtAuthService.findJwtAuthUser(body.id, body.password)

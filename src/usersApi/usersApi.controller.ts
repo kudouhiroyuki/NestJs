@@ -15,7 +15,7 @@ import {
   HttpStatus,
   UseGuards
 } from '@nestjs/common'
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 import { JwtAuthGuard } from '../jwtAuth/jwtAuth.guard'
 import { ErrorResponseDto } from '../error/errorResponse.dto'
@@ -30,6 +30,16 @@ export class UsersApiController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('/')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '一覧',
+    operationId: 'postJwtAuth'
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: String,
+    description: 'Success'
+  })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     type: ErrorResponseDto,
@@ -50,12 +60,10 @@ export class UsersApiController {
 curl -X POST http://localhost:3000/api/jwtAuth -d "id=1&password=password"
 ■認証API
 curl -X GET http://localhost:3000/api/users -H "Authorization: Bearer トークン"
+curl -X GET http://localhost:3000/api/users?id=1&pageNumber=1 -H "Authorization: Bearer トークン"
+curl -X GET http://localhost:3000/api/users?id=あ&pageNumber=あ -H "Authorization: Bearer トークン"
 
-http://localhost:3000/usersApi
-http://localhost:3000/usersApi?id=1&pageNumber=1
-http://localhost:3000/usersApi?id=あ&pageNumber=あ
-
-axios.get('http://localhost:3000/usersApi?id=あ&pageNumber=あ').then(res => {
+axios.get('URL').then(res => {
   console.log(res.data)
 }).catch(error => {
   console.log(error)
