@@ -5,7 +5,7 @@ import { users as Users } from '@prisma/client'
 import { jwtConstants } from './constants'
 
 interface JwtPayload {
-  userName: Users['userName']
+  id: Users['id']
   password: Users['password']
 }
 
@@ -20,6 +20,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload): Promise<JwtPayload> {
-    return { userName: payload.userName, password: payload.password }
+    return { id: payload.id, password: payload.password }
   }
 }

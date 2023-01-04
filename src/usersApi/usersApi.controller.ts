@@ -47,7 +47,8 @@ export class UsersApiController {
 
 /*
 ■トークン発行
-curl -X POST http://localhost:3000/api/jwtAuth -d "userName=名前&password=password"
+curl -X POST http://localhost:3000/api/jwtAuth -d "id=1&password=password"
+curl -X POST http://localhost:3000/api/jwtAuth -d "id=2&password=password"
 ■認証API
 curl -X GET http://localhost:3000/api/users -H "Authorization: Bearer アクセストークン"
 

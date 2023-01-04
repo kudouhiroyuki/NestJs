@@ -1,26 +1,22 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { users as Users } from '@prisma/client'
+import { JwtAuthRepository } from './repository/jwtAuth.repository'
 
 @Injectable()
 export class JwtAuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(private jwtService: JwtService, private jwtAuthRepository: JwtAuthRepository) {}
+
+  async findJwtAuthUser(id: string, password: string): Promise<Users> {
+    return await this.jwtAuthRepository.findJwtAuthUser(id, password)
+  }
 
   jwtEncode(jwt: any) {
-    const payload: any = { userName: jwt.userName, password: jwt.password }
+    const payload = { id: jwt.id, password: jwt.password }
     return {
       access_token: this.jwtService.sign(payload)
     }
   }
-
-  // static readonly tokenPrefix = 'Bearer '
-
-  // jwtEncode(jwt: { userId?: number; cartId?: number }, hasExpiration = true): string {
-  //   const payload = { sub: jwt.userId, cartId: jwt.cartId }
-  //   return `${JwtAuthService.tokenPrefix}${this.jwtService.sign(
-  //     payload,
-  //     hasExpiration ? { expiresIn: 60 } : undefined
-  //   )}`
-  // }
 
   // jwtDecode(token: string, logCaption = 'authorization'): { [key: string]: any } {
   //   if (!token.startsWith(JwtAuthService.tokenPrefix)) {

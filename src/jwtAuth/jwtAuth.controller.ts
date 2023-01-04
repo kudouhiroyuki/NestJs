@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common'
+import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
 import { JwtAuthService } from './jwtAuth.service'
@@ -9,7 +9,11 @@ export class JwtAuthController {
   constructor(private readonly jwtAuthService: JwtAuthService) {}
 
   @Post('/')
-  postJwtEncode(@Body() body: any) {
+  async postJwtEncode(@Body() body: any) {
+    const accounts = await this.jwtAuthService.findJwtAuthUser(body.id, body.password)
+    if (!accounts) {
+      throw new UnauthorizedException('can not authorize')
+    }
     return this.jwtAuthService.jwtEncode(body)
   }
 }
