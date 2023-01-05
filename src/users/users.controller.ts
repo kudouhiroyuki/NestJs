@@ -18,6 +18,7 @@ import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
+import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { UsersService } from './users.service'
 import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
 import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
@@ -156,12 +157,12 @@ export class UsersController {
     status: HttpStatus.NO_CONTENT,
     description: 'success'
   })
-  async update(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
+  async update(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
     const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     if (errors.length) {
       Session['userErrors'] = JSON.parse(JSON.stringify(errors))
       Session['userForms'] = JSON.parse(JSON.stringify(body))
-      return res.redirect(`/users/detail/${id}`)
+      return res.redirect(`/users/${body.id}`)
     }
     await this.usersService.updateUser(body)
     return res.redirect(`/users`)
@@ -177,6 +178,11 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
     description: 'success'
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: ErrorResponseDto,
+    description: 'Bad Request'
   })
   async destroy(@Param('id') id: number) {
     await this.usersService.deleteUser(id)

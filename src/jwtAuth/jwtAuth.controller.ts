@@ -22,7 +22,7 @@ import { JwtAuthService } from './jwtAuth.service'
 import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { JwtAuthPostRequestDto } from './dto/request/jwtAuthRequest.dto'
 
-@ApiTags('API JWT認証（トークン生成）')
+@ApiTags('API JWT認証')
 @Controller('api/jwtAuth')
 export class JwtAuthController {
   constructor(private readonly jwtAuthService: JwtAuthService) {}
