@@ -45,8 +45,8 @@ export class JwtAuthController {
   })
   @ApiBody({ type: JwtAuthPostRequestDto })
   async postJwtAuth(@Body() body: JwtAuthPostRequestDto) {
-    const accounts = await this.jwtAuthService.findJwtAuthUser(body.id, body.password)
-    if (!accounts) {
+    const userAccount = await this.jwtAuthService.findJwtAuthUser(body.id, body.password)
+    if (!userAccount) {
       throw new UnauthorizedException('can not authorize')
     }
     return this.jwtAuthService.jwtEncode(body)

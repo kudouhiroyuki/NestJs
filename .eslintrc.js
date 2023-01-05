@@ -25,7 +25,6 @@ module.exports = {
       "warn",
       { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
     ],
-    // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/order.md
     "import/order": [
       "error",
       {
