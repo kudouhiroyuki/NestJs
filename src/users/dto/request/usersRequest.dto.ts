@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsOptional, IsDateString, IsInt, Min, ValidateIf } from 'class-validator'
+import { IsOptional, IsDateString, IsInt, Min, ValidateIf, IsNumberString, IsNotEmpty } from 'class-validator'
 
 export class UsersGetRequestDto {
   @Type(() => Number)
@@ -39,4 +39,22 @@ export class UsersGetRequestCheckDto {
   @IsInt({ message: 'pageNumberは数値で入力してください' })
   @Min(1, { message: 'pageNumberは1以上で入力してください' })
   pageNumber: number
+}
+
+export class UsersDeleteRequestDto {
+  id: string
+}
+
+export class UsersDeleteCheckDto {
+  constructor(params: UsersDeleteRequestDto) {
+    this.id = params.id
+  }
+
+  @IsNumberString({}, { message: 'IDを正しく入力してください' })
+  @IsNotEmpty({ message: 'IDを入力してください' })
+  @ApiProperty({
+    description: 'ID',
+    example: '1'
+  })
+  id: string
 }

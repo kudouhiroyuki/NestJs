@@ -65,7 +65,7 @@ export class UsersService {
     await this.userRepository.updateUser(updateArgs)
   }
 
-  async deleteUser(id: number) {
+  async deleteUser(id: string) {
     await this.userRepository.deleteUser(id)
   }
 }

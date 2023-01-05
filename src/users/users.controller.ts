@@ -18,10 +18,14 @@ import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
-import { ErrorResponseDto } from '../error/errorResponse.dto'
 import { UsersService } from './users.service'
 import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
-import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
+import {
+  UsersGetRequestDto,
+  UsersGetRequestCheckDto,
+  UsersDeleteRequestDto,
+  UsersDeleteCheckDto
+} from './dto/request/usersRequest.dto'
 import {
   UsersCreateGetRequestDto,
   UsersCreatePostRequestDto,
@@ -46,15 +50,17 @@ export class UsersController {
     description: 'success'
   })
   async index(@Query() query: UsersGetRequestDto) {
-    let errors: ValidationError[] = await validate(new UsersGetRequestCheckDto(query))
+    const sessionErrors = Session['userErrors'] ? Session['userErrors'] : []
+    const validationErrors = await validate(new UsersGetRequestCheckDto(query))
+    const errors = [...sessionErrors, ...validationErrors]
     let users = []
     let pagination = 0
-    if (!errors.length) {
+    if (!validationErrors.length) {
       const resultData = await this.usersService.findUsers(query.id, query.startDate, query.endDate, query.pageNumber)
-      errors = []
       users = resultData.users
       pagination = resultData.pagination
     }
+    Session['userErrors'] = null
     return {
       errors: JSON.stringify(errors),
       users: JSON.stringify(users),
@@ -169,7 +175,6 @@ export class UsersController {
   }
 
   @Delete('/:id')
-  @Redirect('/users')
   @HttpCode(204)
   @ApiOperation({
     summary: '削除処理',
@@ -179,12 +184,14 @@ export class UsersController {
     status: HttpStatus.NO_CONTENT,
     description: 'success'
   })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    type: ErrorResponseDto,
-    description: 'Bad Request'
-  })
-  async destroy(@Param('id') id: number) {
-    await this.usersService.deleteUser(id)
+  async destroy(@Body() body: UsersDeleteRequestDto, @Res() res: Response) {
+    const errors: ValidationError[] = await validate(new UsersDeleteCheckDto(body))
+    if (errors.length) {
+      Session['userErrors'] = JSON.parse(JSON.stringify(errors))
+      Session['userForms'] = null
+    } else {
+      await this.usersService.deleteUser(body.id)
+    }
+    return res.redirect(`/users`)
   }
 }
