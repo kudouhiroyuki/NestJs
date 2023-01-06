@@ -42,6 +42,10 @@ export class UsersGetRequestCheckDto {
 }
 
 export class UsersDeleteRequestDto {
+  @ApiProperty({
+    description: 'ID',
+    example: '1'
+  })
   id: string
 }
 
@@ -52,9 +56,5 @@ export class UsersDeleteCheckDto {
 
   @IsNumberString({}, { message: 'IDを正しく入力してください' })
   @IsNotEmpty({ message: 'IDを入力してください' })
-  @ApiProperty({
-    description: 'ID',
-    example: '1'
-  })
   id: string
 }

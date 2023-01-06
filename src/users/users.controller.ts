@@ -3,6 +3,7 @@ import {
   Post,
   Put,
   Delete,
+  Request,
   Body,
   Controller,
   Render,
@@ -184,14 +185,14 @@ export class UsersController {
     status: HttpStatus.NO_CONTENT,
     description: 'success'
   })
-  async destroy(@Body() body: UsersDeleteRequestDto, @Res() res: Response) {
-    const errors: ValidationError[] = await validate(new UsersDeleteCheckDto(body))
-    if (errors.length) {
-      Session['userErrors'] = JSON.parse(JSON.stringify(errors))
-      Session['userForms'] = null
-    } else {
-      await this.usersService.deleteUser(body.id)
+  async destroy(@Request() req: UsersDeleteRequestDto, @Res() res: Response) {
+    const errors: ValidationError[] = await validate(new UsersDeleteCheckDto(req['params']))
+    Session['userErrors'] = JSON.parse(JSON.stringify(errors))
+    Session['userForms'] = null
+    if (!errors.length) {
+      await this.usersService.deleteUser(req['params']['id'])
     }
+    await this.usersService.deleteUser(req['params']['id'])
     return res.redirect(`/users`)
   }
 }

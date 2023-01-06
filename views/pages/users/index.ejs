@@ -26,7 +26,6 @@
 
     <!-- 削除フォーム -->
     <form name="deleteForm">
-      <input type="hidden" name="id">
     </form>
 
     <!-- 検索フォーム -->
@@ -211,7 +210,6 @@ new Vue({
     onDelete(id) {
       document.deleteForm.method='post';
       document.deleteForm.action = `/users/${id}?_method=DELETE`;
-      document.deleteForm.id.value = id;
       document.deleteForm.submit();
     },
   }
