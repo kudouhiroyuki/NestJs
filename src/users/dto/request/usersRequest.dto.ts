@@ -20,7 +20,6 @@ export class UsersGetRequestCheckDto {
     this.endDate = params.endDate
     this.pageNumber = params.pageNumber
   }
-
   @IsOptional()
   @IsInt({ message: 'idは数値で入力してください' })
   id: number
@@ -53,7 +52,6 @@ export class UsersDeleteCheckDto {
   constructor(params: UsersDeleteRequestDto) {
     this.id = params.id
   }
-
   @IsNumberString({}, { message: 'IDを正しく入力してください' })
   @IsNotEmpty({ message: 'IDを入力してください' })
   id: string

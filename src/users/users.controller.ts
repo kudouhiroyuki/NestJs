@@ -164,14 +164,15 @@ export class UsersController {
     status: HttpStatus.NO_CONTENT,
     description: 'success'
   })
-  async update(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
-    const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
+  async update(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
+    const requestBody = { ...{ id }, ...body }
+    const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(requestBody))
     if (errors.length) {
       Session['userErrors'] = JSON.parse(JSON.stringify(errors))
-      Session['userForms'] = JSON.parse(JSON.stringify(body))
-      return res.redirect(`/users/${body.id}`)
+      Session['userForms'] = JSON.parse(JSON.stringify(requestBody))
+      return res.redirect(`/users/${id}`)
     }
-    await this.usersService.updateUser(body)
+    await this.usersService.updateUser(id, body)
     return res.redirect(`/users`)
   }
 
@@ -192,7 +193,6 @@ export class UsersController {
     if (!errors.length) {
       await this.usersService.deleteUser(req['params']['id'])
     }
-    await this.usersService.deleteUser(req['params']['id'])
     return res.redirect(`/users`)
   }
 }

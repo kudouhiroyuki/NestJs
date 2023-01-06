@@ -47,7 +47,7 @@ export class UsersService {
     })
   }
 
-  async updateUser(user: UsersCreatePostRequestDto): Promise<void> {
+  async updateUser(id: number, user: UsersCreatePostRequestDto): Promise<void> {
     const item: Prisma.usersUncheckedUpdateInput = {
       userName: user.userName,
       password: user.password,
@@ -60,7 +60,7 @@ export class UsersService {
     }
     const updateArgs: Prisma.usersUpdateArgs = {
       data: item,
-      where: { id: Number(user.id) }
+      where: { id }
     }
     await this.userRepository.updateUser(updateArgs)
   }

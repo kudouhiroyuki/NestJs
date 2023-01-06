@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Type } from 'class-transformer'
 import { IsString, IsEmail, IsNotEmpty, Length, IsIn, IsNumberString } from 'class-validator'
 import { IsJpName, IsUserPassword } from '../../../utils/validation.utils'
 
@@ -32,6 +33,7 @@ export class UsersCreatePostRequestCheckDto {
     this.age = params.age
     this.departmentId = params.departmentId
   }
+  @IsNumberString({}, { message: 'idを正しく入力してください' })
   @ApiProperty({
     description: 'ID（ユーザー更新）',
     required: false,

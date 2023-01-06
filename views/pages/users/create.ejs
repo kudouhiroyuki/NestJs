@@ -21,7 +21,7 @@
 
     <form @submit.prevent="onUpsert" name="usersFrom">
       <div class="row mb-4">
-        <input v-model="id" type="hidden" name="id">
+        <input v-model="id" type="hidden">
         <label class="form-label">id: {{ id }}</label>
       </div>
       <div class="row mb-4">    
@@ -85,12 +85,12 @@ new Vue({
   el: "#usersCreate",
   data: {
     displayType: "",
+    id: '',
     // サーバーデータ
     errors: JSON.parse(errors),
     departments: JSON.parse(departments),
     forms: JSON.parse(forms),
     // 登録データ
-    id: '',
     userName: '',
     password: '',
     address: '',
@@ -136,7 +136,7 @@ new Vue({
      * アップサート処理
      */ 
     onUpsert() {
-      let action = this.displayType === 'create' ? '/users' : `/users/${location.pathname.split('/')[3]}?_method=PUT`;
+      let action = this.displayType === 'create' ? '/users' : `/users/${location.pathname.split('/')[2]}?_method=PUT`;
       this.$v.$touch();
       if(!this.$v.$invalid) {
         document.usersFrom.method = 'post';
