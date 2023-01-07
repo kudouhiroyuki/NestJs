@@ -78,10 +78,8 @@ export class UserRepository {
     return await this.prisma.users.update(user)
   }
 
-  async deleteUser(id: string): Promise<Users> {
-    return await this.prisma.$queryRaw`
-      DELETE FROM nest.users WHERE id = ${id}
-    `
+  async deleteUser(id: number): Promise<Users> {
+    return await this.prisma.users.delete({ where: { id } })
   }
 
   createUsersSkip(pageNumber: number, take: number): number {

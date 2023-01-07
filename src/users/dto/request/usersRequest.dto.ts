@@ -39,20 +39,3 @@ export class UsersGetRequestCheckDto {
   @Min(1, { message: 'pageNumberは1以上で入力してください' })
   pageNumber: number
 }
-
-export class UsersDeleteRequestDto {
-  @ApiProperty({
-    description: 'ID',
-    example: '1'
-  })
-  id: string
-}
-
-export class UsersDeleteCheckDto {
-  constructor(params: UsersDeleteRequestDto) {
-    this.id = params.id
-  }
-  @IsNumberString({}, { message: 'IDを正しく入力してください' })
-  @IsNotEmpty({ message: 'IDを入力してください' })
-  id: string
-}

@@ -10,6 +10,7 @@ import {
   Query,
   Res,
   Param,
+  ParseIntPipe,
   Redirect,
   Session,
   HttpCode,
@@ -21,12 +22,7 @@ import { validate, ValidationError } from 'class-validator'
 
 import { UsersService } from './users.service'
 import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
-import {
-  UsersGetRequestDto,
-  UsersGetRequestCheckDto,
-  UsersDeleteRequestDto,
-  UsersDeleteCheckDto
-} from './dto/request/usersRequest.dto'
+import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
 import {
   UsersCreateGetRequestDto,
   UsersCreatePostRequestDto,
@@ -164,12 +160,12 @@ export class UsersController {
     status: HttpStatus.NO_CONTENT,
     description: 'success'
   })
-  async update(@Param('id') id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
-    const requestBody = { ...{ id }, ...body }
-    const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(requestBody))
+  @ApiBody({ type: UsersCreatePostRequestCheckDto })
+  async update(@Param('id', ParseIntPipe) id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
+    const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
     if (errors.length) {
       Session['userErrors'] = JSON.parse(JSON.stringify(errors))
-      Session['userForms'] = JSON.parse(JSON.stringify(requestBody))
+      Session['userForms'] = JSON.parse(JSON.stringify({ ...{ id }, ...body }))
       return res.redirect(`/users/${id}`)
     }
     await this.usersService.updateUser(id, body)
@@ -177,7 +173,7 @@ export class UsersController {
   }
 
   @Delete('/:id')
-  @HttpCode(204)
+  @HttpCode(200)
   @ApiOperation({
     summary: '削除処理',
     operationId: 'destroy'
@@ -186,13 +182,8 @@ export class UsersController {
     status: HttpStatus.NO_CONTENT,
     description: 'success'
   })
-  async destroy(@Request() req: UsersDeleteRequestDto, @Res() res: Response) {
-    const errors: ValidationError[] = await validate(new UsersDeleteCheckDto(req['params']))
-    Session['userErrors'] = JSON.parse(JSON.stringify(errors))
-    Session['userForms'] = null
-    if (!errors.length) {
-      await this.usersService.deleteUser(req['params']['id'])
-    }
+  async destroy(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
+    await this.usersService.deleteUser(id)
     return res.redirect(`/users`)
   }
 }

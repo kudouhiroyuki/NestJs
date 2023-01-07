@@ -8,8 +8,6 @@ export class UsersCreateGetRequestDto {
 }
 
 export class UsersCreatePostRequestDto {
-  @ApiProperty({ description: 'ID' })
-  id: string
   @ApiProperty({ description: '名前' })
   userName: string
   @ApiProperty({ description: 'パスワード' })
@@ -26,20 +24,12 @@ export class UsersCreatePostRequestDto {
 
 export class UsersCreatePostRequestCheckDto {
   constructor(params: UsersCreatePostRequestDto) {
-    this.id = params.id
     this.userName = params.userName
     this.password = params.password
     this.address = params.address
     this.age = params.age
     this.departmentId = params.departmentId
   }
-  @IsNumberString({}, { message: 'idを正しく入力してください' })
-  @ApiProperty({
-    description: 'ID（ユーザー更新）',
-    required: false,
-    example: ''
-  })
-  id?: string
 
   @IsString({ message: '名前を正しく入力してください' })
   @IsNotEmpty({ message: '名前を入力してください' })

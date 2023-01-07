@@ -40,11 +40,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
 
   // 認証ガード（グローバルスコープ）
-  const reflector = app.get(Reflector)
-  app.useGlobalGuards(new AuthGuard(reflector))
+  // const reflector = app.get(Reflector)
+  // app.useGlobalGuards(new AuthGuard(reflector))
 
   // 認証フィルター（グローバルスコープ）
-  app.useGlobalFilters(new UnauthorizedExceptionFilter())
+  // app.useGlobalFilters(new UnauthorizedExceptionFilter())
 
   await app.listen(3000)
 }
