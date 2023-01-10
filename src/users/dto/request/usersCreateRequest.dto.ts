@@ -4,7 +4,8 @@ import { IsString, IsEmail, IsNotEmpty, Length, IsIn, IsNumberString } from 'cla
 import { IsJpName, IsUserPassword } from '../../../utils/validation.utils'
 
 export class UsersCreateGetRequestDto {
-  id: string
+  @Type(() => Number)
+  id: number
 }
 
 export class UsersCreatePostRequestDto {

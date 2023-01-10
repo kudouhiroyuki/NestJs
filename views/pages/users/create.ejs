@@ -124,13 +124,17 @@ new Vue({
      * 登録情報セット
      */ 
     setInitData() {
-      this.id = this.forms.id;
-      this.userName = this.forms.userName;
-      this.password = this.forms.password;
-      this.address = this.forms.address;
-      this.age = this.forms.age;
-      this.departmentId = this.forms.departmentId;
-      if(location.pathname.split('/')[2] === 'create') this.displayType = 'create';
+      if(location.pathname.split('/')[2] === 'create') {
+        this.displayType = 'create';
+      }
+      if(this.forms) {
+        this.id = this.forms.id;
+        this.userName = this.forms.userName;
+        this.password = this.forms.password;
+        this.address = this.forms.address;
+        this.age = this.forms.age;
+        this.departmentId = this.forms.departmentId;
+      }
     },
     /**
      * アップサート処理

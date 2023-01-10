@@ -20,6 +20,7 @@ import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
+import { ErrorMessegeConstants } from '../constants/errorMessege'
 import { UsersService } from './users.service'
 import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
 import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
@@ -47,17 +48,19 @@ export class UsersController {
     description: 'success'
   })
   async index(@Query() query: UsersGetRequestDto) {
-    const sessionErrors = Session['userErrors'] ? Session['userErrors'] : []
-    const validationErrors = await validate(new UsersGetRequestCheckDto(query))
-    const errors = [...sessionErrors, ...validationErrors]
+    let errors = await validate(new UsersGetRequestCheckDto(query))
     let users = []
     let pagination = 0
-    if (!validationErrors.length) {
+    if (Session['userErrors']) {
+      errors = [...errors, ...Session['userErrors']]
+    }
+    if (!errors.length) {
       const resultData = await this.usersService.findUsers(query.id, query.startDate, query.endDate, query.pageNumber)
       users = resultData.users
       pagination = resultData.pagination
     }
     Session['userErrors'] = null
+    Session['userForms'] = null
     return {
       errors: JSON.stringify(errors),
       users: JSON.stringify(users),
@@ -66,7 +69,6 @@ export class UsersController {
   }
 
   @Get('/create')
-  @Render('users/create')
   @HttpCode(200)
   @ApiOperation({
     summary: '登録画面（新規登録・コピー新規登録）',
@@ -76,35 +78,35 @@ export class UsersController {
     status: HttpStatus.OK,
     description: 'success'
   })
-  async create(@Query() query: UsersCreateGetRequestDto) {
-    const errors = Session['userErrors'] ? Session['userErrors'] : []
+  async create(@Query() query: UsersCreateGetRequestDto, @Res() res: Response) {
+    let errors: ValidationError[] = []
     const departments = await this.usersService.findDepartmentsAll()
-    const user = query.id ? await this.usersService.findUserById(Number(query.id)) : {}
-    let forms = {}
-    if (Session['userErrors']) forms = Session['userForms']
-    if (!Session['userErrors'] && user) {
-      forms = {
-        userName: user['userName'],
-        password: user['password'],
-        address: user['address'],
-        age: user['age'],
-        departmentId: user['departmentId'],
-        point: null,
-        createdAt: new Date(),
-        updateAt: new Date()
+    let user = null
+    if (query.id) {
+      user = await this.usersService.findUserById(query.id)
+      if (!user) {
+        Session['userErrors'] = ErrorMessegeConstants.Empty
+        return res.redirect('/users')
       }
+      delete user.id
+      delete user.point
+      delete user.createdAt
+      delete user.updateAt
+    }
+    if (Session['userErrors']) {
+      errors = Session['userErrors']
+      user = Session['userForms']
     }
     Session['userErrors'] = null
     Session['userForms'] = null
-    return {
+    return res.render('users/create', {
       errors: JSON.stringify(errors),
       departments: JSON.stringify(departments),
-      forms: JSON.stringify(forms)
-    }
+      forms: JSON.stringify(user)
+    })
   }
 
   @Get('/:id')
-  @Render('users/create')
   @HttpCode(200)
   @ApiOperation({
     summary: '詳細画面',
@@ -114,18 +116,25 @@ export class UsersController {
     status: HttpStatus.OK,
     description: 'success'
   })
-  async show(@Param('id') id: number) {
-    const errors = Session['userErrors'] ? Session['userErrors'] : []
+  async show(@Param('id') id: number, @Res() res: Response) {
+    let errors: ValidationError[] = []
     const departments = await this.usersService.findDepartmentsAll()
-    let forms = await this.usersService.findUserById(id)
-    if (Session['userErrors']) forms = Session['userForms']
+    let user = await this.usersService.findUserById(id)
+    if (!user) {
+      Session['userErrors'] = ErrorMessegeConstants.Empty
+      return res.redirect('/users')
+    }
+    if (Session['userErrors']) {
+      errors = Session['userErrors']
+      user = Session['userForms']
+    }
     Session['userErrors'] = null
     Session['userForms'] = null
-    return {
+    return res.render('users/create', {
       errors: JSON.stringify(errors),
       departments: JSON.stringify(departments),
-      forms: JSON.stringify(forms)
-    }
+      forms: JSON.stringify(user)
+    })
   }
 
   @Post('/')
@@ -173,7 +182,7 @@ export class UsersController {
   }
 
   @Delete('/:id')
-  @HttpCode(200)
+  @HttpCode(204)
   @ApiOperation({
     summary: '削除処理',
     operationId: 'destroy'

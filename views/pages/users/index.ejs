@@ -104,8 +104,8 @@
           <td>{{ item.point }}</td>
           <td>{{ item.createdAt }}</td>
           <td>{{ item.updateAt }}</td>
-          <td><a :href=`users/${item.id}` class="btn btn-secondary" style="width: 60px;">詳細</a></td>
-          <td><a :href=`users/create?id=${item.id}` class="btn btn-secondary" style="width: 80px;">コピー</a></td>
+          <td><a :href=`/users/${item.id}` class="btn btn-secondary" style="width: 60px;">詳細</a></td>
+          <td><a :href=`/users/create?id=${item.id}` class="btn btn-secondary" style="width: 80px;">コピー</a></td>
           <td>
             <button @click="onDelete(item.id)" type="button" class="btn btn-secondary" style="width: 60px;">削除</button> 
           </td>
