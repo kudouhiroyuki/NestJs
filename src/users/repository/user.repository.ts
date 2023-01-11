@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../../prisma.service'
-import { UserDto } from '../dto/response/usersResponse.dto'
+import { UserRelationDto } from '../dto/response/userRelation.dto'
 import { Prisma, users as Users, departments as Departments } from '@prisma/client'
 
 @Injectable()
@@ -14,7 +14,7 @@ export class UserRepository {
     // `
   }
 
-  async findUsersAll(): Promise<UserDto[] | null> {
+  async findUsersAll(): Promise<UserRelationDto[] | null> {
     return await this.prisma.users.findMany({ include: { department: true } })
   }
 
@@ -24,7 +24,7 @@ export class UserRepository {
     endDate: string,
     pageNumber: number,
     take: number
-  ): Promise<UserDto[] | null> {
+  ): Promise<UserRelationDto[] | null> {
     return await this.prisma.users.findMany({
       where: this.createUsersWhere(id, startDate, endDate),
       take: take,
@@ -33,7 +33,7 @@ export class UserRepository {
         department: true
       }
     })
-    // return await this.prisma.$queryRaw<UserDto[]>`
+    // return await this.prisma.$queryRaw<UserRelationDto[]>`
     //   SELECT * FROM users AS u
     //   INNER JOIN departments AS d
     //   ON u.departmentId = d.departmentId

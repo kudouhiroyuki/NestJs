@@ -3,7 +3,6 @@ import {
   Post,
   Put,
   Delete,
-  Request,
   Body,
   Controller,
   Render,
@@ -11,7 +10,6 @@ import {
   Res,
   Param,
   ParseIntPipe,
-  Redirect,
   Session,
   HttpCode,
   HttpStatus
@@ -22,8 +20,9 @@ import { validate, ValidationError } from 'class-validator'
 
 import { ErrorMessegeConstants } from '../constants/errorMessege'
 import { UsersService } from './users.service'
-import { UsersGetResponseDto } from './dto/response/usersResponse.dto'
-import { UsersGetRequestDto, UsersGetRequestCheckDto } from './dto/request/usersRequest.dto'
+import { UsersIndexGetResponse } from './dto/response/usersIndexResponse.dto'
+import { UsersShowGetResponse } from './dto/response/usersShowResponse.dto'
+import { UsersIndexGetRequestDto, UsersIndexGetRequestCheckDto } from './dto/request/usersIndexRequest.dto'
 import {
   UsersCreateGetRequestDto,
   UsersCreatePostRequestDto,
@@ -44,11 +43,11 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: UsersGetResponseDto,
+    type: UsersIndexGetResponse,
     description: 'success'
   })
-  async index(@Query() query: UsersGetRequestDto) {
-    let errors = await validate(new UsersGetRequestCheckDto(query))
+  async index(@Query() query: UsersIndexGetRequestDto) {
+    let errors = await validate(new UsersIndexGetRequestCheckDto(query))
     let users = []
     let pagination = 0
     if (Session['userErrors']) {
@@ -114,6 +113,7 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
+    type: UsersShowGetResponse,
     description: 'success'
   })
   async show(@Param('id') id: number, @Res() res: Response) {

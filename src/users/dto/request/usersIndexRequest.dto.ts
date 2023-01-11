@@ -1,8 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsOptional, IsDateString, IsInt, Min, ValidateIf, IsNumberString, IsNotEmpty } from 'class-validator'
+import { IsOptional, IsDateString, IsInt, Min, ValidateIf } from 'class-validator'
 
-export class UsersGetRequestDto {
+export class UsersIndexGetRequestDto {
   @Type(() => Number)
   id: number
 
@@ -13,8 +12,8 @@ export class UsersGetRequestDto {
   pageNumber: number
 }
 
-export class UsersGetRequestCheckDto {
-  constructor(params: UsersGetRequestDto) {
+export class UsersIndexGetRequestCheckDto {
+  constructor(params: UsersIndexGetRequestDto) {
     this.id = params.id
     this.startDate = params.startDate
     this.endDate = params.endDate

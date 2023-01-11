@@ -1,26 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { departments as Departments } from '@prisma/client'
+import { users as Users } from '@prisma/client'
+import { DepartmentDto } from './department.dto'
 import { ValidationErrorResponseDto } from '../../../error/errorResponse.dto'
 
-export class DepartmentDto {
-  constructor(department: Departments) {
-    this.departmentId = department.departmentId
-    this.departmentName = department.departmentName
-  }
-  @ApiProperty({
-    description: '部署ID',
-    example: 'A0001'
-  })
-  departmentId: string
-
-  @ApiProperty({
-    description: '部署名',
-    example: 'アプリケーション'
-  })
-  departmentName: string
-}
-
 export class UserDto {
+  constructor(params: Users) {
+    this.userName = params.userName
+    this.password = params.password
+    this.address = params.address
+    this.age = params.age
+    this.departmentId = params.departmentId
+  }
   @ApiProperty({
     description: 'ユーザーID',
     example: 1
@@ -52,10 +42,10 @@ export class UserDto {
   age: string
 
   @ApiProperty({
-    description: '部署',
-    type: DepartmentDto
+    description: '部署ID',
+    example: 'A0001'
   })
-  department: DepartmentDto
+  departmentId: string
 
   @ApiProperty({
     description: 'ポイント',
@@ -67,11 +57,7 @@ export class UserDto {
   updateAt: Date
 }
 
-export class UsersGetResponseDto {
-  constructor(users: UserDto[], pagination: number) {
-    this.users = users
-    this.pagination = pagination
-  }
+export class UsersShowGetResponse {
   @ApiProperty({
     description: 'バリデーションエラー',
     type: [ValidationErrorResponseDto]
@@ -79,14 +65,14 @@ export class UsersGetResponseDto {
   errors: []
 
   @ApiProperty({
-    description: 'ユーザーリスト',
-    type: [UserDto]
+    description: 'ユーザー詳細',
+    type: UserDto
   })
-  users: UserDto[]
+  forms: UserDto
 
   @ApiProperty({
-    description: 'ページネーション',
-    example: 1
+    description: '部署リスト',
+    type: DepartmentDto
   })
-  pagination: number
+  department: DepartmentDto
 }
