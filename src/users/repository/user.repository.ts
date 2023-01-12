@@ -1,20 +1,22 @@
 import { Injectable } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
 import { PrismaService } from '../../prisma.service'
-import { UserRelationDto } from '../dto/response/userRelation.dto'
-import { Prisma, users as Users, departments as Departments } from '@prisma/client'
+
+import { DepartmentEntity } from '../dto/entity/department.entity'
+import { UserEntity, UserRelationEntity } from '../dto/entity/user.entity'
 
 @Injectable()
 export class UserRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findDepartmentsAll(): Promise<Departments[] | null> {
+  async findDepartmentsAll(): Promise<DepartmentEntity[] | null> {
     return await this.prisma.departments.findMany({})
     // return await this.prisma.$queryRaw`
     //   SELECT * FROM departments
     // `
   }
 
-  async findUsersAll(): Promise<UserRelationDto[] | null> {
+  async findUsersAll(): Promise<UserRelationEntity[] | null> {
     return await this.prisma.users.findMany({ include: { department: true } })
   }
 
@@ -24,7 +26,7 @@ export class UserRepository {
     endDate: string,
     pageNumber: number,
     take: number
-  ): Promise<UserRelationDto[] | null> {
+  ): Promise<UserRelationEntity[] | null> {
     return await this.prisma.users.findMany({
       where: this.createUsersWhere(id, startDate, endDate),
       take: take,
@@ -33,7 +35,7 @@ export class UserRepository {
         department: true
       }
     })
-    // return await this.prisma.$queryRaw<UserRelationDto[]>`
+    // return await this.prisma.$queryRaw<UserRelationEntity[]>`
     //   SELECT * FROM users AS u
     //   INNER JOIN departments AS d
     //   ON u.departmentId = d.departmentId
@@ -45,7 +47,7 @@ export class UserRepository {
     // `
   }
 
-  async findUserById(id: number): Promise<Users | null> {
+  async findUserById(id: number): Promise<UserEntity | null> {
     return await this.prisma.users.findUnique({ where: { id } })
   }
 
@@ -68,17 +70,17 @@ export class UserRepository {
   async createUser(
     prismaTransaction: Prisma.TransactionClient,
     user: Prisma.usersUncheckedCreateInput
-  ): Promise<Users> {
+  ): Promise<UserEntity> {
     return await prismaTransaction.users.create({
       data: user
     })
   }
 
-  async updateUser(user: Prisma.usersUpdateArgs): Promise<Users> {
+  async updateUser(user: Prisma.usersUpdateArgs): Promise<UserEntity> {
     return await this.prisma.users.update(user)
   }
 
-  async deleteUser(id: number): Promise<Users> {
+  async deleteUser(id: number): Promise<UserEntity> {
     return await this.prisma.users.delete({ where: { id } })
   }
 

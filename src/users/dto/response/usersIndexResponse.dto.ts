@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { UserRelationDto } from './userRelation.dto'
+import { UsersRelationGetResponseDto } from './usersResponse.dto'
 import { ValidationErrorResponseDto } from '../../../error/errorResponse.dto'
 
 export class UsersIndexGetResponse {
@@ -11,9 +11,9 @@ export class UsersIndexGetResponse {
 
   @ApiProperty({
     description: 'ユーザーリスト',
-    type: [UserRelationDto]
+    type: [UsersRelationGetResponseDto]
   })
-  users: UserRelationDto[]
+  users: UsersRelationGetResponseDto[]
 
   @ApiProperty({
     description: 'ページネーション',

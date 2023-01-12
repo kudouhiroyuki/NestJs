@@ -18,9 +18,10 @@ import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger'
 import { Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 
-import { ErrorMessegeConstants } from '../constants/errorMessege'
 import { UsersService } from './users.service'
+import { ErrorMessegeConstants } from '../constants/errorMessege'
 import { UsersIndexGetResponse } from './dto/response/usersIndexResponse.dto'
+import { UsersCreateGetResponse } from './dto/response/usersCreateResponse.dto'
 import { UsersShowGetResponse } from './dto/response/usersShowResponse.dto'
 import { UsersIndexGetRequestDto, UsersIndexGetRequestCheckDto } from './dto/request/usersIndexRequest.dto'
 import {
@@ -75,22 +76,19 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
+    type: UsersCreateGetResponse,
     description: 'success'
   })
   async create(@Query() query: UsersCreateGetRequestDto, @Res() res: Response) {
     let errors: ValidationError[] = []
     const departments = await this.usersService.findDepartmentsAll()
     let user = null
-    if (query.id) {
-      user = await this.usersService.findUserById(query.id)
+    if (query.copyId) {
+      user = await this.usersService.findUserByCopyId(query.copyId)
       if (!user) {
         Session['userErrors'] = ErrorMessegeConstants.Empty
         return res.redirect('/users')
       }
-      delete user.id
-      delete user.point
-      delete user.createdAt
-      delete user.updateAt
     }
     if (Session['userErrors']) {
       errors = Session['userErrors']

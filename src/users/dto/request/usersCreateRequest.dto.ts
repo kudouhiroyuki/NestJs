@@ -5,7 +5,7 @@ import { IsJpName, IsUserPassword } from '../../../utils/validation.utils'
 
 export class UsersCreateGetRequestDto {
   @Type(() => Number)
-  id: number
+  copyId: number
 }
 
 export class UsersCreatePostRequestDto {
@@ -19,6 +19,7 @@ export class UsersCreatePostRequestDto {
   age: string
   @ApiProperty({ description: '部署ID' })
   departmentId: string
+  point: number
   createdAt: string
   updateAt: string
 }

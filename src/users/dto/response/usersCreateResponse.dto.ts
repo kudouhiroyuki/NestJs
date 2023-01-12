@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { UsersGetResponseDto } from './usersResponse.dto'
+import { UsersCopyGetResponseDto } from './usersResponse.dto'
 import { DepartsmentsGetResponseDto } from '../response/departmentsResponse.dto'
 import { ValidationErrorResponseDto } from '../../../error/errorResponse.dto'
 
-export class UsersShowGetResponse {
+export class UsersCreateGetResponse {
   @ApiProperty({
     description: 'バリデーションエラー',
     type: [ValidationErrorResponseDto]
@@ -11,10 +11,10 @@ export class UsersShowGetResponse {
   errors: []
 
   @ApiProperty({
-    description: 'ユーザー詳細',
-    type: UsersGetResponseDto
+    description: 'ユーザーリスト',
+    type: [UsersCopyGetResponseDto]
   })
-  forms: UsersGetResponseDto
+  users: UsersCopyGetResponseDto[]
 
   @ApiProperty({
     description: '部署リスト',

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class DepartmentDto {
+export class DepartmentEntity {
   @ApiProperty({
     description: '部署ID',
     example: 'A0001'
