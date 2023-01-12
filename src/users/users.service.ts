@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { UserRepository } from './repository/user.repository'
 import { Prisma, PrismaClient, users as Users } from '@prisma/client'
 import { DepartmentDto } from './dto/response/department.dto'
-import { UsersIndexGetResponse } from './dto/response/usersIndexResponse.dto'
+import { UserRelationDto } from './dto/response/userRelation.dto'
 import { UsersCreatePostRequestDto } from './dto/request/usersCreateRequest.dto'
 
 @Injectable()
@@ -13,18 +13,23 @@ export class UsersService {
     return await this.userRepository.findDepartmentsAll()
   }
 
-  async findUsersAll(): Promise<UsersIndexGetResponse> {
+  async findUsersAll(): Promise<{ users: UserRelationDto[]; pagination: number }> {
     const users = await this.userRepository.findUsersAll()
     const usersCount = await this.userRepository.getUsersCount()
     const pagination = Math.ceil(usersCount / 5)
-    return new UsersIndexGetResponse(users, pagination)
+    return { users, pagination }
   }
 
-  async findUsers(id: number, startDate: string, endDate: string, pageNumber: number): Promise<UsersIndexGetResponse> {
+  async findUsers(
+    id: number,
+    startDate: string,
+    endDate: string,
+    pageNumber: number
+  ): Promise<{ users: UserRelationDto[]; pagination: number }> {
     const users = await this.userRepository.findUsers(id, startDate, endDate, pageNumber, 5)
     const usersCount = await this.userRepository.getUsersCount(id, startDate, endDate)
     const pagination = Math.ceil(usersCount / 5)
-    return new UsersIndexGetResponse(users, pagination)
+    return { users, pagination }
   }
 
   async findUserById(id: number): Promise<Users> {

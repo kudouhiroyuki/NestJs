@@ -3,10 +3,6 @@ import { UserRelationDto } from './userRelation.dto'
 import { ValidationErrorResponseDto } from '../../../error/errorResponse.dto'
 
 export class UsersIndexGetResponse {
-  constructor(users: UserRelationDto[], pagination: number) {
-    this.users = users
-    this.pagination = pagination
-  }
   @ApiProperty({
     description: 'バリデーションエラー',
     type: [ValidationErrorResponseDto]
