@@ -115,23 +115,27 @@ export class UsersController {
     description: 'success'
   })
   async show(@Param('id') id: number, @Res() res: Response) {
-    let errors: ValidationError[] = []
+    const SessionErrors = Session['userErrors']
+    const SessionForms = Session['userForms']
     const departments = await this.usersService.findDepartmentsAll()
-    let user = await this.usersService.findUserById(id)
-    if (!user) {
+    const userDetail = await this.usersService.findUserById(id)
+    Session['userErrors'] = null
+    Session['userForms'] = null
+    if (!userDetail) {
       Session['userErrors'] = ErrorMessegeConstants.Empty
       return res.redirect('/users')
     }
-    if (Session['userErrors']) {
-      errors = Session['userErrors']
-      user = Session['userForms']
+    if (SessionErrors) {
+      return res.render('users/create', {
+        errors: JSON.stringify(SessionErrors),
+        departments: JSON.stringify(departments),
+        forms: JSON.stringify(SessionForms)
+      })
     }
-    Session['userErrors'] = null
-    Session['userForms'] = null
     return res.render('users/create', {
-      errors: JSON.stringify(errors),
+      errors: JSON.stringify([]),
       departments: JSON.stringify(departments),
-      forms: JSON.stringify(user)
+      forms: JSON.stringify(userDetail)
     })
   }
 

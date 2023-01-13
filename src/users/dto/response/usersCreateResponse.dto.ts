@@ -11,10 +11,10 @@ export class UsersCreateGetResponse {
   errors: []
 
   @ApiProperty({
-    description: 'ユーザーリスト',
+    description: 'ユーザー詳細',
     type: [UsersCopyGetResponseDto]
   })
-  users: UsersCopyGetResponseDto[]
+  forms: UsersCopyGetResponseDto[]
 
   @ApiProperty({
     description: '部署リスト',
