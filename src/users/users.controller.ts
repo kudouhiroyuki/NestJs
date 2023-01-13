@@ -48,23 +48,30 @@ export class UsersController {
     description: 'success'
   })
   async index(@Query() query: UsersIndexGetRequestDto) {
-    let errors = await validate(new UsersIndexGetRequestCheckDto(query))
-    let users = []
-    let pagination = 0
-    if (Session['userErrors']) {
-      errors = [...errors, ...Session['userErrors']]
-    }
-    if (!errors.length) {
-      const resultData = await this.usersService.findUsers(query.id, query.startDate, query.endDate, query.pageNumber)
-      users = resultData.users
-      pagination = resultData.pagination
-    }
+    const validateResult: ValidationError[] = await validate(new UsersIndexGetRequestCheckDto(query))
+    const sessionErrors = Session['userErrors']
+    let userList = null
     Session['userErrors'] = null
     Session['userForms'] = null
+    if (sessionErrors) {
+      return {
+        errors: JSON.stringify(sessionErrors),
+        users: JSON.stringify([]),
+        pagination: 0
+      }
+    }
+    if (validateResult.length) {
+      return {
+        errors: JSON.stringify(validateResult),
+        users: JSON.stringify([]),
+        pagination: 0
+      }
+    }
+    userList = await this.usersService.findUsers(query.id, query.startDate, query.endDate, query.pageNumber)
     return {
-      errors: JSON.stringify(errors),
-      users: JSON.stringify(users),
-      pagination: pagination
+      errors: JSON.stringify([]),
+      users: JSON.stringify(userList.users),
+      pagination: userList.pagination
     }
   }
 
@@ -80,26 +87,36 @@ export class UsersController {
     description: 'success'
   })
   async create(@Query() query: UsersCreateGetRequestDto, @Res() res: Response) {
-    let errors: ValidationError[] = []
+    const sessionErrors = Session['userErrors']
+    const sessionForms = Session['userForms']
     const departments = await this.usersService.findDepartmentsAll()
-    let user = null
+    let userDetail = null
+    Session['userErrors'] = null
+    Session['userForms'] = null
     if (query.copyId) {
-      user = await this.usersService.findUserByCopyId(query.copyId)
-      if (!user) {
+      userDetail = await this.usersService.findUserByCopyId(query.copyId)
+      if (userDetail) {
+        return res.render('users/create', {
+          errors: JSON.stringify([]),
+          departments: JSON.stringify(departments),
+          forms: JSON.stringify(userDetail)
+        })
+      } else {
         Session['userErrors'] = ErrorMessegeConstants.Empty
         return res.redirect('/users')
       }
     }
-    if (Session['userErrors']) {
-      errors = Session['userErrors']
-      user = Session['userForms']
+    if (sessionErrors) {
+      return res.render('users/create', {
+        errors: JSON.stringify(sessionErrors),
+        departments: JSON.stringify(departments),
+        forms: JSON.stringify(sessionForms)
+      })
     }
-    Session['userErrors'] = null
-    Session['userForms'] = null
     return res.render('users/create', {
-      errors: JSON.stringify(errors),
+      errors: JSON.stringify([]),
       departments: JSON.stringify(departments),
-      forms: JSON.stringify(user)
+      forms: JSON.stringify({})
     })
   }
 
@@ -115,8 +132,8 @@ export class UsersController {
     description: 'success'
   })
   async show(@Param('id') id: number, @Res() res: Response) {
-    const SessionErrors = Session['userErrors']
-    const SessionForms = Session['userForms']
+    const sessionErrors = Session['userErrors']
+    const sessionForms = Session['userForms']
     const departments = await this.usersService.findDepartmentsAll()
     const userDetail = await this.usersService.findUserById(id)
     Session['userErrors'] = null
@@ -125,11 +142,11 @@ export class UsersController {
       Session['userErrors'] = ErrorMessegeConstants.Empty
       return res.redirect('/users')
     }
-    if (SessionErrors) {
+    if (sessionErrors) {
       return res.render('users/create', {
-        errors: JSON.stringify(SessionErrors),
+        errors: JSON.stringify(sessionErrors),
         departments: JSON.stringify(departments),
-        forms: JSON.stringify(SessionForms)
+        forms: JSON.stringify(sessionForms)
       })
     }
     return res.render('users/create', {
@@ -151,9 +168,9 @@ export class UsersController {
   })
   @ApiBody({ type: UsersCreatePostRequestCheckDto })
   async store(@Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
-    const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
-    if (errors.length) {
-      Session['userErrors'] = JSON.parse(JSON.stringify(errors))
+    const validateResult: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
+    if (validateResult.length) {
+      Session['userErrors'] = JSON.parse(JSON.stringify(validateResult))
       Session['userForms'] = JSON.parse(JSON.stringify(body))
       return res.redirect(`/users/create`)
     }
@@ -173,9 +190,9 @@ export class UsersController {
   })
   @ApiBody({ type: UsersCreatePostRequestCheckDto })
   async update(@Param('id', ParseIntPipe) id: number, @Body() body: UsersCreatePostRequestDto, @Res() res: Response) {
-    const errors: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
-    if (errors.length) {
-      Session['userErrors'] = JSON.parse(JSON.stringify(errors))
+    const validateResult: ValidationError[] = await validate(new UsersCreatePostRequestCheckDto(body))
+    if (validateResult.length) {
+      Session['userErrors'] = JSON.parse(JSON.stringify(validateResult))
       Session['userForms'] = JSON.parse(JSON.stringify({ ...{ id }, ...body }))
       return res.redirect(`/users/${id}`)
     }
