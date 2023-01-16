@@ -33,7 +33,7 @@ export class UsersApiController {
   @HttpCode(200)
   @ApiOperation({
     summary: '一覧',
-    operationId: 'postJwtAuth'
+    operationId: 'getUsers'
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -56,13 +56,6 @@ export class UsersApiController {
 }
 
 /*
-■トークン生成
-curl -X POST http://localhost:3000/api/jwtAuth -d "id=1&password=password"
-■認証API
-curl -X GET http://localhost:3000/api/users -H "Authorization: Bearer トークン"
-curl -X GET http://localhost:3000/api/users?id=1&pageNumber=1 -H "Authorization: Bearer トークン"
-curl -X GET http://localhost:3000/api/users?id=あ&pageNumber=あ -H "Authorization: Bearer トークン"
-
 axios.get('URL').then(res => {
   console.log(res.data)
 }).catch(error => {
