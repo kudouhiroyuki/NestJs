@@ -141,12 +141,12 @@ const memberId = 1
 const couponCode = '1111111111111111'
 const result = await this.prisma.$queryRaw`
   SELECT     c.coupon_name AS couponName,
-              c.discount_value AS discountValue,
-              tc.coupon_status AS couponStatus,
-              tc.enable_from_limit_datetime AS enableFromLimitDatetime,
-              tc.enable_to_limit_datetime AS enableToLimitDatetime,
-              tc.enable_limit_date AS enableLimitDate,
-              c.enable_element AS enableElement
+             c.discount_value AS discountValue,
+             tc.coupon_status AS couponStatus,
+             tc.enable_from_limit_datetime AS enableFromLimitDatetime,
+             tc.enable_to_limit_datetime AS enableToLimitDatetime,
+             tc.enable_limit_date AS enableLimitDate,
+             c.enable_element AS enableElement
   FROM       ticketing_coupon tc
   INNER JOIN coupon c
   ON         c.id = tc.coupon_id
@@ -154,5 +154,36 @@ const result = await this.prisma.$queryRaw`
   AND        tc.coupon_code = ${couponCode}
   ORDER BY   IF(c.enable_element = 'PERIOD', tc.enable_to_limit_datetime, tc.enable_limit_date) DESC
 `
+
+const coupons = [
+  {
+    couponName: 'クーポンB',
+    discountValue: 200,
+    couponStatus: 'UNUSED',
+    enableFromLimitDatetime: 1673847616667,
+    enableToLimitDatetime: 1676593705853,
+    enableLimitDate: 1673847616667,
+    enableElement: 'PERIOD'
+  },
+  {
+    couponName: 'クーポンA',
+    discountValue: 200,
+    couponStatus: 'UNUSED',
+    enableFromLimitDatetime: 1673845643271,
+    enableToLimitDatetime: 1676593705853,
+    enableLimitDate: 1673845643271,
+    enableElement: 'PERIOD'
+  }
+]
+const enableCoupons = coupons.filter((coupon) => {
+  return (
+    coupon.couponStatus === 'UNUSED' &&
+    ((coupon.enableElement === 'PERIOD' &&
+      coupon.enableFromLimitDatetime <= Date.now() &&
+      Date.now() <= coupon.enableToLimitDatetime) ||
+      (coupon.enableElement === 'TERM' && Date.now() <= coupon.enableLimitDate))
+  )
+})
+return enableCoupons
 <---------------------------------------------------------------------------------------------------------->
 */
