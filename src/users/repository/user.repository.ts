@@ -108,11 +108,12 @@ id unsigned int          // クーポンID
 coupon_name varchar(50)  // クーポン名
 discount_value int       // 値引値
 enable_element enum      // 有効期間区分
-<---有効期間区分--->
+<--- 有効期間区分 --->
 1：期間指定(PERIOD)
 2：期限指定(TERM)
 
 ■発券クーポン（ticketing_coupon）
+id unsigned int                    // クーポンユニークID
 coupon_id unsigned int             // クーポンID
 coupon_code varchar(16)            // クーポンコード
 member_id unsigned int             // 会員ID（クーポンが発行された会員ID）
@@ -120,7 +121,7 @@ coupon_status enum                 // クーポンステータス
 enable_from_limit_datetime bigint  // 有効期限（from）
 enable_to_limit_datetime bigint    // 有効期限（to）
 enable_limit_date bigint           // 有効期限日（発券されたクーポンに設定された有効期限）
-<---クーポンステータス--->
+<--- クーポンステータス --->
 1：未利用(UNUSED)
 2：利用済み(USED)
 3：もぎり済み(TABLATURED)
@@ -131,12 +132,11 @@ INSERT INTO nest.coupon(id, coupon_name, discount_value, enable_element) VALUES
 (1001, 'クーポンA', 200, '1'),
 (1002, 'クーポンB', 200, '1');
 
-INSERT INTO nest.ticketing_coupon (coupon_id, coupon_code, member_id, coupon_status, enable_from_limit_datetime, enable_to_limit_datetime, enable_limit_date) 
-VALUES (1001, '1111111111111111', 1, '1', 1673845643271, 1673845643271, 1673845643271)
+INSERT INTO nest.ticketing_coupon (coupon_id, coupon_code, member_id, coupon_status, enable_from_limit_datetime, enable_to_limit_datetime, enable_limit_date) VALUES
+(1001, '1111111111111111', 1, '1', 1673847616667, 1676593705853, 1673847616667),
+(1002, '1111111111111111', 1, '1', 1673847616667, 1676593705853, 1673847616667);
 
-INSERT INTO nest.ticketing_coupon (coupon_id, coupon_code, member_id, coupon_status, enable_from_limit_datetime, enable_to_limit_datetime, enable_limit_date) 
-VALUES (1002, '1111111111111111', 1, '1', 1673847616667, 1673847616667, 1673847616667);
-
+■Repository
 const memberId = 1
 const couponCode = '1111111111111111'
 const result = await this.prisma.$queryRaw`
@@ -155,6 +155,7 @@ const result = await this.prisma.$queryRaw`
   ORDER BY   IF(c.enable_element = 'PERIOD', tc.enable_to_limit_datetime, tc.enable_limit_date) DESC
 `
 
+■Service
 const coupons = [
   {
     couponName: 'クーポンB',
@@ -185,5 +186,7 @@ const enableCoupons = coupons.filter((coupon) => {
   )
 })
 return enableCoupons
+<---------------------------------------------------------------------------------------------------------->
+
 <---------------------------------------------------------------------------------------------------------->
 */
