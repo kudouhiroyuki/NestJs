@@ -256,14 +256,10 @@ DROP TRIGGER insert_trigger;
 #### <----- データの追加と削除 -----><br>
 ■INSERT 文<br>
 ※データを追加する<br>
-INSERT INTO nest.users (userName, password, address, age, departmentId, point, createdAt, updateAt) VALUES<br>
-('name1', 'password', 'address', 30, 'A0001', 100, '2010-10-01 00:00:00', '2010-10-01 00:00:00'),<br>
-('name2', 'password', 'address', 20, 'A0001', 500, '2010-11-01 08:00:00', '2010-11-01 08:00:00'),<br>
-('name3', 'password', 'address', 17, 'B0001', 500, '2010-11-01 20:00:00', '2010-11-01 20:00:00'),<br>
-('name4', 'password', 'address', 58, 'B0001', 400, '2010-12-01 00:00:00', '2010-12-01 00:00:00'),<br>
-('name5', 'password', 'address', 32, 'B0001', NULL, '2011-12-01 00:00:00', '2011-12-01 00:00:00');<br>
+INSERT INTO nest.users (user_name, password, address, age, department_id, point, created_at, update_at) VALUES<br>
+('name1', 'password', 'address', '30', 'A0001', 100, '2010-10-01 00:00:00', '2010-10-01 00:00:00');<br>
 
-INSERT INTO nest.departments (departmentId, departmentName) VALUES<br>
+INSERT INTO nest.departments (department_id, department_name) VALUES<br>
 ('A0001', 'アプリケーション'),<br>
 ('B0001', 'デザイン');<br>
 
