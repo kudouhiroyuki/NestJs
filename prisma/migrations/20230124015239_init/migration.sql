@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE `users` (
+CREATE TABLE `user` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `user_name` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
@@ -10,16 +10,16 @@ CREATE TABLE `users` (
     `created_at` DATETIME(0) NOT NULL,
     `update_at` DATETIME(0) NOT NULL,
 
-    INDEX `users_department_id_fkey`(`department_id`),
+    INDEX `user_department_id_fkey`(`department_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `departments` (
+CREATE TABLE `department` (
     `department_id` VARCHAR(191) NOT NULL,
     `department_name` VARCHAR(191) NOT NULL,
 
-    UNIQUE INDEX `departments_department_id_key`(`department_id`)
+    UNIQUE INDEX `department_department_id_key`(`department_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -47,4 +47,4 @@ CREATE TABLE `ticketing_coupon` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `users` ADD CONSTRAINT `users_department_id_fkey` FOREIGN KEY (`department_id`) REFERENCES `departments`(`department_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `user` ADD CONSTRAINT `user_department_id_fkey` FOREIGN KEY (`department_id`) REFERENCES `department`(`department_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
