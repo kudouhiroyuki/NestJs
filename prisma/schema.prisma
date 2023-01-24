@@ -9,24 +9,24 @@ datasource db {
 }
 
 model users {
-  id           Int         @id @default(autoincrement())
-  userName     String
-  password     String
-  address      String
-  age          String
-  departmentId String
-  point        Int?
-  createdAt    DateTime    @db.DateTime(0)
-  updateAt     DateTime    @db.DateTime(0)
-  department   departments @relation(fields: [departmentId], references: [departmentId])
+  id            Int         @id @default(autoincrement())
+  user_name     String
+  password      String
+  address       String
+  age           String
+  department_id String
+  point         Int?
+  created_at    DateTime    @db.DateTime(0)
+  update_at     DateTime    @db.DateTime(0)
+  department    departments @relation(fields: [department_id], references: [department_id])
 
-  @@index([departmentId], map: "users_departmentId_fkey")
+  @@index([department_id], map: "users_department_id_fkey")
 }
 
 model departments {
-  departmentId   String  @unique
-  departmentName String
-  users          users[]
+  department_id   String  @unique
+  department_name String
+  users           users[]
 }
 
 

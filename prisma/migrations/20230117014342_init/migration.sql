@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `coupon` MODIFY `id` INTEGER UNSIGNED NOT NULL;
