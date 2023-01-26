@@ -16,10 +16,12 @@ CREATE TABLE `user` (
 
 -- CreateTable
 CREATE TABLE `department` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `department_id` VARCHAR(191) NOT NULL,
     `department_name` VARCHAR(191) NOT NULL,
 
-    UNIQUE INDEX `department_department_id_key`(`department_id`)
+    UNIQUE INDEX `department_department_id_key`(`department_id`),
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable

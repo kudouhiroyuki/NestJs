@@ -24,6 +24,7 @@ model user {
 }
 
 model department {
+  id              Int     @id @default(autoincrement())
   department_id   String  @unique
   department_name String
   user            user[]
