@@ -1,4 +1,4 @@
-##　JavaScript TypeScript　勉強メモ（READMEのみ）<br>
+## JavaScript TypeScript　勉強メモ（READMEのみ）<br>
 https://github.com/kudouhiroyuki/JavaScript-TypeScript
 
 
