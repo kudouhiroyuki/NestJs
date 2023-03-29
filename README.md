@@ -7,11 +7,10 @@ https://github.com/kudouhiroyuki/Study-JavaScript
 ## Vue2 + Typescript 検証環境<br>
 https://github.com/kudouhiroyuki/Vue2-Typescript
 
-## ツール
-Docker
-MySQL
-MySQL Workbench
-
+## ツール<br>
+Docker<br>
+MySQL<br>
+MySQL Workbench<br>
 
 ## 開発工程<br>
 要件定義→外部設計→内部設計→開発→単体テスト→結合テスト→システムテスト→運用テスト→システム移行<br>
