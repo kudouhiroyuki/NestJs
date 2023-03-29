@@ -65,23 +65,7 @@ MySQL Workbench<br>
 ■シナリオテスト<br>
 ■アドホックテスト（モンキーテスト）<br>
 
-## Swagger<br>
-http://localhost:3000/api/
-
-## 起動（Docker無）<br>
-MySQL<br>
-mysql -u root -p;<br>
-CREATE DATABASE nest;<br>
-
-.env<br>
-DATABASE_URL="mysql://root:@localhost:3306/nest"<br>
-
-cd NestJs<br>
-npx prisma migrate dev --name init<br>
-npm i<br>
-npm run start:dev<br>
-
-## 起動（Docker有）<br>
+## 起動（Docker）<br>
 .env<br>
 DATABASE_URL="mysql://root:root@nest-db:3306/nest"<br>
 
@@ -104,6 +88,9 @@ Connection Name: nestDb<br>
 Hostname: 127.0.0.1<br>
 Port: 3306<br>
 Username: root<br>
+
+http://localhost:3000/users/
+http://localhost:3000/api/
 
 ## Dockerコマンド<br>
 ■Webサーバー（http://localhost/）<br>
