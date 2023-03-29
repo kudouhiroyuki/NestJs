@@ -89,8 +89,8 @@ Hostname: 127.0.0.1<br>
 Port: 3306<br>
 Username: root<br>
 
-http://localhost:3000/users/
-http://localhost:3000/api/
+http://localhost:3000/users/<br>
+http://localhost:3000/api/<br>
 
 ## Dockerコマンド<br>
 ■Webサーバー（http://localhost/）<br>
