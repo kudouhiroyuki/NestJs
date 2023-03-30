@@ -17,7 +17,7 @@ MySQL Workbench<br>
 ## 用語<br>
 - ステートメント<br>
 SQLで言うなら「SELECT」や「INSERT」「DELETE」などで一つのクエリを構築しますが、この構築された文の全体をステートメントと言います。<br>
-•データ定義言語<br>
+ステートメントの種類（データ定義言語 / データ操作言語）<br>
 
 - データ定義言語（DDL）<br>
 データベース構造の作成や変更、削除といった機能を担っています。<br>
@@ -29,6 +29,16 @@ DISABLE TRIGGER<br>
 ENABLE TRIGGER<br>
 RENAME<br>
 UPDATE STATISTICS<br>
+
+- データ操作言語（DML）<br>
+データベースに格納されるデータを挿入、更新、変更、削除するためのもの<br>
+BULK INSERT<br>
+DELETE<br>
+INSERT<br>
+SELECT<br>
+UPDATE<br>
+MERGE<br>
+TRUNCATE TABLE<br>
 
 - sqlインジェクション<br>
 Webアプリケーションに対し不正なSQL文を注入して不正に操作する攻撃手法<br>
