@@ -14,9 +14,20 @@ Docker<br>
 MySQL<br>
 MySQL Workbench<br>
 
-#### 用語<br>
-- ステートメント
-構築された文全体<br>
+## 用語<br>
+- ステートメント<br>
+SQLで言うなら「SELECT」や「INSERT」「DELETE」などで一つのクエリを構築しますが、この構築された文の全体をステートメントと言います。<br>
+
+- データ定義言語（DDL）<br>
+役割としては、データベース構造の作成や変更、削除といった機能を担っています。<br>
+ALTER<br>
+照合順序<br>
+CREATE<br>
+DROP<br>
+DISABLE TRIGGER<br>
+ENABLE TRIGGER<br>
+RENAME<br>
+UPDATE STATISTICS<br>
 
 - sqlインジェクション<br>
 Webアプリケーションに対し不正なSQL文を注入して不正に操作する攻撃手法<br>
