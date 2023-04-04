@@ -129,6 +129,9 @@ SQLでDELETE文を発行してレコードを削除すること<br>
 ■アドホックテスト（モンキーテスト）<br>
 
 ## 起動（Docker）<br>
+CREATE DATABASE nest;<br>
+utf8mb4：utf8mb4_unicode_ci<br>
+
 .env<br>
 DATABASE_URL="mysql://root:root@nest-db:3306/nest"<br>
 

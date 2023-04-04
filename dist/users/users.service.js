@@ -11,47 +11,80 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
-const prisma_service_1 = require("../prisma.service");
+const client_1 = require("@prisma/client");
+const user_repository_1 = require("./repository/user.repository");
 let UsersService = class UsersService {
-    constructor(prisma) {
-        this.prisma = prisma;
+    constructor(userRepository, prismaClient) {
+        this.userRepository = userRepository;
+        this.prismaClient = prismaClient;
     }
-    async getUsers(query) {
-        const whereConditions = {};
-        const orderConditions = {};
-        if (query.id)
-            whereConditions['id'] = Number(query.id);
-        if (query.userName)
-            whereConditions['userName'] = { contains: query.userName };
-        if (query.sort)
-            orderConditions['id'] = query.sort;
-        const result = await this.prisma.users.findMany({
-            include: {
-                department: true
-            }
+    async findDepartmentsAll() {
+        return await this.userRepository.findDepartmentsAll();
+    }
+    async findUsersAll() {
+        const users = await this.userRepository.findUsersAll();
+        const usersCount = await this.userRepository.getUsersCount();
+        const pagination = Math.ceil(usersCount / 5);
+        return { users, pagination };
+    }
+    async findUsers(id, startDate, endDate, pageNumber) {
+        const users = await this.userRepository.findUsers(id, startDate, endDate, pageNumber, 5);
+        const usersCount = await this.userRepository.getUsersCount(id, startDate, endDate);
+        const pagination = Math.ceil(usersCount / 5);
+        return { users, pagination };
+    }
+    async findUserById(id) {
+        return await this.userRepository.findUserById(id);
+    }
+    async findUserByCopyId(copyId) {
+        const users = await this.userRepository.findUserById(copyId);
+        if (users) {
+            delete users.id;
+            delete users.point;
+            delete users.createdAt;
+            delete users.updateAt;
+        }
+        return users;
+    }
+    async createUser(user) {
+        return await this.prismaClient.$transaction(async (prismaTransaction) => {
+            const item = {
+                userName: user.userName,
+                password: user.password,
+                address: user.address,
+                age: user.age,
+                departmentId: user.departmentId,
+                point: 0,
+                createdAt: new Date(),
+                updateAt: new Date()
+            };
+            await this.userRepository.createUser(prismaTransaction, item);
         });
-        return {
-            sum: result.reduce((sum, i) => sum + i.id, 0),
-            count: result.length
+    }
+    async updateUser(id, user) {
+        const item = {
+            userName: user.userName,
+            password: user.password,
+            address: user.address,
+            age: user.age,
+            departmentId: user.departmentId,
+            point: user.point,
+            createdAt: user.createdAt,
+            updateAt: new Date()
         };
+        const updateArgs = {
+            data: item,
+            where: { id }
+        };
+        await this.userRepository.updateUser(updateArgs);
     }
-    async createUser(data) {
-        return await this.prisma.users.create({ data });
-    }
-    async updateUser(params) {
-        const { where, data } = params;
-        return this.prisma.users.update({
-            where,
-            data
-        });
-    }
-    async deleteUser(where) {
-        return await this.prisma.users.delete({ where });
+    async deleteUser(id) {
+        await this.userRepository.deleteUser(id);
     }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [user_repository_1.UserRepository, client_1.PrismaClient])
 ], UsersService);
 exports.UsersService = UsersService;
 //# sourceMappingURL=users.service.js.map

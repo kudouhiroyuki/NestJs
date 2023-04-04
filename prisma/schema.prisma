@@ -28,36 +28,3 @@ model department {
   department_name String
   user            user[]
 }
-
-
-model Coupon {
-  id                               Int                                @id @db.UnsignedInt
-  couponName                       String                             @map("coupon_name") @db.VarChar(50)
-  discountValue                    Int                                @map("discount_value")
-  enableElement                    coupon_enable_element              @map("enable_element")
-  @@map("coupon")
-}
-
-model TicketingCoupon {
-  id                      Int                             @id @default(autoincrement()) @db.UnsignedInt
-  couponId                Int                             @map("coupon_id") @db.UnsignedInt
-  couponCode              String                          @map("coupon_code") @db.VarChar(16)
-  memberId                Int                             @map("member_id") @db.UnsignedInt
-  enableFromLimitDatetime BigInt                          @map("enable_from_limit_datetime")
-  enableToLimitDatetime   BigInt                          @map("enable_to_limit_datetime")
-  enableLimitDate         BigInt                          @map("enable_limit_date")
-  couponStatus            ticketing_coupon_coupon_status? @map("coupon_status")
-  @@map("ticketing_coupon")
-}
-
-enum coupon_enable_element {
-  PERIOD
-  TERM
-}
-
-enum ticketing_coupon_coupon_status {
-  UNUSED
-  USED
-  CANCELED
-  EXPIRED
-}
