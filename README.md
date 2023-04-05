@@ -13,6 +13,7 @@ Postman<br>
 Docker<br>
 MySQL<br>
 MySQL Workbench<br>
+Homebrew<br>
 
 ## 用語<br>
 - ステートメント<br>
