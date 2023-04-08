@@ -10,7 +10,7 @@ export class UsersCreateGetRequestDto {
 
 export class UsersCreatePostRequestDto {
   @ApiProperty({ description: '名前' })
-  userName: string
+  user_name: string
   @ApiProperty({ description: 'パスワード' })
   password: string
   @ApiProperty({ description: 'メールアドレス' })
@@ -18,19 +18,19 @@ export class UsersCreatePostRequestDto {
   @ApiProperty({ description: '年齢' })
   age: string
   @ApiProperty({ description: '部署ID' })
-  departmentId: string
+  department_id: string
   point: number
-  createdAt: string
-  updateAt: string
+  created_at: string
+  update_at: string
 }
 
 export class UsersCreatePostRequestCheckDto {
   constructor(params: UsersCreatePostRequestDto) {
-    this.userName = params.userName
+    this.user_name = params.user_name
     this.password = params.password
     this.address = params.address
     this.age = params.age
-    this.departmentId = params.departmentId
+    this.department_id = params.department_id
   }
 
   @IsString({ message: '名前を正しく入力してください' })
@@ -43,7 +43,7 @@ export class UsersCreatePostRequestCheckDto {
     maxLength: 30,
     example: '田中'
   })
-  userName: string
+  user_name: string
 
   @IsString({ message: 'パスワードを正しく入力してください' })
   @IsNotEmpty({ message: 'パスワードを入力してください' })
@@ -84,5 +84,5 @@ export class UsersCreatePostRequestCheckDto {
     enum: ['A0001', 'B0001'],
     example: 'A0001'
   })
-  departmentId: string
+  department_id: string
 }

@@ -12,7 +12,7 @@ export class UsersGetResponseDto {
     description: 'ユーザー名',
     example: '名前'
   })
-  userName: string
+  user_name: string
 
   @ApiProperty({
     description: 'パスワード',
@@ -36,7 +36,7 @@ export class UsersGetResponseDto {
     description: '部署ID',
     example: 'A0001'
   })
-  departmentId: string
+  department_id: string
 
   @ApiProperty({
     description: 'ポイント',
@@ -48,13 +48,13 @@ export class UsersGetResponseDto {
     description: '作成日時',
     example: '2023-01-12T05:38:09.000Z'
   })
-  createdAt: Date
+  created_at: Date
 
   @ApiProperty({
     description: '更新日時',
     example: '2023-01-12T05:38:09.000Z'
   })
-  updateAt: Date
+  update_at: Date
 }
 
 export class UsersRelationGetResponseDto {
@@ -68,7 +68,7 @@ export class UsersRelationGetResponseDto {
     description: 'ユーザー名',
     example: '名前'
   })
-  userName: string
+  user_name: string
 
   @ApiProperty({
     description: 'パスワード',
@@ -104,13 +104,13 @@ export class UsersRelationGetResponseDto {
     description: '作成日時',
     example: '2023-01-12T05:38:09.000Z'
   })
-  createdAt: Date
+  created_at: Date
 
   @ApiProperty({
     description: '更新日時',
     example: '2023-01-12T05:38:09.000Z'
   })
-  updateAt: Date
+  update_at: Date
 }
 
 export class UsersCopyGetResponseDto {
@@ -118,7 +118,7 @@ export class UsersCopyGetResponseDto {
     description: 'ユーザー名',
     example: '名前'
   })
-  userName: string
+  user_name: string
 
   @ApiProperty({
     description: 'パスワード',
@@ -142,5 +142,5 @@ export class UsersCopyGetResponseDto {
     description: '部署ID',
     example: 'A0001'
   })
-  departmentId: string
+  department_id: string
 }

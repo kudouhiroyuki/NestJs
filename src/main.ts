@@ -5,15 +5,15 @@ import * as Session from 'express-session'
 import { join } from 'path'
 import { AppModule } from './app.module'
 import { ValidationPipe } from '@nestjs/common'
-import { AuthGuard } from './auth/auth.guard'
-import { UnauthorizedExceptionFilter } from './filters/unauthorizedExeption.filter'
+// import { AuthGuard } from './auth/auth.guard'
+// import { UnauthorizedExceptionFilter } from './filters/unauthorizedExeption.filter'
 import * as methodOverride from 'method-override'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
-  app.useStaticAssets(join(__dirname, '../../views/public'))
-  app.setBaseViewsDir(join(__dirname, '../../views/pages'))
+  app.useStaticAssets(join(__dirname, '../views/public'))
+  app.setBaseViewsDir(join(__dirname, '../views/pages'))
   app.setViewEngine('ejs')
 
   // CORS有効化

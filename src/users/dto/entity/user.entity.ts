@@ -12,7 +12,7 @@ export class UserEntity {
     description: 'ユーザー名',
     example: '名前'
   })
-  userName: string
+  user_name: string
 
   @ApiProperty({
     description: 'パスワード',
@@ -36,7 +36,7 @@ export class UserEntity {
     description: '部署ID',
     example: '1001'
   })
-  departmentId: string
+  department_id: string
 
   @ApiProperty({
     description: 'ポイント',
@@ -44,8 +44,8 @@ export class UserEntity {
   })
   point: number
 
-  createdAt: Date
-  updateAt: Date
+  created_at: Date
+  update_at: Date
 }
 
 export class UserRelationEntity {
@@ -59,7 +59,7 @@ export class UserRelationEntity {
     description: 'ユーザー名',
     example: '名前'
   })
-  userName: string
+  user_name: string
 
   @ApiProperty({
     description: 'パスワード',
@@ -91,6 +91,6 @@ export class UserRelationEntity {
   })
   point: number
 
-  createdAt: Date
-  updateAt: Date
+  created_at: Date
+  update_at: Date
 }

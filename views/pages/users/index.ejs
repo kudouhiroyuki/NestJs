@@ -96,16 +96,16 @@
       <tbody>
         <tr v-for="(item, index) in users" :key="index">
           <td>{{ item.id }}</td>
-          <td>{{ item.userName }}</td>
+          <td>{{ item.user_name }}</td>
           <td>{{ item.password }}</td>
           <td>{{ item.address }}</td>
           <td>{{ item.age }}</td>
-          <td>{{ item.department.departmentName }}</td>
+          <td>{{ item.department.department_name }}</td>
           <td>{{ item.point }}</td>
-          <td>{{ item.createdAt }}</td>
-          <td>{{ item.updateAt }}</td>
+          <td>{{ item.created_at }}</td>
+          <td>{{ item.update_at }}</td>
           <td><a :href=`/users/${item.id}` class="btn btn-secondary" style="width: 60px;">詳細</a></td>
-          <td><a :href=`/users/create?copyId=${item.id}` class="btn btn-secondary" style="width: 80px;">コピー</a></td>
+          <!-- <td><a :href=`/users/create?copyId=${item.id}` class="btn btn-secondary" style="width: 80px;">コピー</a></td> -->
           <td>
             <button @click="onDelete(item.id)" type="button" class="btn btn-secondary" style="width: 60px;">削除</button> 
           </td>

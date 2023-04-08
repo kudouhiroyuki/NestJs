@@ -46,40 +46,40 @@ export class UsersService {
     if (users) {
       delete users.id
       delete users.point
-      delete users.createdAt
-      delete users.updateAt
+      delete users.created_at
+      delete users.update_at
     }
     return users
   }
 
   async createUser(user: UsersCreatePostRequestDto): Promise<void> {
     return await this.prismaClient.$transaction(async (prismaTransaction) => {
-      const item: Prisma.usersUncheckedCreateInput = {
-        userName: user.userName,
+      const item: Prisma.userUncheckedCreateInput = {
+        user_name: user.user_name,
         password: user.password,
         address: user.address,
         age: user.age,
-        departmentId: user.departmentId,
+        department_id: user.department_id,
         point: 0,
-        createdAt: new Date(),
-        updateAt: new Date()
+        created_at: new Date(),
+        update_at: new Date()
       }
       await this.userRepository.createUser(prismaTransaction, item)
     })
   }
 
   async updateUser(id: number, user: UsersCreatePostRequestDto): Promise<void> {
-    const item: Prisma.usersUncheckedUpdateInput = {
-      userName: user.userName,
+    const item: Prisma.userUncheckedUpdateInput = {
+      user_name: user.user_name,
       password: user.password,
       address: user.address,
       age: user.age,
-      departmentId: user.departmentId,
+      department_id: user.department_id,
       point: user.point,
-      createdAt: user.createdAt,
-      updateAt: new Date()
+      created_at: user.created_at,
+      update_at: new Date()
     }
-    const updateArgs: Prisma.usersUpdateArgs = {
+    const updateArgs: Prisma.userUpdateArgs = {
       data: item,
       where: { id }
     }

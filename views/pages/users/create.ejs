@@ -26,9 +26,9 @@
       </div>
       <div class="row mb-4">    
         <label class="form-label">名前</label>
-        <input v-model="userName" type="text" name="userName">
-        <div v-if="$v.userName.$dirty" class="text-danger fw-bold">
-          <span v-if="!$v.userName.required">名前が入力されていません。</span>
+        <input v-model="user_name" type="text" name="user_name">
+        <div v-if="$v.user_name.$dirty" class="text-danger fw-bold">
+          <span v-if="!$v.user_name.required">名前が入力されていません。</span>
         </div>
       </div>
       <div class="row mb-4">    
@@ -54,15 +54,15 @@
       </div>
       <div class="row mb-4">    
         <label class="form-label">部署</label>
-        <select v-model="departmentId" class="form-select" name="departmentId">
+        <select v-model="department_id" class="form-select" name="department_id">
           <option
             v-for="item in departments"
-            :key="item.departmentId"
-            :value="item.departmentId"
-          >{{ item.departmentName }}</option>
+            :key="item.department_id"
+            :value="item.department_id"
+          >{{ item.department_name }}</option>
         </select>
-        <div v-if="$v.departmentId.$dirty" class="text-danger fw-bold">
-          <span v-if="!$v.departmentId.required">部署が入力されていません。</span>
+        <div v-if="$v.department_id.$dirty" class="text-danger fw-bold">
+          <span v-if="!$v.department_id.required">部署が入力されていません。</span>
         </div>
       </div>
       <div class="text-end">
@@ -91,11 +91,11 @@ new Vue({
     departments: JSON.parse(departments),
     forms: JSON.parse(forms),
     // 登録データ
-    userName: '',
+    user_name: '',
     password: '',
     address: '',
     age: '',
-    departmentId: '',
+    department_id: '',
   },
   created() {
     this.setInitData();
@@ -103,7 +103,7 @@ new Vue({
   mounted() {
   },
   validations: {
-    userName: {
+    user_name: {
       required
     },
     password: {
@@ -115,7 +115,7 @@ new Vue({
     age: {
       required
     },
-    departmentId: {
+    department_id: {
       required
     }
   },
@@ -129,11 +129,11 @@ new Vue({
       }
       if(this.forms) {
         this.id = this.forms.id;
-        this.userName = this.forms.userName;
+        this.user_name = this.forms.user_name;
         this.password = this.forms.password;
         this.address = this.forms.address;
         this.age = this.forms.age;
-        this.departmentId = this.forms.departmentId;
+        this.department_id = this.forms.department_id;
       }
     },
     /**

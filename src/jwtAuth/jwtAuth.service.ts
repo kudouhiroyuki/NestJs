@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { users as Users } from '@prisma/client'
+import { user as User } from '@prisma/client'
 import { JwtAuthRepository } from './repository/jwtAuth.repository'
 
 @Injectable()
 export class JwtAuthService {
   constructor(private jwtService: JwtService, private jwtAuthRepository: JwtAuthRepository) {}
 
-  async findJwtAuthUser(id: string, password: string): Promise<Users> {
+  async findJwtAuthUser(id: string, password: string): Promise<User> {
     return await this.jwtAuthRepository.findJwtAuthUser(id, password)
   }
 

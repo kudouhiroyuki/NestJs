@@ -10,14 +10,14 @@ export class UserRepository {
   constructor(private prisma: PrismaService) {}
 
   async findDepartmentsAll(): Promise<DepartmentEntity[] | null> {
-    return await this.prisma.departments.findMany({})
+    return await this.prisma.department.findMany({})
     // return await this.prisma.$queryRaw`
     //   SELECT * FROM departments
     // `
   }
 
   async findUsersAll(): Promise<UserRelationEntity[] | null> {
-    return await this.prisma.users.findMany({ include: { department: true } })
+    return await this.prisma.user.findMany({ include: { department: true } })
   }
 
   async findUsers(
@@ -27,7 +27,7 @@ export class UserRepository {
     pageNumber: number,
     take: number
   ): Promise<UserRelationEntity[] | null> {
-    return await this.prisma.users.findMany({
+    return await this.prisma.user.findMany({
       where: this.createUsersWhere(id, startDate, endDate),
       take: take,
       skip: this.createUsersSkip(pageNumber, take),
@@ -48,11 +48,11 @@ export class UserRepository {
   }
 
   async findUserById(id: number): Promise<UserEntity | null> {
-    return await this.prisma.users.findUnique({ where: { id } })
+    return await this.prisma.user.findUnique({ where: { id } })
   }
 
   async getUsersCount(id?: number, startDate?: string, endDate?: string): Promise<number> {
-    return await this.prisma.users.count({
+    return await this.prisma.user.count({
       where: this.createUsersWhere(id, startDate, endDate)
     })
     // const result = await this.prisma.$queryRaw`
@@ -69,19 +69,19 @@ export class UserRepository {
 
   async createUser(
     prismaTransaction: Prisma.TransactionClient,
-    user: Prisma.usersUncheckedCreateInput
+    user: Prisma.userUncheckedCreateInput
   ): Promise<UserEntity> {
-    return await prismaTransaction.users.create({
+    return await prismaTransaction.user.create({
       data: user
     })
   }
 
-  async updateUser(user: Prisma.usersUpdateArgs): Promise<UserEntity> {
-    return await this.prisma.users.update(user)
+  async updateUser(user: Prisma.userUpdateArgs): Promise<UserEntity> {
+    return await this.prisma.user.update(user)
   }
 
   async deleteUser(id: number): Promise<UserEntity> {
-    return await this.prisma.users.delete({ where: { id } })
+    return await this.prisma.user.delete({ where: { id } })
   }
 
   createUsersSkip(pageNumber: number, take: number): number {
@@ -92,11 +92,11 @@ export class UserRepository {
 
   createUsersWhere(id: number, startDate: string, endDate: string): object {
     const whereConditions = {}
-    const createdAt = {}
+    const created_at = {}
     if (id) whereConditions['id'] = id
-    if (startDate) createdAt['gte'] = new Date(startDate + 'T00:00:00.000')
-    if (endDate) createdAt['lte'] = new Date(endDate + 'T23:59:59.999')
-    whereConditions['createdAt'] = createdAt
+    if (startDate) created_at['gte'] = new Date(startDate + 'T00:00:00.000')
+    if (endDate) created_at['lte'] = new Date(endDate + 'T23:59:59.999')
+    whereConditions['created_at'] = created_at
     return whereConditions
   }
 }

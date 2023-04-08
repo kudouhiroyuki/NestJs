@@ -5,11 +5,11 @@ export class DepartsmentsGetResponseDto {
     description: '部署ID',
     example: 'A0001'
   })
-  departmentId: string
+  department_id: string
 
   @ApiProperty({
     description: '部署名',
     example: 'アプリケーション'
   })
-  departmentName: string
+  department_name: string
 }
