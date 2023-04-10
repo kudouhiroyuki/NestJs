@@ -8,23 +8,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
+model User {
   id            Int         @id @default(autoincrement())
-  user_name     String
+  userName      String      @map("user_name")
   password      String
   address       String
   age           String
-  department_id String
+  departmentId  String      @map("department_id")
   point         Int?
-  created_at    DateTime    @db.DateTime(0)
-  update_at     DateTime    @db.DateTime(0)
-  department    department  @relation(fields: [department_id], references: [department_id])
+  createdAt     DateTime    @map("created_at")  @db.DateTime(0)
+  updatedAt     DateTime    @map("updated_at")  @db.DateTime(0)
+  department    Department  @relation(fields: [departmentId], references: [departmentId])
 
-  @@index([department_id], map: "user_department_id_fkey")
+  @@index([departmentId], map: "user_department_id_fkey")
+  @@map("user")
 }
 
-model department {
-  department_id   String  @unique
-  department_name String
-  user            user[]
+model Department {
+  departmentId    String  @map("department_id")  @unique
+  departmentName  String  @map("department_name")
+  user            User[]
+
+  @@map("department")
 }

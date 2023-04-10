@@ -8,7 +8,7 @@ CREATE TABLE `user` (
     `department_id` VARCHAR(191) NOT NULL,
     `point` INTEGER NULL,
     `created_at` DATETIME(0) NOT NULL,
-    `update_at` DATETIME(0) NOT NULL,
+    `updated_at` DATETIME(0) NOT NULL,
 
     INDEX `user_department_id_fkey`(`department_id`),
     PRIMARY KEY (`id`)
