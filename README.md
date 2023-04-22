@@ -216,7 +216,7 @@ DROP TRIGGER insert_trigger;
 #### <----- データの追加と削除 -----><br>
 ■INSERT 文<br>
 ※データを追加する<br>
-INSERT INTO nest.user (user_name, password, address, age, department_id, point, created_at, update_at) VALUES<br>
+INSERT INTO nest.user (user_name, password, address, age, department_id, point, created_at, updated_at) VALUES<br>
 ('name1', 'password', 'address', '30', 'A0001', 100, '2010-10-01 00:00:00', '2010-10-01 00:00:00');<br>
 
 INSERT INTO nest.department (department_id, department_name) VALUES<br>
