@@ -348,15 +348,15 @@ SELECT id, id, user_name, password FROM nest.user;<br>
 SELECT id*1.08, user_name, password FROM nest.user;<br>
 SELECT id+10, user_name, password FROM nest.user;<br>
 
-■GROUP BY 句<br>
-※データをグループ化する<br>
-
 ■AS句（エイリアス）<br>
 ※カラムに別名を付ける<br>
 SELECT * FROM nest.user AS u;<br>
 SELECT * FROM nest.user u;<br>
 SELECT id, user_name, password, department_id AS dept from nest.user;<br>
 SELECT id, user_name, password, department_id dept from nest.user;<br>
+
+■GROUP BY 句<br>
+※データをグループ化する<br>
 
 ■WHERE 句<br>
 ※データを取得する条件を設定する<br>
