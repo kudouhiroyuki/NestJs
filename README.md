@@ -346,6 +346,7 @@ SELECT * FROM nest.user;<br>
 SELECT id, user_name, password FROM nest.user;<br>
 SELECT id, id, user_name, password FROM nest.user;<br>
 SELECT id*1.08, user_name, password FROM nest.user;<br>
+SELECT id+10, user_name, password FROM nest.user;<br>
 
 ■GROUP BY 句<br>
 ※データをグループ化する<br>
