@@ -342,34 +342,31 @@ SELECT @u_count, @d_count;<br>
 #### データの取得<br>
 - SELECT 文<br>
 ※データを取得する<br>
-SELECT * FROM nest.users;<br>
-SELECT id, userName, password FROM nest.users;<br>
-SELECT id*1.08, userName, password FROM nest.users;<br>
+SELECT * FROM nest.user;<br>
+SELECT id, user_name, password FROM nest.user;<br>
+SELECT id*1.08, user_name, password FROM nest.user;<br>
 
 - GROUP BY 句<br>
 ※データをグループ化する<br>
 
 - AS句（エイリアス）<br>
 ※カラムに別名を付ける<br>
-SELECT * FROM nest.users AS u;<br>
-SELECT * FROM nest.users u;<br>
-SELECT id, userName, password, departmentId AS dept from nest.users;<br>
-SELECT id, userName, password, departmentId dept from nest.users;<br>
+SELECT * FROM nest.user AS u;<br>
+SELECT * FROM nest.user u;<br>
+SELECT id, user_name, password, department_id AS dept from nest.user;<br>
+SELECT id, user_name, password, department_id dept from nest.user;<br>
 
 ■WHERE 句<br>
 ※データを取得する条件を設定する<br>
-SELECT *<br>
-FROM nest.users<br>
-WHERE id = 1<br>
-OR id = 2;<br>
+SELECT * FROM nest.user WHERE id = 1 OR id = 2;<br>
 
 ■EXISTS 句<br>
 ※サブクエリを使った検索条件の設定<br>
 SELECT *<br>
-FROM nest.users<br>
-WHERE departmentId = (<br>
-&emsp;SELECT departmentId<br>
-&emsp;FROM nest.departments<br>
+FROM nest.user<br>
+WHERE department_id = (<br>
+&emsp;SELECT department_id<br>
+&emsp;FROM nest.department<br>
 &emsp;LIMIT 1<br>
 );<br>
 SELECT *<br>
