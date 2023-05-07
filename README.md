@@ -361,8 +361,9 @@ SELECT COUNT(id) AS id_count, SUM(id) AS id_sum FROM nest.user;<br>
 ■WHERE 句<br>
 ※データを取得する条件を設定する<br>
 SELECT * FROM nest.user WHERE id = 1;<br>
-SELECT * FROM nest.user WHERE id = 1 OR id = 2;<br>
 SELECT * FROM nest.user WHERE department_id = 'A0001';<br>
+SELECT * FROM nest.user WHERE id = 1 OR id = 2;<br>
+SELECT * FROM nest.user WHERE id = 1 AND department_id = 'A0001';<br>
 
 ■GROUP BY 句<br>
 ※データをグループ化する<br>
