@@ -358,12 +358,12 @@ SELECT id, user_name, password, department_id AS dept from nest.user;<br>
 SELECT id, user_name, password, department_id dept from nest.user;<br>
 SELECT COUNT(id) AS id_count, SUM(id) AS id_sum FROM nest.user;<br>
 
-■GROUP BY 句<br>
-※データをグループ化する<br>
-
 ■WHERE 句<br>
 ※データを取得する条件を設定する<br>
 SELECT * FROM nest.user WHERE id = 1 OR id = 2;<br>
+
+■GROUP BY 句<br>
+※データをグループ化する<br>
 
 ■EXISTS 句<br>
 ※サブクエリを使った検索条件の設定<br>
