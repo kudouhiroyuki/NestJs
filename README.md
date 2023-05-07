@@ -340,16 +340,16 @@ call sample4(1, 'A0001', @u_count, @d_count);<br>
 SELECT @u_count, @d_count;<br>
 
 #### データの取得<br>
-- SELECT 文<br>
+■SELECT 文<br>
 ※データを取得する<br>
 SELECT * FROM nest.user;<br>
 SELECT id, user_name, password FROM nest.user;<br>
 SELECT id*1.08, user_name, password FROM nest.user;<br>
 
-- GROUP BY 句<br>
+■GROUP BY 句<br>
 ※データをグループ化する<br>
 
-- AS句（エイリアス）<br>
+■AS句（エイリアス）<br>
 ※カラムに別名を付ける<br>
 SELECT * FROM nest.user AS u;<br>
 SELECT * FROM nest.user u;<br>
