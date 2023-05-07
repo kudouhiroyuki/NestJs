@@ -96,6 +96,8 @@ npx prisma format<br>
 npx prisma db pull<br>
 
 ## MySQL<br>
+![Screen-Shot-2019-08-04-at-16 22 27](https://user-images.githubusercontent.com/32052493/236705258-8c5699a5-8f28-4cc7-aad5-157421f06984.png)
+
 #### MySQLコマンドラインツールの利用<br>
 - 接続<br>
 mysql -u root -p;
