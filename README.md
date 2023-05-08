@@ -1,3 +1,6 @@
+## MySQL　勉強メモ（READMEのみ）<br>
+https://github.com/kudouhiroyuki/MySQL
+
 ## SpringBoot 検証環境<br>
 https://github.com/kudouhiroyuki/SpringBoot
 
