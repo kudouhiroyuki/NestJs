@@ -368,6 +368,11 @@ SELECT * FROM nest.user WHERE id = 1 AND department_id = 'A0001';<br>
 ■GROUP BY 句<br>
 ※データをグループ化する<br>
 
+■ORDER BY 句<br>
+※取得するデータをソートする<br>
+SELECT * FROM nest.user ORDER BY id;<br>
+SELECT * FROM nest.user ORDER BY id DESC;<br>
+
 ■EXISTS 句<br>
 ※サブクエリを使った検索条件の設定<br>
 SELECT *<br>
