@@ -370,6 +370,7 @@ SELECT * FROM nest.user WHERE id = 1 AND department_id = 'A0001';<br>
 
 ■ORDER BY 句<br>
 ※取得するデータをソートする<br>
+SELECT * FROM nest.user ORDER BY id ASC;<br>
 SELECT * FROM nest.user ORDER BY id;<br>
 SELECT * FROM nest.user ORDER BY id DESC;<br>
 SELECT * FROM nest.user ORDER BY id >= 3 DESC;<br>
