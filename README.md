@@ -372,6 +372,9 @@ SELECT * FROM nest.user WHERE id = 1 AND department_id = 'A0001';<br>
 ※取得するデータをソートする<br>
 SELECT * FROM nest.user ORDER BY id;<br>
 SELECT * FROM nest.user ORDER BY id DESC;<br>
+SELECT * FROM nest.user ORDER BY id >= 3 DESC;<br>
+SELECT * FROM nest.user WHERE department_id = 'A0001' ORDER BY id DESC;<br>
+SELECT * FROM nest.user ORDER BY FIELD(id, 2, 1, 3);<br>
 
 ■EXISTS 句<br>
 ※サブクエリを使った検索条件の設定<br>
